@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Book, Target, Users, Award, Sitemap } from "lucide-react";
+import { Book, Target, Users, Award, Network } from "lucide-react";
 
 export default function ProfilePage() {
   return (
@@ -81,7 +81,7 @@ export default function ProfilePage() {
               <Card className="h-full transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
                 <CardHeader className="items-center">
                   <div className="rounded-full bg-accent/20 p-4">
-                    <Sitemap className="h-10 w-10 text-accent" />
+                    <Network className="h-10 w-10 text-accent" />
                   </div>
                   <CardTitle className="font-headline pt-4 text-primary">Struktur Organisasi</CardTitle>
                 </CardHeader>
