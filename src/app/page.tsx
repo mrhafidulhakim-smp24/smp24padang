@@ -183,24 +183,6 @@ export default function Home() {
            </div>
         </div>
       </section>
-
-      {/* Call to Action Section */}
-      <section className="bg-primary py-16 text-primary-foreground">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="font-headline text-3xl font-bold">Ready to Join Our Community?</h2>
-          <p className="mx-auto mt-2 max-w-2xl text-lg text-primary-foreground/80">
-            Discover the opportunities waiting for you at DUAPAT Empat Padang.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
-              <Link href="/contact">Contact Us</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
-              <Link href="/profile">About The School</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
