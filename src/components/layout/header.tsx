@@ -10,7 +10,6 @@ import {
   BookOpen,
   Trophy,
   Mail,
-  ShieldCheck,
   Menu,
 } from "lucide-react";
 import { Logo } from "@/components/icons";
@@ -21,7 +20,6 @@ const navLinks = [
   { href: "/academics", label: "Academics", icon: BookOpen },
   { href: "/achievements", label: "Achievements", icon: Trophy },
   { href: "/contact", label: "Contact", icon: Mail },
-  { href: "/admin", label: "Admin", icon: ShieldCheck },
 ];
 
 export default function Header() {
