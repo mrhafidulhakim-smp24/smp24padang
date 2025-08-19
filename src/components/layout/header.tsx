@@ -54,14 +54,14 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex flex-shrink-0 items-center gap-2">
           <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
-          <span className="font-headline text-xl font-bold text-primary">
+          <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
             SMPN 24 Padang
           </span>
         </Link>
 
-        <nav className="hidden md:flex md:items-center md:gap-6">
+        <nav className="hidden w-full items-center justify-end gap-6 md:flex">
           {navLinks.map((link) => 
             link.subLinks ? (
               <DropdownMenu key={link.href}>
@@ -92,11 +92,11 @@ export default function Header() {
         </nav>
         
         <div className="hidden items-center gap-4 text-sm lg:flex">
-             <a href="tel:+621234567890" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+             <a href="tel:+621234567890" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary whitespace-nowrap">
                 <Phone className="h-4 w-4" />
                  <span>+62 123 456 7890</span>
              </a>
-             <a href="mailto:info@duapat.edu" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+             <a href="mailto:info@duapat.edu" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary whitespace-nowrap">
                 <Mail className="h-4 w-4" />
                  <span>info@duapat.edu</span>
             </a>
@@ -115,7 +115,7 @@ export default function Header() {
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="mb-4 flex items-center gap-2">
                    <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
-                  <span className="font-headline text-xl font-bold text-primary">
+                  <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
                     SMPN 24 Padang
                   </span>
                 </Link>
