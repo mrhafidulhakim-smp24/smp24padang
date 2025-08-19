@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -29,6 +30,7 @@ import {
   Network,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
@@ -52,6 +54,7 @@ const navLinks = [
 export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsMounted(true);
@@ -99,13 +102,19 @@ export default function Header() {
             {navLinks.map((link) => 
                 link.subLinks ? (
                 <DropdownMenu key={link.href}>
-                    <DropdownMenuTrigger className="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none">
+                    <DropdownMenuTrigger className={cn(
+                        "flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none",
+                        pathname.startsWith(link.href) && "text-primary"
+                    )}>
                     {link.label} <ChevronDown className="ml-1 h-4 w-4" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                     {link.subLinks.map(subLink => (
                         <DropdownMenuItem key={subLink.href} asChild>
-                        <Link href={subLink.href} className="flex items-center gap-2">
+                        <Link href={subLink.href} className={cn(
+                            "flex items-center gap-2",
+                             pathname === subLink.href && "font-semibold text-primary"
+                        )}>
                             <subLink.icon className="h-4 w-4 text-muted-foreground" />
                             {subLink.label}
                         </Link>
@@ -117,7 +126,10 @@ export default function Header() {
                 <Link
                     key={link.href}
                     href={link.href}
-                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                    className={cn(
+                        "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+                        pathname === link.href && "text-primary font-semibold"
+                    )}
                 >
                     {link.label}
                 </Link>
@@ -151,14 +163,20 @@ export default function Header() {
                       key={link.href}
                       href={link.href}
                       onClick={() => setSheetOpen(false)}
-                      className="flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                      className={cn(
+                          "flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
+                           pathname === link.href && "bg-accent text-accent-foreground"
+                      )}
                     >
                       <link.icon className="h-5 w-5" />
                       {link.label}
                     </Link>
                    ) : (
                     <div key={link.href} className="flex flex-col">
-                       <p className="flex items-center gap-3 p-2 text-lg font-medium text-muted-foreground">
+                       <p className={cn(
+                           "flex items-center gap-3 p-2 text-lg font-medium text-muted-foreground",
+                            pathname.startsWith(link.href) && "text-accent-foreground"
+                        )}>
                         <link.icon className="h-5 w-5" />
                         {link.label}
                        </p>
@@ -168,7 +186,10 @@ export default function Header() {
                                 key={subLink.href}
                                 href={subLink.href}
                                 onClick={() => setSheetOpen(false)}
-                                className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                                className={cn(
+                                    "flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
+                                    pathname === subLink.href && "bg-accent text-accent-foreground"
+                                )}
                             >
                                 <subLink.icon className="h-4 w-4" />
                                 {subLink.label}
