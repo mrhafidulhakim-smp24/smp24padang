@@ -5,6 +5,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import {
   Home,
   User,
   BookOpen,
@@ -13,12 +20,26 @@ import {
   Menu,
   MapPin,
   Phone,
+  ChevronDown,
+  Target,
+  Users,
+  Award,
 } from "lucide-react";
 import { Logo } from "@/components/icons";
 
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/profile", label: "Profile", icon: User },
+  { 
+    href: "/profile", 
+    label: "Profile", 
+    icon: User,
+    subLinks: [
+      { href: "/profile", label: "Profil Sekolah", icon: User },
+      { href: "/profile/vision-mission", label: "Visi & Misi", icon: Target },
+      { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
+      { href: "/profile/accreditation", label: "Akreditasi", icon: Award },
+    ]
+  },
   { href: "/academics", label: "Academics", icon: BookOpen },
   { href: "/achievements", label: "Achievements", icon: Trophy },
   { href: "/contact", label: "Contact", icon: Mail },
@@ -56,15 +77,33 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex md:items-center md:gap-6">
-          {navLinks.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
-              {label}
-            </Link>
-          ))}
+          {navLinks.map((link) => 
+            link.subLinks ? (
+              <DropdownMenu key={link.href}>
+                <DropdownMenuTrigger className="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none">
+                  {link.label} <ChevronDown className="ml-1 h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {link.subLinks.map(subLink => (
+                    <DropdownMenuItem key={subLink.href} asChild>
+                       <Link href={subLink.href} className="flex items-center gap-2">
+                        <subLink.icon className="h-4 w-4 text-muted-foreground" />
+                        {subLink.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="md:hidden">
@@ -83,17 +122,39 @@ export default function Header() {
                     DUAPAT
                   </span>
                 </Link>
-                {navLinks.map(({ href, label, icon: Icon }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    onClick={() => setSheetOpen(false)}
-                    className="flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    <Icon className="h-5 w-5" />
-                    {label}
-                  </Link>
-                ))}
+                {navLinks.map((link) => 
+                   !link.subLinks ? (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setSheetOpen(false)}
+                      className="flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <link.icon className="h-5 w-5" />
+                      {link.label}
+                    </Link>
+                   ) : (
+                    <div key={link.href} className="flex flex-col">
+                       <p className="flex items-center gap-3 p-2 text-lg font-medium text-muted-foreground">
+                        <link.icon className="h-5 w-5" />
+                        {link.label}
+                       </p>
+                       <div className="flex flex-col pl-8">
+                        {link.subLinks.map(subLink => (
+                            <Link
+                                key={subLink.href}
+                                href={subLink.href}
+                                onClick={() => setSheetOpen(false)}
+                                className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                            >
+                                <subLink.icon className="h-4 w-4" />
+                                {subLink.label}
+                            </Link>
+                        ))}
+                       </div>
+                    </div>
+                   )
+                )}
               </div>
             </SheetContent>
           </Sheet>
