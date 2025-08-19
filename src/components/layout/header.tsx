@@ -27,6 +27,7 @@ import {
   Users,
   Award,
   Network,
+  Wrench,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -56,6 +57,7 @@ export default function Header() {
     { href: "/academics", label: t('nav.academics'), icon: BookOpen },
     { href: "/achievements", label: t('nav.achievements'), icon: Trophy },
     { href: "/gallery", label: t('nav.gallery'), icon: Camera },
+    { href: "/admin", label: t('nav.admin'), icon: Wrench },
   ];
 
   useEffect(() => {
