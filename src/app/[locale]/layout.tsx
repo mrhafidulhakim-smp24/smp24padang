@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
-import { Providers } from "@/components/providers";
 import '../globals.css';
 import {getMessages} from 'next-intl/server';
+import {NextIntlClientProvider} from 'next-intl';
+import {ThemeProvider} from '@/components/theme-provider';
  
 export const metadata: Metadata = {
   title: 'SMPN 24 Padang',
@@ -29,16 +30,22 @@ export default async function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <Providers locale={locale} messages={messages}>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <Toaster />
-        </Providers>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            disableTransitionOnChange
+          >
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <Toaster />
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

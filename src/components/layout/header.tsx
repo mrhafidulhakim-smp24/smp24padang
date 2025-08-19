@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { usePathname } from "@/navigation";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -67,6 +67,13 @@ export default function Header() {
     return null;
   }
 
+  const getCleanPathname = (path: string) => {
+    const localePattern = /^\/(en|id)/;
+    return path.replace(localePattern, '') || '/';
+  }
+  
+  const cleanPathname = getCleanPathname(pathname);
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       {/* Top Bar */}
@@ -104,7 +111,7 @@ export default function Header() {
                 <DropdownMenu key={link.href}>
                     <DropdownMenuTrigger className={cn(
                         "flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none",
-                        pathname.startsWith(link.href) && "text-primary"
+                        cleanPathname.startsWith(link.href) && "text-primary"
                     )}>
                     {link.label} <ChevronDown className="ml-1 h-4 w-4" />
                     </DropdownMenuTrigger>
@@ -113,7 +120,7 @@ export default function Header() {
                         <DropdownMenuItem key={subLink.href} asChild>
                         <Link href={subLink.href} className={cn(
                             "flex items-center gap-2",
-                             pathname === subLink.href && "font-semibold text-primary"
+                             cleanPathname === subLink.href && "font-semibold text-primary"
                         )}>
                             <subLink.icon className="h-4 w-4 text-muted-foreground" />
                             {subLink.label}
@@ -128,7 +135,7 @@ export default function Header() {
                     href={link.href}
                     className={cn(
                         "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-                        (pathname === link.href) && "text-primary font-semibold"
+                        (cleanPathname === link.href) && "text-primary font-semibold"
                     )}
                 >
                     {link.label}
@@ -166,7 +173,7 @@ export default function Header() {
                       onClick={() => setSheetOpen(false)}
                       className={cn(
                           "flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
-                          pathname === link.href && "bg-accent text-accent-foreground"
+                          cleanPathname === link.href && "bg-accent text-accent-foreground"
                       )}
                     >
                       <link.icon className="h-5 w-5" />
@@ -176,7 +183,7 @@ export default function Header() {
                     <div key={link.href} className="flex flex-col">
                        <p className={cn(
                            "flex items-center gap-3 p-2 text-lg font-medium text-muted-foreground",
-                            pathname.startsWith(link.href) && "text-accent-foreground"
+                            cleanPathname.startsWith(link.href) && "text-accent-foreground"
                         )}>
                         <link.icon className="h-5 w-5" />
                         {link.label}
@@ -189,7 +196,7 @@ export default function Header() {
                                 onClick={() => setSheetOpen(false)}
                                 className={cn(
                                     "flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
-                                    pathname === subLink.href && "bg-accent text-accent-foreground"
+                                    cleanPathname === subLink.href && "bg-accent text-accent-foreground"
                                 )}
                             >
                                 <subLink.icon className="h-4 w-4" />
