@@ -24,6 +24,7 @@ import {
   Target,
   Users,
   Award,
+  Sitemap,
 } from "lucide-react";
 import { Logo } from "@/components/icons";
 
@@ -37,6 +38,7 @@ const navLinks = [
       { href: "/profile", label: "Profil Sekolah", icon: User },
       { href: "/profile/vision-mission", label: "Visi & Misi", icon: Target },
       { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
+      { href: "/profile/organization-structure", label: "Struktur Organisasi", icon: Sitemap },
       { href: "/profile/accreditation", label: "Akreditasi", icon: Award },
     ]
   },

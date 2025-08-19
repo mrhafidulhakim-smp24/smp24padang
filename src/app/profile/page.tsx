@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Book, Target, Users, Award } from "lucide-react";
+import { Book, Target, Users, Award, Sitemap } from "lucide-react";
 
 export default function ProfilePage() {
   return (
@@ -50,7 +50,7 @@ export default function ProfilePage() {
               Pelajari lebih lanjut tentang apa yang membuat sekolah kami istimewa.
             </p>
           </div>
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             <Link href="/profile/vision-mission">
               <Card className="h-full transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
                 <CardHeader className="items-center">
@@ -74,6 +74,19 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">Temui para pendidik berpengalaman yang membimbing siswa kami.</p>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link href="/profile/organization-structure">
+              <Card className="h-full transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                <CardHeader className="items-center">
+                  <div className="rounded-full bg-accent/20 p-4">
+                    <Sitemap className="h-10 w-10 text-accent" />
+                  </div>
+                  <CardTitle className="font-headline pt-4 text-primary">Struktur Organisasi</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">Lihat bagaimana sekolah kami terstruktur untuk mencapai kesuksesan.</p>
                 </CardContent>
               </Card>
             </Link>
