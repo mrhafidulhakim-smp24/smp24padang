@@ -70,17 +70,14 @@ export default function Header() {
       <div className="hidden bg-primary/90 text-primary-foreground lg:block">
         <div className="container mx-auto flex h-10 items-center justify-between px-4 text-sm">
             <div className="flex items-center gap-4">
-                 <a href="#" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
-                    <MapPin className="h-4 w-4" />
-                    <span>123 Education Lane, Padang, Indonesia</span>
-                 </a>
+                 <p className="text-primary-foreground/80">Membina Pikiran, Membentuk Masa Depan</p>
             </div>
             <div className="flex items-center gap-6">
                 <a href="tel:+621234567890" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
                     <Phone className="h-4 w-4" />
                     <span>+62 123 456 7890</span>
                 </a>
-                <a href="mailto:info@duapat.edu" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
+                <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
                     <Mail className="h-4 w-4" />
                     <span>info@smpn24padang.sch.id</span>
                 </a>
