@@ -8,39 +8,39 @@ export default function AcademicsPage() {
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
         <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
-          Our Academics
+          Akademik Kami
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Fostering intellectual curiosity and a passion for lifelong learning.
+          Menumbuhkan rasa ingin tahu intelektual dan semangat untuk belajar seumur hidup.
         </p>
       </div>
 
       <Tabs defaultValue="curriculum" className="mt-12 w-full">
         <TabsList className="grid w-full grid-cols-1 md:grid-cols-3">
           <TabsTrigger value="curriculum">
-            <BookMarked className="mr-2 h-5 w-5" /> Curriculum
+            <BookMarked className="mr-2 h-5 w-5" /> Kurikulum
           </TabsTrigger>
           <TabsTrigger value="organization">
-            <Building className="mr-2 h-5 w-5" /> Organization
+            <Building className="mr-2 h-5 w-5" /> Organisasi
           </TabsTrigger>
           <TabsTrigger value="activities">
-            <Activity className="mr-2 h-5 w-5" /> Activities
+            <Activity className="mr-2 h-5 w-5" /> Kegiatan
           </TabsTrigger>
         </TabsList>
         <TabsContent value="curriculum" className="mt-8">
           <Card>
             <CardHeader>
               <CardTitle className="font-headline text-2xl text-primary">
-                Comprehensive Curriculum
+                Kurikulum Komprehensif
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-foreground/80">
                <Image src="https://placehold.co/1200x400.png" alt="Curriculum" width={1200} height={400} className="mb-6 w-full rounded-lg object-cover" data-ai-hint="library books" />
               <p>
-                Our curriculum is designed to provide a balanced and holistic education, blending rigorous academic standards with creative and practical learning experiences. We follow the national curriculum while incorporating innovative teaching methodologies to cater to diverse learning styles.
+                Kurikulum kami dirancang untuk memberikan pendidikan yang seimbang dan holistik, memadukan standar akademik yang ketat dengan pengalaman belajar yang kreatif dan praktis. Kami mengikuti kurikulum nasional sambil menggabungkan metodologi pengajaran inovatif untuk melayani gaya belajar yang beragam.
               </p>
               <p>
-                Core subjects include Mathematics, Science, Languages, and Social Studies, supplemented by a wide range of elective courses in arts, technology, and physical education. We emphasize critical thinking, problem-solving, and collaboration to prepare students for the challenges of the future.
+                Mata pelajaran inti meliputi Matematika, Sains, Bahasa, dan Ilmu Sosial, dilengkapi dengan berbagai pilihan mata pelajaran dalam seni, teknologi, dan pendidikan jasmani. Kami menekankan pemikiran kritis, pemecahan masalah, dan kolaborasi untuk mempersiapkan siswa menghadapi tantangan masa depan.
               </p>
             </CardContent>
           </Card>
@@ -49,16 +49,16 @@ export default function AcademicsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="font-headline text-2xl text-primary">
-                School Organization
+                Organisasi Sekolah
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-foreground/80">
               <Image src="https://placehold.co/1200x400.png" alt="Organization" width={1200} height={400} className="mb-6 w-full rounded-lg object-cover" data-ai-hint="school building" />
               <p>
-                DUAPAT Empat Padang is structured to create a supportive and efficient learning environment. The school is divided into three main levels: Primary School (Grades 1-6), Middle School (Grades 7-9), and High School (Grades 10-12).
+                SMPN 24 Padang terstruktur untuk menciptakan lingkungan belajar yang mendukung dan efisien. Sekolah ini dibagi menjadi tiga tingkatan utama: Sekolah Dasar (Kelas 1-6), Sekolah Menengah Pertama (Kelas 7-9), dan Sekolah Menengah Atas (Kelas 10-12).
               </p>
               <p>
-                Each level is led by a dedicated head, who works closely with a team of experienced educators and support staff. Our administrative body ensures the smooth operation of all school functions, from admissions to student welfare, maintaining open communication with parents and the wider community.
+                Setiap tingkatan dipimpin oleh seorang kepala yang berdedikasi, yang bekerja sama dengan tim pendidik dan staf pendukung yang berpengalaman. Badan administrasi kami memastikan kelancaran semua fungsi sekolah, mulai dari penerimaan siswa hingga kesejahteraan siswa, menjaga komunikasi terbuka dengan orang tua dan masyarakat luas.
               </p>
             </CardContent>
           </Card>
@@ -67,22 +67,22 @@ export default function AcademicsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="font-headline text-2xl text-primary">
-                Extracurricular Activities
+                Kegiatan Ekstrakurikuler
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-foreground/80">
               <Image src="https://placehold.co/1200x400.png" alt="Activities" width={1200} height={400} className="mb-6 w-full rounded-lg object-cover" data-ai-hint="students playing" />
               <p>
-                We believe that learning extends beyond the classroom. Our extensive extracurricular program offers students opportunities to explore their interests, develop new skills, and build character.
+                Kami percaya bahwa belajar tidak hanya terbatas di dalam kelas. Program ekstrakurikuler kami yang beragam memberikan siswa kesempatan untuk mengeksplorasi minat mereka, mengembangkan keterampilan baru, dan membangun karakter.
               </p>
               <p>
-                Students can choose from a variety of clubs and activities, including:
+                Siswa dapat memilih dari berbagai klub dan kegiatan, termasuk:
               </p>
               <ul className="list-disc pl-6">
-                <li><strong>Sports:</strong> Soccer, Basketball, Swimming, and Athletics.</li>
-                <li><strong>Arts:</strong> Drama Club, School Choir, Band, and Visual Arts.</li>
-                <li><strong>Academic Clubs:</strong> Debate Team, Science Club, and Math Olympiad.</li>
-                <li><strong>Community Service:</strong> Volunteering and social outreach programs.</li>
+                <li><strong>Olahraga:</strong> Sepak Bola, Bola Basket, Renang, dan Atletik.</li>
+                <li><strong>Seni:</strong> Klub Drama, Paduan Suara Sekolah, Band, dan Seni Rupa.</li>
+                <li><strong>Klub Akademik:</strong> Tim Debat, Klub Sains, dan Olimpiade Matematika.</li>
+                <li><strong>Pengabdian Masyarakat:</strong> Program sukarela dan penjangkauan sosial.</li>
               </ul>
             </CardContent>
           </Card>

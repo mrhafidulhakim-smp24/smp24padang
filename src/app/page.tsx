@@ -46,10 +46,10 @@ export default function Home() {
         />
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-primary">
           <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
-            Welcome to DUAPAT Empat Padang
+            Selamat Datang di SMPN 24 Padang
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-primary/80 drop-shadow-sm">
-            Nurturing Minds, Shaping Futures. Explore our world of learning and discovery.
+            Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.
           </p>
         </div>
       </section>
@@ -68,13 +68,13 @@ export default function Home() {
             />
           </div>
           <div>
-            <h2 className="font-headline text-3xl font-bold text-primary">A Message from the Principal</h2>
+            <h2 className="font-headline text-3xl font-bold text-primary">Pesan dari Kepala Sekolah</h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Welcome to DUAPAT Empat Padang! We are a community dedicated to fostering academic excellence, character development, and a lifelong love of learning. Our commitment is to provide a safe, nurturing, and stimulating environment where every student can thrive.
+              Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.
             </p>
             <Button asChild variant="link" className="mt-4 p-0 text-accent-foreground">
               <Link href="/profile">
-                Read More <ArrowRight className="ml-1 h-4 w-4" />
+                Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -85,9 +85,9 @@ export default function Home() {
       <section className="bg-primary/5 py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Our Pillars of Excellence</h2>
+            <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pilar Keunggulan Kami</h2>
             <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-              Building a strong foundation for every student's future.
+              Membangun fondasi yang kuat untuk masa depan setiap siswa.
             </p>
           </div>
           <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -96,12 +96,12 @@ export default function Home() {
                 <div className="rounded-full bg-accent/20 p-4">
                   <GraduationCap className="h-10 w-10 text-accent" />
                 </div>
-                <CardTitle className="font-headline pt-4 text-primary">Academics</CardTitle>
+                <CardTitle className="font-headline pt-4 text-primary">Akademik</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">A rigorous and innovative curriculum designed to challenge and inspire.</p>
+                <p className="text-muted-foreground">Kurikulum yang ketat dan inovatif yang dirancang untuk menantang dan menginspirasi.</p>
                 <Button asChild variant="outline" className="mt-4">
-                   <Link href="/academics">Learn More</Link>
+                   <Link href="/academics">Pelajari Lebih Lanjut</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -110,12 +110,12 @@ export default function Home() {
                 <div className="rounded-full bg-accent/20 p-4">
                   <Users className="h-10 w-10 text-accent" />
                 </div>
-                <CardTitle className="font-headline pt-4 text-primary">Student Life</CardTitle>
+                <CardTitle className="font-headline pt-4 text-primary">Kehidupan Siswa</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">A vibrant community with diverse extracurricular activities and clubs.</p>
+                <p className="text-muted-foreground">Komunitas yang dinamis dengan beragam kegiatan ekstrakurikuler dan klub.</p>
                  <Button asChild variant="outline" className="mt-4">
-                   <Link href="/academics#activities">Explore Activities</Link>
+                   <Link href="/academics#activities">Jelajahi Kegiatan</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -124,12 +124,12 @@ export default function Home() {
                 <div className="rounded-full bg-accent/20 p-4">
                   <Building className="h-10 w-10 text-accent" />
                 </div>
-                <CardTitle className="font-headline pt-4 text-primary">Our Campus</CardTitle>
+                <CardTitle className="font-headline pt-4 text-primary">Kampus Kami</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">State-of-the-art facilities that provide a world-class learning environment.</p>
+                <p className="text-muted-foreground">Fasilitas canggih yang menyediakan lingkungan belajar kelas dunia.</p>
                  <Button asChild variant="outline" className="mt-4">
-                   <Link href="/profile">Visit Us</Link>
+                   <Link href="/profile">Kunjungi Kami</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -141,7 +141,7 @@ export default function Home() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <h2 className="font-headline mb-8 text-center text-3xl font-bold text-primary md:text-4xl">
-            Latest News & Announcements
+            Berita & Pengumuman Terbaru
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {newsItems.map((item, index) => (
@@ -164,7 +164,7 @@ export default function Home() {
                   <p className="mt-2 text-foreground/80">{item.description}</p>
                   <Button variant="link" asChild className="mt-4 p-0 text-accent-foreground">
                     <Link href={item.link}>
-                      Read More <ArrowRight className="ml-1 h-4 w-4" />
+                      Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </Button>
                 </CardContent>
@@ -173,7 +173,7 @@ export default function Home() {
           </div>
            <div className="mt-12 text-center">
              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link href="/achievements">View All News</Link>
+                <Link href="/achievements">Lihat Semua Berita</Link>
              </Button>
            </div>
         </div>

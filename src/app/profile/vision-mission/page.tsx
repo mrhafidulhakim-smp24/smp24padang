@@ -14,7 +14,7 @@ export default function VisionMissionPage() {
           Visi & Misi
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Prinsip-prinsip penuntun yang membentuk setiap aspek kehidupan di DUAPAT.
+          Prinsip-prinsip penuntun yang membentuk setiap aspek kehidupan di SMPN 24 Padang.
         </p>
       </div>
 

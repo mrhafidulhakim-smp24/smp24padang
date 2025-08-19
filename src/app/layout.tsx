@@ -5,8 +5,8 @@ import Footer from '@/components/layout/footer';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'DUAPAT Empat Padang',
-  description: 'Official Website of DUAPAT Empat Padang School',
+  title: 'SMPN 24 Padang',
+  description: 'Official Website of SMPN 24 Padang School',
 };
 
 export default function RootLayout({

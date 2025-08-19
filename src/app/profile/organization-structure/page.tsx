@@ -34,7 +34,7 @@ export default function OrganizationStructurePage() {
           Struktur Organisasi
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Hirarki kepemimpinan dan manajemen di DUAPAT Empat Padang.
+          Hirarki kepemimpinan dan manajemen di SMPN 24 Padang.
         </p>
       </div>
 

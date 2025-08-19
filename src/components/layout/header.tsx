@@ -73,9 +73,9 @@ export default function Header() {
       </div>
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.jpg" alt="DUAPAT Logo" width={40} height={40} className="h-8 w-auto" />
+          <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
           <span className="font-headline text-xl font-bold text-primary">
-            DUAPAT
+            SMPN 24 Padang
           </span>
         </Link>
 
@@ -120,9 +120,9 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="mb-4 flex items-center gap-2">
-                   <Image src="/logo.jpg" alt="DUAPAT Logo" width={40} height={40} className="h-8 w-auto" />
+                   <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
                   <span className="font-headline text-xl font-bold text-primary">
-                    DUAPAT
+                    SMPN 24 Padang
                   </span>
                 </Link>
                 {navLinks.map((link) => 

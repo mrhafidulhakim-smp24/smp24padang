@@ -11,7 +11,7 @@ export default function ProfilePage() {
           Profil Sekolah
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Mengenal lebih dekat DUAPAT Empat Padang.
+          Mengenal lebih dekat SMPN 24 Padang.
         </p>
       </div>
 
@@ -31,7 +31,7 @@ export default function ProfilePage() {
               Sambutan dari Kepala Sekolah
             </h2>
             <p className="mt-4 text-foreground/80">
-              Selamat datang di DUAPAT Empat Padang! Kami adalah komunitas yang berdedikasi untuk menumbuhkan keunggulan akademik, pengembangan karakter, dan kecintaan belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang dan mencapai potensi penuh mereka.
+              Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang berdedikasi untuk menumbuhkan keunggulan akademik, pengembangan karakter, dan kecintaan belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang dan mencapai potensi penuh mereka.
             </p>
             <p className="mt-4 text-foreground/80">
               Kami percaya pada pendekatan holistik terhadap pendidikan, yang menyeimbangkan kekakuan akademis dengan ekspresi artistik, prestasi atletik, dan pengabdian masyarakat. Fakultas kami yang berbakat dan berdedikasi hadir untuk membimbing dan menginspirasi siswa kami dalam perjalanan pendidikan mereka.
@@ -60,7 +60,7 @@ export default function ProfilePage() {
                   <CardTitle className="font-headline pt-4 text-primary">Visi & Misi</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">Prinsip-prinsip penuntun yang membentuk setiap aspek kehidupan di DUAPAT.</p>
+                  <p className="text-muted-foreground">Prinsip-prinsip penuntun yang membentuk setiap aspek kehidupan di SMPN 24 Padang.</p>
                 </CardContent>
               </Card>
             </Link>
