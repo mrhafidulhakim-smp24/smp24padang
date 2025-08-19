@@ -102,13 +102,6 @@ export default function Header() {
       {/* Main Navigation */}
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex flex-shrink-0 items-center gap-2">
-           <button
-            onClick={switchLocale}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold transition-colors hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-ring"
-            aria-label="Switch language"
-          >
-            {locale.toUpperCase()}
-          </button>
           <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
             {t('schoolName')}
           </span>
@@ -153,6 +146,14 @@ export default function Header() {
                 )
             )}
             </nav>
+             <Button
+                variant="ghost"
+                size="icon"
+                onClick={switchLocale}
+                aria-label="Switch language"
+              >
+                <span className="text-xs font-bold">{locale.toUpperCase()}</span>
+              </Button>
             <ThemeToggle />
         </div>
 
@@ -169,15 +170,6 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="mb-4 flex items-center gap-2">
-                   <button
-                    onClick={() => {
-                        switchLocale();
-                        setSheetOpen(false);
-                    }}
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold"
-                    >
-                    {locale.toUpperCase()}
-                   </button>
                   <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
                     {t('schoolName')}
                   </span>
