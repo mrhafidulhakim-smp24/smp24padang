@@ -28,6 +28,7 @@ import {
   Award,
   Network,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
@@ -78,7 +79,7 @@ export default function Header() {
                 </a>
                 <a href="mailto:info@duapat.edu" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
                     <Mail className="h-4 w-4" />
-                    <span>info@duapat.edu</span>
+                    <span>info@smpn24padang.sch.id</span>
                 </a>
             </div>
         </div>
@@ -93,35 +94,39 @@ export default function Header() {
           </span>
         </Link>
         
-        <nav className="items-center justify-end gap-6 hidden md:flex">
-          {navLinks.map((link) => 
-            link.subLinks ? (
-              <DropdownMenu key={link.href}>
-                <DropdownMenuTrigger className="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none">
-                  {link.label} <ChevronDown className="ml-1 h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {link.subLinks.map(subLink => (
-                    <DropdownMenuItem key={subLink.href} asChild>
-                       <Link href={subLink.href} className="flex items-center gap-2">
-                        <subLink.icon className="h-4 w-4 text-muted-foreground" />
-                        {subLink.label}
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-              >
-                {link.label}
-              </Link>
-            )
-          )}
-        </nav>
+        <div className="flex items-center gap-2">
+            <nav className="items-center justify-end gap-6 hidden md:flex">
+            {navLinks.map((link) => 
+                link.subLinks ? (
+                <DropdownMenu key={link.href}>
+                    <DropdownMenuTrigger className="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none">
+                    {link.label} <ChevronDown className="ml-1 h-4 w-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                    {link.subLinks.map(subLink => (
+                        <DropdownMenuItem key={subLink.href} asChild>
+                        <Link href={subLink.href} className="flex items-center gap-2">
+                            <subLink.icon className="h-4 w-4 text-muted-foreground" />
+                            {subLink.label}
+                        </Link>
+                        </DropdownMenuItem>
+                    ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                ) : (
+                <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                >
+                    {link.label}
+                </Link>
+                )
+            )}
+            </nav>
+            <ThemeToggle />
+        </div>
+
 
         {/* Mobile Menu Trigger */}
         <div className="md:hidden">
@@ -178,9 +183,9 @@ export default function Header() {
                         <Phone className="h-5 w-5" />
                          <span>+62 123 456 7890</span>
                      </a>
-                     <a href="mailto:info@duapat.edu" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                     <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                         <Mail className="h-5 w-5" />
-                         <span>info@duapat.edu</span>
+                         <span>info@smpn24padang.sch.id</span>
                     </a>
                     <Link href="https://www.google.com/maps/search/?api=1&query=123+Education+Lane,+Padang,+Indonesia" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                         <MapPin className="h-5 w-5" />

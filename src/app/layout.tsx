@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import { ThemeProvider } from "@/components/theme-provider";
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="!scroll-smooth">
+    <html lang="en" className="!scroll-smooth" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -23,12 +24,19 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </div>
-        <Toaster />
+         <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </div>
+            <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
