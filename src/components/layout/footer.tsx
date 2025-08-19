@@ -1,8 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
+  const t = useTranslations('Footer');
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="bg-primary/90 text-primary-foreground">
       <div className="container mx-auto grid grid-cols-1 gap-12 px-4 py-12 md:grid-cols-3">
@@ -14,7 +20,7 @@ export default function Footer() {
             </span>
           </Link>
           <p className="text-primary-foreground/80">
-            Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.
+            {t('about')}
           </p>
           <div className="flex space-x-4">
             <Link href="#" className="text-primary-foreground/80 transition-colors hover:text-white"><Facebook className="h-6 w-6" /></Link>
@@ -24,11 +30,11 @@ export default function Footer() {
         </div>
         
         <div className="space-y-4">
-          <h3 className="font-headline text-lg font-semibold text-white">Hubungi Kami</h3>
+          <h3 className="font-headline text-lg font-semibold text-white">{t('contactUs')}</h3>
           <ul className="space-y-2 text-primary-foreground/80">
             <li className="flex items-start gap-3">
               <MapPin className="mt-1 h-5 w-5 flex-shrink-0 text-accent" />
-              <span>123 Education Lane, Padang, Indonesia</span>
+              <span>{t('address')}</span>
             </li>
             <li className="flex items-center gap-3">
               <Phone className="h-5 w-5 flex-shrink-0 text-accent" />
@@ -36,7 +42,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-3">
               <Mail className="h-5 w-5 flex-shrink-0 text-accent" />
-              <span>info@duapat.edu</span>
+              <span>info@smpn24padang.sch.id</span>
             </li>
           </ul>
         </div>
@@ -56,7 +62,7 @@ export default function Footer() {
       </div>
       <div className="bg-primary py-4">
         <div className="container mx-auto px-4 text-center text-sm text-primary-foreground/70">
-          <p>&copy; {new Date().getFullYear()} SMPN 24 Padang. All Rights Reserved.</p>
+          <p>{t('copyright', {year: currentYear})}</p>
         </div>
       </div>
     </footer>

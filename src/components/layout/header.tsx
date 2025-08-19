@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { useTranslations } from 'next-intl';
 
 import {
   Home,
@@ -33,29 +34,31 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
-const navLinks = [
-  { href: "/", label: "Home", icon: Home },
-  { 
-    href: "/profile", 
-    label: "Profile", 
-    icon: User,
-    subLinks: [
-      { href: "/profile", label: "School Profile", icon: User },
-      { href: "/profile/vision-mission", label: "Vision & Mission", icon: Target },
-      { href: "/profile/faculty", label: "Faculty & Staff", icon: Users },
-      { href: "/profile/organization-structure", label: "Organization Structure", icon: Network },
-      { href: "/profile/accreditation", label: "Accreditation Certificate", icon: Award },
-    ]
-  },
-  { href: "/academics", label: "Academics", icon: BookOpen },
-  { href: "/achievements", label: "Achievements", icon: Trophy },
-  { href: "/gallery", label: "Gallery", icon: Camera },
-];
 
 export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations('Header');
+
+  const navLinks = [
+    { href: "/", label: t('nav.home'), icon: Home },
+    { 
+      href: "/profile", 
+      label: t('nav.profile'), 
+      icon: User,
+      subLinks: [
+        { href: "/profile", label: t('nav.schoolProfile'), icon: User },
+        { href: "/profile/vision-mission", label: t('nav.visionMission'), icon: Target },
+        { href: "/profile/faculty", label: t('nav.facultyStaff'), icon: Users },
+        { href: "/profile/organization-structure", label: t('nav.organizationStructure'), icon: Network },
+        { href: "/profile/accreditation", label: t('nav.accreditation'), icon: Award },
+      ]
+    },
+    { href: "/academics", label: t('nav.academics'), icon: BookOpen },
+    { href: "/achievements", label: t('nav.achievements'), icon: Trophy },
+    { href: "/gallery", label: t('nav.gallery'), icon: Camera },
+  ];
 
   useEffect(() => {
     setIsMounted(true);
@@ -68,19 +71,19 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       {/* Top Bar */}
-      <div className="hidden bg-primary/90 text-primary-foreground lg:block">
-        <div className="container mx-auto flex h-10 items-center justify-between px-4 text-sm">
+      <div className="hidden bg-primary/90 text-primary-foreground lg:block clip-path-diagonal">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 text-sm">
             <div className="flex items-center gap-4">
-                 <p className="text-primary-foreground/80">Membina Pikiran, Membentuk Masa Depan</p>
+                 <p className="text-primary-foreground/80">{t('slogan')}</p>
             </div>
             <div className="flex items-center gap-6">
-                <a href="tel:+621234567890" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
+                <a href={`tel:${t('phone')}`} className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
                     <Phone className="h-4 w-4" />
-                    <span>+62 123 456 7890</span>
+                    <span>{t('phone')}</span>
                 </a>
-                <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
+                <a href={`mailto:${t('email')}`} className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
                     <Mail className="h-4 w-4" />
-                    <span>info@smpn24padang.sch.id</span>
+                    <span>{t('email')}</span>
                 </a>
             </div>
         </div>
@@ -91,7 +94,7 @@ export default function Header() {
         <Link href="/" className="flex flex-shrink-0 items-center gap-2">
           <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
           <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
-            SMPN 24 Padang
+            {t('schoolName')}
           </span>
         </Link>
         
@@ -127,7 +130,7 @@ export default function Header() {
                     className={cn(
                         "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
                         (pathname.endsWith(link.href) && link.href !== "/") && "text-primary font-semibold",
-                        (pathname.endsWith('/') && link.href === '/') && "text-primary font-semibold"
+                        (pathname.endsWith(link.href) && link.href === '/') && "text-primary font-semibold"
                     )}
                 >
                     {link.label}
@@ -154,7 +157,7 @@ export default function Header() {
                 <Link href="/" className="mb-4 flex items-center gap-2">
                    <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
                   <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
-                    SMPN 24 Padang
+                    {t('schoolName')}
                   </span>
                 </Link>
                 {navLinks.map((link) => 
@@ -201,19 +204,15 @@ export default function Header() {
                    )
                 )}
                  <div className="mt-4 flex flex-col gap-4 border-t pt-4">
-                     <a href="tel:+621234567890" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                     <a href={`tel:${t('phone')}`} className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                         <Phone className="h-5 w-5" />
-                         <span>+62 123 456 7890</span>
+                         <span>{t('phone')}</span>
                      </a>
-                     <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                     <a href={`mailto:${t('email')}`} className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                         <Mail className="h-5 w-5" />
-                         <span>info@smpn24padang.sch.id</span>
+                         <span>{t('email')}</span>
                     </a>
-                    <Link href="https://www.google.com/maps/search/?api=1&query=123+Education+Lane,+Padang,+Indonesia" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
-                        <MapPin className="h-5 w-5" />
-                        <span>123 Education Lane, Padang</span>
-                     </Link>
-                </div>
+                 </div>
               </div>
             </SheetContent>
           </Sheet>

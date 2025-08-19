@@ -30,7 +30,7 @@ export default async function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
          <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -38,7 +38,9 @@ export default async function RootLayout({
           >
             <div className="flex min-h-screen flex-col">
               <Header />
-              <main className="flex-grow">{children}</main>
+              <main className="flex-grow">
+                {children}
+              </main>
               <Footer />
             </div>
             <Toaster />
