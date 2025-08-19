@@ -1,7 +1,7 @@
-import withNextIntl from 'next-intl/plugin';
+const withNextIntl = require('next-intl/plugin');
  
 const withIntl = withNextIntl('./src/i18n.ts');
  
-export default withIntl({
+module.exports = withIntl({
   // Other Next.js configuration ...
 });
