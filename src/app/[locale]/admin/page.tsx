@@ -14,7 +14,7 @@ const dashboardItems = [
     title: "Berita & Pengumuman",
     description: "Kelola artikel berita dan pengumuman sekolah.",
     icon: <Newspaper className="h-8 w-8 text-accent" />,
-    link: "#",
+    link: "/admin/news",
   },
   {
     title: "Prestasi Siswa",
