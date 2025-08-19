@@ -34,7 +34,6 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
-
 export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -105,7 +104,7 @@ export default function Header() {
                 <DropdownMenu key={link.href}>
                     <DropdownMenuTrigger className={cn(
                         "flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none",
-                        pathname.includes(link.href) && "text-primary"
+                        pathname.startsWith(link.href) && "text-primary"
                     )}>
                     {link.label} <ChevronDown className="ml-1 h-4 w-4" />
                     </DropdownMenuTrigger>
@@ -114,7 +113,7 @@ export default function Header() {
                         <DropdownMenuItem key={subLink.href} asChild>
                         <Link href={subLink.href} className={cn(
                             "flex items-center gap-2",
-                             pathname.endsWith(subLink.href) && "font-semibold text-primary"
+                             pathname === subLink.href && "font-semibold text-primary"
                         )}>
                             <subLink.icon className="h-4 w-4 text-muted-foreground" />
                             {subLink.label}
@@ -129,8 +128,7 @@ export default function Header() {
                     href={link.href}
                     className={cn(
                         "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-                        (pathname.endsWith(link.href) && link.href !== "/") && "text-primary font-semibold",
-                        (pathname.endsWith(link.href) && link.href === '/') && "text-primary font-semibold"
+                        (pathname === link.href) && "text-primary font-semibold"
                     )}
                 >
                     {link.label}
@@ -168,8 +166,7 @@ export default function Header() {
                       onClick={() => setSheetOpen(false)}
                       className={cn(
                           "flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
-                           (pathname.endsWith(link.href) && link.href !== "/") && "bg-accent text-accent-foreground",
-                           (pathname.endsWith('/') && link.href === '/') && "bg-accent text-accent-foreground"
+                          pathname === link.href && "bg-accent text-accent-foreground"
                       )}
                     >
                       <link.icon className="h-5 w-5" />
@@ -179,7 +176,7 @@ export default function Header() {
                     <div key={link.href} className="flex flex-col">
                        <p className={cn(
                            "flex items-center gap-3 p-2 text-lg font-medium text-muted-foreground",
-                            pathname.includes(link.href) && "text-accent-foreground"
+                            pathname.startsWith(link.href) && "text-accent-foreground"
                         )}>
                         <link.icon className="h-5 w-5" />
                         {link.label}
@@ -192,7 +189,7 @@ export default function Header() {
                                 onClick={() => setSheetOpen(false)}
                                 className={cn(
                                     "flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
-                                    pathname.endsWith(subLink.href) && "bg-accent text-accent-foreground"
+                                    pathname === subLink.href && "bg-accent text-accent-foreground"
                                 )}
                             >
                                 <subLink.icon className="h-4 w-4" />
