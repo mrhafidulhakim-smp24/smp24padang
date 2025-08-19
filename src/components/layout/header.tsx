@@ -53,24 +53,6 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="bg-primary/5">
-        <div className="container mx-auto flex h-10 items-center justify-end px-4">
-            <div className="flex items-center gap-6 text-sm">
-                 <Link href="https://www.google.com/maps/search/?api=1&query=123+Education+Lane,+Padang,+Indonesia" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
-                    <MapPin className="h-4 w-4" />
-                    <span className="hidden md:inline">123 Education Lane, Padang, Indonesia</span>
-                 </Link>
-                 <a href="tel:+621234567890" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
-                    <Phone className="h-4 w-4" />
-                     <span className="hidden md:inline">+62 123 456 7890</span>
-                 </a>
-                 <a href="mailto:info@duapat.edu" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
-                    <Mail className="h-4 w-4" />
-                     <span className="hidden md:inline">info@duapat.edu</span>
-                </a>
-            </div>
-        </div>
-      </div>
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
@@ -108,6 +90,18 @@ export default function Header() {
             )
           )}
         </nav>
+        
+        <div className="hidden items-center gap-4 text-sm lg:flex">
+             <a href="tel:+621234567890" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+                <Phone className="h-4 w-4" />
+                 <span>+62 123 456 7890</span>
+             </a>
+             <a href="mailto:info@duapat.edu" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+                <Mail className="h-4 w-4" />
+                 <span>info@duapat.edu</span>
+            </a>
+        </div>
+
 
         <div className="md:hidden">
           <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
@@ -158,6 +152,20 @@ export default function Header() {
                     </div>
                    )
                 )}
+                 <div className="mt-4 flex flex-col gap-4 border-t pt-4">
+                     <a href="tel:+621234567890" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                        <Phone className="h-5 w-5" />
+                         <span>+62 123 456 7890</span>
+                     </a>
+                     <a href="mailto:info@duapat.edu" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                        <Mail className="h-5 w-5" />
+                         <span>info@duapat.edu</span>
+                    </a>
+                    <Link href="https://www.google.com/maps/search/?api=1&query=123+Education+Lane,+Padang,+Indonesia" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                        <MapPin className="h-5 w-5" />
+                        <span>123 Education Lane, Padang</span>
+                     </Link>
+                </div>
               </div>
             </SheetContent>
           </Sheet>
