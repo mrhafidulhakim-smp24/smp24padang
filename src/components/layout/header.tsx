@@ -39,7 +39,7 @@ const navLinks = [
       { href: "/profile/vision-mission", label: "Visi & Misi", icon: Target },
       { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
       { href: "/profile/organization-structure", label: "Struktur Organisasi", icon: Network },
-      { href: "/profile/accreditation", label: "Akreditasi", icon: Award },
+      { href: "/profile/accreditation", label: "Sertifikat Akreditasi", icon: Award },
     ]
   },
   { href: "/academics", label: "Academics", icon: BookOpen },
