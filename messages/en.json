@@ -1,0 +1,26 @@
+{
+  "Header": {
+    "slogan": "Nurturing Minds, Shaping the Future",
+    "phone": "+62 123 456 7890",
+    "email": "info@smpn24padang.sch.id",
+    "schoolName": "SMPN 24 Padang",
+    "nav": {
+      "home": "Home",
+      "profile": "Profile",
+      "schoolProfile": "School Profile",
+      "visionMission": "Vision & Mission",
+      "facultyStaff": "Faculty & Staff",
+      "organizationStructure": "Organization Structure",
+      "accreditation": "Accreditation Certificate",
+      "academics": "Academics",
+      "achievements": "Achievements",
+      "gallery": "Gallery"
+    }
+  },
+  "Footer": {
+    "about": "Nurturing Minds, Shaping the Future. Explore our world of learning and discovery.",
+    "contactUs": "Contact Us",
+    "address": "123 Education Lane, Padang, Indonesia",
+    "copyright": "© {year} SMPN 24 Padang. All Rights Reserved."
+  }
+}

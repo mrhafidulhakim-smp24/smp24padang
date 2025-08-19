@@ -1,0 +1,26 @@
+{
+  "Header": {
+    "slogan": "Membina Pikiran, Membentuk Masa Depan",
+    "phone": "+62 123 456 7890",
+    "email": "info@smpn24padang.sch.id",
+    "schoolName": "SMPN 24 Padang",
+    "nav": {
+      "home": "Beranda",
+      "profile": "Profil",
+      "schoolProfile": "Profil Sekolah",
+      "visionMission": "Visi & Misi",
+      "facultyStaff": "Guru & Staf",
+      "organizationStructure": "Struktur Organisasi",
+      "accreditation": "Sertifikat Akreditasi",
+      "academics": "Akademik",
+      "achievements": "Prestasi",
+      "gallery": "Galeri"
+    }
+  },
+  "Footer": {
+    "about": "Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.",
+    "contactUs": "Hubungi Kami",
+    "address": "Jalan Pendidikan 123, Padang, Indonesia",
+    "copyright": "© {year} SMPN 24 Padang. Hak Cipta Dilindungi Undang-Undang."
+  }
+}
