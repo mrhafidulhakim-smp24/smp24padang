@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,6 @@ import {
   Trophy,
   Camera,
   Menu,
-  MapPin,
   Phone,
   Mail,
   ChevronDown,
@@ -99,7 +97,7 @@ export default function Header() {
       {/* Main Navigation */}
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex flex-shrink-0 items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
             {locale.toUpperCase()}
           </div>
           <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
@@ -163,7 +161,7 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="mb-4 flex items-center gap-2">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
                     {locale.toUpperCase()}
                   </div>
                   <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
