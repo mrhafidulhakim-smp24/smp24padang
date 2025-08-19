@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
-import { Logo } from "@/components/icons";
 
 export default function Footer() {
   return (
@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container mx-auto grid grid-cols-1 gap-12 px-4 py-12 md:grid-cols-3">
         <div className="space-y-4">
           <Link href="/" className="flex items-center gap-2">
-            <Logo className="h-8 w-8 text-accent" />
+            <Image src="/logo.jpg" alt="DUAPAT Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
             <span className="font-headline text-xl font-bold text-white">
               DUAPAT
             </span>

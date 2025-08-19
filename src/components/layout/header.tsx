@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -27,7 +28,6 @@ import {
   Award,
   Network,
 } from "lucide-react";
-import { Logo } from "@/components/icons";
 
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
@@ -73,7 +73,7 @@ export default function Header() {
       </div>
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <Logo className="h-8 w-8 text-primary" />
+          <Image src="/logo.jpg" alt="DUAPAT Logo" width={40} height={40} className="h-8 w-auto" />
           <span className="font-headline text-xl font-bold text-primary">
             DUAPAT
           </span>
@@ -120,7 +120,7 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="mb-4 flex items-center gap-2">
-                  <Logo className="h-8 w-8 text-primary" />
+                   <Image src="/logo.jpg" alt="DUAPAT Logo" width={40} height={40} className="h-8 w-auto" />
                   <span className="font-headline text-xl font-bold text-primary">
                     DUAPAT
                   </span>
