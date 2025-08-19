@@ -53,6 +53,29 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      {/* Top Bar */}
+      <div className="hidden bg-primary/90 text-primary-foreground lg:block">
+        <div className="container mx-auto flex h-10 items-center justify-between px-4 text-sm">
+            <div className="flex items-center gap-4">
+                 <a href="#" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
+                    <MapPin className="h-4 w-4" />
+                    <span>123 Education Lane, Padang, Indonesia</span>
+                 </a>
+            </div>
+            <div className="flex items-center gap-6">
+                <a href="tel:+621234567890" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
+                    <Phone className="h-4 w-4" />
+                    <span>+62 123 456 7890</span>
+                </a>
+                <a href="mailto:info@duapat.edu" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
+                    <Mail className="h-4 w-4" />
+                    <span>info@duapat.edu</span>
+                </a>
+            </div>
+        </div>
+      </div>
+      
+      {/* Main Navigation */}
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex flex-shrink-0 items-center gap-2">
           <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
@@ -61,50 +84,37 @@ export default function Header() {
           </span>
         </Link>
         
-        <div className="hidden items-center gap-6 md:flex">
-          <nav className="items-center justify-end gap-6 hidden md:flex">
-            {navLinks.map((link) => 
-              link.subLinks ? (
-                <DropdownMenu key={link.href}>
-                  <DropdownMenuTrigger className="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none">
-                    {link.label} <ChevronDown className="ml-1 h-4 w-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    {link.subLinks.map(subLink => (
-                      <DropdownMenuItem key={subLink.href} asChild>
-                         <Link href={subLink.href} className="flex items-center gap-2">
-                          <subLink.icon className="h-4 w-4 text-muted-foreground" />
-                          {subLink.label}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-                >
-                  {link.label}
-                </Link>
-              )
-            )}
-          </nav>
-          
-          <div className="hidden items-center gap-4 text-sm lg:flex">
-               <a href="tel:+621234567890" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary whitespace-nowrap">
-                  <Phone className="h-4 w-4" />
-                   <span>+62 123 456 7890</span>
-               </a>
-               <a href="mailto:info@duapat.edu" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary whitespace-nowrap">
-                  <Mail className="h-4 w-4" />
-                   <span>info@duapat.edu</span>
-              </a>
-          </div>
-        </div>
+        <nav className="items-center justify-end gap-6 hidden md:flex">
+          {navLinks.map((link) => 
+            link.subLinks ? (
+              <DropdownMenu key={link.href}>
+                <DropdownMenuTrigger className="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none">
+                  {link.label} <ChevronDown className="ml-1 h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {link.subLinks.map(subLink => (
+                    <DropdownMenuItem key={subLink.href} asChild>
+                       <Link href={subLink.href} className="flex items-center gap-2">
+                        <subLink.icon className="h-4 w-4 text-muted-foreground" />
+                        {subLink.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
+        </nav>
 
-
+        {/* Mobile Menu Trigger */}
         <div className="md:hidden">
           <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
