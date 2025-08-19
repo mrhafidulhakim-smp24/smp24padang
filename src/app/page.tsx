@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpen, Building, GraduationCap, Users } from 'lucide-react';
 
 const newsItems = [
   {
@@ -11,6 +11,7 @@ const newsItems = [
     image: "https://placehold.co/600x400.png",
     hint: "sports students",
     date: "2024-03-15",
+    link: "#"
   },
   {
     title: "Science Fair Innovations",
@@ -18,6 +19,7 @@ const newsItems = [
     image: "https://placehold.co/600x400.png",
     hint: "science fair",
     date: "2024-03-10",
+    link: "#"
   },
   {
     title: "Art Exhibition 'Creative Canvases'",
@@ -25,34 +27,15 @@ const newsItems = [
     image: "https://placehold.co/600x400.png",
     hint: "art exhibition",
     date: "2024-03-05",
-  },
-   {
-    title: "Community Service Initiative",
-    description: "Students participate in a local clean-up drive, making a positive impact.",
-    image: "https://placehold.co/600x400.png",
-    hint: "community service",
-    date: "2024-02-28",
-  },
-  {
-    title: "Music Festival Hits a High Note",
-    description: "A harmonious evening of musical performances by school bands and choirs.",
-    image: "https://placehold.co/600x400.png",
-    hint: "music festival",
-    date: "2024-02-20",
-  },
-  {
-    title: "Principal's Honor Roll Ceremony",
-    description: "Celebrating the academic excellence of our top-performing students.",
-    image: "https://placehold.co/600x400.png",
-    hint: "academic ceremony",
-    date: "2024-02-15",
+    link: "#"
   },
 ];
 
 export default function Home() {
   return (
     <div className="flex flex-col">
-      <section className="relative h-[60vh] bg-primary/10">
+      {/* Hero Section */}
+      <section className="relative h-[70vh] w-full bg-primary/10">
         <Image
           src="https://placehold.co/1920x1080.png"
           alt="School Campus"
@@ -62,21 +45,105 @@ export default function Home() {
           data-ai-hint="school campus"
         />
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-primary">
-          <h1 className="font-headline text-4xl font-bold md:text-6xl">
+          <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
             Welcome to DUAPAT Empat Padang
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-primary/80">
+          <p className="mt-4 max-w-2xl text-lg text-primary/80 drop-shadow-sm">
             Nurturing Minds, Shaping Futures. Explore our world of learning and discovery.
           </p>
-          <Button asChild className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link href="/profile">
-              Learn More <ArrowRight className="ml-2 h-5 w-5" />
+          <Button asChild className="mt-8 bg-accent text-accent-foreground shadow-lg transition-transform hover:scale-105 hover:bg-accent/90">
+            <Link href="/contact">
+              Enroll Today <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
         </div>
       </section>
 
-      <section className="py-12 md:py-24">
+      {/* Welcome from Principal Section */}
+      <section className="bg-background py-16 md:py-24">
+        <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
+          <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-xl">
+            <Image 
+              src="https://placehold.co/600x800.png" 
+              alt="Principal" 
+              layout="fill" 
+              objectFit="cover" 
+              data-ai-hint="professional portrait"
+              className="transition-transform duration-500 hover:scale-110"
+            />
+          </div>
+          <div>
+            <h2 className="font-headline text-3xl font-bold text-primary">A Message from the Principal</h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Welcome to DUAPAT Empat Padang! We are a community dedicated to fostering academic excellence, character development, and a lifelong love of learning. Our commitment is to provide a safe, nurturing, and stimulating environment where every student can thrive.
+            </p>
+            <Button asChild variant="link" className="mt-4 p-0 text-accent-foreground">
+              <Link href="/profile">
+                Read More <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Pillars Section */}
+      <section className="bg-primary/5 py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Our Pillars of Excellence</h2>
+            <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+              Building a strong foundation for every student's future.
+            </p>
+          </div>
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+            <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <CardHeader className="items-center">
+                <div className="rounded-full bg-accent/20 p-4">
+                  <GraduationCap className="h-10 w-10 text-accent" />
+                </div>
+                <CardTitle className="font-headline pt-4 text-primary">Academics</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">A rigorous and innovative curriculum designed to challenge and inspire.</p>
+                <Button asChild variant="outline" className="mt-4">
+                   <Link href="/academics">Learn More</Link>
+                </Button>
+              </CardContent>
+            </Card>
+            <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <CardHeader className="items-center">
+                <div className="rounded-full bg-accent/20 p-4">
+                  <Users className="h-10 w-10 text-accent" />
+                </div>
+                <CardTitle className="font-headline pt-4 text-primary">Student Life</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">A vibrant community with diverse extracurricular activities and clubs.</p>
+                 <Button asChild variant="outline" className="mt-4">
+                   <Link href="/academics#activities">Explore Activities</Link>
+                </Button>
+              </CardContent>
+            </Card>
+            <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <CardHeader className="items-center">
+                <div className="rounded-full bg-accent/20 p-4">
+                  <Building className="h-10 w-10 text-accent" />
+                </div>
+                <CardTitle className="font-headline pt-4 text-primary">Our Campus</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">State-of-the-art facilities that provide a world-class learning environment.</p>
+                 <Button asChild variant="outline" className="mt-4">
+                   <Link href="/profile">Visit Us</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest News Section */}
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <h2 className="font-headline mb-8 text-center text-3xl font-bold text-primary md:text-4xl">
             Latest News & Announcements
@@ -101,13 +168,36 @@ export default function Home() {
                   </CardTitle>
                   <p className="mt-2 text-foreground/80">{item.description}</p>
                   <Button variant="link" asChild className="mt-4 p-0 text-accent-foreground">
-                    <Link href="#">
+                    <Link href={item.link}>
                       Read More <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </Button>
                 </CardContent>
               </Card>
             ))}
+          </div>
+           <div className="mt-12 text-center">
+             <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <Link href="/achievements">View All News</Link>
+             </Button>
+           </div>
+        </div>
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="bg-primary py-16 text-primary-foreground">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="font-headline text-3xl font-bold">Ready to Join Our Community?</h2>
+          <p className="mx-auto mt-2 max-w-2xl text-lg text-primary-foreground/80">
+            Discover the opportunities waiting for you at DUAPAT Empat Padang.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Button asChild size="lg" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
+              <Link href="/contact">Contact Us</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
+              <Link href="/profile">About The School</Link>
+            </Button>
           </div>
         </div>
       </section>

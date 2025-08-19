@@ -63,7 +63,7 @@ export default function AcademicsPage() {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="activities" className="mt-8">
+        <TabsContent value="activities" id="activities" className="mt-8">
           <Card>
             <CardHeader>
               <CardTitle className="font-headline text-2xl text-primary">
