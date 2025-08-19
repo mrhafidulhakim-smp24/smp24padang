@@ -16,10 +16,11 @@ import {
   User,
   BookOpen,
   Trophy,
-  Mail,
+  Camera,
   Menu,
   MapPin,
   Phone,
+  Mail,
   ChevronDown,
   Target,
   Users,
@@ -44,7 +45,7 @@ const navLinks = [
   },
   { href: "/academics", label: "Academics", icon: BookOpen },
   { href: "/achievements", label: "Achievements", icon: Trophy },
-  { href: "/contact", label: "Contact", icon: Mail },
+  { href: "/gallery", label: "Gallery", icon: Camera },
 ];
 
 export default function Header() {

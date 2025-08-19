@@ -51,11 +51,6 @@ export default function Home() {
           <p className="mt-4 max-w-2xl text-lg text-primary/80 drop-shadow-sm">
             Nurturing Minds, Shaping Futures. Explore our world of learning and discovery.
           </p>
-          <Button asChild className="mt-8 bg-accent text-accent-foreground shadow-lg transition-transform hover:scale-105 hover:bg-accent/90">
-            <Link href="/contact">
-              Enroll Today <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
         </div>
       </section>
 
