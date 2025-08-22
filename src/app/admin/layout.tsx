@@ -18,15 +18,21 @@ import {
   ImageIcon,
   Users,
   Home,
+  Building,
+  Award,
+  Network,
 } from "lucide-react";
 import Image from "next/image";
 
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/profile", label: "Profil Sekolah", icon: Building },
   { href: "/admin/news", label: "Berita", icon: Newspaper },
   { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
   { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },
   { href: "/admin/staff", label: "Guru & Staf", icon: Users },
+  { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },
+  { href: "/admin/accreditation", label: "Akreditasi", icon: Award },
 ];
 
 export default function AdminLayout({

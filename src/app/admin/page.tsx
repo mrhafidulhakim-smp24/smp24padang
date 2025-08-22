@@ -6,10 +6,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Newspaper, Trophy, ImageIcon, Users, BookOpen } from "lucide-react";
+import { Newspaper, Trophy, ImageIcon, Users, Building, Award, Network } from "lucide-react";
 import Link from "next/link";
 
 const dashboardItems = [
+   {
+    title: "Kelola Profil Sekolah",
+    description: "Edit kata sambutan kepala sekolah dan foto profil.",
+    icon: <Building className="h-8 w-8 text-primary" />,
+    link: "/admin/profile",
+  },
   {
     title: "Kelola Berita",
     description: "Tambah, edit, atau hapus artikel berita dan pengumuman.",
@@ -33,6 +39,18 @@ const dashboardItems = [
     description: "Kelola profil para pendidik dan staf.",
     icon: <Users className="h-8 w-8 text-primary" />,
     link: "/admin/staff",
+  },
+   {
+    title: "Kelola Struktur Organisasi",
+    description: "Atur bagan struktur organisasi sekolah.",
+    icon: <Network className="h-8 w-8 text-primary" />,
+    link: "/admin/organization",
+  },
+  {
+    title: "Kelola Akreditasi",
+    description: "Kelola dokumen dan sertifikat akreditasi.",
+    icon: <Award className="h-8 w-8 text-primary" />,
+    link: "/admin/accreditation",
   },
 ];
 
