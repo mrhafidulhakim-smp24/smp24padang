@@ -40,80 +40,61 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import Image from "next/image";
 
-
-type OrgMember = {
+type OrgChart = {
   id: string;
-  name: string;
-  position: string;
-  category: "Kepemimpinan Sekolah" | "Staf Tata Usaha" | "Pembina OSIS";
-  initials: string;
+  title: string;
   image: string;
+  hint: string;
 };
 
-const initialMembers: OrgMember[] = [
-  { id: "1", name: "Dr. Budi Santoso, M.Pd.", position: "Kepala Sekolah", category: "Kepemimpinan Sekolah", initials: "BS", image: "https://placehold.co/150x150.png" },
-  { id: "2", name: "Siti Rahayu, S.Pd.", position: "Wakil Kepala Sekolah Bidang Akademik", category: "Kepemimpinan Sekolah", initials: "SR", image: "https://placehold.co/150x150.png" },
-  { id: "3", name: "Joko Susilo, S.Kom", position: "Kepala Tata Usaha", category: "Staf Tata Usaha", initials: "JS", image: "https://placehold.co/150x150.png" },
-  { id: "4", name: "Eko Prasetyo, S.Or.", position: "Pembina OSIS", category: "Pembina OSIS", initials: "EP", image: "https://placehold.co/150x150.png" },
+const initialCharts: OrgChart[] = [
+  { id: "1", title: "Struktur Pimpinan Sekolah", image: "https://placehold.co/1200x800.png", hint: "organization chart" },
+  { id: "2", title: "Struktur Organisasi Siswa Intra Sekolah (OSIS)", image: "https://placehold.co/1200x800.png", hint: "organization chart" },
 ];
 
-const categories = ["Kepemimpinan Sekolah", "Staf Tata Usaha", "Pembina OSIS"];
-
 export default function OrganizationAdminPage() {
-  const [members, setMembers] = useState<OrgMember[]>(initialMembers);
+  const [charts, setCharts] = useState<OrgChart[]>(initialCharts);
   const [isAddOpen, setAddOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const [selectedMember, setSelectedMember] = useState<OrgMember | null>(null);
+  const [selectedChart, setSelectedChart] = useState<OrgChart | null>(null);
 
-  const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-  }
-
-  const handleAddMember = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddChart = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const name = formData.get("name") as string;
-    const newMember: OrgMember = {
+    const newChart: OrgChart = {
       id: Date.now().toString(),
-      name,
-      position: formData.get("position") as string,
-      category: formData.get("category") as OrgMember['category'],
-      initials: getInitials(name),
-      image: "https://placehold.co/150x150.png",
+      title: formData.get("title") as string,
+      image: "https://placehold.co/1200x800.png",
+      hint: "organization chart"
     };
-    setMembers([newMember, ...members]);
+    setCharts([newChart, ...charts]);
     setAddOpen(false);
     (event.target as HTMLFormElement).reset();
   };
 
-  const handleEditMember = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEditChart = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!selectedMember) return;
+    if (!selectedChart) return;
     
     const formData = new FormData(event.currentTarget);
-    const name = formData.get("name") as string;
-    const updatedMember: OrgMember = {
-      ...selectedMember,
-      name,
-      position: formData.get("position") as string,
-      category: formData.get("category") as OrgMember['category'],
-      initials: getInitials(name),
+    const updatedChart: OrgChart = {
+      ...selectedChart,
+      title: formData.get("title") as string,
     };
 
-    setMembers(members.map(s => s.id === selectedMember.id ? updatedMember : s));
+    setCharts(charts.map(s => s.id === selectedChart.id ? updatedChart : s));
     setEditOpen(false);
-    setSelectedMember(null);
+    setSelectedChart(null);
   };
   
   const handleDeleteConfirm = () => {
-    if (!selectedMember) return;
-    setMembers(members.filter(s => s.id !== selectedMember.id));
+    if (!selectedChart) return;
+    setCharts(charts.filter(s => s.id !== selectedChart.id));
     setDeleteOpen(false);
-    setSelectedMember(null);
+    setSelectedChart(null);
   };
 
   return (
@@ -121,26 +102,30 @@ export default function OrganizationAdminPage() {
        <div className="flex items-center justify-between">
         <div>
           <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-            Kelola Struktur Organisasi
+            Kelola Bagan Organisasi
           </h1>
           <p className="mt-2 text-lg text-muted-foreground">
-            Tambah, edit, atau hapus anggota dari struktur organisasi.
+            Tambah, edit, atau hapus gambar bagan struktur organisasi.
           </p>
         </div>
         <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
           <DialogTrigger asChild>
             <Button>
               <PlusCircle className="mr-2 h-4 w-4" />
-              Tambah Anggota
+              Tambah Bagan
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Tambah Anggota Organisasi</DialogTitle>
+              <DialogTitle>Tambah Bagan Organisasi Baru</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleAddMember} className="space-y-4">
+            <form onSubmit={handleAddChart} className="space-y-4">
               <div>
-                <Label htmlFor="image-add">Foto</Label>
+                <Label htmlFor="title-add">Judul Bagan</Label>
+                <Input id="title-add" name="title" placeholder="Contoh: Struktur Pimpinan Sekolah" required />
+              </div>
+              <div>
+                <Label htmlFor="image-add">Gambar Bagan</Label>
                  <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
                     <div className="space-y-1 text-center">
                         <Upload className="mx-auto h-12 w-12 text-gray-400" />
@@ -150,25 +135,6 @@ export default function OrganizationAdminPage() {
                         </Label>
                     </div>
                  </div>
-              </div>
-              <div>
-                <Label htmlFor="name-add">Nama Lengkap & Gelar</Label>
-                <Input id="name-add" name="name" required />
-              </div>
-              <div>
-                <Label htmlFor="position-add">Jabatan</Label>
-                <Input id="position-add" name="position" required />
-              </div>
-              <div>
-                <Label htmlFor="category-add">Kategori</Label>
-                <Select name="category" required>
-                    <SelectTrigger id="category-add">
-                        <SelectValue placeholder="Pilih kategori" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {categories.map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
-                    </SelectContent>
-                </Select>
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setAddOpen(false)}>Batal</Button>
@@ -184,26 +150,18 @@ export default function OrganizationAdminPage() {
             <Table>
             <TableHeader>
                 <TableRow>
-                <TableHead className="w-[35%]">Nama</TableHead>
-                <TableHead className="w-[30%]">Jabatan</TableHead>
-                <TableHead>Kategori</TableHead>
+                <TableHead className="w-[15%]">Pratinjau</TableHead>
+                <TableHead>Judul Bagan</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {members.map((item) => (
+                {charts.map((item) => (
                 <TableRow key={item.id}>
-                    <TableCell className="font-medium">
-                        <div className="flex items-center gap-3">
-                            <Avatar>
-                                <AvatarImage src={item.image} alt={item.name} />
-                                <AvatarFallback>{item.initials}</AvatarFallback>
-                            </Avatar>
-                            <span>{item.name}</span>
-                        </div>
+                    <TableCell>
+                        <Image src={item.image} alt={item.title} width={120} height={80} className="rounded-md object-cover"/>
                     </TableCell>
-                    <TableCell>{item.position}</TableCell>
-                    <TableCell>{item.category}</TableCell>
+                    <TableCell className="font-medium">{item.title}</TableCell>
                     <TableCell className="text-right">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -213,11 +171,11 @@ export default function OrganizationAdminPage() {
                         </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                        <DropdownMenuItem onSelect={() => { setSelectedMember(item); setEditOpen(true); }}>
+                        <DropdownMenuItem onSelect={() => { setSelectedChart(item); setEditOpen(true); }}>
                             <Pencil className="mr-2 h-4 w-4" />
                             <span>Edit</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => { setSelectedMember(item); setDeleteOpen(true); }} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                        <DropdownMenuItem onSelect={() => { setSelectedChart(item); setDeleteOpen(true); }} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
                             <Trash2 className="mr-2 h-4 w-4" />
                             <span>Hapus</span>
                         </DropdownMenuItem>
@@ -234,39 +192,24 @@ export default function OrganizationAdminPage() {
        <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Edit Anggota Organisasi</DialogTitle>
+              <DialogTitle>Edit Bagan Organisasi</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleEditMember} className="space-y-4">
+            <form onSubmit={handleEditChart} className="space-y-4">
+              <div>
+                <Label htmlFor="title-edit">Judul Bagan</Label>
+                <Input id="title-edit" name="title" defaultValue={selectedChart?.title} required />
+              </div>
                <div>
-                <Label htmlFor="image-edit">Foto</Label>
+                <Label htmlFor="image-edit">Ganti Gambar Bagan</Label>
                  <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
                     <div className="space-y-1 text-center">
                         <Upload className="mx-auto h-12 w-12 text-gray-400" />
                          <Label htmlFor="file-upload-edit" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none hover:text-primary/80">
-                            <span>Ganti file</span>
+                            <span>Unggah file baru</span>
                              <Input id="file-upload-edit" name="file-upload" type="file" className="sr-only" />
                         </Label>
                     </div>
                  </div>
-              </div>
-              <div>
-                <Label htmlFor="name-edit">Nama Lengkap & Gelar</Label>
-                <Input id="name-edit" name="name" defaultValue={selectedMember?.name} required />
-              </div>
-              <div>
-                <Label htmlFor="position-edit">Jabatan</Label>
-                <Input id="position-edit" name="position" defaultValue={selectedMember?.position} required />
-              </div>
-              <div>
-                 <Label htmlFor="category-edit">Kategori</Label>
-                <Select name="category" defaultValue={selectedMember?.category} required>
-                    <SelectTrigger id="category-edit">
-                        <SelectValue placeholder="Pilih kategori" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {categories.map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
-                    </SelectContent>
-                </Select>
               </div>
               <DialogFooter>
                  <Button type="button" variant="outline" onClick={() => setEditOpen(false)}>Batal</Button>
@@ -281,11 +224,11 @@ export default function OrganizationAdminPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
             <AlertDialogDescription>
-              Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data anggota secara permanen.
+              Tindakan ini tidak dapat dibatalkan. Ini akan menghapus bagan organisasi secara permanen.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setSelectedMember(null)}>Batal</AlertDialogCancel>
+            <AlertDialogCancel onClick={() => setSelectedChart(null)}>Batal</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
               Hapus
             </AlertDialogAction>

@@ -1,39 +1,23 @@
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type OrgMember = {
+type OrgChart = {
   id: string;
-  name: string;
-  position: string;
-  category: "Kepemimpinan Sekolah" | "Staf Tata Usaha" | "Pembina OSIS";
-  initials: string;
+  title: string;
   image: string;
   hint: string;
 };
 
 // Data ini seharusnya diambil dari CMS/database di aplikasi nyata.
-const orgMembers: OrgMember[] = [
-  { id: "1", name: "Dr. Budi Santoso, M.Pd.", position: "Kepala Sekolah", category: "Kepemimpinan Sekolah", initials: "BS", image: "https://placehold.co/150x150.png", hint: "man portrait" },
-  { id: "2", name: "Siti Rahayu, S.Pd.", position: "Wakil Kepala Sekolah Bidang Akademik", category: "Kepemimpinan Sekolah", initials: "SR", image: "https://placehold.co/150x150.png", hint: "woman portrait" },
-  { id: "3", name: "Agus Wijaya, M.Pd.", position: "Wakil Kepala Sekolah Bidang Kesiswaan", category: "Kepemimpinan Sekolah", initials: "AW", image: "https://placehold.co/150x150.png", hint: "man portrait" },
-  { id: "4", name: "Joko Susilo, S.Kom", position: "Kepala Tata Usaha", category: "Staf Tata Usaha", initials: "JS", image: "https://placehold.co/150x150.png", hint: "man portrait" },
-  { id: "5", name: "Dewi Lestari, A.Md.", position: "Staf Administrasi", category: "Staf Tata Usaha", initials: "DL", image: "https://placehold.co/150x150.png", hint: "woman portrait" },
-  { id: "6", name: "Eko Prasetyo, S.Or.", position: "Pembina OSIS", category: "Pembina OSIS", initials: "EP", image: "https://placehold.co/150x150.png", hint: "man portrait" },
-  { id: "7", name: "Fitriani, S.Psi.", position: "Sekretaris OSIS", category: "Pembina OSIS", initials: "F", image: "https://placehold.co/150x150.png", hint: "woman portrait" },
+const orgCharts: OrgChart[] = [
+  { id: "1", title: "Struktur Pimpinan Sekolah", image: "https://placehold.co/1200x800.png", hint: "organization chart" },
+  { id: "2", title: "Struktur Organisasi Siswa Intra Sekolah (OSIS)", image: "https://placehold.co/1200x800.png", hint: "organization chart" },
+  { id: "3", title: "Struktur Tata Usaha", image: "https://placehold.co/1200x800.png", hint: "organization chart" },
 ];
 
-const groupByCategory = (members: OrgMember[]) => {
-  return members.reduce((acc, member) => {
-    (acc[member.category] = acc[member.category] || []).push(member);
-    return acc;
-  }, {} as Record<string, OrgMember[]>);
-};
 
 export default function OrganizationStructurePage() {
-  const groupedMembers = groupByCategory(orgMembers);
-  const categories = Object.keys(groupedMembers);
-
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -41,30 +25,32 @@ export default function OrganizationStructurePage() {
           Struktur Organisasi
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Mengenal kepemimpinan, staf, dan pengurus organisasi di SMPN 24 Padang.
+          Mengenal bagan kepengurusan di berbagai unit SMPN 24 Padang.
         </p>
       </div>
 
       <div className="mt-16 space-y-16">
-        {categories.map((category) => (
-          <section key={category}>
-            <h2 className="font-headline mb-8 text-center text-3xl font-bold text-primary">
-              {category}
-            </h2>
-            <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {groupedMembers[category].map((member) => (
-                <div key={member.id} className="flex flex-col items-center text-center">
-                  <Avatar className="h-32 w-32 border-4 border-primary/10">
-                    <AvatarImage src={member.image} data-ai-hint={member.hint} alt={member.name} />
-                    <AvatarFallback className="bg-primary/20 text-3xl font-semibold text-primary">
-                      {member.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <h3 className="mt-4 text-xl font-bold text-primary">{member.name}</h3>
-                  <p className="font-semibold text-base text-accent-foreground">{member.position}</p>
+        {orgCharts.map((chart) => (
+          <section key={chart.id}>
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-headline text-center text-3xl text-primary">
+                  {chart.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-lg border">
+                   <Image
+                      src={chart.image}
+                      alt={chart.title}
+                      width={1200}
+                      height={800}
+                      className="h-auto w-full object-contain"
+                      data-ai-hint={chart.hint}
+                    />
                 </div>
-              ))}
-            </div>
+              </CardContent>
+            </Card>
           </section>
         ))}
       </div>
