@@ -1,3 +1,4 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building, BookMarked, Activity } from "lucide-react";
@@ -8,10 +9,10 @@ export default function AcademicsPage() {
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
         <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
-          Akademik Kami
+          Program Akademik
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Menumbuhkan rasa ingin tahu intelektual dan semangat untuk belajar seumur hidup.
+          Menumbuhkan Keunggulan Intelektual dan Semangat Belajar Seumur Hidup.
         </p>
       </div>
 
@@ -21,26 +22,26 @@ export default function AcademicsPage() {
             <BookMarked className="mr-2 h-5 w-5" /> Kurikulum
           </TabsTrigger>
           <TabsTrigger value="organization">
-            <Building className="mr-2 h-5 w-5" /> Organisasi
+            <Building className="mr-2 h-5 w-5" /> Struktur Pembelajaran
           </TabsTrigger>
           <TabsTrigger value="activities">
-            <Activity className="mr-2 h-5 w-5" /> Kegiatan
+            <Activity className="mr-2 h-5 w-5" /> Kegiatan Ekstrakurikuler
           </TabsTrigger>
         </TabsList>
         <TabsContent value="curriculum" className="mt-8">
           <Card>
             <CardHeader>
               <CardTitle className="font-headline text-2xl text-primary">
-                Kurikulum Komprehensif
+                Kurikulum Merdeka yang Adaptif & Inovatif
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-foreground/80">
                <Image src="https://placehold.co/1200x400.png" alt="Curriculum" width={1200} height={400} className="mb-6 w-full rounded-lg object-cover" data-ai-hint="library books" />
               <p>
-                Kurikulum kami dirancang untuk memberikan pendidikan yang seimbang dan holistik, memadukan standar akademik yang ketat dengan pengalaman belajar yang kreatif dan praktis. Kami mengikuti kurikulum nasional sambil menggabungkan metodologi pengajaran inovatif untuk melayani gaya belajar yang beragam.
+                SMPN 24 Padang menerapkan **Kurikulum Merdeka**, sebuah pendekatan pendidikan yang memberikan keleluasaan bagi guru untuk menciptakan pembelajaran berkualitas yang sesuai dengan kebutuhan dan minat belajar siswa. Kurikulum ini dirancang untuk menumbuhkan siswa yang kreatif, mandiri, dan bernalar kritis.
               </p>
               <p>
-                Mata pelajaran inti meliputi Matematika, Sains, Bahasa, dan Ilmu Sosial, dilengkapi dengan berbagai pilihan mata pelajaran dalam seni, teknologi, dan pendidikan jasmani. Kami menekankan pemikiran kritis, pemecahan masalah, dan kolaborasi untuk mempersiapkan siswa menghadapi tantangan masa depan.
+                Kami fokus pada pembelajaran intrakurikuler yang beragam, di mana konten dioptimalkan agar siswa memiliki cukup waktu untuk mendalami konsep dan menguatkan kompetensi. Selain itu, kami mengintegrasikan **Projek Penguatan Profil Pelajar Pancasila (P5)** yang memungkinkan siswa untuk mengeksplorasi isu-isu aktual seperti lingkungan, kesehatan, dan kewirausahaan melalui pembelajaran berbasis proyek yang kolaboratif.
               </p>
             </CardContent>
           </Card>
@@ -49,16 +50,16 @@ export default function AcademicsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="font-headline text-2xl text-primary">
-                Organisasi Sekolah
+                Struktur Pembelajaran yang Mendukung
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-foreground/80">
               <Image src="https://placehold.co/1200x400.png" alt="Organization" width={1200} height={400} className="mb-6 w-full rounded-lg object-cover" data-ai-hint="school building" />
               <p>
-                SMPN 24 Padang terstruktur untuk menciptakan lingkungan belajar yang mendukung dan efisien. Sekolah ini dibagi menjadi tiga tingkatan utama: Sekolah Dasar (Kelas 1-6), Sekolah Menengah Pertama (Kelas 7-9), dan Sekolah Menengah Atas (Kelas 10-12).
+                Struktur pembelajaran kami dirancang untuk menciptakan lingkungan belajar yang kondusif dan terarah bagi siswa jenjang Sekolah Menengah Pertama (Kelas 7-9). Setiap kelas dibimbing oleh seorang wali kelas yang berdedikasi, yang berperan sebagai fasilitator utama dan jembatan komunikasi antara sekolah, siswa, dan orang tua.
               </p>
               <p>
-                Setiap tingkatan dipimpin oleh seorang kepala yang berdedikasi, yang bekerja sama dengan tim pendidik dan staf pendukung yang berpengalaman. Badan administrasi kami memastikan kelancaran semua fungsi sekolah, mulai dari penerimaan siswa hingga kesejahteraan siswa, menjaga komunikasi terbuka dengan orang tua dan masyarakat luas.
+                Wali kelas bekerja sama dengan tim guru mata pelajaran yang ahli di bidangnya untuk memastikan setiap siswa mendapatkan perhatian yang dibutuhkan, baik secara akademik maupun personal. Pendekatan ini memungkinkan kami untuk memantau perkembangan siswa secara holistik dan memberikan dukungan yang tepat waktu untuk membantu mereka mencapai potensi maksimal.
               </p>
             </CardContent>
           </Card>
@@ -67,22 +68,22 @@ export default function AcademicsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="font-headline text-2xl text-primary">
-                Kegiatan Ekstrakurikuler
+                Pengembangan Diri Melalui Ekstrakurikuler
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-foreground/80">
               <Image src="https://placehold.co/1200x400.png" alt="Activities" width={1200} height={400} className="mb-6 w-full rounded-lg object-cover" data-ai-hint="students playing" />
               <p>
-                Kami percaya bahwa belajar tidak hanya terbatas di dalam kelas. Program ekstrakurikuler kami yang beragam memberikan siswa kesempatan untuk mengeksplorasi minat mereka, mengembangkan keterampilan baru, dan membangun karakter.
+                Kami percaya pendidikan tidak hanya terjadi di dalam kelas. Program ekstrakurikuler kami yang beragam dirancang untuk menjadi wadah bagi siswa untuk menyalurkan minat, mengembangkan bakat, membangun karakter, dan belajar kepemimpinan.
               </p>
               <p>
-                Siswa dapat memilih dari berbagai klub dan kegiatan, termasuk:
+                Siswa dapat memilih dari berbagai klub dan kegiatan yang menarik, di antaranya:
               </p>
-              <ul className="list-disc pl-6">
-                <li><strong>Olahraga:</strong> Sepak Bola, Bola Basket, Renang, dan Atletik.</li>
-                <li><strong>Seni:</strong> Klub Drama, Paduan Suara Sekolah, Band, dan Seni Rupa.</li>
-                <li><strong>Klub Akademik:</strong> Tim Debat, Klub Sains, dan Olimpiade Matematika.</li>
-                <li><strong>Pengabdian Masyarakat:</strong> Program sukarela dan penjangkauan sosial.</li>
+              <ul className="list-disc space-y-2 pl-6">
+                <li><strong>Olahraga:</strong> Sepak Bola, Bola Basket, Bola Voli, Bulu Tangkis, dan Pencak Silat.</li>
+                <li><strong>Seni & Budaya:</strong> Tari Tradisional, Paduan Suara, Klub Musik (Band), dan Seni Rupa.</li>
+                <li><strong>Akademik & Sains:</strong> Kelompok Ilmiah Remaja (KIR), Olimpiade Sains Nasional (OSN), dan English Club.</li>
+                <li><strong>Pengembangan Diri:</strong> Pramuka, Palang Merah Remaja (PMR), dan Pasukan Pengibar Bendera (Paskibra).</li>
               </ul>
             </CardContent>
           </Card>
