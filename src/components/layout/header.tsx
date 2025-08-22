@@ -85,52 +85,55 @@ export default function Header() {
       </div>
 
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex flex-shrink-0 items-center gap-2">
-          <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
-          <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
-            SMPN 24 Padang
-          </span>
-        </Link>
-        
-        {/* Desktop Navigation */}
-        <nav className="items-center justify-end gap-6 hidden md:flex">
-        {navLinks.map((link) => 
-            link.subLinks ? (
-            <DropdownMenu key={link.href}>
-                <DropdownMenuTrigger className={cn(
-                    "flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none",
-                    cleanPathname.startsWith(link.href) && "text-primary"
-                )}>
-                {link.label} <ChevronDown className="ml-1 h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                {link.subLinks.map(subLink => (
-                    <DropdownMenuItem key={subLink.href} asChild>
-                    <Link href={subLink.href} className={cn(
-                        "flex items-center gap-2",
-                         cleanPathname === subLink.href && "font-semibold text-primary"
-                    )}>
-                        <subLink.icon className="h-4 w-4 text-muted-foreground" />
-                        {subLink.label}
-                    </Link>
-                    </DropdownMenuItem>
-                ))}
-                </DropdownMenuContent>
-            </DropdownMenu>
-            ) : (
-            <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                    "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-                    (cleanPathname === link.href) && "text-primary font-semibold"
-                )}
-            >
-                {link.label}
+        <div className="flex items-center gap-6">
+            <Link href="/" className="flex flex-shrink-0 items-center gap-2">
+                <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
+                <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
+                    SMPN 24 Padang
+                </span>
             </Link>
-            )
-        )}
-        </nav>
+            
+            {/* Desktop Navigation */}
+            <nav className="items-center justify-end gap-6 hidden md:flex">
+            {navLinks.map((link) => 
+                link.subLinks ? (
+                <DropdownMenu key={link.href}>
+                    <DropdownMenuTrigger className={cn(
+                        "flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none",
+                        cleanPathname.startsWith(link.href) && "text-primary"
+                    )}>
+                    {link.label} <ChevronDown className="ml-1 h-4 w-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                    {link.subLinks.map(subLink => (
+                        <DropdownMenuItem key={subLink.href} asChild>
+                        <Link href={subLink.href} className={cn(
+                            "flex items-center gap-2",
+                            cleanPathname === subLink.href && "font-semibold text-primary"
+                        )}>
+                            <subLink.icon className="h-4 w-4 text-muted-foreground" />
+                            {subLink.label}
+                        </Link>
+                        </DropdownMenuItem>
+                    ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                ) : (
+                <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                        "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+                        (cleanPathname === link.href) && "text-primary font-semibold"
+                    )}
+                >
+                    {link.label}
+                </Link>
+                )
+            )}
+            </nav>
+        </div>
+
 
         {/* Mobile Menu and Theme Toggle */}
         <div className="flex items-center gap-2">
