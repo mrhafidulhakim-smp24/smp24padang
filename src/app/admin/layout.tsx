@@ -12,6 +12,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
   LayoutDashboard,
   Newspaper,
   Trophy,
@@ -25,6 +30,7 @@ import {
   BookOpen,
   User,
   Target,
+  ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -84,24 +90,31 @@ export default function AdminLayout({
                       </SidebarMenuButton>
                     </Link>
                   ) : (
-                     <div>
-                       <SidebarMenuButton>
-                          <item.icon />
-                          <span>{item.label}</span>
+                    <Collapsible>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton className="group justify-between">
+                          <div className="flex items-center gap-2">
+                            <item.icon />
+                            <span>{item.label}</span>
+                          </div>
+                          <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
                         </SidebarMenuButton>
-                       <SidebarMenu>
-                        {item.subLinks.map(subLink => (
-                           <SidebarMenuItem key={subLink.label}>
-                             <Link href={subLink.href}>
-                               <SidebarMenuButton>
-                                 <subLink.icon />
-                                 <span>{subLink.label}</span>
-                               </SidebarMenuButton>
-                             </Link>
-                           </SidebarMenuItem>
-                        ))}
-                       </SidebarMenu>
-                     </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenu className="ml-4 mt-2 border-l border-border pl-4">
+                          {item.subLinks.map(subLink => (
+                            <SidebarMenuItem key={subLink.label}>
+                              <Link href={subLink.href}>
+                                <SidebarMenuButton variant="ghost" className="h-8 justify-start">
+                                  <subLink.icon />
+                                  <span>{subLink.label}</span>
+                                </SidebarMenuButton>
+                              </Link>
+                            </SidebarMenuItem>
+                          ))}
+                        </SidebarMenu>
+                      </CollapsibleContent>
+                    </Collapsible>
                   )}
                 </SidebarMenuItem>
               ))}
