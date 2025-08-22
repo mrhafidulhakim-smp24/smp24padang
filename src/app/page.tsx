@@ -4,6 +4,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Building, GraduationCap, Users } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+
+const heroBanners = [
+  {
+    title: "Selamat Datang di SMPN 24 Padang",
+    description: "Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.",
+    image: "https://placehold.co/1920x1080.png",
+    hint: "school campus"
+  },
+  {
+    title: "Penerimaan Siswa Baru 2024/2025",
+    description: "Jadilah bagian dari komunitas kami yang berprestasi. Pendaftaran telah dibuka!",
+    image: "https://placehold.co/1920x1080.png",
+    hint: "students registration"
+  },
+  {
+    title: "Juara Umum Lomba Cerdas Cermat",
+    description: "Siswa kami kembali mengharumkan nama sekolah di tingkat nasional.",
+    image: "https://placehold.co/1920x1080.png",
+    hint: "students winning trophy"
+  },
+];
 
 const newsItems = [
   {
@@ -44,25 +66,40 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[70vh] w-full">
-        <div className="absolute inset-0 bg-black/50 z-10"></div>
-        <Image
-          src="https://placehold.co/1920x1080.png"
-          alt="School Campus"
-          fill
-          objectFit="cover"
-          className="z-0"
-          data-ai-hint="school campus"
-          priority
-        />
-        <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white">
-          <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
-            Selamat Datang di SMPN 24 Padang
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm">
-            Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.
-          </p>
-        </div>
+      <section className="relative w-full">
+        <Carousel
+          opts={{ loop: true }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {heroBanners.map((banner, index) => (
+              <CarouselItem key={index}>
+                <div className="relative h-[70vh] w-full">
+                  <div className="absolute inset-0 bg-black/50 z-10"></div>
+                  <Image
+                    src={banner.image}
+                    alt={banner.title}
+                    fill
+                    objectFit="cover"
+                    className="z-0"
+                    data-ai-hint={banner.hint}
+                    priority={index === 0}
+                  />
+                  <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white">
+                    <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl animate-fade-in-down">
+                      {banner.title}
+                    </h1>
+                    <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm animate-fade-in-up">
+                      {banner.description}
+                    </p>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex" />
+          <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex" />
+        </Carousel>
       </section>
 
       {/* Marquee Section */}

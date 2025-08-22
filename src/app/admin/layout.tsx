@@ -21,12 +21,14 @@ import {
   Building,
   Award,
   Network,
+  Image as ImageIconLucide,
 } from "lucide-react";
 import Image from "next/image";
 
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/profile", label: "Profil Sekolah", icon: Building },
+  { href: "/admin/banner", label: "Banner Beranda", icon: ImageIconLucide },
   { href: "/admin/news", label: "Berita", icon: Newspaper },
   { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
   { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },
