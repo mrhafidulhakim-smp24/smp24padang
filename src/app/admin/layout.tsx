@@ -16,11 +16,9 @@ import {
   Trophy,
   ImageIcon,
   Users,
-  Wrench,
   Home,
 } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -28,7 +26,6 @@ const adminNavItems = [
   { href: "/achievements", label: "Prestasi", icon: Trophy },
   { href: "/gallery", label: "Galeri", icon: ImageIcon },
   { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
-  { href: "#", label: "Utilitas", icon: Wrench },
 ];
 
 export default function AdminLayout({
@@ -38,7 +35,7 @@ export default function AdminLayout({
 }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen bg-background">
         <Sidebar>
           <SidebarHeader>
             <div className="flex items-center gap-2">
@@ -85,10 +82,10 @@ export default function AdminLayout({
           <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
               <SidebarTrigger className="md:hidden"/>
               <div className="w-full flex-1">
-                  {/* Bisa ditambahkan breadcrumbs atau judul halaman di sini */}
+                  <h1 className="text-lg font-semibold">Manajemen Konten</h1>
               </div>
           </header>
-          <main className="flex-1 p-4 sm:p-6">{children}</main>
+          <main className="flex-1 p-4 sm:p-6 bg-muted/40">{children}</main>
         </div>
       </div>
     </SidebarProvider>
