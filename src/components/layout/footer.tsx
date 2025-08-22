@@ -3,10 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
-import { useTranslations } from "next-intl";
 
 export default function Footer() {
-  const t = useTranslations('Footer');
   const currentYear = new Date().getFullYear();
 
   return (
@@ -20,7 +18,7 @@ export default function Footer() {
             </span>
           </Link>
           <p className="text-primary-foreground/80">
-            {t('about')}
+            Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.
           </p>
           <div className="flex space-x-4">
             <Link href="#" className="text-primary-foreground/80 transition-colors hover:text-white"><Facebook className="h-6 w-6" /></Link>
@@ -30,11 +28,11 @@ export default function Footer() {
         </div>
         
         <div className="space-y-4">
-          <h3 className="font-headline text-lg font-semibold text-white">{t('contactUs')}</h3>
+          <h3 className="font-headline text-lg font-semibold text-white">Hubungi Kami</h3>
           <ul className="space-y-2 text-primary-foreground/80">
             <li className="flex items-start gap-3">
               <MapPin className="mt-1 h-5 w-5 flex-shrink-0 text-accent" />
-              <span>{t('address')}</span>
+              <span>Jalan Pendidikan 123, Padang, Indonesia</span>
             </li>
             <li className="flex items-center gap-3">
               <Phone className="h-5 w-5 flex-shrink-0 text-accent" />
@@ -62,7 +60,7 @@ export default function Footer() {
       </div>
       <div className="bg-primary py-4">
         <div className="container mx-auto px-4 text-center text-sm text-primary-foreground/70">
-          <p>{t('copyright', {year: currentYear})}</p>
+          <p>© {currentYear} SMPN 24 Padang. Hak Cipta Dilindungi Undang-Undang.</p>
         </div>
       </div>
     </footer>

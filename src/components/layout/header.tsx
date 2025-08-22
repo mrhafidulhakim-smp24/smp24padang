@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "@/navigation";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -11,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTranslations, useLocale } from 'next-intl';
 
 import {
   Home,
@@ -34,51 +33,29 @@ import { cn } from "@/lib/utils";
 
 export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
-  const t = useTranslations('Header');
-  const locale = useLocale();
 
   const navLinks = [
-    { href: "/", label: t('nav.home'), icon: Home },
+    { href: "/", label: "Beranda", icon: Home },
     { 
       href: "/profile", 
-      label: t('nav.profile'), 
+      label: "Profil", 
       icon: User,
       subLinks: [
-        { href: "/profile", label: t('nav.schoolProfile'), icon: User },
-        { href: "/profile/vision-mission", label: t('nav.visionMission'), icon: Target },
-        { href: "/profile/faculty", label: t('nav.facultyStaff'), icon: Users },
-        { href: "/profile/organization-structure", label: t('nav.organizationStructure'), icon: Network },
-        { href: "/profile/accreditation", label: t('nav.accreditation'), icon: Award },
+        { href: "/profile", label: "Profil Sekolah", icon: User },
+        { href: "/profile/vision-mission", label: "Visi & Misi", icon: Target },
+        { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
+        { href: "/profile/organization-structure", label: "Struktur Organisasi", icon: Network },
+        { href: "/profile/accreditation", label: "Sertifikat Akreditasi", icon: Award },
       ]
     },
-    { href: "/academics", label: t('nav.academics'), icon: BookOpen },
-    { href: "/achievements", label: t('nav.achievements'), icon: Trophy },
-    { href: "/gallery", label: t('nav.gallery'), icon: Camera },
-    { href: "/admin", label: t('nav.admin'), icon: Wrench },
+    { href: "/academics", label: "Akademik", icon: BookOpen },
+    { href: "/achievements", label: "Prestasi", icon: Trophy },
+    { href: "/gallery", label: "Galeri", icon: Camera },
+    { href: "/admin", label: "Admin", icon: Wrench },
   ];
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const switchLocale = () => {
-    const nextLocale = locale === 'id' ? 'en' : 'id';
-    router.replace(pathname, { locale: nextLocale });
-  };
-
-  if (!isMounted) {
-    return null;
-  }
-
-  const getCleanPathname = (path: string) => {
-    const localePattern = /^\/(en|id)/;
-    return path.replace(localePattern, '') || '/';
-  }
-  
-  const cleanPathname = getCleanPathname(pathname);
+  const cleanPathname = pathname;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -86,16 +63,16 @@ export default function Header() {
       <div className="hidden bg-primary/90 text-primary-foreground lg:block clip-path-diagonal">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 text-sm">
             <div className="flex items-center gap-4">
-                 <p className="text-primary-foreground/80">{t('slogan')}</p>
+                 <p className="text-primary-foreground/80">Membina Pikiran, Membentuk Masa Depan</p>
             </div>
             <div className="flex items-center gap-6">
-                <a href={`tel:${t('phone')}`} className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
+                <a href="tel:+62 123 456 7890" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
                     <Phone className="h-4 w-4" />
-                    <span>{t('phone')}</span>
+                    <span>+62 123 456 7890</span>
                 </a>
-                <a href={`mailto:${t('email')}`} className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
+                <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
                     <Mail className="h-4 w-4" />
-                    <span>{t('email')}</span>
+                    <span>info@smpn24padang.sch.id</span>
                 </a>
             </div>
         </div>
@@ -105,7 +82,7 @@ export default function Header() {
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex flex-shrink-0 items-center gap-2">
           <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
-            {t('schoolName')}
+            SMPN 24 Padang
           </span>
         </Link>
         
@@ -148,14 +125,6 @@ export default function Header() {
                 )
             )}
             </nav>
-             <Button
-                variant="ghost"
-                size="icon"
-                onClick={switchLocale}
-                aria-label="Switch language"
-              >
-                <span className="text-xs font-bold">{locale.toUpperCase()}</span>
-              </Button>
             <ThemeToggle />
         </div>
 
@@ -173,7 +142,7 @@ export default function Header() {
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="mb-4 flex items-center gap-2">
                   <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
-                    {t('schoolName')}
+                    SMPN 24 Padang
                   </span>
                 </Link>
                 {navLinks.map((link) => 
@@ -219,13 +188,13 @@ export default function Header() {
                    )
                 )}
                  <div className="mt-4 flex flex-col gap-4 border-t pt-4">
-                     <a href={`tel:${t('phone')}`} className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                     <a href="tel:+62 123 456 7890" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                         <Phone className="h-5 w-5" />
-                         <span>{t('phone')}</span>
+                         <span>+62 123 456 7890</span>
                      </a>
-                     <a href={`mailto:${t('email')}`} className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                     <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                         <Mail className="h-5 w-5" />
-                         <span>{t('email')}</span>
+                         <span>info@smpn24padang.sch.id</span>
                     </a>
                  </div>
               </div>
