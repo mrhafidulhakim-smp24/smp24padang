@@ -85,7 +85,6 @@ export default function Header() {
       </div>
 
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-6">
             <Link href="/" className="flex flex-shrink-0 items-center gap-2">
                 <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
                 <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
@@ -93,6 +92,7 @@ export default function Header() {
                 </span>
             </Link>
             
+        <div className="flex items-center gap-2">
             {/* Desktop Navigation */}
             <nav className="items-center justify-end gap-6 hidden md:flex">
             {navLinks.map((link) => 
@@ -132,12 +132,10 @@ export default function Header() {
                 )
             )}
             </nav>
-        </div>
 
-
-        {/* Mobile Menu and Theme Toggle */}
-        <div className="flex items-center gap-2">
             <ThemeToggle />
+            
+            {/* Mobile Menu */}
             <div className="md:hidden">
                 <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
                     <SheetTrigger asChild>
