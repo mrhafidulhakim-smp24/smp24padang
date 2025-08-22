@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 import { Newspaper, Trophy, ImageIcon, Users, BookOpen } from "lucide-react";
 import Link from "next/link";
-import { BackupReminderForm } from "@/components/admin/backup-reminder-form";
 
 const dashboardItems = [
   {
@@ -70,15 +69,6 @@ export default function AdminPage() {
             </Card>
           </Link>
         ))}
-      </div>
-      
-       <div>
-         <h2 className="mb-6 font-headline text-2xl font-bold text-primary">
-          Utilitas AI
-        </h2>
-        <div>
-          <BackupReminderForm />
-        </div>
       </div>
     </div>
   );
