@@ -39,57 +39,59 @@ export default function AdminLayout({
 }) {
   return (
     <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <div className="flex items-center gap-2">
-            <Image
-              src="/logo.jpg"
-              alt="SMPN 24 Padang Logo"
-              width={40}
-              height={40}
-              className="h-8 w-auto rounded-full"
-            />
-            <span className="font-headline text-lg font-bold text-primary whitespace-nowrap">
-              Admin CMS
-            </span>
-          </div>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            {adminNavItems.map((item) => (
-              <SidebarMenuItem key={item.label}>
-                <Link href={item.href}>
+      <div className="flex min-h-screen">
+        <Sidebar>
+          <SidebarHeader>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo.jpg"
+                alt="SMPN 24 Padang Logo"
+                width={40}
+                height={40}
+                className="h-8 w-auto rounded-full"
+              />
+              <span className="font-headline text-lg font-bold text-primary whitespace-nowrap">
+                Admin CMS
+              </span>
+            </div>
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMenu>
+              {adminNavItems.map((item) => (
+                <SidebarMenuItem key={item.label}>
+                  <Link href={item.href}>
+                    <SidebarMenuButton>
+                      <item.icon />
+                      <span>{item.label}</span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <Link href="/">
                   <SidebarMenuButton>
-                    <item.icon />
-                    <span>{item.label}</span>
+                    <Home />
+                    <span>Kembali ke Situs</span>
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <Link href="/">
-                <SidebarMenuButton>
-                  <Home />
-                  <span>Kembali ke Situs</span>
-                </SidebarMenuButton>
-              </Link>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
-      <SidebarInset>
-        <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
-            <SidebarTrigger className="md:hidden"/>
-            <div className="w-full flex-1">
-                {/* Bisa ditambahkan breadcrumbs atau judul halaman di sini */}
-            </div>
-        </header>
-        <main className="flex-1 p-4 sm:p-6">{children}</main>
-      </SidebarInset>
+            </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+        <div className="flex flex-1 flex-col">
+          <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
+              <SidebarTrigger className="md:hidden"/>
+              <div className="w-full flex-1">
+                  {/* Bisa ditambahkan breadcrumbs atau judul halaman di sini */}
+              </div>
+          </header>
+          <main className="flex-1 p-4 sm:p-6">{children}</main>
+        </div>
+      </div>
     </SidebarProvider>
   );
 }
