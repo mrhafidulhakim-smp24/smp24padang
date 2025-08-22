@@ -1,8 +1,9 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, Building, GraduationCap, Users } from 'lucide-react';
+import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
@@ -147,42 +148,42 @@ export default function Home() {
             <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
               <CardHeader className="items-center">
                 <div className="rounded-full bg-accent/20 p-4">
-                  <GraduationCap className="h-10 w-10 text-accent" />
+                  <BookOpen className="h-10 w-10 text-accent" />
                 </div>
-                <CardTitle className="font-headline pt-4 text-primary">Akademik</CardTitle>
+                <CardTitle className="font-headline pt-4 text-primary">Kurikulum Merdeka & Inovatif</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">Kurikulum yang ketat dan inovatif yang dirancang untuk menantang dan menginspirasi.</p>
+                <p className="text-muted-foreground">Mengadaptasi kurikulum nasional dengan pembelajaran berbasis proyek dan teknologi untuk kreativitas.</p>
                 <Button asChild variant="outline" className="mt-4">
-                   <Link href="/academics">Pelajari Lebih Lanjut</Link>
+                   <Link href="/academics">Jelajahi Kurikulum</Link>
                 </Button>
               </CardContent>
             </Card>
             <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
               <CardHeader className="items-center">
                 <div className="rounded-full bg-accent/20 p-4">
-                  <Users className="h-10 w-10 text-accent" />
+                  <Sparkles className="h-10 w-10 text-accent" />
                 </div>
-                <CardTitle className="font-headline pt-4 text-primary">Kehidupan Siswa</CardTitle>
+                <CardTitle className="font-headline pt-4 text-primary">Pengembangan Karakter & Bakat</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">Komunitas yang dinamis dengan beragam kegiatan ekstrakurikuler dan klub.</p>
+                <p className="text-muted-foreground">Membentuk karakter mulia dan menggali potensi siswa melalui beragam kegiatan ekstrakurikuler.</p>
                  <Button asChild variant="outline" className="mt-4">
-                   <Link href="/academics#activities">Jelajahi Kegiatan</Link>
+                   <Link href="/academics#activities">Lihat Kegiatan</Link>
                 </Button>
               </CardContent>
             </Card>
             <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
               <CardHeader className="items-center">
                 <div className="rounded-full bg-accent/20 p-4">
-                  <Building className="h-10 w-10 text-accent" />
+                  <ShieldCheck className="h-10 w-10 text-accent" />
                 </div>
-                <CardTitle className="font-headline pt-4 text-primary">Kampus Kami</CardTitle>
+                <CardTitle className="font-headline pt-4 text-primary">Lingkungan Belajar Mendukung</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">Fasilitas canggih yang menyediakan lingkungan belajar kelas dunia.</p>
+                <p className="text-muted-foreground">Menyediakan fasilitas modern dan komunitas sekolah yang aman, nyaman, dan inklusif bagi semua.</p>
                  <Button asChild variant="outline" className="mt-4">
-                   <Link href="/profile">Kunjungi Kami</Link>
+                   <Link href="/profile/vision-mission">Pahami Nilai Kami</Link>
                 </Button>
               </CardContent>
             </Card>
