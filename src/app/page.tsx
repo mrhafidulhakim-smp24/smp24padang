@@ -227,7 +227,7 @@ export default function Home() {
           </div>
            <div className="mt-12 text-center">
              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link href="/achievements">Lihat Semua Berita</Link>
+                <Link href="/news">Lihat Semua Berita</Link>
              </Button>
            </div>
         </div>

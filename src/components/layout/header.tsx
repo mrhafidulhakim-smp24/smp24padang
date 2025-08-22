@@ -30,6 +30,7 @@ import {
   Network,
   Wrench,
   MapPin,
+  Newspaper,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -55,6 +56,7 @@ export default function Header() {
     { href: "/academics", label: "Akademik", icon: BookOpen },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/gallery", label: "Galeri", icon: Camera },
+    { href: "/news", label: "Berita", icon: Newspaper },
     { href: "/admin", label: "Admin", icon: Wrench },
   ];
 
@@ -84,15 +86,15 @@ export default function Header() {
         </div>
       </div>
 
-       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-            <Link href="/" className="flex flex-shrink-0 items-center gap-2">
+       <div className="container mx-auto flex h-16 items-center px-4">
+            <Link href="/" className="mr-6 flex flex-shrink-0 items-center gap-2">
                 <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
                 <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
                     SMPN 24 Padang
                 </span>
             </Link>
             
-        <div className="flex items-center gap-2">
+        <div className="flex w-full items-center justify-end">
             {/* Desktop Navigation */}
             <nav className="items-center justify-end gap-6 hidden md:flex">
             {navLinks.map((link) => 
@@ -133,7 +135,9 @@ export default function Header() {
             )}
             </nav>
 
-            <ThemeToggle />
+            <div className="ml-4">
+              <ThemeToggle />
+            </div>
             
             {/* Mobile Menu */}
             <div className="md:hidden">
