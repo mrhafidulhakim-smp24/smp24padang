@@ -33,7 +33,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, MoreHorizontal, Trash2, Pencil } from "lucide-react";
+import { PlusCircle, MoreHorizontal, Trash2, Pencil, Upload } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -122,7 +122,7 @@ export default function AchievementsAdminPage() {
               Tambah Prestasi
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Tambah Prestasi Baru</DialogTitle>
               <DialogDescription>
@@ -130,6 +130,22 @@ export default function AchievementsAdminPage() {
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleAddAchievement} className="space-y-4">
+              <div>
+                <Label htmlFor="image-add">Gambar</Label>
+                 <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
+                    <div className="space-y-1 text-center">
+                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                        <div className="flex text-sm text-gray-600">
+                            <Label htmlFor="file-upload-add" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
+                                <span>Unggah file</span>
+                                 <Input id="file-upload-add" name="file-upload" type="file" className="sr-only" />
+                            </Label>
+                            <p className="pl-1">atau seret dan lepas</p>
+                        </div>
+                        <p className="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
+                    </div>
+                 </div>
+              </div>
               <div>
                 <Label htmlFor="title">Judul</Label>
                 <Input id="title" name="title" required />
@@ -155,6 +171,7 @@ export default function AchievementsAdminPage() {
             <Table>
             <TableHeader>
                 <TableRow>
+                <TableHead>Gambar</TableHead>
                 <TableHead>Judul</TableHead>
                 <TableHead>Siswa/Tim</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
@@ -163,6 +180,9 @@ export default function AchievementsAdminPage() {
             <TableBody>
                 {achievements.map((item) => (
                 <TableRow key={item.id}>
+                    <TableCell>
+                        <Image src={item.image} alt={item.title} width={80} height={80} className="h-16 w-16 rounded-md object-cover"/>
+                    </TableCell>
                     <TableCell className="font-medium">{item.title}</TableCell>
                     <TableCell>{item.student}</TableCell>
                     <TableCell className="text-right">
@@ -193,7 +213,7 @@ export default function AchievementsAdminPage() {
       </Card>
 
        <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
-          <DialogContent>
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Edit Prestasi</DialogTitle>
               <DialogDescription>
@@ -201,6 +221,22 @@ export default function AchievementsAdminPage() {
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleEditAchievement} className="space-y-4">
+              <div>
+                <Label htmlFor="image-edit">Gambar</Label>
+                 <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
+                    <div className="space-y-1 text-center">
+                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                        <div className="flex text-sm text-gray-600">
+                            <Label htmlFor="file-upload-edit" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
+                                <span>Ganti file</span>
+                                 <Input id="file-upload-edit" name="file-upload" type="file" className="sr-only" />
+                            </Label>
+                            <p className="pl-1">atau seret dan lepas</p>
+                        </div>
+                        <p className="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
+                    </div>
+                 </div>
+              </div>
               <div>
                 <Label htmlFor="title-edit">Judul</Label>
                 <Input id="title-edit" name="title" defaultValue={selectedAchievement?.title} required />
@@ -240,3 +276,5 @@ export default function AchievementsAdminPage() {
     </div>
   );
 }
+
+    

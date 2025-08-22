@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -32,20 +33,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, MoreHorizontal, Trash2, Pencil } from "lucide-react";
+import { PlusCircle, MoreHorizontal, Trash2, Pencil, Upload } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
 
 type NewsArticle = {
   id: string;
   title: string;
   date: string;
   description: string;
+  image: string;
+  hint: string;
 };
 
 const initialNews: NewsArticle[] = [
@@ -54,18 +58,24 @@ const initialNews: NewsArticle[] = [
     title: "Annual Sports Day Gala",
     date: "2024-03-15",
     description: "A day of thrilling competitions and spectacular performances.",
+    image: "https://placehold.co/600x400.png",
+    hint: "sports day"
   },
   {
     id: "2",
     title: "Science Fair Innovations",
     date: "2024-03-10",
     description: "Our students showcase their groundbreaking science projects.",
+    image: "https://placehold.co/600x400.png",
+    hint: "science fair"
   },
   {
     id: "3",
     title: "Art Exhibition 'Creative Canvases'",
     date: "2024-03-05",
     description: "Explore the vibrant world of art created by our talented students.",
+    image: "https://placehold.co/600x400.png",
+    hint: "art exhibition"
   },
 ];
 
@@ -84,6 +94,8 @@ export default function NewsAdminPage() {
       title: formData.get("title") as string,
       date: formData.get("date") as string,
       description: formData.get("description") as string,
+      image: "https://placehold.co/600x400.png",
+      hint: "new news"
     };
     setNews([newArticle, ...news]);
     setAddOpen(false);
@@ -135,34 +147,42 @@ export default function NewsAdminPage() {
               Tambah Berita Baru
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Tambah Berita Baru</DialogTitle>
               <DialogDescription>
                 Isi detail di bawah ini untuk menambahkan artikel berita baru.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleAddNews}>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="title" className="text-right">
-                    Judul
-                  </Label>
-                  <Input id="title" name="title" className="col-span-3" required />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="date" className="text-right">
-                    Tanggal
-                  </Label>
-                  <Input id="date" name="date" type="date" className="col-span-3" defaultValue={new Date().toISOString().substring(0, 10)} required />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="description" className="text-right">
-                    Deskripsi
-                  </Label>
-                  <Textarea id="description" name="description" className="col-span-3" required />
-                </div>
+            <form onSubmit={handleAddNews} className="space-y-4">
+              <div>
+                <Label htmlFor="image-add">Gambar</Label>
+                 <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
+                    <div className="space-y-1 text-center">
+                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                        <div className="flex text-sm text-gray-600">
+                            <Label htmlFor="file-upload-add" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
+                                <span>Unggah file</span>
+                                 <Input id="file-upload-add" name="file-upload" type="file" className="sr-only" />
+                            </Label>
+                            <p className="pl-1">atau seret dan lepas</p>
+                        </div>
+                        <p className="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
+                    </div>
+                 </div>
               </div>
+              <div>
+                  <Label htmlFor="title">Judul</Label>
+                  <Input id="title" name="title" required />
+                </div>
+                <div>
+                  <Label htmlFor="date">Tanggal</Label>
+                  <Input id="date" name="date" type="date" defaultValue={new Date().toISOString().substring(0, 10)} required />
+                </div>
+                <div>
+                  <Label htmlFor="description">Deskripsi</Label>
+                  <Textarea id="description" name="description" required />
+                </div>
               <DialogFooter>
                 <Button type="submit">Simpan</Button>
               </DialogFooter>
@@ -176,6 +196,7 @@ export default function NewsAdminPage() {
             <Table>
             <TableHeader>
                 <TableRow>
+                <TableHead>Gambar</TableHead>
                 <TableHead className="w-1/2">Judul</TableHead>
                 <TableHead>Tanggal</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
@@ -184,8 +205,11 @@ export default function NewsAdminPage() {
             <TableBody>
                 {sortedNews.map((item) => (
                 <TableRow key={item.id}>
+                    <TableCell>
+                       <Image src={item.image} alt={item.title} width={80} height={80} className="h-16 w-16 rounded-md object-cover"/>
+                    </TableCell>
                     <TableCell className="font-medium">{item.title}</TableCell>
-                    <TableCell>{item.date}</TableCell>
+                    <TableCell>{new Date(item.date).toLocaleDateString()}</TableCell>
                     <TableCell className="text-right">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -215,34 +239,42 @@ export default function NewsAdminPage() {
 
        {/* Edit Dialog */}
        <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Edit Berita</DialogTitle>
               <DialogDescription>
                 Perbarui detail artikel berita di bawah ini.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleEditNews}>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="title-edit" className="text-right">
-                    Judul
-                  </Label>
-                  <Input id="title-edit" name="title" className="col-span-3" defaultValue={selectedNews?.title} required />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="date-edit" className="text-right">
-                    Tanggal
-                  </Label>
-                  <Input id="date-edit" name="date" type="date" className="col-span-3" defaultValue={selectedNews?.date} required />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="description-edit" className="text-right">
-                    Deskripsi
-                  </Label>
-                  <Textarea id="description-edit" name="description" className="col-span-3" defaultValue={selectedNews?.description} required />
-                </div>
+            <form onSubmit={handleEditNews} className="space-y-4">
+              <div>
+                <Label htmlFor="image-edit">Gambar</Label>
+                 <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
+                    <div className="space-y-1 text-center">
+                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                        <div className="flex text-sm text-gray-600">
+                            <Label htmlFor="file-upload-edit" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
+                                <span>Ganti file</span>
+                                 <Input id="file-upload-edit" name="file-upload" type="file" className="sr-only" />
+                            </Label>
+                            <p className="pl-1">atau seret dan lepas</p>
+                        </div>
+                        <p className="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
+                    </div>
+                 </div>
               </div>
+              <div>
+                  <Label htmlFor="title-edit">Judul</Label>
+                  <Input id="title-edit" name="title" defaultValue={selectedNews?.title} required />
+                </div>
+                <div>
+                  <Label htmlFor="date-edit">Tanggal</Label>
+                  <Input id="date-edit" name="date" type="date" defaultValue={selectedNews?.date} required />
+                </div>
+                <div>
+                  <Label htmlFor="description-edit">Deskripsi</Label>
+                  <Textarea id="description-edit" name="description" defaultValue={selectedNews?.description} required />
+                </div>
               <DialogFooter>
                  <Button type="button" variant="outline" onClick={() => setEditOpen(false)}>Batal</Button>
                  <Button type="submit">Simpan Perubahan</Button>
@@ -271,3 +303,5 @@ export default function NewsAdminPage() {
     </div>
   );
 }
+
+    
