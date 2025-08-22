@@ -29,6 +29,7 @@ import {
   Award,
   Network,
   Wrench,
+  MapPin,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -54,7 +55,6 @@ export default function Header() {
     { href: "/academics", label: "Akademik", icon: BookOpen },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/gallery", label: "Galeri", icon: Camera },
-    { href: "/contact", label: "Kontak", icon: Mail },
     { href: "/admin", label: "Admin", icon: Wrench },
   ];
 
@@ -62,6 +62,28 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
+      {/* Top Bar for Contact Info */}
+      <div className="hidden bg-primary/90 text-primary-foreground lg:block">
+        <div className="container mx-auto flex h-10 items-center justify-between px-4 text-sm">
+            <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    <span>Jl. Bypass, Kec. Lubuk Begalung, Padang</span>
+                </div>
+            </div>
+            <div className="flex items-center gap-6">
+                <a href="tel:+621234567890" className="flex items-center gap-2 transition-colors hover:text-white/80">
+                    <Phone className="h-4 w-4" />
+                    <span>+62 123 456 7890</span>
+                </a>
+                <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-2 transition-colors hover:text-white/80">
+                    <Mail className="h-4 w-4" />
+                    <span>info@smpn24padang.sch.id</span>
+                </a>
+            </div>
+        </div>
+      </div>
+
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex flex-shrink-0 items-center gap-2">
           <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
@@ -172,6 +194,10 @@ export default function Header() {
                             )
                         )}
                         <div className="mt-4 flex flex-col gap-4 border-t pt-4">
+                             <div className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground">
+                                <MapPin className="h-5 w-5" />
+                                <span>Jl. Bypass, Lubuk Begalung, Padang</span>
+                            </div>
                             <a href="tel:+62 123 456 7890" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                                 <Phone className="h-5 w-5" />
                                 <span>+62 123 456 7890</span>
