@@ -1,16 +1,16 @@
+
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
+import ConditionalLayout from '@/components/layout/conditional-layout';
 import './globals.css';
 import {ThemeProvider} from '@/components/theme-provider';
- 
+
 export const metadata: Metadata = {
   title: 'SMPN 24 Padang',
   description: 'Official Website of SMPN 24 Padang School',
 };
-
-export default async function RootLayout({
+ 
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -30,13 +30,9 @@ export default async function RootLayout({
             defaultTheme="light"
             disableTransitionOnChange
           >
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-grow">
-                {children}
-              </main>
-              <Footer />
-            </div>
+            <ConditionalLayout>
+              {children}
+            </ConditionalLayout>
             <Toaster />
           </ThemeProvider>
       </body>
