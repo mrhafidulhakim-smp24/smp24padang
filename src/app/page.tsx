@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Building, GraduationCap, Users } from 'lucide-react';
+import { Marquee } from '@/components/ui/marquee';
 
 const newsItems = [
   {
@@ -31,6 +32,14 @@ const newsItems = [
   },
 ];
 
+const marqueeItems = [
+    { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
+    { type: 'Berita', text: 'Pendaftaran siswa baru tahun ajaran 2024/2025 telah dibuka.' },
+    { type: 'Pengumuman', text: 'Jadwal Ujian Akhir Semester akan diumumkan minggu depan.' },
+    { type: 'Prestasi', text: 'Tim Basket Sekolah meraih Juara 1 tingkat Provinsi.' },
+    { type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
+];
+
 export default function Home() {
   return (
     <div className="flex flex-col">
@@ -40,10 +49,11 @@ export default function Home() {
         <Image
           src="https://placehold.co/1920x1080.png"
           alt="School Campus"
-          layout="fill"
+          fill
           objectFit="cover"
           className="z-0"
           data-ai-hint="school campus"
+          priority
         />
         <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white">
           <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
@@ -55,6 +65,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Marquee Section */}
+      <section>
+        <Marquee items={marqueeItems} />
+      </section>
+
       {/* Welcome from Principal Section */}
       <section className="bg-background py-16 md:py-24">
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
@@ -62,7 +77,7 @@ export default function Home() {
             <Image 
               src="https://placehold.co/600x800.png" 
               alt="Principal" 
-              layout="fill" 
+              fill 
               objectFit="cover" 
               data-ai-hint="professional portrait"
               className="transition-transform duration-500 hover:scale-110"
