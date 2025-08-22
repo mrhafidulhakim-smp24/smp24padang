@@ -29,7 +29,7 @@ const dashboardItems = [
     link: "/gallery",
   },
   {
-    title: "Staf & Fakultas",
+    title: "Guru & Staf",
     description: "Kelola profil guru dan staf sekolah.",
     icon: <Users className="h-8 w-8 text-accent" />,
     link: "/profile/faculty",

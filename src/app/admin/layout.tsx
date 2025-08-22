@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   SidebarTrigger,
-  SidebarInset,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard,
@@ -28,7 +27,7 @@ const adminNavItems = [
   { href: "/admin/news", label: "Berita", icon: Newspaper },
   { href: "/achievements", label: "Prestasi", icon: Trophy },
   { href: "/gallery", label: "Galeri", icon: ImageIcon },
-  { href: "/profile/faculty", label: "Fakultas", icon: Users },
+  { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
   { href: "#", label: "Utilitas", icon: Wrench },
 ];
 
