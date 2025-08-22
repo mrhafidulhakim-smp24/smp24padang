@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -20,25 +21,19 @@ const dashboardItems = [
     title: "Kelola Prestasi",
     description: "Perbarui daftar prestasi siswa dan sekolah.",
     icon: <Trophy className="h-8 w-8 text-primary" />,
-    link: "/achievements", // This should ideally be /admin/achievements
+    link: "/admin/achievements",
   },
   {
     title: "Kelola Galeri",
     description: "Unggah dan atur gambar di galeri sekolah.",
     icon: <ImageIcon className="h-8 w-8 text-primary" />,
-    link: "/gallery", // This should ideally be /admin/gallery
+    link: "/admin/gallery",
   },
   {
     title: "Kelola Guru & Staf",
     description: "Kelola profil para pendidik dan staf.",
     icon: <Users className="h-8 w-8 text-primary" />,
-    link: "/profile/faculty", // This should ideally be /admin/staff
-  },
-  {
-    title: "Kelola Akademik",
-    description: "Perbarui informasi kurikulum dan kegiatan.",
-    icon: <BookOpen className="h-8 w-8 text-primary" />,
-    link: "/academics", // This should ideally be /admin/academics
+    link: "/admin/staff",
   },
 ];
 

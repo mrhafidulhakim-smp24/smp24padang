@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import {
   SidebarProvider,
@@ -23,9 +24,9 @@ import Image from "next/image";
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/news", label: "Berita", icon: Newspaper },
-  { href: "/achievements", label: "Prestasi", icon: Trophy },
-  { href: "/gallery", label: "Galeri", icon: ImageIcon },
-  { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
+  { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
+  { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },
+  { href: "/admin/staff", label: "Guru & Staf", icon: Users },
 ];
 
 export default function AdminLayout({
