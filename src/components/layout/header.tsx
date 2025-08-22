@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
 import {
   Home,
@@ -59,28 +60,9 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      {/* Top Bar */}
-      <div className="hidden bg-primary/90 text-primary-foreground lg:block clip-path-diagonal">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 text-sm">
-            <div className="flex items-center gap-4">
-                 <p className="text-primary-foreground/80">Membina Pikiran, Membentuk Masa Depan</p>
-            </div>
-            <div className="flex items-center gap-6">
-                <a href="tel:+62 123 456 7890" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
-                    <Phone className="h-4 w-4" />
-                    <span>+62 123 456 7890</span>
-                </a>
-                <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white">
-                    <Mail className="h-4 w-4" />
-                    <span>info@smpn24padang.sch.id</span>
-                </a>
-            </div>
-        </div>
-      </div>
-      
-      {/* Main Navigation */}
        <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex flex-shrink-0 items-center gap-2">
+          <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
           <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
             SMPN 24 Padang
           </span>
@@ -141,6 +123,7 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="mb-4 flex items-center gap-2">
+                   <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
                   <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
                     SMPN 24 Padang
                   </span>
