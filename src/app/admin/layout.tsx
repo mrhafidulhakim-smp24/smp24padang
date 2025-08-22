@@ -22,19 +22,31 @@ import {
   Award,
   Network,
   Image as ImageIconLucide,
+  BookOpen,
+  User,
+  Target,
 } from "lucide-react";
 import Image from "next/image";
 
 const adminNavItems = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/profile", label: "Profil Sekolah", icon: Building },
-  { href: "/admin/banner", label: "Banner Beranda", icon: ImageIconLucide },
-  { href: "/admin/news", label: "Berita", icon: Newspaper },
+  { href: "/admin", label: "Dasbor", icon: LayoutDashboard },
+  { 
+    href: "/admin/profile", 
+    label: "Profil", 
+    icon: User,
+    subLinks: [
+      { href: "/admin/profile", label: "Profil Sekolah", icon: Building },
+      { href: "/admin/profile/vision-mission", label: "Visi & Misi", icon: Target },
+      { href: "/admin/staff", label: "Guru & Staf", icon: Users },
+      { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },
+      { href: "/admin/accreditation", label: "Akreditasi", icon: Award },
+    ]
+  },
+  { href: "/admin/academics", label: "Akademik", icon: BookOpen },
   { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
   { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },
-  { href: "/admin/staff", label: "Guru & Staf", icon: Users },
-  { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },
-  { href: "/admin/accreditation", label: "Akreditasi", icon: Award },
+  { href: "/admin/news", label: "Berita", icon: Newspaper },
+  { href: "/admin/banner", label: "Banner Beranda", icon: ImageIconLucide },
 ];
 
 export default function AdminLayout({
@@ -64,12 +76,33 @@ export default function AdminLayout({
             <SidebarMenu>
               {adminNavItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <Link href={item.href}>
-                    <SidebarMenuButton>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </SidebarMenuButton>
-                  </Link>
+                   {!item.subLinks ? (
+                    <Link href={item.href}>
+                      <SidebarMenuButton>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </SidebarMenuButton>
+                    </Link>
+                  ) : (
+                     <div>
+                       <SidebarMenuButton>
+                          <item.icon />
+                          <span>{item.label}</span>
+                        </SidebarMenuButton>
+                       <SidebarMenu>
+                        {item.subLinks.map(subLink => (
+                           <SidebarMenuItem key={subLink.label}>
+                             <Link href={subLink.href}>
+                               <SidebarMenuButton>
+                                 <subLink.icon />
+                                 <span>{subLink.label}</span>
+                               </SidebarMenuButton>
+                             </Link>
+                           </SidebarMenuItem>
+                        ))}
+                       </SidebarMenu>
+                     </div>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

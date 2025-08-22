@@ -6,16 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Newspaper, Trophy, ImageIcon, Users, Building, Award, Network, Image as ImageIconLucide } from "lucide-react";
+import { Newspaper, Trophy, ImageIcon, Users, Building, Award, Network, Image as ImageIconLucide, BookOpen, Target, User } from "lucide-react";
 import Link from "next/link";
 
 const dashboardItems = [
-   {
-    title: "Kelola Profil Sekolah",
-    description: "Edit kata sambutan kepala sekolah dan foto profil.",
-    icon: <Building className="h-8 w-8 text-primary" />,
-    link: "/admin/profile",
-  },
    {
     title: "Kelola Banner Beranda",
     description: "Atur gambar banner yang tampil di halaman utama.",
@@ -23,10 +17,16 @@ const dashboardItems = [
     link: "/admin/banner",
   },
   {
-    title: "Kelola Berita",
-    description: "Tambah, edit, atau hapus artikel berita dan pengumuman.",
-    icon: <Newspaper className="h-8 w-8 text-primary" />,
-    link: "/admin/news",
+    title: "Kelola Profil Sekolah",
+    description: "Edit kata sambutan, visi & misi, guru, struktur, dan akreditasi.",
+    icon: <User className="h-8 w-8 text-primary" />,
+    link: "/admin/profile",
+  },
+  {
+    title: "Kelola Akademik",
+    description: "Atur informasi seputar kurikulum dan kegiatan belajar.",
+    icon: <BookOpen className="h-8 w-8 text-primary" />,
+    link: "/admin/academics",
   },
   {
     title: "Kelola Prestasi",
@@ -40,23 +40,11 @@ const dashboardItems = [
     icon: <ImageIcon className="h-8 w-8 text-primary" />,
     link: "/admin/gallery",
   },
-  {
-    title: "Kelola Guru & Staf",
-    description: "Kelola profil para pendidik dan staf.",
-    icon: <Users className="h-8 w-8 text-primary" />,
-    link: "/admin/staff",
-  },
    {
-    title: "Kelola Struktur Organisasi",
-    description: "Atur bagan struktur organisasi sekolah.",
-    icon: <Network className="h-8 w-8 text-primary" />,
-    link: "/admin/organization",
-  },
-  {
-    title: "Kelola Akreditasi",
-    description: "Kelola dokumen dan sertifikat akreditasi.",
-    icon: <Award className="h-8 w-8 text-primary" />,
-    link: "/admin/accreditation",
+    title: "Kelola Berita",
+    description: "Tambah, edit, atau hapus artikel berita dan pengumuman.",
+    icon: <Newspaper className="h-8 w-8 text-primary" />,
+    link: "/admin/news",
   },
 ];
 
