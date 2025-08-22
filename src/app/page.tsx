@@ -35,20 +35,21 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[70vh] w-full bg-primary/10">
+      <section className="relative h-[70vh] w-full">
+        <div className="absolute inset-0 bg-black/50 z-10"></div>
         <Image
           src="https://placehold.co/1920x1080.png"
           alt="School Campus"
           layout="fill"
           objectFit="cover"
-          className="z-0 opacity-20"
+          className="z-0"
           data-ai-hint="school campus"
         />
-        <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-primary">
+        <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white">
           <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
             Selamat Datang di SMPN 24 Padang
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-primary/80 drop-shadow-sm">
+          <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm">
             Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.
           </p>
         </div>

@@ -53,6 +53,7 @@ export default function Header() {
     { href: "/academics", label: "Akademik", icon: BookOpen },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/gallery", label: "Galeri", icon: Camera },
+    { href: "/contact", label: "Kontak", icon: Mail },
     { href: "/admin", label: "Admin", icon: Wrench },
   ];
 
