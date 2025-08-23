@@ -3,72 +3,31 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, Sparkles, ShieldCheck, Megaphone } from 'lucide-react';
+import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import prisma from '@/lib/prisma';
+import type { Banner, NewsArticle, Profile } from '@prisma/client';
 
-const heroBanners = [
-  {
-    title: "Selamat Datang di SMPN 24 Padang",
-    description: "Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.",
-    image: "https://placehold.co/1920x1080.png",
-    hint: "school campus"
-  },
-  {
-    title: "Penerimaan Siswa Baru 2024/2025",
-    description: "Jadilah bagian dari komunitas kami yang berprestasi. Pendaftaran telah dibuka!",
-    image: "https://placehold.co/1920x1080.png",
-    hint: "students registration"
-  },
-  {
-    title: "Juara Umum Lomba Cerdas Cermat",
-    description: "Siswa kami kembali mengharumkan nama sekolah di tingkat nasional.",
-    image: "https://placehold.co/1920x1080.png",
-    hint: "students winning trophy"
-  },
-];
+async function getBanners(): Promise<Banner[]> {
+    return prisma.banner.findMany({ orderBy: { createdAt: 'desc' } });
+}
 
-const newsItems = [
-  {
-    id: "1",
-    title: "Jadwal Ujian Akhir Semester (UAS) Genap",
-    date: "2024-05-20",
-    description: "Ujian Akhir Semester untuk tahun ajaran 2023/2024 akan dilaksanakan mulai tanggal 3 Juni hingga 7 Juni 2024. Harap siswa mempersiapkan diri.",
-    image: "https://placehold.co/600x400.png",
-    hint: "students exam",
-    link: "#"
-  },
-  {
-    id: "2",
-    title: "Pendaftaran Ekstrakurikuler Tahun Ajaran Baru",
-    date: "2024-05-18",
-    description: "Pendaftaran untuk seluruh kegiatan ekstrakurikuler tahun ajaran 2024/2025 akan dibuka pada tanggal 15 Juli 2024.",
-    image: "https://placehold.co/600x400.png",
-    hint: "student activities",
-    link: "#"
-  },
-  {
-    id: "3",
-    title: "Informasi Libur Kenaikan Kelas",
-    date: "2024-05-15",
-    description: "Libur akhir tahun ajaran akan dimulai pada tanggal 10 Juni 2024 dan siswa akan kembali masuk pada tanggal 8 Juli 2024.",
-    image: "https://placehold.co/600x400.png",
-    hint: "school holiday",
-    link: "#"
-  },
-];
+async function getLatestNews(): Promise<NewsArticle[]> {
+    return prisma.newsArticle.findMany({
+        orderBy: { date: 'desc' },
+        take: 3,
+    });
+}
 
-const marqueeItems = [
-    { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
-    { type: 'Berita', text: 'Pendaftaran siswa baru tahun ajaran 2024/2025 telah dibuka.' },
-    { type: 'Pengumuman', text: 'Jadwal Ujian Akhir Semester akan diumumkan minggu depan.' },
-    { type: 'Prestasi', text: 'Tim Basket Sekolah meraih Juara 1 tingkat Provinsi.' },
-    { type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
-];
+async function getProfile(): Promise<Profile | null> {
+    return prisma.profile.findFirst();
+}
 
-const latestAnnouncements = newsItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3);
 
-function Announcement() {
+async function Announcement() {
+  const latestAnnouncements = await getLatestNews();
+
   return (
     <section className="bg-background py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -82,19 +41,19 @@ function Announcement() {
           {latestAnnouncements.map((item) => (
             <Card key={item.id} className="flex flex-col">
               <CardHeader>
-                <p className="text-sm font-semibold text-accent-foreground">{`PENGUMUMAN | ${new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
+                <p className="text-sm font-semibold text-accent">{`PENGUMUMAN | ${new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
                 <CardTitle className="font-headline text-xl text-primary">
                   {item.title}
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
                 <p className="text-foreground/80">
-                  {item.description}
+                  {item.description.substring(0, 150)}...
                 </p>
               </CardContent>
               <div className="p-6 pt-0">
-                <Button asChild variant="link" className="p-0 text-accent-foreground">
-                  <Link href={`/news`}>
+                <Button asChild variant="link" className="p-0 text-accent hover:text-accent/80">
+                  <Link href={`/news/${item.id}`}>
                     Baca Selengkapnya <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -103,7 +62,7 @@ function Announcement() {
           ))}
         </div>
          <div className="mt-12 text-center">
-           <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+           <Button asChild size="lg">
               <Link href="/news">Lihat Semua Pengumuman</Link>
            </Button>
          </div>
@@ -112,7 +71,26 @@ function Announcement() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const heroBanners = await getBanners();
+  const latestNews = await getLatestNews();
+  const profile = await getProfile();
+
+  const principal = profile || {
+    principalWelcome: "Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.",
+    principalName: "Kepala Sekolah",
+    principalImageUrl: "https://placehold.co/600x800.png"
+  };
+
+  const marqueeItems = [
+      { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
+      { type: 'Berita', text: 'Pendaftaran siswa baru tahun ajaran 2024/2025 telah dibuka.' },
+      { type: 'Pengumuman', text: 'Jadwal Ujian Akhir Semester akan diumumkan minggu depan.' },
+      { type: 'Prestasi', text: 'Tim Basket Sekolah meraih Juara 1 tingkat Provinsi.' },
+      { type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
+  ];
+
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -127,15 +105,15 @@ export default function Home() {
                 <div className="relative h-[70vh] w-full">
                   <div className="absolute inset-0 bg-black/50 z-10"></div>
                   <Image
-                    src={banner.image}
+                    src={banner.imageUrl || "https://placehold.co/1920x1080.png"}
                     alt={banner.title}
                     fill
-                    objectFit="cover"
+                    style={{objectFit: 'cover'}}
                     className="z-0"
-                    data-ai-hint={banner.hint}
+                    data-ai-hint={banner.hint || "school event"}
                     priority={index === 0}
                   />
-                  <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white">
+                  <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white p-4">
                     <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
                       {banner.title}
                     </h1>
@@ -162,24 +140,25 @@ export default function Home() {
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
           <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-xl">
             <Image 
-              src="https://placehold.co/600x800.png" 
+              src={principal.principalImageUrl || "https://placehold.co/600x800.png"} 
               alt="Principal" 
               fill 
-              objectFit="cover" 
+              style={{objectFit: 'cover'}}
               data-ai-hint="professional portrait"
               className="transition-transform duration-500 hover:scale-110"
             />
           </div>
           <div>
             <h2 className="font-headline text-3xl font-bold text-primary">Pesan dari Kepala Sekolah</h2>
-             <div className="mt-4 flex items-center gap-3 rounded-lg bg-accent/10 p-3 text-accent-foreground/80">
-               <ShieldCheck className="h-6 w-6 text-accent flex-shrink-0" />
+             <div className="mt-4 flex items-center gap-3 rounded-lg bg-accent/10 p-3 text-accent">
+               <ShieldCheck className="h-6 w-6 flex-shrink-0" />
                <p className="font-semibold">Sekolah Adiwiyata Nasional, Sekolah Ramah Anak</p>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
-              Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.
+              {principal.principalWelcome.substring(0,200)}...
             </p>
-            <Button asChild variant="link" className="mt-4 p-0 text-accent-foreground">
+             <p className="mt-4 font-semibold text-primary">{principal.principalName}</p>
+            <Button asChild variant="link" className="mt-4 p-0 text-accent hover:text-accent/80">
               <Link href="/profile">
                 Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
@@ -254,26 +233,28 @@ export default function Home() {
             Berita Terbaru
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {newsItems.map((item, index) => (
-              <Card key={index} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+            {latestNews.map((item) => (
+              <Card key={item.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
                 <CardHeader className="p-0">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    width={600}
-                    height={400}
-                    className="h-56 w-full object-cover"
-                    data-ai-hint={item.hint}
-                  />
+                  <Link href={`/news/${item.id}`}>
+                    <Image
+                      src={item.imageUrl || "https://placehold.co/600x400.png"}
+                      alt={item.title}
+                      width={600}
+                      height={400}
+                      className="h-56 w-full object-cover"
+                      data-ai-hint={item.hint || "news article"}
+                    />
+                  </Link>
                 </CardHeader>
-                <CardContent className="flex flex-col p-6 flex-grow">
+                <CardContent className="flex flex-grow flex-col p-6">
                   <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   <CardTitle className="font-headline text-xl font-bold text-primary">
-                    {item.title}
+                    <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
                   </CardTitle>
-                  <p className="mt-2 text-foreground/80 flex-grow">{item.description}</p>
-                   <Button variant="link" asChild className="mt-4 p-0 self-start text-accent-foreground">
-                    <Link href={item.link}>
+                  <p className="mt-2 text-foreground/80 flex-grow">{item.description.substring(0, 100)}...</p>
+                   <Button variant="link" asChild className="mt-4 p-0 self-start text-accent hover:text-accent/80">
+                    <Link href={`/news/${item.id}`}>
                       Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </Button>
@@ -282,7 +263,7 @@ export default function Home() {
             ))}
           </div>
            <div className="mt-12 text-center">
-             <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+             <Button asChild size="lg">
                 <Link href="/news">Lihat Semua Berita</Link>
              </Button>
            </div>
@@ -291,4 +272,3 @@ export default function Home() {
     </div>
   );
 }
-
