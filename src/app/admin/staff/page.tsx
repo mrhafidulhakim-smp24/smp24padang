@@ -47,6 +47,7 @@ type StaffMember = {
   name: string;
   position: string;
   subject: string;
+  waliKelas?: string;
   initials: string;
   image: string;
   hint: string;
@@ -54,8 +55,8 @@ type StaffMember = {
 
 const initialStaff: StaffMember[] = [
   { id: "1", name: "Dr. Budi Santoso, M.Pd.", position: "Kepala Sekolah", subject: "Manajemen Pendidikan", initials: "BS", image: "https://placehold.co/150x150.png", hint: "man portrait" },
-  { id: "2", name: "Siti Rahayu, S.Pd.", position: "Wakil Kepala Sekolah Bidang Akademik", subject: "Bahasa Indonesia", initials: "SR", image: "https://placehold.co/150x150.png", hint: "woman portrait" },
-  { id: "3", name: "Agus Wijaya, S.Si.", position: "Kepala Laboratorium", subject: "Sains", initials: "AW", image: "https://placehold.co/150x150.png", hint: "man portrait" },
+  { id: "2", name: "Siti Rahayu, S.Pd.", position: "Wakil Kepala Sekolah Bidang Akademik", subject: "Bahasa Indonesia", waliKelas: "Kelas 9A", initials: "SR", image: "https://placehold.co/150x150.png", hint: "woman portrait" },
+  { id: "3", name: "Agus Wijaya, S.Si.", position: "Kepala Laboratorium", subject: "Sains", waliKelas: "Kelas 8B", initials: "AW", image: "https://placehold.co/150x150.png", hint: "man portrait" },
 ];
 
 export default function StaffAdminPage() {
@@ -78,6 +79,7 @@ export default function StaffAdminPage() {
       name,
       position: formData.get("position") as string,
       subject: formData.get("subject") as string,
+      waliKelas: formData.get("waliKelas") as string || undefined,
       initials: getInitials(name),
       image: "https://placehold.co/150x150.png", // Placeholder for uploaded image
       hint: "portrait"
@@ -97,6 +99,7 @@ export default function StaffAdminPage() {
       name,
       position: formData.get("position") as string,
       subject: formData.get("subject") as string,
+      waliKelas: formData.get("waliKelas") as string || undefined,
       initials: getInitials(name),
     };
 
@@ -166,6 +169,10 @@ export default function StaffAdminPage() {
                 <Label htmlFor="subject-add">Mata Pelajaran</Label>
                 <Input id="subject-add" name="subject" placeholder="Contoh: Matematika" />
               </div>
+              <div>
+                <Label htmlFor="waliKelas-add">Wali Kelas (Opsional)</Label>
+                <Input id="waliKelas-add" name="waliKelas" placeholder="Contoh: Kelas 7A" />
+              </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setAddOpen(false)}>Batal</Button>
                 <Button type="submit">Simpan</Button>
@@ -180,9 +187,10 @@ export default function StaffAdminPage() {
             <Table>
             <TableHeader>
                 <TableRow>
-                <TableHead className="w-[40%]">Nama</TableHead>
-                <TableHead className="w-[30%]">Jabatan</TableHead>
+                <TableHead className="w-[30%]">Nama</TableHead>
+                <TableHead>Jabatan</TableHead>
                 <TableHead>Mata Pelajaran</TableHead>
+                <TableHead>Wali Kelas</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
                 </TableRow>
             </TableHeader>
@@ -200,6 +208,7 @@ export default function StaffAdminPage() {
                     </TableCell>
                     <TableCell>{item.position}</TableCell>
                     <TableCell>{item.subject}</TableCell>
+                    <TableCell>{item.waliKelas || "-"}</TableCell>
                     <TableCell className="text-right">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -263,6 +272,10 @@ export default function StaffAdminPage() {
               <div>
                 <Label htmlFor="subject-edit">Mata Pelajaran</Label>
                 <Input id="subject-edit" name="subject" defaultValue={selectedStaff?.subject} />
+              </div>
+               <div>
+                <Label htmlFor="waliKelas-edit">Wali Kelas (Opsional)</Label>
+                <Input id="waliKelas-edit" name="waliKelas" defaultValue={selectedStaff?.waliKelas} placeholder="Contoh: Kelas 7A" />
               </div>
               <DialogFooter>
                  <Button type="button" variant="outline" onClick={() => setEditOpen(false)}>Batal</Button>
