@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -10,22 +11,120 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Achievement {
-  id          String   @id @default(uuid())
-  title       String
-  student     String
-  description String
-  imageUrl    String?
-  hint        String?
-  createdAt   DateTime @default(now())
-}
-
 model NewsArticle {
-  id          String   @id @default(uuid())
+  id          String   @id @default(cuid())
   title       String
   date        DateTime
-  description String
+  description String   @db.Text
+  image       String
+  hint        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String
+  student     String
+  description String   @db.Text
   imageUrl    String?
   hint        String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Banner {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String
+  hint        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GalleryItem {
+  id        String   @id @default(cuid())
+  alt       String
+  category  String
+  imageUrl  String
+  hint      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Extracurricular {
+  id          String   @id @default(cuid())
+  name        String
+  category    String
+  description String
+  imageUrl    String
+  hint        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Uniform {
+  id          String   @id @default(cuid())
+  day         String   @unique
+  description String
+  imageUrl    String
+  hint        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model OrganizationChart {
+  id        String   @id @default(cuid())
+  title     String
+  imageUrl  String
+  hint      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AccreditationDoc {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  link        String
+  embedLink   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Profile {
+  id               String @id @default("singleton")
+  principalWelcome String @db.Text
+  principalName    String
+  principalImage   String
+  vision           String @db.Text
+  mission          String @db.Text
+  updatedAt        DateTime @updatedAt
+}
+
+model StaffMember {
+  id        String   @id @default(cuid())
+  name      String
+  position  String
+  subject   String
+  waliKelas String?
+  initials  String
+  imageUrl  String
+  hint      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AcademicInfo {
+  id                      String @id @default("singleton")
+  curriculumTitle         String
+  curriculumContent       String @db.Text
+  curriculumImageUrl      String
+  curriculumImageHint     String?
+  learningStructureTitle  String
+  learningStructureContent String @db.Text
+  learningStructureImageUrl String
+  learningStructureImageHint String?
+  updatedAt               DateTime @updatedAt
 }
