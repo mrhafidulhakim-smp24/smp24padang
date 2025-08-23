@@ -172,6 +172,10 @@ export default function Home() {
           </div>
           <div>
             <h2 className="font-headline text-3xl font-bold text-primary">Pesan dari Kepala Sekolah</h2>
+             <div className="mt-4 flex items-center gap-3 rounded-lg bg-accent/10 p-3 text-accent-foreground/80">
+               <ShieldCheck className="h-6 w-6 text-accent flex-shrink-0" />
+               <p className="font-semibold">Sekolah Adiwiyata Nasional, Sekolah Ramah Anak</p>
+            </div>
             <p className="mt-4 text-lg text-muted-foreground">
               Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.
             </p>
@@ -221,7 +225,7 @@ export default function Home() {
               <CardContent>
                 <p className="text-muted-foreground">Membentuk karakter mulia dan menggali potensi siswa melalui beragam kegiatan ekstrakurikuler.</p>
                  <Button asChild variant="outline" className="mt-4">
-                   <Link href="/academics#activities">Lihat Kegiatan</Link>
+                   <Link href="/profile/extracurricular">Lihat Kegiatan</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -287,3 +291,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
