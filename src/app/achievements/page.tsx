@@ -2,14 +2,18 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Award } from "lucide-react";
+import prisma from "@/lib/prisma";
+import type { Achievement } from "@prisma/client";
 
-const achievements = [
-    { id: '1', title: 'Juara 1 Olimpiade Sains Nasional', student: 'Andi Pratama', description: 'Meraih medali emas dalam kompetisi sains tingkat nasional.', imageUrl: 'https://placehold.co/600x400.png', hint: 'student winner' },
-    { id: '2', title: 'Juara 2 Lomba Debat Bahasa Inggris', student: 'Tim Debat SMPN 24', description: 'Menunjukkan kemampuan berargumen yang luar biasa di tingkat provinsi.', imageUrl: 'https://placehold.co/600x400.png', hint: 'debate team' },
-    { id: '3', title: 'Pemain Terbaik Turnamen Futsal', student: 'Rizky Maulana', description: 'Menjadi pencetak gol terbanyak dan pemain terbaik turnamen antar sekolah.', imageUrl: 'https://placehold.co/600x400.png', hint: 'soccer player' },
-];
+async function getAchievements(): Promise<Achievement[]> {
+    return prisma.achievement.findMany({
+        orderBy: { createdAt: 'desc' },
+    });
+}
 
-export default function AchievementsPage() {
+export default async function AchievementsPage() {
+  const achievements = await getAchievements();
+
   return (
     <div className="bg-background">
       <div className="container mx-auto px-4 py-12 md:py-24">

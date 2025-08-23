@@ -6,27 +6,26 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import prisma from '@/lib/prisma';
+import type { Banner, NewsArticle, Profile } from '@prisma/client';
 
-const heroBanners = [
-    { id: "1", title: "Selamat Datang di SMPN 24 Padang", description: "Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.", imageUrl: "https://placehold.co/1920x1080.png", hint: "school campus" },
-    { id: "2", title: "Penerimaan Siswa Baru 2024/2025", description: "Jadilah bagian dari komunitas kami yang berprestasi. Pendaftaran telah dibuka!", imageUrl: "https://placehold.co/1920x1080.png", hint: "students registration" },
-    { id: "3", title: "Juara Umum Lomba Cerdas Cermat", description: "Siswa kami kembali mengharumkan nama sekolah di tingkat nasional.", imageUrl: "https://placehold.co/1920x1080.png", hint: "students winning trophy" },
-];
+async function getBanners(): Promise<Banner[]> {
+    return prisma.banner.findMany({ orderBy: { createdAt: 'desc' } });
+}
 
-const latestNews = [
-    { id: '1', title: 'Kegiatan Class Meeting Akhir Semester', date: new Date(), description: 'Siswa-siswi menunjukkan bakat dan sportivitas dalam berbagai perlombaan.', imageUrl: 'https://placehold.co/600x400.png', hint: 'students competition' },
-    { id: '2', title: 'Workshop Guru Inovatif', date: new Date(), description: 'Para guru mengikuti pelatihan untuk meningkatkan kualitas pembelajaran.', imageUrl: 'https://placehold.co/600x400.png', hint: 'teacher workshop' },
-    { id: '3', title: 'Peringatan Hari Lingkungan Hidup', date: new Date(), description: 'Aksi bersih-bersih dan penanaman pohon di lingkungan sekolah.', imageUrl: 'https://placehold.co/600x400.png', hint: 'environmental cleanup' },
-];
+async function getLatestNews(): Promise<NewsArticle[]> {
+    return prisma.newsArticle.findMany({
+        orderBy: { date: 'desc' },
+        take: 3,
+    });
+}
 
-const profile = {
-    principalWelcome: "Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.",
-    principalName: "Dr. Budi Santoso, M.Pd.",
-    principalImageUrl: "https://placehold.co/600x800.png"
-};
+async function getProfile(): Promise<Profile | null> {
+    return prisma.profile.findFirst();
+}
 
-function Announcement() {
-  const latestAnnouncements = latestNews;
+async function Announcement() {
+  const latestAnnouncements = await getLatestNews();
 
   return (
     <section className="bg-background py-16 md:py-24">
@@ -71,8 +70,16 @@ function Announcement() {
   );
 }
 
-export default function Home() {
-  const principal = profile;
+export default async function Home() {
+  const heroBanners = await getBanners();
+  const latestNews = await getLatestNews();
+  const profile = await getProfile();
+
+  const principal = profile ?? {
+    principalWelcome: "Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.",
+    principalName: "Kepala Sekolah",
+    principalImageUrl: "https://placehold.co/600x800.png"
+  };
 
   const marqueeItems = [
       { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },

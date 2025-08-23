@@ -2,16 +2,17 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Calendar, UserCircle } from "lucide-react";
+import prisma from "@/lib/prisma";
 
-const newsItems = [
-    { id: '1', title: 'Kegiatan Class Meeting Akhir Semester', date: new Date(), description: 'Siswa-siswi menunjukkan bakat dan sportivitas dalam berbagai perlombaan seru seperti futsal, basket, dan tarik tambang untuk merayakan akhir semester. Kegiatan ini bertujuan untuk mempererat tali persaudaraan antar siswa dan menyegarkan pikiran setelah ujian.', imageUrl: 'https://placehold.co/1200x675.png', hint: 'students competition' },
-    { id: '2', title: 'Workshop Guru Inovatif', date: new Date(), description: 'Para guru mengikuti pelatihan intensif mengenai metode pengajaran terbaru dan pemanfaatan teknologi dalam pendidikan untuk meningkatkan kualitas pembelajaran di kelas. Workshop ini menghadirkan para ahli di bidang pendidikan.', imageUrl: 'https://placehold.co/1200x675.png', hint: 'teacher workshop' },
-    { id: '3', title: 'Peringatan Hari Lingkungan Hidup', date: new Date(), description: 'Seluruh warga sekolah berpartisipasi dalam aksi bersih-bersih lingkungan sekolah dan menanam pohon sebagai bentuk kepedulian terhadap bumi. Acara ini juga diisi dengan seminar tentang pentingnya menjaga kelestarian alam.', imageUrl: 'https://placehold.co/1200x675.png', hint: 'environmental cleanup' },
-    { id: '4', title: 'Kunjungan Edukatif ke Museum Adityawarman', date: new Date(), description: 'Siswa kelas 8 melakukan kunjungan belajar ke museum untuk mempelajari sejarah dan budaya Minangkabau secara langsung. Mereka sangat antusias melihat berbagai koleksi peninggalan sejarah.', imageUrl: 'https://placehold.co/1200x675.png', hint: 'museum visit' },
-];
+async function getArticle(id: string) {
+    const article = await prisma.newsArticle.findUnique({
+        where: { id },
+    });
+    return article;
+}
 
-export default function NewsArticlePage({ params }: { params: { id: string } }) {
-  const article = newsItems.find(item => item.id === params.id);
+export default async function NewsArticlePage({ params }: { params: { id: string } }) {
+  const article = await getArticle(params.id);
 
   if (!article) {
     notFound();

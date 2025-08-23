@@ -1,104 +1,18 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
-
-generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["native", "debian-openssl-3.0.x"]
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Banner {
   id          String   @id @default(cuid())
   title       String
   description String
-  imageUrl    String?
-  hint        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Profile {
-  id                 String   @id @default(cuid())
-  principalWelcome   String   @db.Text
-  principalName      String
-  principalImageUrl  String?
-  vision             String   @db.Text
-  mission            String[]
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
-
-model AcademicInfo {
-  id                 String   @id @default(cuid())
-  curriculumTitle    String
-  curriculumContent  String[]
-  curriculumImageUrl String?
-  curriculumHint     String?
-  structureTitle     String
-  structureContent   String[]
-  structureImageUrl  String?
-  structureHint      String?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
-
-model GalleryItem {
-  id          String   @id @default(cuid())
-  alt         String
-  category    String
-  imageUrl    String
-  hint        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Extracurricular {
-  id          String   @id @default(cuid())
-  name        String
-  category    String
-  description String
-  imageUrl    String?
-  hint        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Uniform {
-  id          String   @id @default(cuid())
-  day         String
-  description String
-  imageUrl    String?
-  hint        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model OrganizationChart {
-  id        String   @id @default(cuid())
-  title     String
-  imageUrl  String?
-  hint      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model AccreditationDoc {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  link        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Achievement {
-  id          String   @id @default(cuid())
-  title       String
-  student     String
-  description String   @db.Text
   imageUrl    String?
   hint        String?
   createdAt   DateTime @default(now())
@@ -114,4 +28,24 @@ model NewsArticle {
   hint        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String
+  student     String
+  description String
+  imageUrl    String?
+  hint        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Profile {
+  id                 String @id @default("singleton")
+  principalWelcome   String @db.Text
+  principalName      String
+  principalImageUrl  String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
