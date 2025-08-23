@@ -6,29 +6,26 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
-}
-
-model NewsArticle {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  date        DateTime
-  image       String // Placeholder, will be replaced by imageUrl
-  imageUrl    String?
-  hint        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Achievement {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   title       String
   student     String
   description String
   imageUrl    String?
-  hint        String
+  hint        String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+}
+
+model NewsArticle {
+  id          String   @id @default(uuid())
+  title       String
+  date        DateTime
+  description String
+  imageUrl    String?
+  hint        String?
+  createdAt   DateTime @default(now())
 }

@@ -1,58 +1,19 @@
+
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
+import prisma from "@/lib/prisma";
 
-const galleryItems = [
-  {
-    src: "https://placehold.co/600x400.png",
-    alt: "Kegiatan Belajar Mengajar di Kelas",
-    category: "Akademik",
-    hint: "classroom students",
-  },
-  {
-    src: "https://placehold.co/600x400.png",
-    alt: "Tim Basket Sekolah Merayakan Kemenangan",
-    category: "Olahraga",
-    hint: "basketball team celebration",
-  },
-  {
-    src: "https://placehold.co/600x400.png",
-    alt: "Pameran Seni Siswa",
-    category: "Seni & Budaya",
-    hint: "student art exhibition",
-  },
-  {
-    src: "https://placehold.co/600x400.png",
-    alt: "Siswa Melakukan Percobaan di Laboratorium Sains",
-    category: "Sains",
-    hint: "science lab students",
-  },
-  {
-    src: "https://placehold.co/600x400.png",
-    alt: "Upacara Bendera Peringatan Hari Kemerdekaan",
-    category: "Acara Sekolah",
-    hint: "flag ceremony",
-  },
-  {
-    src: "https://placehold.co/600x400.png",
-    alt: "Kegiatan Pramuka di Alam Terbuka",
-    category: "Ekstrakurikuler",
-    hint: "scouts camping",
-  },
-   {
-    src: "https://placehold.co/600x400.png",
-    alt: "Lomba Cerdas Cermat Tingkat Nasional",
-    category: "Prestasi",
-    hint: "quiz competition students",
-  },
-  {
-    src: "https://placehold.co/600x400.png",
-    alt: "Pentas Drama Tahunan",
-    category: "Seni & Budaya",
-    hint: "school play drama",
-  },
-];
+async function getGalleryItems() {
+  return await prisma.galleryItem.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+}
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const galleryItems = await getGalleryItems();
+
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -71,10 +32,10 @@ export default function GalleryPage() {
                 <Image
                   width={600}
                   height={400}
-                  src={item.src}
+                  src={item.imageUrl}
                   alt={item.alt}
                   className="h-auto w-full transform transition-transform duration-300 group-hover:scale-105"
-                  data-ai-hint={item.hint}
+                  data-ai-hint={item.hint || 'gallery image'}
                 />
              </Card>
              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
