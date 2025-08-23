@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -18,6 +19,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import Link from "next/link";
+
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -533,12 +536,16 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
+
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button"> & {
-    asChild?: boolean
-    isActive?: boolean
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    asChild?: boolean;
+    isActive?: boolean;
+    tooltip?: string | React.ComponentProps<typeof TooltipContent>;
+    href?: string;
+    icon?: React.ReactNode;
+    children?: React.ReactNode;
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
@@ -549,32 +556,51 @@ const SidebarMenuButton = React.forwardRef<
       size = "default",
       tooltip,
       className,
+      href,
+      icon,
+      children,
       ...props
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button"
-    const { isMobile, state } = useSidebar()
+    const { isMobile, state } = useSidebar();
+    const Comp = href ? asChild ? Slot : Link : asChild ? Slot : "button";
+
+    const buttonContent = (
+      <>
+        {icon}
+        <span className="group-data-[collapsible=icon]:hidden">{children}</span>
+      </>
+    );
 
     const button = (
+      // @ts-ignore - href is a valid prop for Link
       <Comp
         ref={ref}
+        href={href}
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
         {...props}
-      />
-    )
+      >
+        {buttonContent}
+      </Comp>
+    );
 
-    if (!tooltip) {
-      return button
+    if (!tooltip && state !== "collapsed") {
+      tooltip = children as string;
     }
+    
+    if (!tooltip) {
+        return button;
+    }
+
 
     if (typeof tooltip === "string") {
       tooltip = {
         children: tooltip,
-      }
+      };
     }
 
     return (
@@ -583,14 +609,15 @@ const SidebarMenuButton = React.forwardRef<
         <TooltipContent
           side="right"
           align="center"
-          hidden={state !== "collapsed" || isMobile}
+          hidden={(state !== "collapsed" && !isMobile) || !tooltip}
           {...tooltip}
         />
       </Tooltip>
-    )
+    );
   }
-)
-SidebarMenuButton.displayName = "SidebarMenuButton"
+);
+SidebarMenuButton.displayName = "SidebarMenuButton";
+
 
 const SidebarMenuAction = React.forwardRef<
   HTMLButtonElement,
@@ -690,7 +717,7 @@ const SidebarMenuSub = React.forwardRef<
     ref={ref}
     data-sidebar="menu-sub"
     className={cn(
-      "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5",
+      "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border pl-4 pr-0 py-1",
       "group-data-[collapsible=icon]:hidden",
       className
     )}
@@ -716,7 +743,8 @@ const SidebarMenuSubButton = React.forwardRef<
   const Comp = asChild ? Slot : "a"
 
   return (
-    <Comp
+     <Link
+      href={props.href || '#'}
       ref={ref}
       data-sidebar="menu-sub-button"
       data-size={size}
