@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
+import { ArrowRight, BookOpen, Sparkles, ShieldCheck, Megaphone } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
@@ -63,6 +63,68 @@ const marqueeItems = [
     { type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
 ];
 
+const announcementItems = [
+    {
+      title: "Jadwal Ujian Akhir Semester (UAS) Genap",
+      date: "2024-05-20",
+      description: "Ujian Akhir Semester untuk tahun ajaran 2023/2024 akan dilaksanakan mulai tanggal 3 Juni hingga 7 Juni 2024. Harap siswa mempersiapkan diri dan memeriksa jadwal detail di papan pengumuman sekolah.",
+      link: "/news/jadwal-uas-genap"
+    },
+    {
+      title: "Pendaftaran Ekstrakurikuler Tahun Ajaran Baru",
+      date: "2024-05-18",
+      description: "Pendaftaran untuk seluruh kegiatan ekstrakurikuler tahun ajaran 2024/2025 akan dibuka pada tanggal 15 Juli 2024. Formulir dapat diambil di ruang OSIS.",
+      link: "/academics#activities"
+    },
+    {
+      title: "Informasi Libur Kenaikan Kelas",
+      date: "2024-05-15",
+      description: "Libur akhir tahun ajaran akan dimulai pada tanggal 10 Juni 2024 dan siswa akan kembali masuk pada tanggal 8 Juli 2024. Selamat berlibur!",
+      link: "#"
+    }
+];
+
+function Announcements() {
+  return (
+    <section className="bg-background py-16 md:py-24">
+      <div className="container mx-auto px-4">
+        <div className="text-center">
+          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pengumuman Penting</h2>
+          <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+            Informasi terbaru seputar kegiatan dan jadwal sekolah.
+          </p>
+        </div>
+        <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {announcementItems.map((item, index) => (
+            <Card key={index} className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+               <CardHeader className="flex flex-row items-center gap-4">
+                  <div className="rounded-lg bg-primary/10 p-3">
+                     <Megaphone className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle className="font-headline text-xl text-primary">{item.title}</CardTitle>
+                    <p className="text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                  </div>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="text-foreground/80">{item.description}</p>
+              </CardContent>
+              <div className="p-6 pt-0">
+                  <Button variant="link" asChild className="p-0 text-accent-foreground">
+                    <Link href={item.link}>
+                      Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
+                    </Link>
+                  </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 export default function Home() {
   return (
     <div className="flex flex-col">
@@ -87,10 +149,10 @@ export default function Home() {
                     priority={index === 0}
                   />
                   <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white">
-                    <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl animate-fade-in-down">
+                    <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
                       {banner.title}
                     </h1>
-                    <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm animate-fade-in-up">
+                    <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm">
                       {banner.description}
                     </p>
                   </div>
@@ -134,6 +196,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      {/* Announcements Section */}
+      <Announcements />
 
       {/* Pillars Section */}
       <section className="bg-primary/5 py-16 md:py-24">
