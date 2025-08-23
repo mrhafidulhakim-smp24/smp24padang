@@ -1,7 +1,9 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -42,6 +44,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
+// import { createNewsArticle, updateNewsArticle, deleteNewsArticle, NewsArticleSchema } from "./actions";
+// import type { NewsArticle } from "@prisma/client";
+import { z } from "zod";
+
+// Mock data and functions for now, will be replaced with server actions
+const NewsArticleSchema = z.object({
+    title: z.string().min(1, "Judul diperlukan"),
+    date: z.string().min(1, "Tanggal diperlukan"),
+    description: z.string().min(1, "Deskripsi diperlukan"),
+});
+type NewsArticleValues = z.infer<typeof NewsArticleSchema>;
 
 type NewsArticle = {
   id: string;
@@ -69,15 +83,8 @@ const initialNews: NewsArticle[] = [
     image: "https://placehold.co/600x400.png",
     hint: "student activities"
   },
-  {
-    id: "3",
-    title: "Informasi Libur Kenaikan Kelas",
-    date: "2024-05-15",
-    description: "Libur akhir tahun ajaran akan dimulai pada tanggal 10 Juni 2024 dan siswa akan kembali masuk pada tanggal 8 Juli 2024.",
-    image: "https://placehold.co/600x400.png",
-    hint: "school holiday"
-  },
 ];
+
 
 export default function NewsAdminPage() {
   const [news, setNews] = useState<NewsArticle[]>(initialNews);
@@ -85,49 +92,79 @@ export default function NewsAdminPage() {
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [selectedNews, setSelectedNews] = useState<NewsArticle | null>(null);
+  
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
 
-  const handleAddNews = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+  const form = useForm<NewsArticleValues>({
+    resolver: zodResolver(NewsArticleSchema),
+  });
+
+  const handleAddNews = async (data: NewsArticleValues) => {
+    // startTransition(async () => {
+    //   const result = await createNewsArticle(data);
+    //   if (result.success) {
+    //     toast({ title: "Sukses", description: "Berita baru telah ditambahkan." });
+    //     setAddOpen(false);
+    //   } else {
+    //     toast({ title: "Error", description: result.message, variant: "destructive" });
+    //   }
+    // });
+    console.log("Adding news:", data);
     const newArticle: NewsArticle = {
-      id: Date.now().toString(),
-      title: formData.get("title") as string,
-      date: formData.get("date") as string,
-      description: formData.get("description") as string,
-      image: "https://placehold.co/600x400.png",
-      hint: "new news"
+        id: Date.now().toString(),
+        title: data.title,
+        date: data.date,
+        description: data.description,
+        image: "https://placehold.co/600x400.png",
+        hint: "new news"
     };
     setNews([newArticle, ...news]);
+    toast({ title: "Sukses", description: "Berita baru telah ditambahkan." });
     setAddOpen(false);
   };
 
-  const handleEditNews = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleEditNews = async (data: NewsArticleValues) => {
     if (!selectedNews) return;
-    
-    const formData = new FormData(event.currentTarget);
-    const updatedArticle: NewsArticle = {
+    // startTransition(async () => {
+    //   const result = await updateNewsArticle(selectedNews.id, data);
+    //   if (result.success) {
+    //     toast({ title: "Sukses", description: "Berita telah diperbarui." });
+    //     setEditOpen(false);
+    //     setSelectedNews(null);
+    //   } else {
+    //     toast({ title: "Error", description: result.message, variant: "destructive" });
+    //   }
+    // });
+     console.log("Editing news:", data);
+     const updatedArticle: NewsArticle = {
       ...selectedNews,
-      title: formData.get("title") as string,
-      date: formData.get("date") as string,
-      description: formData.get("description") as string,
+      ...data,
     };
-
     setNews(news.map(n => n.id === selectedNews.id ? updatedArticle : n));
+    toast({ title: "Sukses", description: "Berita telah diperbarui." });
     setEditOpen(false);
     setSelectedNews(null);
   };
   
   const handleDeleteConfirm = () => {
     if (!selectedNews) return;
-    setNews(news.filter(n => n.id !== selectedNews.id));
-    setDeleteOpen(false);
-    setSelectedNews(null);
+    // startTransition(async () => {
+    //   const result = await deleteNewsArticle(selectedNews.id);
+    //   if (result.success) {
+    //     toast({ title: "Sukses", description: "Berita telah dihapus." });
+    //     setDeleteOpen(false);
+    //     setSelectedNews(null);
+    //   } else {
+    //     toast({ title: "Error", description: result.message, variant: "destructive" });
+    //   }
+    // });
+     console.log("Deleting news:", selectedNews.id);
+     setNews(news.filter(n => n.id !== selectedNews.id));
+     toast({ title: "Sukses", description: "Berita telah dihapus." });
+     setDeleteOpen(false);
+     setSelectedNews(null);
   };
-
-  const sortedNews = useMemo(() => {
-    return [...news].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [news]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -150,41 +187,25 @@ export default function NewsAdminPage() {
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Tambah Berita Baru</DialogTitle>
-              <DialogDescription>
-                Isi detail di bawah ini untuk menambahkan artikel berita baru.
-              </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleAddNews} className="space-y-4">
-              <div>
-                <Label htmlFor="image-add">Gambar</Label>
-                 <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
-                    <div className="space-y-1 text-center">
-                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                        <div className="flex text-sm text-gray-600">
-                            <Label htmlFor="file-upload-add" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
-                                <span>Unggah file</span>
-                                 <Input id="file-upload-add" name="file-upload" type="file" className="sr-only" />
-                            </Label>
-                            <p className="pl-1">atau seret dan lepas</p>
-                        </div>
-                        <p className="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
-                    </div>
-                 </div>
-              </div>
-              <div>
+            <form onSubmit={form.handleSubmit(handleAddNews)} className="space-y-4">
+               <div>
                   <Label htmlFor="title">Judul</Label>
-                  <Input id="title" name="title" required />
+                  <Input id="title" {...form.register("title")} />
+                  {form.formState.errors.title && <p className="text-sm text-destructive">{form.formState.errors.title.message}</p>}
                 </div>
                 <div>
                   <Label htmlFor="date">Tanggal</Label>
-                  <Input id="date" name="date" type="date" defaultValue={new Date().toISOString().substring(0, 10)} required />
+                  <Input id="date" type="date" {...form.register("date")} defaultValue={new Date().toISOString().substring(0, 10)} />
+                   {form.formState.errors.date && <p className="text-sm text-destructive">{form.formState.errors.date.message}</p>}
                 </div>
                 <div>
                   <Label htmlFor="description">Deskripsi</Label>
-                  <Textarea id="description" name="description" required />
+                  <Textarea id="description" {...form.register("description")} />
+                   {form.formState.errors.description && <p className="text-sm text-destructive">{form.formState.errors.description.message}</p>}
                 </div>
               <DialogFooter>
-                <Button type="submit">Simpan</Button>
+                <Button type="submit" disabled={isPending}>{isPending ? "Menyimpan..." : "Simpan"}</Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -203,7 +224,7 @@ export default function NewsAdminPage() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {sortedNews.map((item) => (
+                {news.map((item) => (
                 <TableRow key={item.id}>
                     <TableCell>
                        <Image src={item.image} alt={item.title} width={80} height={80} className="h-16 w-16 rounded-md object-cover"/>
@@ -214,12 +235,11 @@ export default function NewsAdminPage() {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Buka menu</span>
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                        <DropdownMenuItem onSelect={() => { setSelectedNews(item); setEditOpen(true); }}>
+                        <DropdownMenuItem onSelect={() => { setSelectedNews(item); form.reset({title: item.title, date: item.date.substring(0,10), description: item.description }); setEditOpen(true); }}>
                             <Pencil className="mr-2 h-4 w-4" />
                             <span>Edit</span>
                         </DropdownMenuItem>
@@ -237,53 +257,35 @@ export default function NewsAdminPage() {
         </CardContent>
       </Card>
 
-       {/* Edit Dialog */}
        <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Edit Berita</DialogTitle>
-              <DialogDescription>
-                Perbarui detail artikel berita di bawah ini.
-              </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleEditNews} className="space-y-4">
-              <div>
-                <Label htmlFor="image-edit">Gambar</Label>
-                 <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
-                    <div className="space-y-1 text-center">
-                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                        <div className="flex text-sm text-gray-600">
-                            <Label htmlFor="file-upload-edit" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
-                                <span>Ganti file</span>
-                                 <Input id="file-upload-edit" name="file-upload" type="file" className="sr-only" />
-                            </Label>
-                            <p className="pl-1">atau seret dan lepas</p>
-                        </div>
-                        <p className="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
-                    </div>
-                 </div>
-              </div>
+            <form onSubmit={form.handleSubmit(handleEditNews)} className="space-y-4">
               <div>
                   <Label htmlFor="title-edit">Judul</Label>
-                  <Input id="title-edit" name="title" defaultValue={selectedNews?.title} required />
+                  <Input id="title-edit" {...form.register("title")} />
+                   {form.formState.errors.title && <p className="text-sm text-destructive">{form.formState.errors.title.message}</p>}
                 </div>
                 <div>
                   <Label htmlFor="date-edit">Tanggal</Label>
-                  <Input id="date-edit" name="date" type="date" defaultValue={selectedNews?.date} required />
+                  <Input id="date-edit" type="date" {...form.register("date")} />
+                   {form.formState.errors.date && <p className="text-sm text-destructive">{form.formState.errors.date.message}</p>}
                 </div>
                 <div>
                   <Label htmlFor="description-edit">Deskripsi</Label>
-                  <Textarea id="description-edit" name="description" defaultValue={selectedNews?.description} required />
+                  <Textarea id="description-edit" {...form.register("description")} />
+                   {form.formState.errors.description && <p className="text-sm text-destructive">{form.formState.errors.description.message}</p>}
                 </div>
               <DialogFooter>
                  <Button type="button" variant="outline" onClick={() => setEditOpen(false)}>Batal</Button>
-                 <Button type="submit">Simpan Perubahan</Button>
+                 <Button type="submit" disabled={isPending}>{isPending ? "Menyimpan..." : "Simpan Perubahan"}</Button>
               </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog open={isDeleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -294,8 +296,8 @@ export default function NewsAdminPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setSelectedNews(null)}>Batal</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Hapus
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90" disabled={isPending}>
+              {isPending ? "Menghapus..." : "Hapus"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -303,5 +305,3 @@ export default function NewsAdminPage() {
     </div>
   );
 }
-
-    
