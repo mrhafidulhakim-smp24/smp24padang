@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useTransition } from "react";
@@ -147,7 +146,7 @@ export default function NewsAdminPage({ newsArticles: initialNews }: NewsAdminPa
     if (!selectedNews) return;
     startTransition(async () => {
       try {
-        const result = await deleteNewsArticle(selectedNews.id, selectedNews.imageUrl || '');
+        const result = await deleteNewsArticle(selectedNews.id, selectedNews.imageUrl || null);
         if (result.success) {
           setNews(news.filter(n => n.id !== selectedNews.id));
           toast({ title: "Sukses", description: "Berita telah dihapus." });
@@ -323,7 +322,3 @@ export default function NewsAdminPage({ newsArticles: initialNews }: NewsAdminPa
     </div>
   );
 }
-
-    
-
-    

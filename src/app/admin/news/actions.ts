@@ -1,3 +1,4 @@
+
 "use server";
 
 import { z } from "zod";
@@ -6,10 +7,10 @@ import { revalidatePath } from "next/cache";
 import { put, del } from "@vercel/blob";
 import { Prisma } from "@prisma/client";
 
-export const AchievementSchema = z.object({
+export const NewsArticleSchema = z.object({
   title: z.string().min(3, "Judul minimal 3 karakter"),
-  student: z.string().min(3, "Siswa/Tim minimal 3 karakter"),
   description: z.string().min(10, "Deskripsi minimal 10 karakter"),
+  date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Format tanggal tidak valid" }),
   hint: z.string().optional(),
 });
 
@@ -20,35 +21,38 @@ async function uploadImage(image: File) {
   return blob.url;
 }
 
-export async function createAchievement(formData: FormData) {
-  const validatedFields = AchievementSchema.safeParse({
+export async function createNewsArticle(formData: FormData) {
+  const validatedFields = NewsArticleSchema.safeParse({
     title: formData.get("title"),
-    student: formData.get("student"),
     description: formData.get("description"),
+    date: formData.get("date"),
     hint: formData.get("hint"),
   });
 
   if (!validatedFields.success) {
     return { success: false, message: "Validasi gagal", errors: validatedFields.error.flatten().fieldErrors };
   }
+  
+  const { date, ...rest } = validatedFields.data;
 
   const image = formData.get("image") as File;
   let imageUrl;
 
-  if (image && image.size > 0) {
-    imageUrl = await uploadImage(image);
-  }
-
   try {
-    const newAchievement = await prisma.achievement.create({
+    if (image && image.size > 0) {
+      imageUrl = await uploadImage(image);
+    }
+
+    const newArticle = await prisma.newsArticle.create({
       data: {
-        ...validatedFields.data,
+        ...rest,
+        date: new Date(date),
         imageUrl,
       },
     });
-    revalidatePath("/admin/achievements");
-    revalidatePath("/achievements");
-    return { success: true, data: newAchievement };
+    revalidatePath("/admin/news");
+    revalidatePath("/news");
+    return { success: true, data: newArticle };
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       return { success: false, message: `Gagal menyimpan: ${e.message}` };
@@ -57,42 +61,43 @@ export async function createAchievement(formData: FormData) {
   }
 }
 
-export async function updateAchievement(id: string, currentImageUrl: string | null, formData: FormData) {
-    const validatedFields = AchievementSchema.safeParse({
+export async function updateNewsArticle(id: string, currentImageUrl: string | null, formData: FormData) {
+    const validatedFields = NewsArticleSchema.safeParse({
         title: formData.get('title'),
-        student: formData.get('student'),
         description: formData.get('description'),
+        date: formData.get('date'),
         hint: formData.get('hint'),
     });
 
     if (!validatedFields.success) {
         return { success: false, message: 'Validasi gagal', errors: validatedFields.error.flatten().fieldErrors };
     }
+    
+    const { date, ...rest } = validatedFields.data;
 
     const image = formData.get('image') as File;
     let newImageUrl;
 
     try {
         if (image && image.size > 0) {
-            // Hapus gambar lama jika ada
             if (currentImageUrl) {
                 await del(currentImageUrl);
             }
-            // Unggah gambar baru
             newImageUrl = await uploadImage(image);
         }
 
-        const updatedAchievement = await prisma.achievement.update({
+        const updatedArticle = await prisma.newsArticle.update({
             where: { id },
             data: {
-                ...validatedFields.data,
+                ...rest,
+                date: new Date(date),
                 ...(newImageUrl && { imageUrl: newImageUrl }),
             },
         });
 
-        revalidatePath('/admin/achievements');
-        revalidatePath('/achievements');
-        return { success: true, data: updatedAchievement };
+        revalidatePath('/admin/news');
+        revalidatePath('/news');
+        return { success: true, data: updatedArticle };
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             return { success: false, message: `Gagal memperbarui: ${e.message}` };
@@ -102,20 +107,19 @@ export async function updateAchievement(id: string, currentImageUrl: string | nu
 }
 
 
-export async function deleteAchievement(id: string, imageUrl: string | null) {
+export async function deleteNewsArticle(id: string, imageUrl: string | null) {
     try {
-        // Hapus gambar dari Vercel Blob jika ada
         if (imageUrl) {
             await del(imageUrl);
         }
         
-        await prisma.achievement.delete({
+        await prisma.newsArticle.delete({
             where: { id },
         });
 
-        revalidatePath('/admin/achievements');
-        revalidatePath('/achievements');
-        return { success: true, message: 'Prestasi berhasil dihapus.' };
+        revalidatePath('/admin/news');
+        revalidatePath('/news');
+        return { success: true, message: 'Berita berhasil dihapus.' };
     } catch (e) {
          if (e instanceof Prisma.PrismaClientKnownRequestError) {
             return { success: false, message: `Gagal menghapus: ${e.message}` };

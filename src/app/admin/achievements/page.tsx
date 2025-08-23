@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useTransition } from "react";
@@ -146,7 +145,7 @@ export default function AchievementsAdminPage({ achievements: initialAchievement
     if (!selectedAchievement) return;
     startTransition(async () => {
       try {
-        const result = await deleteAchievement(selectedAchievement.id, selectedAchievement.imageUrl || '');
+        const result = await deleteAchievement(selectedAchievement.id, selectedAchievement.imageUrl || null);
         if (result.success) {
           setAchievements(achievements.filter(a => a.id !== selectedAchievement.id));
           toast({ title: "Sukses", description: "Prestasi telah dihapus." });
@@ -323,7 +322,3 @@ export default function AchievementsAdminPage({ achievements: initialAchievement
     </div>
   );
 }
-
-    
-
-    

@@ -1,24 +1,33 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
 
 generator client {
   provider        = "prisma-client-js"
-  binaryTargets   = ["native", "debian-openssl-3.0.x"]
+  previewFeatures = ["driverAdapters"]
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+model Banner {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String
+  hint        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model NewsArticle {
   id          String   @id @default(cuid())
   title       String
-  date        DateTime
   description String   @db.Text
   imageUrl    String?
   hint        String?
+  date        DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -27,60 +36,56 @@ model Achievement {
   id          String   @id @default(cuid())
   title       String
   student     String
-  description String   @db.Text
+  description String
   imageUrl    String?
   hint        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model Banner {
+model GalleryItem {
   id          String   @id @default(cuid())
-  title       String
-  description String
+  alt         String
+  category    String
   imageUrl    String
-  hint        String
+  hint        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Staff {
+  id          String   @id @default(cuid())
+  name        String
+  position    String
+  subject     String
+  waliKelas   String?
+  initials    String
+  imageUrl    String?
+  hint        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Profile {
-  id                 String   @id @default(cuid())
-  principalWelcome   String   @db.Text
-  principalName      String
-  principalImageUrl  String?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
-
-model VisionMission {
-  id      String   @id @default(cuid())
-  vision  String   @db.Text
-  mission String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model AcademicInfo {
   id                  String   @id @default(cuid())
-  curriculumTitle     String
-  curriculumContent   String[]
-  curriculumImageUrl  String?
-  learningStructureTitle String
-  learningStructureContent String[]
-  learningStructureImageUrl String?
+  principalWelcome    String   @db.Text
+  principalName       String
+  principalImageUrl   String?
+  vision              String   @db.Text
+  mission             String[]
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
 
-model GalleryItem {
-  id        String   @id @default(cuid())
-  alt       String
-  category  String
-  imageUrl  String
-  hint      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model AcademicInfo {
+  id                  String   @id @default(cuid())
+  type                String   @unique // 'curriculum' or 'learningStructure'
+  title               String
+  content             String[]
+  imageUrl            String?
+  hint                String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model Extracurricular {
@@ -96,7 +101,7 @@ model Extracurricular {
 
 model Uniform {
   id          String   @id @default(cuid())
-  day         String
+  day         String   @unique
   description String
   imageUrl    String?
   hint        String?
@@ -105,26 +110,13 @@ model Uniform {
 }
 
 model OrganizationChart {
-  id        String   @id @default(cuid())
-  title     String
-  imageUrl  String
-  hint      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  title       String
+  imageUrl    String?
+  hint        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
-
-model Staff {
-  id        String   @id @default(cuid())
-  name      String
-  position  String
-  subject   String
-  waliKelas String?
-  imageUrl  String?
-  hint      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 
 model AccreditationDoc {
   id          String   @id @default(cuid())

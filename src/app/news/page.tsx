@@ -5,8 +5,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
+import type { NewsArticle } from "@prisma/client";
 
-async function getNews() {
+async function getNews(): Promise<NewsArticle[]> {
   const newsItems = await prisma.newsArticle.findMany({
     orderBy: {
       date: 'desc'

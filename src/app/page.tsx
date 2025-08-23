@@ -7,7 +7,7 @@ import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import prisma from '@/lib/prisma';
-import type { Banner, NewsArticle, Profile } from '@prisma/client';
+import type { Banner, NewsArticle, Profile } from "@prisma/client";
 
 async function getBanners(): Promise<Banner[]> {
     return prisma.banner.findMany({ orderBy: { createdAt: 'desc' } });
@@ -270,5 +270,3 @@ export default async function Home() {
     </div>
   );
 }
-
-    

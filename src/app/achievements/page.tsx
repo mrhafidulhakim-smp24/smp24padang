@@ -3,8 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Award } from "lucide-react";
 import prisma from "@/lib/prisma";
+import type { Achievement } from "@prisma/client";
 
-async function getAchievements() {
+async function getAchievements(): Promise<Achievement[]> {
   const achievements = await prisma.achievement.findMany({
     orderBy: {
       createdAt: 'desc'

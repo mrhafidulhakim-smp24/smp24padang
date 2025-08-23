@@ -2,8 +2,9 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
+import type { GalleryItem } from "@prisma/client";
 
-async function getGalleryItems() {
+async function getGalleryItems(): Promise<GalleryItem[]> {
   return await prisma.galleryItem.findMany({
     orderBy: {
       createdAt: 'desc'
