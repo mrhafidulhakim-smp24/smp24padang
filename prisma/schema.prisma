@@ -2,13 +2,14 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model NewsArticle {
@@ -16,8 +17,8 @@ model NewsArticle {
   title       String
   date        DateTime
   description String   @db.Text
-  image       String
-  hint        String
+  imageUrl    String?
+  hint        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -38,9 +39,38 @@ model Banner {
   title       String
   description String
   imageUrl    String
-  hint        String?
+  hint        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Profile {
+  id                 String   @id @default(cuid())
+  principalWelcome   String   @db.Text
+  principalName      String
+  principalImageUrl  String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model VisionMission {
+  id      String   @id @default(cuid())
+  vision  String   @db.Text
+  mission String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AcademicInfo {
+  id                  String   @id @default(cuid())
+  curriculumTitle     String
+  curriculumContent   String[]
+  curriculumImageUrl  String?
+  learningStructureTitle String
+  learningStructureContent String[]
+  learningStructureImageUrl String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model GalleryItem {
@@ -58,7 +88,7 @@ model Extracurricular {
   name        String
   category    String
   description String
-  imageUrl    String
+  imageUrl    String?
   hint        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -66,9 +96,9 @@ model Extracurricular {
 
 model Uniform {
   id          String   @id @default(cuid())
-  day         String   @unique
+  day         String
   description String
-  imageUrl    String
+  imageUrl    String?
   hint        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -83,48 +113,24 @@ model OrganizationChart {
   updatedAt DateTime @updatedAt
 }
 
-model AccreditationDoc {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  link        String
-  embedLink   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Profile {
-  id               String @id @default("singleton")
-  principalWelcome String @db.Text
-  principalName    String
-  principalImage   String
-  vision           String @db.Text
-  mission          String @db.Text
-  updatedAt        DateTime @updatedAt
-}
-
-model StaffMember {
+model Staff {
   id        String   @id @default(cuid())
   name      String
   position  String
   subject   String
   waliKelas String?
-  initials  String
-  imageUrl  String
+  imageUrl  String?
   hint      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model AcademicInfo {
-  id                      String @id @default("singleton")
-  curriculumTitle         String
-  curriculumContent       String @db.Text
-  curriculumImageUrl      String
-  curriculumImageHint     String?
-  learningStructureTitle  String
-  learningStructureContent String @db.Text
-  learningStructureImageUrl String
-  learningStructureImageHint String?
-  updatedAt               DateTime @updatedAt
+
+model AccreditationDoc {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  link        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

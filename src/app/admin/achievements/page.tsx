@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useTransition } from "react";
@@ -35,7 +36,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, MoreHorizontal, Trash2, Pencil, Upload } from "lucide-react";
+import { PlusCircle, MoreHorizontal, Trash2, Pencil } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -89,7 +90,7 @@ export default function AchievementsAdminPage({ achievements: initialAchievement
         title: achievement.title,
         student: achievement.student,
         description: achievement.description,
-        hint: achievement.hint,
+        hint: achievement.hint ?? undefined,
       });
       setPreviewImage(achievement.imageUrl);
       setEditOpen(true);
@@ -105,6 +106,7 @@ export default function AchievementsAdminPage({ achievements: initialAchievement
     setAddOpen(false);
     setEditOpen(false);
     setPreviewImage(null);
+    form.reset();
   }
 
   const onSubmit = (data: AchievementValues) => {
@@ -170,7 +172,7 @@ export default function AchievementsAdminPage({ achievements: initialAchievement
             Tambah, edit, atau hapus data prestasi.
           </p>
         </div>
-        <Dialog open={isAddOpen} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+        <Dialog open={isAddOpen} onOpenChange={(isOpen) => { if (!isOpen) handleCloseDialog(); else setAddOpen(true);}}>
           <DialogTrigger asChild>
             <Button onClick={() => handleOpenDialog()}>
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -262,7 +264,7 @@ export default function AchievementsAdminPage({ achievements: initialAchievement
         </CardContent>
       </Card>
 
-       <Dialog open={isEditOpen} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+       <Dialog open={isEditOpen} onOpenChange={(isOpen) => { if (!isOpen) handleCloseDialog(); else setEditOpen(true);}}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Prestasi</DialogTitle>
@@ -321,3 +323,7 @@ export default function AchievementsAdminPage({ achievements: initialAchievement
     </div>
   );
 }
+
+    
+
+    

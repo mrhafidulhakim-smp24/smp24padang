@@ -24,7 +24,6 @@ async function getProfile(): Promise<Profile | null> {
     return prisma.profile.findFirst();
 }
 
-
 async function Announcement() {
   const latestAnnouncements = await getLatestNews();
 
@@ -89,7 +88,6 @@ export default async function Home() {
       { type: 'Prestasi', text: 'Tim Basket Sekolah meraih Juara 1 tingkat Provinsi.' },
       { type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
   ];
-
 
   return (
     <div className="flex flex-col">
@@ -272,3 +270,5 @@ export default async function Home() {
     </div>
   );
 }
+
+    
