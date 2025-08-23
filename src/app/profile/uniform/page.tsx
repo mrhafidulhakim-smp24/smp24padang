@@ -4,13 +4,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const uniforms = [
   {
-    day: "Senin & Selasa",
+    day: "Senin",
     description: "Seragam Putih Biru lengkap dengan atribut sekolah.",
     image: "https://placehold.co/400x600.png",
     hint: "school uniform blue",
   },
   {
-    day: "Rabu & Kamis",
+    day: "Selasa",
+    description: "Seragam Putih Biru lengkap dengan atribut sekolah.",
+    image: "https://placehold.co/400x600.png",
+    hint: "school uniform blue",
+  },
+  {
+    day: "Rabu",
+    description: "Seragam Batik identitas sekolah.",
+    image: "https://placehold.co/400x600.png",
+    hint: "batik uniform",
+  },
+  {
+    day: "Kamis",
     description: "Seragam Batik identitas sekolah.",
     image: "https://placehold.co/400x600.png",
     hint: "batik uniform",
@@ -41,7 +53,7 @@ export default function UniformPage() {
         </p>
       </div>
 
-      <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {uniforms.map((uniform) => (
           <Card key={uniform.day} className="overflow-hidden text-center">
             <CardHeader className="p-0">
