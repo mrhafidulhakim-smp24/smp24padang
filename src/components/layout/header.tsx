@@ -52,7 +52,7 @@ export default function Header() {
         { href: "/profile/vision-mission", label: "Visi & Misi", icon: Target },
         { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
         { href: "/profile/organization-structure", label: "Struktur Organisasi", icon: Network },
-        { href: "/profile/accreditation", label: "Sertifikat Akreditasi", icon: Award },
+        { href: "/profile/accreditation", label: "Sertifikasi & Penghargaan", icon: Award },
         { href: "/profile/uniform", label: "Seragam Sekolah", icon: Shirt },
         { href: "/profile/extracurricular", label: "Ekstrakurikuler", icon: Swords },
       ]

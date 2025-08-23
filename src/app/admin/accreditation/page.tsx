@@ -114,10 +114,10 @@ export default function AccreditationAdminPage() {
        <div className="flex items-center justify-between">
         <div>
           <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-            Kelola Akreditasi
+            Kelola Sertifikasi & Penghargaan
           </h1>
           <p className="mt-2 text-lg text-muted-foreground">
-            Tambah, edit, atau hapus dokumen akreditasi.
+            Tambah, edit, atau hapus dokumen sertifikasi & penghargaan.
           </p>
         </div>
         <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
@@ -202,7 +202,7 @@ export default function AccreditationAdminPage() {
        <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Edit Dokumen Akreditasi</DialogTitle>
+              <DialogTitle>Edit Dokumen</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleEditDoc} className="space-y-4">
               <div>

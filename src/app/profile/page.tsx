@@ -96,7 +96,7 @@ export default function ProfilePage() {
                   <div className="rounded-full bg-accent/20 p-4">
                     <Award className="h-10 w-10 text-accent" />
                   </div>
-                  <CardTitle className="font-headline pt-4 text-primary">Sertifikat Akreditasi</CardTitle>
+                  <CardTitle className="font-headline pt-4 text-primary">Sertifikasi & Penghargaan</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">Lihat pengakuan dan sertifikasi resmi sekolah kami.</p>

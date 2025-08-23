@@ -47,7 +47,7 @@ const adminNavItems = [
       { href: "/admin/profile/vision-mission", label: "Visi & Misi", icon: Target },
       { href: "/admin/staff", label: "Guru & Staf", icon: Users },
       { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },
-      { href: "/admin/accreditation", label: "Akreditasi", icon: Award },
+      { href: "/admin/accreditation", label: "Sertifikasi & Penghargaan", icon: Award },
       { href: "/admin/profile/uniform", label: "Seragam Sekolah", icon: Shirt },
       { href: "/admin/profile/extracurricular", label: "Ekstrakurikuler", icon: Swords },
     ]
