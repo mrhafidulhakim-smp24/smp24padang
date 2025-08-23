@@ -16,6 +16,7 @@ import {
   Home,
 } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default function AdminLayout({
   children,
