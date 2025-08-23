@@ -30,6 +30,17 @@ export default function ProfileAdminPage() {
             description: "Profil sekolah telah berhasil diperbarui.",
         });
     };
+    
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPrincipalImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return (
         <div className="flex flex-col gap-8">
@@ -84,11 +95,7 @@ export default function ProfileAdminPage() {
                                             <div className="flex text-sm text-gray-600">
                                                 <Label htmlFor="file-upload" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
                                                     <span>Ganti gambar</span>
-                                                    <Input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={(e) => {
-                                                        if (e.target.files && e.target.files[0]) {
-                                                            setPrincipalImage(URL.createObjectURL(e.target.files[0]));
-                                                        }
-                                                    }} />
+                                                    <Input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleImageChange} accept="image/*" />
                                                 </Label>
                                                 <p className="pl-1">atau seret dan lepas</p>
                                             </div>
