@@ -1,7 +1,8 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Book, Target, Users, Award, Network } from "lucide-react";
+import { Book, Target, Users, Award, Network, Shirt, Swords } from "lucide-react";
 
 export default function ProfilePage() {
   return (
@@ -103,8 +104,36 @@ export default function ProfilePage() {
                 </CardContent>
               </Card>
             </Link>
+             <Link href="/profile/uniform">
+              <Card className="h-full transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                <CardHeader className="items-center">
+                  <div className="rounded-full bg-accent/20 p-4">
+                    <Shirt className="h-10 w-10 text-accent" />
+                  </div>
+                  <CardTitle className="font-headline pt-4 text-primary">Seragam Sekolah</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">Panduan seragam resmi untuk siswa-siswi kami.</p>
+                </CardContent>
+              </Card>
+            </Link>
+             <Link href="/profile/extracurricular">
+              <Card className="h-full transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                <CardHeader className="items-center">
+                  <div className="rounded-full bg-accent/20 p-4">
+                    <Swords className="h-10 w-10 text-accent" />
+                  </div>
+                  <CardTitle className="font-headline pt-4 text-primary">Ekstrakurikuler</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">Temukan minat dan kembangkan bakat melalui kegiatan kami.</p>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
       </section>
     </div>
   );
 }
+
+    

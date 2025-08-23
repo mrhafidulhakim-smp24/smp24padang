@@ -269,7 +269,7 @@ export default function NewsAdminPage() {
                 </div>
                 <div>
                   <Label htmlFor="date-edit">Tanggal</Label>
-                  <Input id="date-edit" name="date" defaultValue={selectedNews?.date} required />
+                  <Input id="date-edit" name="date" type="date" defaultValue={selectedNews?.date} required />
                 </div>
                 <div>
                   <Label htmlFor="description-edit">Deskripsi</Label>

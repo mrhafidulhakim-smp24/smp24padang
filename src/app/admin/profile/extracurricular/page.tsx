@@ -54,7 +54,7 @@ type Extracurricular = {
 
 const initialData: Extracurricular[] = [
     { id: "1", name: "Sepak Bola", category: "Olahraga", description: "Mengembangkan bakat sepak bola dan kerja sama tim.", image: "https://placehold.co/600x400.png", hint: "students playing soccer" },
-    { id: "2", name: "Tari Tradisional", category: "Seni & Budaya", description: "Mempelajari dan melestarikan seni tari daerah.", image: "https://placehold.co/600x400.png", hint: "students painting" },
+    { id: "2", name: "Tari Tradisional", category: "Seni & Budaya", description: "Mempelajari dan melestarikan seni tari daerah.", image: "https://placehold.co/600x400.png", hint: "students dancing" },
     { id: "3", name: "Kelompok Ilmiah Remaja (KIR)", category: "Akademik & Sains", description: "Mendorong penelitian dan inovasi di kalangan siswa.", image: "https://placehold.co/600x400.png", hint: "students science club" },
 ];
 
@@ -190,7 +190,7 @@ export default function ExtracurricularAdminPage() {
                             <Pencil className="mr-2 h-4 w-4" />
                             <span>Edit</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => { setSelectedActivity(item); setDeleteOpen(true); }} className="text-destructive">
+                        <DropdownMenuItem onSelect={() => { setSelectedActivity(item); setDeleteOpen(true); }} className="text-destructive focus:text-destructive focus:bg-destructive/10">
                             <Trash2 className="mr-2 h-4 w-4" />
                             <span>Hapus</span>
                         </DropdownMenuItem>
@@ -252,7 +252,7 @@ export default function ExtracurricularAdminPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setSelectedActivity(null)}>Batal</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive hover:bg-destructive/90">
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
               Hapus
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -261,3 +261,5 @@ export default function ExtracurricularAdminPage() {
     </div>
   );
 }
+
+    

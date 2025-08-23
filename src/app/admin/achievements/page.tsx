@@ -53,9 +53,9 @@ type Achievement = {
 };
 
 const initialAchievements: Achievement[] = [
-    { id: "1", title: "National Science Olympiad Winner", student: "Andi Pratama", description: "Secured the gold medal in the National Science Olympiad, showcasing exceptional talent in Physics.", image: "https://placehold.co/600x400.png", hint: "science award" },
-    { id: "2", title: "Regional Basketball Champions", student: "School Team", description: "Our basketball team clinched the regional championship title after an undefeated season.", image: "https://placehold.co/600x400.png", hint: "basketball team" },
-    { id: "3", title: "International Art Competition Finalist", student: "Citra Lestari", description: "Recognized for her outstanding painting in the 'Future Visions' international art competition.", image: "https://placehold.co/600x400.png", hint: "art painting" },
+    { id: "1", title: "Juara Olimpiade Sains Nasional", student: "Andi Pratama", description: "Meraih medali emas dalam Olimpiade Sains Nasional (OSN) 2023, menunjukkan bakat luar biasa di bidang Fisika.", image: "https://placehold.co/600x400.png", hint: "science award" },
+    { id: "2", title: "Juara 1 Lomba Debat Bahasa Inggris", student: "Tim Debat Bahasa Inggris", description: "Tim debat kami menunjukkan kemampuan berpikir kritis dan public speaking yang luar biasa, mengamankan posisi pertama tingkat provinsi.", image: "https://placehold.co/600x400.png", hint: "debate trophy" },
+    { id: "3", title: "Finalis Kompetisi Seni Internasional", student: "Citra Lestari", description: "Diakui atas lukisannya yang luar biasa dalam kompetisi seni internasional 'Future Visions' untuk seniman muda.", image: "https://placehold.co/600x400.png", hint: "art painting" },
 ];
 
 export default function AchievementsAdminPage() {
