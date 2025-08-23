@@ -79,22 +79,13 @@ function Announcement() {
           </p>
         </div>
         <div className="mt-12">
-           <Card className="overflow-hidden md:grid md:grid-cols-5 md:items-center">
-             <div className="relative h-64 md:col-span-2 md:h-full">
-                <Image
-                    src={latestAnnouncement.image}
-                    alt={latestAnnouncement.title}
-                    layout="fill"
-                    objectFit="cover"
-                    data-ai-hint={latestAnnouncement.hint}
-                />
-             </div>
-             <div className="p-8 md:col-span-3">
+           <Card className="overflow-hidden">
+             <div className="p-8 text-center">
                 <p className="mb-2 text-sm font-semibold text-accent-foreground">{`PENGUMUMAN | ${new Date(latestAnnouncement.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
                 <h3 className="font-headline text-2xl font-bold text-primary">
                     {latestAnnouncement.title}
                 </h3>
-                <p className="mt-2 text-foreground/80">
+                <p className="mt-2 text-foreground/80 max-w-3xl mx-auto">
                     {latestAnnouncement.description}
                 </p>
                 <Button asChild variant="link" className="mt-4 p-0 text-accent-foreground">
