@@ -8,29 +8,29 @@ import { Button } from "@/components/ui/button";
 const newsItems = [
   {
     id: "1",
-    title: "Annual Sports Day Gala",
-    date: "2024-03-15",
-    description: "A day of thrilling competitions and spectacular performances, celebrating sportsmanship and teamwork.",
+    title: "Jadwal Ujian Akhir Semester (UAS) Genap",
+    date: "2024-05-20",
+    description: "Ujian Akhir Semester untuk tahun ajaran 2023/2024 akan dilaksanakan mulai tanggal 3 Juni hingga 7 Juni 2024. Harap siswa mempersiapkan diri.",
     image: "https://placehold.co/600x400.png",
-    hint: "sports day",
+    hint: "students exam",
     link: "#"
   },
   {
     id: "2",
-    title: "Science Fair Innovations",
-    date: "2024-03-10",
-    description: "Our students showcase their groundbreaking science projects, pushing the boundaries of creativity and knowledge.",
+    title: "Pendaftaran Ekstrakurikuler Tahun Ajaran Baru",
+    date: "2024-05-18",
+    description: "Pendaftaran untuk seluruh kegiatan ekstrakurikuler tahun ajaran 2024/2025 akan dibuka pada tanggal 15 Juli 2024.",
     image: "https://placehold.co/600x400.png",
-    hint: "science fair",
+    hint: "student activities",
     link: "#"
   },
   {
     id: "3",
-    title: "Art Exhibition 'Creative Canvases'",
-    date: "2024-03-05",
-    description: "Explore the vibrant world of art created by our talented students, featuring a diverse range of styles and mediums.",
+    title: "Informasi Libur Kenaikan Kelas",
+    date: "2024-05-15",
+    description: "Libur akhir tahun ajaran akan dimulai pada tanggal 10 Juni 2024 dan siswa akan kembali masuk pada tanggal 8 Juli 2024.",
     image: "https://placehold.co/600x400.png",
-    hint: "art exhibition",
+    hint: "school holiday",
     link: "#"
   },
    {
@@ -63,6 +63,8 @@ const newsItems = [
 ];
 
 export default function NewsPage() {
+  const sortedNews = newsItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -75,7 +77,7 @@ export default function NewsPage() {
       </div>
 
       <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {newsItems.map((item) => (
+        {sortedNews.map((item) => (
           <Card key={item.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl">
             <CardHeader className="p-0">
               <Image

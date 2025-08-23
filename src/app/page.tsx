@@ -30,27 +30,30 @@ const heroBanners = [
 
 const newsItems = [
   {
-    title: "Annual Sports Day Gala",
-    description: "A day of thrilling competitions and spectacular performances.",
+    id: "1",
+    title: "Jadwal Ujian Akhir Semester (UAS) Genap",
+    date: "2024-05-20",
+    description: "Ujian Akhir Semester untuk tahun ajaran 2023/2024 akan dilaksanakan mulai tanggal 3 Juni hingga 7 Juni 2024. Harap siswa mempersiapkan diri.",
     image: "https://placehold.co/600x400.png",
-    hint: "sports students",
-    date: "2024-03-15",
+    hint: "students exam",
     link: "#"
   },
   {
-    title: "Science Fair Innovations",
-    description: "Our students showcase their groundbreaking science projects.",
+    id: "2",
+    title: "Pendaftaran Ekstrakurikuler Tahun Ajaran Baru",
+    date: "2024-05-18",
+    description: "Pendaftaran untuk seluruh kegiatan ekstrakurikuler tahun ajaran 2024/2025 akan dibuka pada tanggal 15 Juli 2024.",
     image: "https://placehold.co/600x400.png",
-    hint: "science fair",
-    date: "2024-03-10",
+    hint: "student activities",
     link: "#"
   },
   {
-    title: "Art Exhibition 'Creative Canvases'",
-    description: "Explore the vibrant world of art created by our talented students.",
+    id: "3",
+    title: "Informasi Libur Kenaikan Kelas",
+    date: "2024-05-15",
+    description: "Libur akhir tahun ajaran akan dimulai pada tanggal 10 Juni 2024 dan siswa akan kembali masuk pada tanggal 8 Juli 2024.",
     image: "https://placehold.co/600x400.png",
-    hint: "art exhibition",
-    date: "2024-03-05",
+    hint: "school holiday",
     link: "#"
   },
 ];
@@ -63,67 +66,49 @@ const marqueeItems = [
     { type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
 ];
 
-const announcementItems = [
-    {
-      title: "Jadwal Ujian Akhir Semester (UAS) Genap",
-      date: "2024-05-20",
-      description: "Ujian Akhir Semester untuk tahun ajaran 2023/2024 akan dilaksanakan mulai tanggal 3 Juni hingga 7 Juni 2024. Harap siswa mempersiapkan diri dan memeriksa jadwal detail di papan pengumuman sekolah.",
-      link: "/news/jadwal-uas-genap"
-    },
-    {
-      title: "Pendaftaran Ekstrakurikuler Tahun Ajaran Baru",
-      date: "2024-05-18",
-      description: "Pendaftaran untuk seluruh kegiatan ekstrakurikuler tahun ajaran 2024/2025 akan dibuka pada tanggal 15 Juli 2024. Formulir dapat diambil di ruang OSIS.",
-      link: "/academics#activities"
-    },
-    {
-      title: "Informasi Libur Kenaikan Kelas",
-      date: "2024-05-15",
-      description: "Libur akhir tahun ajaran akan dimulai pada tanggal 10 Juni 2024 dan siswa akan kembali masuk pada tanggal 8 Juli 2024. Selamat berlibur!",
-      link: "#"
-    }
-];
+const latestAnnouncement = newsItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
-function Announcements() {
+function Announcement() {
   return (
     <section className="bg-background py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="text-center">
-          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pengumuman Penting</h2>
+          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pengumuman Terkini</h2>
           <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-            Informasi terbaru seputar kegiatan dan jadwal sekolah.
+            Informasi terbaru dan terpenting seputar kegiatan sekolah.
           </p>
         </div>
-        <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {announcementItems.map((item, index) => (
-            <Card key={index} className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl">
-               <CardHeader className="flex flex-row items-center gap-4">
-                  <div className="rounded-lg bg-primary/10 p-3">
-                     <Megaphone className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <CardTitle className="font-headline text-xl text-primary">{item.title}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                  </div>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <p className="text-foreground/80">{item.description}</p>
-              </CardContent>
-              <div className="p-6 pt-0">
-                  <Button variant="link" asChild className="p-0 text-accent-foreground">
-                    <Link href={item.link}>
-                      Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
+        <div className="mt-12">
+           <Card className="overflow-hidden md:grid md:grid-cols-5 md:items-center">
+             <div className="relative h-64 md:col-span-2 md:h-full">
+                <Image
+                    src={latestAnnouncement.image}
+                    alt={latestAnnouncement.title}
+                    layout="fill"
+                    objectFit="cover"
+                    data-ai-hint={latestAnnouncement.hint}
+                />
+             </div>
+             <div className="p-8 md:col-span-3">
+                <p className="mb-2 text-sm font-semibold text-accent-foreground">{`PENGUMUMAN | ${new Date(latestAnnouncement.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
+                <h3 className="font-headline text-2xl font-bold text-primary">
+                    {latestAnnouncement.title}
+                </h3>
+                <p className="mt-2 text-foreground/80">
+                    {latestAnnouncement.description}
+                </p>
+                <Button asChild variant="link" className="mt-4 p-0 text-accent-foreground">
+                    <Link href={`/news`}>
+                        Baca Selengkapnya <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
-                  </Button>
-              </div>
-            </Card>
-          ))}
+                </Button>
+            </div>
+          </Card>
         </div>
       </div>
     </section>
   );
 }
-
 
 export default function Home() {
   return (
@@ -198,7 +183,7 @@ export default function Home() {
       </section>
       
       {/* Announcements Section */}
-      <Announcements />
+      <Announcement />
 
       {/* Pillars Section */}
       <section className="bg-primary/5 py-16 md:py-24">
@@ -276,7 +261,7 @@ export default function Home() {
                   />
                 </CardHeader>
                 <CardContent className="p-6">
-                  <p className="mb-2 text-sm text-muted-foreground">{item.date}</p>
+                  <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   <CardTitle className="font-headline text-xl font-bold text-primary">
                     {item.title}
                   </CardTitle>

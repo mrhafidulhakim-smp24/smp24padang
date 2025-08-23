@@ -55,27 +55,27 @@ type NewsArticle = {
 const initialNews: NewsArticle[] = [
   {
     id: "1",
-    title: "Annual Sports Day Gala",
-    date: "2024-03-15",
-    description: "A day of thrilling competitions and spectacular performances.",
+    title: "Jadwal Ujian Akhir Semester (UAS) Genap",
+    date: "2024-05-20",
+    description: "Ujian Akhir Semester untuk tahun ajaran 2023/2024 akan dilaksanakan mulai tanggal 3 Juni hingga 7 Juni 2024. Harap siswa mempersiapkan diri.",
     image: "https://placehold.co/600x400.png",
-    hint: "sports day"
+    hint: "students exam"
   },
   {
     id: "2",
-    title: "Science Fair Innovations",
-    date: "2024-03-10",
-    description: "Our students showcase their groundbreaking science projects.",
+    title: "Pendaftaran Ekstrakurikuler Tahun Ajaran Baru",
+    date: "2024-05-18",
+    description: "Pendaftaran untuk seluruh kegiatan ekstrakurikuler tahun ajaran 2024/2025 akan dibuka pada tanggal 15 Juli 2024.",
     image: "https://placehold.co/600x400.png",
-    hint: "science fair"
+    hint: "student activities"
   },
   {
     id: "3",
-    title: "Art Exhibition 'Creative Canvases'",
-    date: "2024-03-05",
-    description: "Explore the vibrant world of art created by our talented students.",
+    title: "Informasi Libur Kenaikan Kelas",
+    date: "2024-05-15",
+    description: "Libur akhir tahun ajaran akan dimulai pada tanggal 10 Juni 2024 dan siswa akan kembali masuk pada tanggal 8 Juli 2024.",
     image: "https://placehold.co/600x400.png",
-    hint: "art exhibition"
+    hint: "school holiday"
   },
 ];
 
@@ -269,7 +269,7 @@ export default function NewsAdminPage() {
                 </div>
                 <div>
                   <Label htmlFor="date-edit">Tanggal</Label>
-                  <Input id="date-edit" name="date" type="date" defaultValue={selectedNews?.date} required />
+                  <Input id="date-edit" name="date" defaultValue={selectedNews?.date} required />
                 </div>
                 <div>
                   <Label htmlFor="description-edit">Deskripsi</Label>
