@@ -66,36 +66,47 @@ const marqueeItems = [
     { type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
 ];
 
-const latestAnnouncement = newsItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+const latestAnnouncements = newsItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3);
 
 function Announcement() {
   return (
     <section className="bg-background py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="text-center">
-          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pengumuman Terkini</h2>
+          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pengumuman Terbaru</h2>
           <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
             Informasi terbaru dan terpenting seputar kegiatan sekolah.
           </p>
         </div>
-        <div className="mt-12">
-           <Card className="overflow-hidden">
-             <div className="p-8 text-center">
-                <p className="mb-2 text-sm font-semibold text-accent-foreground">{`PENGUMUMAN | ${new Date(latestAnnouncement.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
-                <h3 className="font-headline text-2xl font-bold text-primary">
-                    {latestAnnouncement.title}
-                </h3>
-                <p className="mt-2 text-foreground/80 max-w-3xl mx-auto">
-                    {latestAnnouncement.description}
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {latestAnnouncements.map((item) => (
+            <Card key={item.id} className="flex flex-col">
+              <CardHeader>
+                <p className="text-sm font-semibold text-accent-foreground">{`PENGUMUMAN | ${new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
+                <CardTitle className="font-headline text-xl text-primary">
+                  {item.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="text-foreground/80">
+                  {item.description}
                 </p>
-                <Button asChild variant="link" className="mt-4 p-0 text-accent-foreground">
-                    <Link href={`/news`}>
-                        Baca Selengkapnya <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
+              </CardContent>
+              <div className="p-6 pt-0">
+                <Button asChild variant="link" className="p-0 text-accent-foreground">
+                  <Link href={`/news`}>
+                    Baca Selengkapnya <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
-            </div>
-          </Card>
+              </div>
+            </Card>
+          ))}
         </div>
+         <div className="mt-12 text-center">
+           <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+              <Link href="/news">Lihat Semua Pengumuman</Link>
+           </Button>
+         </div>
       </div>
     </section>
   );
@@ -236,7 +247,7 @@ export default function Home() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <h2 className="font-headline mb-8 text-center text-3xl font-bold text-primary md:text-4xl">
-            Berita & Pengumuman Terbaru
+            Berita Terbaru
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {newsItems.map((item, index) => (
@@ -251,13 +262,13 @@ export default function Home() {
                     data-ai-hint={item.hint}
                   />
                 </CardHeader>
-                <CardContent className="p-6">
+                <CardContent className="flex flex-col p-6 flex-grow">
                   <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   <CardTitle className="font-headline text-xl font-bold text-primary">
                     {item.title}
                   </CardTitle>
-                  <p className="mt-2 text-foreground/80">{item.description}</p>
-                  <Button variant="link" asChild className="mt-4 p-0 text-accent-foreground">
+                  <p className="mt-2 text-foreground/80 flex-grow">{item.description}</p>
+                   <Button variant="link" asChild className="mt-4 p-0 self-start text-accent-foreground">
                     <Link href={item.link}>
                       Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
