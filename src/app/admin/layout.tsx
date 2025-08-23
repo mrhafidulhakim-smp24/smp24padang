@@ -48,17 +48,14 @@ const adminNavItems = [
       { href: "/admin/staff", label: "Guru & Staf", icon: Users },
       { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },
       { href: "/admin/accreditation", label: "Akreditasi", icon: Award },
+      { href: "/admin/profile/uniform", label: "Seragam Sekolah", icon: Shirt },
+      { href: "/admin/profile/extracurricular", label: "Ekstrakurikuler", icon: Swords },
     ]
   },
   { 
     href: "/admin/academics", 
     label: "Akademik", 
-    icon: BookOpen,
-    subLinks: [
-        { href: "/admin/academics", label: "Informasi Akademik", icon: BookOpen },
-        { href: "/admin/academics/uniform", label: "Seragam Sekolah", icon: Shirt },
-        { href: "/admin/academics/extracurricular", label: "Ekstrakurikuler", icon: Swords },
-    ]
+    icon: BookOpen
   },
   { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
   { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },

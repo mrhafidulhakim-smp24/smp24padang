@@ -53,17 +53,14 @@ export default function Header() {
         { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
         { href: "/profile/organization-structure", label: "Struktur Organisasi", icon: Network },
         { href: "/profile/accreditation", label: "Sertifikat Akreditasi", icon: Award },
+        { href: "/profile/uniform", label: "Seragam Sekolah", icon: Shirt },
+        { href: "/profile/extracurricular", label: "Ekstrakurikuler", icon: Swords },
       ]
     },
     { 
       href: "/academics", 
       label: "Akademik", 
-      icon: BookOpen,
-      subLinks: [
-        { href: "/academics", label: "Informasi Akademik", icon: BookOpen },
-        { href: "/academics/uniform", label: "Seragam Sekolah", icon: Shirt },
-        { href: "/academics/extracurricular", label: "Ekstrakurikuler", icon: Swords },
-      ]
+      icon: BookOpen
     },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/gallery", label: "Galeri", icon: Camera },
