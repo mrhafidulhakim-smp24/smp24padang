@@ -19,12 +19,11 @@ const initialProfile = {
 
 export default function ProfileAdminPage() {
     const [welcomeMessage, setWelcomeMessage] = useState(initialProfile.principalWelcome);
+    const [principalName, setPrincipalName] = useState(initialProfile.principalName);
     const [principalImage, setPrincipalImage] = useState(initialProfile.principalImage);
     const { toast } = useToast();
 
     const handleSaveChanges = () => {
-        // Here you would typically handle the form submission,
-        // e.g., send the data to your backend or API.
         console.log("Saving changes:", { welcomeMessage, principalImage });
         toast({
             title: "Perubahan Disimpan!",
@@ -39,22 +38,22 @@ export default function ProfileAdminPage() {
                     Kelola Profil Sekolah
                 </h1>
                 <p className="mt-2 text-lg text-muted-foreground">
-                    Edit kata sambutan kepala sekolah dan perbarui foto.
+                    Edit kata sambutan, nama, dan foto kepala sekolah.
                 </p>
             </div>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Konten Profil</CardTitle>
+                    <CardTitle>Kata Sambutan Kepala Sekolah</CardTitle>
                     <CardDescription>
-                        Lakukan perubahan pada kata sambutan dan foto kepala sekolah yang ditampilkan di halaman profil.
+                        Lakukan perubahan pada kata sambutan dan foto kepala sekolah yang ditampilkan di halaman profil dan beranda.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                         <div className="md:col-span-2 space-y-4">
                             <div>
-                                <Label htmlFor="welcomeMessage" className="text-base font-semibold">Kata Sambutan Kepala Sekolah</Label>
+                                <Label htmlFor="welcomeMessage" className="text-base font-semibold">Kata Sambutan</Label>
                                 <Textarea
                                     id="welcomeMessage"
                                     value={welcomeMessage}
@@ -63,12 +62,22 @@ export default function ProfileAdminPage() {
                                     placeholder="Tuliskan kata sambutan di sini..."
                                 />
                             </div>
+                             <div>
+                                <Label htmlFor="principalName" className="text-base font-semibold">Nama Kepala Sekolah & Gelar</Label>
+                                <Input
+                                    id="principalName"
+                                    value={principalName}
+                                    onChange={(e) => setPrincipalName(e.target.value)}
+                                    className="mt-2"
+                                    placeholder="Contoh: Dr. Budi Santoso, M.Pd."
+                                />
+                            </div>
                         </div>
                         <div className="space-y-4">
                              <div>
                                 <Label htmlFor="principalImage" className="text-base font-semibold">Foto Kepala Sekolah</Label>
                                 <div className="mt-2 space-y-4">
-                                     <Image src={principalImage} alt="Foto Kepala Sekolah" width={600} height={800} className="w-full rounded-md object-cover aspect-[3/4]" />
+                                     <Image src={principalImage} alt="Foto Kepala Sekolah" width={600} height={800} className="w-full rounded-md object-cover aspect-[3/4]" data-ai-hint="professional portrait" />
                                      <div className="flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
                                         <div className="space-y-1 text-center">
                                             <Upload className="mx-auto h-12 w-12 text-gray-400" />
@@ -90,7 +99,7 @@ export default function ProfileAdminPage() {
                             </div>
                         </div>
                     </div>
-                     <div className="flex justify-end pt-4">
+                     <div className="flex justify-end pt-4 border-t">
                         <Button onClick={handleSaveChanges}>Simpan Perubahan</Button>
                     </div>
                 </CardContent>

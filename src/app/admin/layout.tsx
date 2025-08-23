@@ -41,9 +41,9 @@ const adminNavItems = [
   { 
     href: "/admin/profile", 
     label: "Profil", 
-    icon: User,
+    icon: Building,
     subLinks: [
-      { href: "/admin/profile", label: "Profil Sekolah", icon: Building },
+      { href: "/admin/profile", label: "Profil Sekolah", icon: User },
       { href: "/admin/profile/vision-mission", label: "Visi & Misi", icon: Target },
       { href: "/admin/staff", label: "Guru & Staf", icon: Users },
       { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },

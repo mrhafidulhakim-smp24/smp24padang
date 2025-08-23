@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Newspaper, Trophy, ImageIcon, Users, Building, Award, Network, Image as ImageIconLucide, BookOpen, Target, User } from "lucide-react";
+import { Newspaper, Trophy, ImageIcon, Building, Image as ImageIconLucide, BookOpen, User } from "lucide-react";
 import Link from "next/link";
 
 const dashboardItems = [
@@ -18,8 +18,8 @@ const dashboardItems = [
   },
   {
     title: "Kelola Profil Sekolah",
-    description: "Edit kata sambutan, visi & misi, guru, struktur, dan akreditasi.",
-    icon: <User className="h-8 w-8 text-primary" />,
+    description: "Edit profil, visi & misi, guru, struktur, dan lainnya.",
+    icon: <Building className="h-8 w-8 text-primary" />,
     link: "/admin/profile",
   },
   {
