@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useTransition } from "react";
+import React, { useState, useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -45,18 +44,14 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
-import { createNewsArticle, updateNewsArticle, deleteNewsArticle, NewsArticleSchema } from "./actions";
+import { createNewsArticle, updateNewsArticle, deleteNewsArticle, NewsArticleSchema, getNewsForAdmin } from "./actions";
 import type { NewsArticle } from "@prisma/client";
 import type { z } from "zod";
 
 type NewsArticleValues = z.infer<typeof NewsArticleSchema>;
 
-type NewsAdminPageProps = {
-  newsArticles: NewsArticle[];
-};
-
-export default function NewsAdminPage({ newsArticles: initialNews }: NewsAdminPageProps) {
-  const [news, setNews] = useState<NewsArticle[]>(initialNews);
+export default function NewsAdminPage() {
+  const [news, setNews] = useState<NewsArticle[]>([]);
   const [isAddOpen, setAddOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
@@ -65,6 +60,14 @@ export default function NewsAdminPage({ newsArticles: initialNews }: NewsAdminPa
   
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      const newsArticles = await getNewsForAdmin();
+      setNews(newsArticles);
+    };
+    fetchNews();
+  }, []);
 
   const form = useForm<NewsArticleValues>({
     resolver: zodResolver(NewsArticleSchema),

@@ -46,17 +46,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { type Achievement } from "@prisma/client";
-import { AchievementSchema, createAchievement, updateAchievement, deleteAchievement } from "./actions";
+import { AchievementSchema, createAchievement, updateAchievement, deleteAchievement, getAchievements } from "./actions";
 import type { z } from "zod";
 
 type AchievementValues = z.infer<typeof AchievementSchema>;
 
-type AchievementsAdminPageProps = {
-  achievements: Achievement[];
-};
-
-export default function AchievementsAdminPage({ achievements: initialAchievements }: AchievementsAdminPageProps) {
-  const [achievements, setAchievements] = useState<Achievement[]>(initialAchievements);
+export default function AchievementsAdminPage() {
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [isAddOpen, setAddOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
@@ -64,6 +60,14 @@ export default function AchievementsAdminPage({ achievements: initialAchievement
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+
+  React.useEffect(() => {
+    async function fetchAchievements() {
+      const data = await getAchievements();
+      setAchievements(data);
+    }
+    fetchAchievements();
+  }, []);
 
   const form = useForm<AchievementValues>({
     resolver: zodResolver(AchievementSchema),

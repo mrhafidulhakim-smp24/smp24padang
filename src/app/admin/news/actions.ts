@@ -52,6 +52,7 @@ export async function createNewsArticle(formData: FormData) {
     });
     revalidatePath("/admin/news");
     revalidatePath("/news");
+    revalidatePath("/");
     return { success: true, data: newArticle };
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -97,6 +98,7 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
 
         revalidatePath('/admin/news');
         revalidatePath('/news');
+        revalidatePath('/');
         return { success: true, data: updatedArticle };
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -119,6 +121,7 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
 
         revalidatePath('/admin/news');
         revalidatePath('/news');
+        revalidatePath('/');
         return { success: true, message: 'Berita berhasil dihapus.' };
     } catch (e) {
          if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -126,4 +129,8 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
         }
         return { success: false, message: 'Terjadi kesalahan pada server.' };
     }
+}
+
+export async function getNewsForAdmin() {
+    return prisma.newsArticle.findMany({ orderBy: { date: 'desc' } });
 }

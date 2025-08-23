@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { put, del } from "@vercel/blob";
 import { Prisma } from "@prisma/client";
+import { getAchievements } from "@/app/achievements/actions";
 
 export const AchievementSchema = z.object({
   title: z.string().min(3, "Judul minimal 3 karakter"),
@@ -123,3 +124,6 @@ export async function deleteAchievement(id: string, imageUrl: string | null) {
         return { success: false, message: 'Terjadi kesalahan pada server.' };
     }
 }
+
+// Export getAchievements to be used in the page
+export { getAchievements };

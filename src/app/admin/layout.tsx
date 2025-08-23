@@ -12,56 +12,10 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
   LayoutDashboard,
-  Newspaper,
-  Trophy,
-  ImageIcon,
-  Users,
   Home,
-  Building,
-  Award,
-  Network,
-  Image as ImageIconLucide,
-  BookOpen,
-  User,
-  Target,
-  ChevronRight,
-  Shirt,
-  Swords,
 } from "lucide-react";
 import Image from "next/image";
-
-const adminNavItems = [
-  { href: "/admin", label: "Dasbor", icon: LayoutDashboard },
-  { href: "/admin/banner", label: "Banner Beranda", icon: ImageIconLucide },
-  { 
-    href: "/admin/profile", 
-    label: "Profil", 
-    icon: Building,
-    subLinks: [
-      { href: "/admin/profile", label: "Profil Sekolah", icon: User },
-      { href: "/admin/profile/vision-mission", label: "Visi & Misi", icon: Target },
-      { href: "/admin/staff", label: "Guru & Staf", icon: Users },
-      { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },
-      { href: "/admin/accreditation", label: "Sertifikasi & Penghargaan", icon: Award },
-      { href: "/admin/profile/uniform", label: "Seragam Sekolah", icon: Shirt },
-      { href: "/admin/profile/extracurricular", label: "Ekstrakurikuler", icon: Swords },
-    ]
-  },
-  { 
-    href: "/admin/academics", 
-    label: "Akademik", 
-    icon: BookOpen
-  },
-  { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
-  { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },
-  { href: "/admin/news", label: "Berita", icon: Newspaper },
-];
 
 export default function AdminLayout({
   children,
@@ -69,90 +23,16 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen bg-background">
-        <Sidebar>
-          <SidebarHeader>
-            <div className="flex items-center gap-2">
-              <Image
-                src="/logo.jpg"
-                alt="SMPN 24 Padang Logo"
-                width={40}
-                height={40}
-                className="h-8 w-auto rounded-full"
-              />
-              <span className="font-headline text-lg font-bold text-primary whitespace-nowrap">
-                Admin CMS
-              </span>
-            </div>
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarMenu>
-              {adminNavItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                   {!item.subLinks ? (
-                    <Link href={item.href}>
-                      <SidebarMenuButton>
-                        <item.icon />
-                        <span>{item.label}</span>
-                      </SidebarMenuButton>
-                    </Link>
-                  ) : (
-                    <Collapsible>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton className="group justify-between">
-                          <div className="flex items-center gap-2">
-                            <item.icon />
-                            <span>{item.label}</span>
-                          </div>
-                          <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <SidebarMenu className="ml-4 mt-2 border-l border-border pl-4">
-                          {item.subLinks.map(subLink => (
-                            <SidebarMenuItem key={subLink.label}>
-                              <Link href={subLink.href}>
-                                <SidebarMenuButton variant="ghost" className="h-8 justify-start">
-                                  <subLink.icon />
-                                  <span>{subLink.label}</span>
-                                </SidebarMenuButton>
-                              </Link>
-                            </SidebarMenuItem>
-                          ))}
-                        </SidebarMenu>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  )}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarContent>
-          <SidebarFooter>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <Link href="/">
-                  <SidebarMenuButton>
-                    <Home />
-                    <span>Kembali ke Situs</span>
-                  </SidebarMenuButton>
-                </Link>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarFooter>
-        </Sidebar>
-        <div className="flex flex-1 flex-col">
-          <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
-              <SidebarTrigger className="md:hidden"/>
-              <div className="w-full flex-1">
-                  <h1 className="text-lg font-semibold">Manajemen Konten</h1>
-              </div>
-          </header>
-          <main className="flex-1 p-4 sm:p-6 bg-muted/40">{children}</main>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+          <div className="text-center p-8">
+            <h1 className="font-headline text-4xl font-bold text-primary">Admin CMS Dinonaktifkan</h1>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Fitur CMS dinonaktifkan sementara untuk perbaikan.
+            </p>
+            <Button asChild className="mt-8">
+              <Link href="/">Kembali ke Halaman Utama</Link>
+            </Button>
+          </div>
       </div>
-    </SidebarProvider>
   );
 }
-
-    

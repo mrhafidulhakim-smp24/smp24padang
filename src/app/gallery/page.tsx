@@ -1,20 +1,18 @@
 
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import prisma from "@/lib/prisma";
-import type { GalleryItem } from "@prisma/client";
 
-async function getGalleryItems(): Promise<GalleryItem[]> {
-  return await prisma.galleryItem.findMany({
-    orderBy: {
-      createdAt: 'desc'
-    }
-  });
-}
+const galleryItems = [
+  { id: "1", imageUrl: "https://placehold.co/600x400.png", alt: "Kegiatan Belajar Mengajar di Kelas", category: "Akademik", hint: "classroom students" },
+  { id: "2", imageUrl: "https://placehold.co/600x400.png", alt: "Tim Basket Sekolah Merayakan Kemenangan", category: "Olahraga", hint: "basketball team celebration" },
+  { id: "3", imageUrl: "https://placehold.co/600x400.png", alt: "Pameran Seni Siswa", category: "Seni & Budaya", hint: "student art exhibition" },
+  { id: "4", imageUrl: "https://placehold.co/600x400.png", alt: "Siswa Melakukan Percobaan di Laboratorium Sains", category: "Sains", hint: "science lab students" },
+  { id: "5", imageUrl: "https://placehold.co/600x500.png", alt: "Upacara Bendera Hari Senin", category: "Kegiatan Sekolah", hint: "flag ceremony" },
+  { id: "6", imageUrl: "https://placehold.co/600x800.png", alt: "Perpustakaan Sekolah", category: "Fasilitas", hint: "school library" },
+];
 
-export default async function GalleryPage() {
-  const galleryItems = await getGalleryItems();
 
+export default function GalleryPage() {
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -32,7 +30,7 @@ export default async function GalleryPage() {
              <Card className="overflow-hidden">
                 <Image
                   width={600}
-                  height={400}
+                  height={item.imageUrl.includes('600x800') ? 800 : item.imageUrl.includes('600x500') ? 500 : 400}
                   src={item.imageUrl}
                   alt={item.alt}
                   className="h-auto w-full transform transition-transform duration-300 group-hover:scale-105"

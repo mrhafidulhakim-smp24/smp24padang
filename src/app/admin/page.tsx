@@ -1,87 +1,19 @@
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Newspaper, Trophy, ImageIcon, Building, Image as ImageIconLucide, BookOpen, User } from "lucide-react";
 import Link from "next/link";
-
-const dashboardItems = [
-   {
-    title: "Kelola Banner Beranda",
-    description: "Atur gambar banner yang tampil di halaman utama.",
-    icon: <ImageIconLucide className="h-8 w-8 text-primary" />,
-    link: "/admin/banner",
-  },
-  {
-    title: "Kelola Profil Sekolah",
-    description: "Edit profil, visi & misi, guru, struktur, dan lainnya.",
-    icon: <Building className="h-8 w-8 text-primary" />,
-    link: "/admin/profile",
-  },
-  {
-    title: "Kelola Akademik",
-    description: "Atur informasi seputar kurikulum dan kegiatan belajar.",
-    icon: <BookOpen className="h-8 w-8 text-primary" />,
-    link: "/admin/academics",
-  },
-  {
-    title: "Kelola Prestasi",
-    description: "Perbarui daftar prestasi siswa dan sekolah.",
-    icon: <Trophy className="h-8 w-8 text-primary" />,
-    link: "/admin/achievements",
-  },
-  {
-    title: "Kelola Galeri",
-    description: "Unggah dan atur gambar di galeri sekolah.",
-    icon: <ImageIcon className="h-8 w-8 text-primary" />,
-    link: "/admin/gallery",
-  },
-   {
-    title: "Kelola Berita",
-    description: "Tambah, edit, atau hapus artikel berita dan pengumuman.",
-    icon: <Newspaper className="h-8 w-8 text-primary" />,
-    link: "/admin/news",
-  },
-];
-
+import { Button } from "@/components/ui/button";
 
 export default function AdminPage() {
   return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-          Dasbor Admin
+     <div className="flex flex-col gap-8 items-center justify-center h-full">
+        <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl text-center">
+          Dasbor Admin Dinonaktifkan
         </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Selamat datang! Kelola konten situs Anda dari sini.
+        <p className="mt-2 text-lg text-muted-foreground text-center">
+          Silakan kembali ke halaman utama.
         </p>
+         <Button asChild className="mt-4">
+            <Link href="/">Kembali ke Situs</Link>
+        </Button>
       </div>
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {dashboardItems.map((item) => (
-          <Link href={item.link} key={item.title}>
-            <Card className="flex h-full flex-col transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-              <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2">
-                <div className="rounded-lg bg-primary/10 p-3">
-                  {item.icon}
-                </div>
-                <CardTitle className="font-headline text-xl text-primary">
-                  {item.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <p className="text-sm text-muted-foreground">
-                  {item.description}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
-    </div>
   );
 }

@@ -4,21 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import prisma from "@/lib/prisma";
-import type { NewsArticle } from "@prisma/client";
 
-async function getNews(): Promise<NewsArticle[]> {
-  const newsItems = await prisma.newsArticle.findMany({
-    orderBy: {
-      date: 'desc'
-    }
-  });
-  return newsItems;
-}
+const newsItems = [
+    { id: '1', title: 'Kegiatan Class Meeting Akhir Semester', date: new Date(), description: 'Siswa-siswi menunjukkan bakat dan sportivitas dalam berbagai perlombaan seru seperti futsal, basket, dan tarik tambang untuk merayakan akhir semester.', imageUrl: 'https://placehold.co/600x400.png', hint: 'students competition' },
+    { id: '2', title: 'Workshop Guru Inovatif', date: new Date(), description: 'Para guru mengikuti pelatihan intensif mengenai metode pengajaran terbaru dan pemanfaatan teknologi dalam pendidikan untuk meningkatkan kualitas pembelajaran di kelas.', imageUrl: 'https://placehold.co/600x400.png', hint: 'teacher workshop' },
+    { id: '3', title: 'Peringatan Hari Lingkungan Hidup', date: new Date(), description: 'Seluruh warga sekolah berpartisipasi dalam aksi bersih-bersih lingkungan sekolah dan menanam pohon sebagai bentuk kepedulian terhadap bumi.', imageUrl: 'https://placehold.co/600x400.png', hint: 'environmental cleanup' },
+    { id: '4', title: 'Kunjungan Edukatif ke Museum Adityawarman', date: new Date(), description: 'Siswa kelas 8 melakukan kunjungan belajar ke museum untuk mempelajari sejarah dan budaya Minangkabau secara langsung.', imageUrl: 'https://placehold.co/600x400.png', hint: 'museum visit' },
+];
 
-export default async function NewsPage() {
-  const newsItems = await getNews();
 
+export default function NewsPage() {
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
