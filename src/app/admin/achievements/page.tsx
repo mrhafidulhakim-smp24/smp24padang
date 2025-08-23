@@ -1,7 +1,9 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -42,66 +44,119 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
+import { type Achievement } from "@prisma/client";
+import { AchievementSchema, createAchievement, updateAchievement, deleteAchievement } from "./actions";
+import type { z } from "zod";
 
-type Achievement = {
-  id: string;
-  title: string;
-  student: string;
-  description: string;
-  image: string;
-  hint: string;
+type AchievementValues = z.infer<typeof AchievementSchema>;
+
+type AchievementsAdminPageProps = {
+  achievements: Achievement[];
 };
 
-const initialAchievements: Achievement[] = [
-    { id: "1", title: "Juara Olimpiade Sains Nasional", student: "Andi Pratama", description: "Meraih medali emas dalam Olimpiade Sains Nasional (OSN) 2023, menunjukkan bakat luar biasa di bidang Fisika.", image: "https://placehold.co/600x400.png", hint: "science award" },
-    { id: "2", title: "Juara 1 Lomba Debat Bahasa Inggris", student: "Tim Debat Bahasa Inggris", description: "Tim debat kami menunjukkan kemampuan berpikir kritis dan public speaking yang luar biasa, mengamankan posisi pertama tingkat provinsi.", image: "https://placehold.co/600x400.png", hint: "debate trophy" },
-    { id: "3", title: "Finalis Kompetisi Seni Internasional", student: "Citra Lestari", description: "Diakui atas lukisannya yang luar biasa dalam kompetisi seni internasional 'Future Visions' untuk seniman muda.", image: "https://placehold.co/600x400.png", hint: "art painting" },
-];
-
-export default function AchievementsAdminPage() {
+export default function AchievementsAdminPage({ achievements: initialAchievements }: AchievementsAdminPageProps) {
   const [achievements, setAchievements] = useState<Achievement[]>(initialAchievements);
   const [isAddOpen, setAddOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
 
-  const handleAddAchievement = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const newAchievement: Achievement = {
-      id: Date.now().toString(),
-      title: formData.get("title") as string,
-      student: formData.get("student") as string,
-      description: formData.get("description") as string,
-      image: "https://placehold.co/600x400.png", // Placeholder
-      hint: "new achievement"
-    };
-    setAchievements([newAchievement, ...achievements]);
-    setAddOpen(false);
+  const form = useForm<AchievementValues>({
+    resolver: zodResolver(AchievementSchema),
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
+    }
   };
 
-  const handleEditAchievement = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!selectedAchievement) return;
-    
-    const formData = new FormData(event.currentTarget);
-    const updatedAchievement: Achievement = {
-      ...selectedAchievement,
-      title: formData.get("title") as string,
-      student: formData.get("student") as string,
-      description: formData.get("description") as string,
-    };
-
-    setAchievements(achievements.map(a => a.id === selectedAchievement.id ? updatedAchievement : a));
+  const handleOpenDialog = (achievement?: Achievement) => {
+    if (achievement) {
+      setSelectedAchievement(achievement);
+      form.reset({
+        title: achievement.title,
+        student: achievement.student,
+        description: achievement.description,
+        hint: achievement.hint,
+      });
+      setPreviewImage(achievement.imageUrl);
+      setEditOpen(true);
+    } else {
+      setSelectedAchievement(null);
+      form.reset({ title: "", student: "", description: "", hint: "" });
+      setPreviewImage(null);
+      setAddOpen(true);
+    }
+  };
+  
+  const handleCloseDialog = () => {
+    setAddOpen(false);
     setEditOpen(false);
-    setSelectedAchievement(null);
+    setPreviewImage(null);
+  }
+
+  const onSubmit = (data: AchievementValues) => {
+    startTransition(async () => {
+      try {
+        const formData = new FormData();
+        Object.keys(data).forEach(key => {
+          formData.append(key, (data as any)[key]);
+        });
+        const imageFile = (document.getElementById(selectedAchievement ? 'file-upload-edit' : 'file-upload-add') as HTMLInputElement)?.files?.[0];
+        if (imageFile) {
+          formData.append('image', imageFile);
+        }
+
+        const result = selectedAchievement
+          ? await updateAchievement(selectedAchievement.id, selectedAchievement.imageUrl || '', formData)
+          : await createAchievement(formData);
+
+        if (result.success && result.data) {
+           if (selectedAchievement) {
+            setAchievements(achievements.map(a => a.id === result.data!.id ? result.data! : a));
+          } else {
+            setAchievements([result.data!, ...achievements]);
+          }
+          toast({ title: "Sukses", description: `Prestasi berhasil ${selectedAchievement ? 'diperbarui' : 'ditambahkan'}.` });
+          handleCloseDialog();
+        } else {
+          toast({ title: "Error", description: result.message, variant: "destructive" });
+        }
+      } catch (error) {
+        toast({ title: "Error", description: "Terjadi kesalahan.", variant: "destructive" });
+      }
+    });
   };
   
   const handleDeleteConfirm = () => {
     if (!selectedAchievement) return;
-    setAchievements(achievements.filter(a => a.id !== selectedAchievement.id));
-    setDeleteOpen(false);
-    setSelectedAchievement(null);
+    startTransition(async () => {
+      try {
+        const result = await deleteAchievement(selectedAchievement.id, selectedAchievement.imageUrl || '');
+        if (result.success) {
+          setAchievements(achievements.filter(a => a.id !== selectedAchievement.id));
+          toast({ title: "Sukses", description: "Prestasi telah dihapus." });
+          setDeleteOpen(false);
+          setSelectedAchievement(null);
+        } else {
+          toast({ title: "Error", description: result.message, variant: "destructive" });
+        }
+      } catch (error) {
+        toast({ title: "Error", description: "Terjadi kesalahan saat menghapus.", variant: "destructive" });
+      }
+    });
   };
 
   return (
@@ -115,51 +170,46 @@ export default function AchievementsAdminPage() {
             Tambah, edit, atau hapus data prestasi.
           </p>
         </div>
-        <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
+        <Dialog open={isAddOpen} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
           <DialogTrigger asChild>
-            <Button>
+            <Button onClick={() => handleOpenDialog()}>
               <PlusCircle className="mr-2 h-4 w-4" />
               Tambah Prestasi
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Tambah Prestasi Baru</DialogTitle>
-              <DialogDescription>
-                Isi detail di bawah ini untuk menambahkan prestasi baru.
-              </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleAddAchievement} className="space-y-4">
-              <div>
-                <Label htmlFor="image-add">Gambar</Label>
-                 <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
-                    <div className="space-y-1 text-center">
-                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                        <div className="flex text-sm text-gray-600">
-                            <Label htmlFor="file-upload-add" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
-                                <span>Unggah file</span>
-                                 <Input id="file-upload-add" name="file-upload" type="file" className="sr-only" />
-                            </Label>
-                            <p className="pl-1">atau seret dan lepas</p>
-                        </div>
-                        <p className="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
-                    </div>
-                 </div>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <Label>Gambar</Label>
+                 {previewImage && <Image src={previewImage} alt="Preview" width={200} height={200} className="w-full rounded-md object-cover" />}
+                <Input id="file-upload-add" name="image" type="file" onChange={handleFileChange} />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="title">Judul</Label>
-                <Input id="title" name="title" required />
+                <Input id="title" {...form.register("title")} />
+                {form.formState.errors.title && <p className="text-sm text-destructive">{form.formState.errors.title.message}</p>}
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="student">Siswa/Tim</Label>
-                <Input id="student" name="student" required />
+                <Input id="student" {...form.register("student")} />
+                {form.formState.errors.student && <p className="text-sm text-destructive">{form.formState.errors.student.message}</p>}
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="description">Deskripsi</Label>
-                <Textarea id="description" name="description" required />
+                <Textarea id="description" {...form.register("description")} />
+                {form.formState.errors.description && <p className="text-sm text-destructive">{form.formState.errors.description.message}</p>}
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="hint">Petunjuk AI untuk Gambar</Label>
+                <Input id="hint" {...form.register("hint")} />
+                {form.formState.errors.hint && <p className="text-sm text-destructive">{form.formState.errors.hint.message}</p>}
               </div>
               <DialogFooter>
-                <Button type="submit">Simpan</Button>
+                 <Button type="button" variant="outline" onClick={handleCloseDialog} disabled={isPending}>Batal</Button>
+                 <Button type="submit" disabled={isPending}>{isPending ? "Menyimpan..." : "Simpan"}</Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -181,7 +231,7 @@ export default function AchievementsAdminPage() {
                 {achievements.map((item) => (
                 <TableRow key={item.id}>
                     <TableCell>
-                        <Image src={item.image} alt={item.title} width={80} height={80} className="h-16 w-16 rounded-md object-cover"/>
+                        <Image src={item.imageUrl || "https://placehold.co/80x80.png"} alt={item.title} width={80} height={80} className="h-16 w-16 rounded-md object-cover"/>
                     </TableCell>
                     <TableCell className="font-medium">{item.title}</TableCell>
                     <TableCell>{item.student}</TableCell>
@@ -194,7 +244,7 @@ export default function AchievementsAdminPage() {
                         </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                        <DropdownMenuItem onSelect={() => { setSelectedAchievement(item); setEditOpen(true); }}>
+                        <DropdownMenuItem onSelect={() => handleOpenDialog(item)}>
                             <Pencil className="mr-2 h-4 w-4" />
                             <span>Edit</span>
                         </DropdownMenuItem>
@@ -212,46 +262,41 @@ export default function AchievementsAdminPage() {
         </CardContent>
       </Card>
 
-       <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
-          <DialogContent className="sm:max-w-md">
+       <Dialog open={isEditOpen} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Prestasi</DialogTitle>
-              <DialogDescription>
-                Perbarui detail prestasi di bawah ini.
-              </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleEditAchievement} className="space-y-4">
-              <div>
-                <Label htmlFor="image-edit">Gambar</Label>
-                 <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
-                    <div className="space-y-1 text-center">
-                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                        <div className="flex text-sm text-gray-600">
-                            <Label htmlFor="file-upload-edit" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:text-primary/80">
-                                <span>Ganti file</span>
-                                 <Input id="file-upload-edit" name="file-upload" type="file" className="sr-only" />
-                            </Label>
-                            <p className="pl-1">atau seret dan lepas</p>
-                        </div>
-                        <p className="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
-                    </div>
-                 </div>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <Label>Gambar</Label>
+                {previewImage && <Image src={previewImage} alt="Preview" width={200} height={200} className="w-full rounded-md object-cover" />}
+                <Input id="file-upload-edit" name="image" type="file" onChange={handleFileChange}/>
+                <p className="text-xs text-muted-foreground">Biarkan kosong jika tidak ingin mengubah gambar.</p>
               </div>
-              <div>
+               <div className="space-y-2">
                 <Label htmlFor="title-edit">Judul</Label>
-                <Input id="title-edit" name="title" defaultValue={selectedAchievement?.title} required />
+                <Input id="title-edit" {...form.register("title")} />
+                 {form.formState.errors.title && <p className="text-sm text-destructive">{form.formState.errors.title.message}</p>}
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="student-edit">Siswa/Tim</Label>
-                <Input id="student-edit" name="student" defaultValue={selectedAchievement?.student} required />
+                <Input id="student-edit" {...form.register("student")} />
+                {form.formState.errors.student && <p className="text-sm text-destructive">{form.formState.errors.student.message}</p>}
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="description-edit">Deskripsi</Label>
-                <Textarea id="description-edit" name="description" defaultValue={selectedAchievement?.description} required />
+                <Textarea id="description-edit" {...form.register("description")} />
+                {form.formState.errors.description && <p className="text-sm text-destructive">{form.formState.errors.description.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="hint-edit">Petunjuk AI untuk Gambar</Label>
+                <Input id="hint-edit" {...form.register("hint")} />
+                {form.formState.errors.hint && <p className="text-sm text-destructive">{form.formState.errors.hint.message}</p>}
               </div>
               <DialogFooter>
-                 <Button type="button" variant="outline" onClick={() => setEditOpen(false)}>Batal</Button>
-                 <Button type="submit">Simpan Perubahan</Button>
+                 <Button type="button" variant="outline" onClick={handleCloseDialog} disabled={isPending}>Batal</Button>
+                 <Button type="submit" disabled={isPending}>{isPending ? "Menyimpan..." : "Simpan Perubahan"}</Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -267,8 +312,8 @@ export default function AchievementsAdminPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setSelectedAchievement(null)}>Batal</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Hapus
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90" disabled={isPending}>
+              {isPending ? "Menghapus..." : "Hapus"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -276,5 +321,3 @@ export default function AchievementsAdminPage() {
     </div>
   );
 }
-
-    

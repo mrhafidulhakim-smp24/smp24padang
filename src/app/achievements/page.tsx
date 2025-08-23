@@ -2,53 +2,20 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Award } from "lucide-react";
+import prisma from "@/lib/prisma";
 
-const achievements = [
-  {
-    title: "Juara Olimpiade Sains Nasional",
-    student: "Andi Pratama",
-    description: "Meraih medali emas dalam Olimpiade Sains Nasional (OSN) 2023, menunjukkan bakat luar biasa di bidang Fisika.",
-    image: "https://placehold.co/600x400.png",
-    hint: "science award",
-  },
-  {
-    title: "Juara 1 Lomba Debat Bahasa Inggris",
-    student: "Tim Debat Bahasa Inggris",
-    description: "Tim debat kami menunjukkan kemampuan berpikir kritis dan public speaking yang luar biasa, mengamankan posisi pertama tingkat provinsi.",
-    image: "https://placehold.co/600x400.png",
-    hint: "debate trophy",
-  },
-  {
-    title: "Finalis Kompetisi Seni Internasional",
-    student: "Citra Lestari",
-    description: "Diakui atas lukisannya yang luar biasa dalam kompetisi seni internasional 'Future Visions' untuk seniman muda.",
-    image: "https://placehold.co/600x400.png",
-    hint: "art painting",
-  },
-  {
-    title: "Juara Turnamen Bola Basket Regional",
-    student: "Tim Bola Basket Putra",
-    description: "Tim bola basket kami merebut gelar juara regional setelah musim yang tak terkalahkan.",
-    image: "https://placehold.co/600x400.png",
-    hint: "basketball team",
-  },
-  {
-    title: "Penghargaan Sekolah Adiwiyata Nasional",
-    student: "Penghargaan Sekolah",
-    description: "Diberikan atas komitmen kami terhadap program keberlanjutan dan pendidikan lingkungan.",
-    image: "https://placehold.co/600x400.png",
-    hint: "eco award",
-  },
-  {
-    title: "Pentas Seni Terbaik Festival Budaya",
-    student: "Klub Tari Tradisional",
-    description: "Memukau penonton dengan penampilan tari Saman yang energik dan penuh makna di festival budaya kota.",
-    image: "https://placehold.co/600x400.png",
-    hint: "traditional dance",
-  },
-];
+async function getAchievements() {
+  const achievements = await prisma.achievement.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+  return achievements;
+}
 
-export default function AchievementsPage() {
+export default async function AchievementsPage() {
+  const achievements = await getAchievements();
+
   return (
     <div className="bg-background">
       <div className="container mx-auto px-4 py-12 md:py-24">
@@ -66,12 +33,12 @@ export default function AchievementsPage() {
             <Card key={index} className="group relative w-full overflow-hidden rounded-lg shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
               <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
               <Image
-                src={achievement.image}
+                src={achievement.imageUrl || "https://placehold.co/600x400.png"}
                 alt={achievement.title}
                 width={600}
                 height={400}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                data-ai-hint={achievement.hint}
+                data-ai-hint={achievement.hint || "achievement"}
               />
               <div className="absolute inset-0 z-20 flex flex-col justify-end p-6">
                  <div className="mb-4 h-12 w-12 rounded-full bg-accent/20 p-3 ring-4 ring-accent/30 transition-all duration-500 group-hover:bg-accent group-hover:ring-accent">
