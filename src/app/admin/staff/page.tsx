@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -18,7 +18,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -32,14 +31,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, MoreHorizontal, Trash2, Pencil, Upload } from "lucide-react";
+import { PlusCircle, MoreHorizontal, Trash2, Pencil, Upload, Users, UserCheck, UserCog } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type StaffMember = {
@@ -55,8 +54,9 @@ type StaffMember = {
 
 const initialStaff: StaffMember[] = [
   { id: "1", name: "Dr. Budi Santoso, M.Pd.", position: "Kepala Sekolah", subject: "Manajemen Pendidikan", initials: "BS", image: "https://placehold.co/150x150.png", hint: "man portrait" },
-  { id: "2", name: "Siti Rahayu, S.Pd.", position: "Wakil Kepala Sekolah Bidang Akademik", subject: "Bahasa Indonesia", waliKelas: "Kelas 9A", initials: "SR", image: "https://placehold.co/150x150.png", hint: "woman portrait" },
-  { id: "3", name: "Agus Wijaya, S.Si.", position: "Kepala Laboratorium", subject: "Sains", waliKelas: "Kelas 8B", initials: "AW", image: "https://placehold.co/150x150.png", hint: "man portrait" },
+  { id: "2", name: "Siti Rahayu, S.Pd.", position: "Guru", subject: "Bahasa Indonesia", waliKelas: "Kelas 9A", initials: "SR", image: "https://placehold.co/150x150.png", hint: "woman portrait" },
+  { id: "3", name: "Agus Wijaya, S.Si.", position: "Guru", subject: "Sains", waliKelas: "Kelas 8B", initials: "AW", image: "https://placehold.co/150x150.png", hint: "man portrait" },
+  { id: "4", name: "Rina Marlina", position: "Staf Administrasi", subject: "Tata Usaha", initials: "RM", image: "https://placehold.co/150x150.png", hint: "woman portrait" },
 ];
 
 export default function StaffAdminPage() {
@@ -65,6 +65,13 @@ export default function StaffAdminPage() {
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null);
+
+  const stats = useMemo(() => {
+    const totalStaff = staff.length;
+    const totalTeachers = staff.filter(s => s.position.toLowerCase().includes('guru') || s.position.toLowerCase().includes('kepala sekolah')).length;
+    const totalAdmin = totalStaff - totalTeachers;
+    return { totalStaff, totalTeachers, totalAdmin };
+  }, [staff]);
 
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
@@ -81,7 +88,7 @@ export default function StaffAdminPage() {
       subject: formData.get("subject") as string,
       waliKelas: formData.get("waliKelas") as string || undefined,
       initials: getInitials(name),
-      image: "https://placehold.co/150x150.png", // Placeholder for uploaded image
+      image: "https://placehold.co/150x150.png",
       hint: "portrait"
     };
     setStaff([newStaffMember, ...staff]);
@@ -163,11 +170,11 @@ export default function StaffAdminPage() {
               </div>
               <div>
                 <Label htmlFor="position-add">Jabatan</Label>
-                <Input id="position-add" name="position" placeholder="Contoh: Kepala Sekolah" required />
+                <Input id="position-add" name="position" placeholder="Contoh: Guru / Staf Administrasi" required />
               </div>
               <div>
-                <Label htmlFor="subject-add">Mata Pelajaran</Label>
-                <Input id="subject-add" name="subject" placeholder="Contoh: Matematika" />
+                <Label htmlFor="subject-add">Mata Pelajaran / Bidang</Label>
+                <Input id="subject-add" name="subject" placeholder="Contoh: Matematika / Tata Usaha" />
               </div>
               <div>
                 <Label htmlFor="waliKelas-add">Wali Kelas (Opsional)</Label>
@@ -182,59 +189,96 @@ export default function StaffAdminPage() {
         </Dialog>
       </div>
 
-      <Card>
-        <CardContent className="p-0">
-            <Table>
-            <TableHeader>
-                <TableRow>
-                <TableHead className="w-[30%]">Nama</TableHead>
-                <TableHead>Jabatan</TableHead>
-                <TableHead>Mata Pelajaran</TableHead>
-                <TableHead>Wali Kelas</TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {staff.map((item) => (
-                <TableRow key={item.id}>
-                    <TableCell className="font-medium">
-                        <div className="flex items-center gap-3">
-                            <Avatar>
-                                <AvatarImage src={item.image} alt={item.name} />
-                                <AvatarFallback>{item.initials}</AvatarFallback>
-                            </Avatar>
-                            <span>{item.name}</span>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:items-start">
+            <main className="lg:col-span-2">
+                <Card>
+                    <CardContent className="p-0">
+                        <Table>
+                        <TableHeader>
+                            <TableRow>
+                            <TableHead className="w-[30%]">Nama</TableHead>
+                            <TableHead>Jabatan</TableHead>
+                            <TableHead>Bidang</TableHead>
+                            <TableHead>Wali Kelas</TableHead>
+                            <TableHead className="text-right">Aksi</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {staff.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell className="font-medium">
+                                    <div className="flex items-center gap-3">
+                                        <Avatar>
+                                            <AvatarImage src={item.image} alt={item.name} />
+                                            <AvatarFallback>{item.initials}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{item.name}</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>{item.position}</TableCell>
+                                <TableCell>{item.subject}</TableCell>
+                                <TableCell>{item.waliKelas || "-"}</TableCell>
+                                <TableCell className="text-right">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                        <span className="sr-only">Buka menu</span>
+                                        <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onSelect={() => { setSelectedStaff(item); setEditOpen(true); }}>
+                                        <Pencil className="mr-2 h-4 w-4" />
+                                        <span>Edit</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onSelect={() => { setSelectedStaff(item); setDeleteOpen(true); }} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        <span>Hapus</span>
+                                    </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                </TableCell>
+                            </TableRow>
+                            ))}
+                        </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+            </main>
+
+            <aside className="space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Statistik Staf</CardTitle>
+                        <CardDescription>Ringkasan jumlah guru dan staf di sekolah.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <Users className="h-5 w-5"/>
+                                <span>Total Staf</span>
+                            </div>
+                            <span className="font-bold text-lg">{stats.totalStaff}</span>
                         </div>
-                    </TableCell>
-                    <TableCell>{item.position}</TableCell>
-                    <TableCell>{item.subject}</TableCell>
-                    <TableCell>{item.waliKelas || "-"}</TableCell>
-                    <TableCell className="text-right">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Buka menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                        <DropdownMenuItem onSelect={() => { setSelectedStaff(item); setEditOpen(true); }}>
-                            <Pencil className="mr-2 h-4 w-4" />
-                            <span>Edit</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => { setSelectedStaff(item); setDeleteOpen(true); }} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            <span>Hapus</span>
-                        </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    </TableCell>
-                </TableRow>
-                ))}
-            </TableBody>
-            </Table>
-        </CardContent>
-      </Card>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <UserCheck className="h-5 w-5"/>
+                                <span>Jumlah Guru</span>
+                            </div>
+                            <span className="font-bold text-lg">{stats.totalTeachers}</span>
+                        </div>
+                         <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <UserCog className="h-5 w-5"/>
+                                <span>Staf Administrasi</span>
+                            </div>
+                            <span className="font-bold text-lg">{stats.totalAdmin}</span>
+                        </div>
+                    </CardContent>
+                </Card>
+            </aside>
+        </div>
+
 
        <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
           <DialogContent className="sm:max-w-md">

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { BookMarked, Building, Upload } from "lucide-react";
+import { BookMarked, Building } from "lucide-react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 
@@ -56,61 +56,63 @@ export default function AcademicsAdminPage() {
                 </p>
             </div>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <BookMarked className="h-6 w-6 text-accent"/>
-                        <span>Kurikulum</span>
-                    </CardTitle>
-                    <CardDescription>
-                        Edit judul, deskripsi, dan gambar untuk bagian kurikulum.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div>
-                        <Label htmlFor="curriculum-title">Judul</Label>
-                        <Input id="curriculum-title" value={curriculum.title} onChange={(e) => setCurriculum({...curriculum, title: e.target.value})} />
-                    </div>
-                    <div>
-                        <Label htmlFor="curriculum-content">Deskripsi</Label>
-                        <Textarea id="curriculum-content" value={curriculum.content.join("\n\n")} onChange={(e) => setCurriculum({...curriculum, content: e.target.value.split("\n\n")})} className="min-h-[150px]"/>
-                        <p className="text-xs text-muted-foreground mt-1">Pisahkan paragraf dengan dua kali enter.</p>
-                    </div>
-                     <div>
-                        <Label>Gambar</Label>
-                        <Image src={curriculum.image} alt="Pratinjau Kurikulum" width={1200} height={400} className="w-full rounded-md object-cover aspect-[3/1] my-2" />
-                        <Input type="file" />
-                    </div>
-                </CardContent>
-            </Card>
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <BookMarked className="h-6 w-6 text-accent"/>
+                            <span>Kurikulum</span>
+                        </CardTitle>
+                        <CardDescription>
+                            Edit judul, deskripsi, dan gambar untuk bagian kurikulum.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div>
+                            <Label htmlFor="curriculum-title">Judul</Label>
+                            <Input id="curriculum-title" value={curriculum.title} onChange={(e) => setCurriculum({...curriculum, title: e.target.value})} />
+                        </div>
+                        <div>
+                            <Label htmlFor="curriculum-content">Deskripsi</Label>
+                            <Textarea id="curriculum-content" value={curriculum.content.join("\n\n")} onChange={(e) => setCurriculum({...curriculum, content: e.target.value.split("\n\n")})} className="min-h-[150px]"/>
+                            <p className="text-xs text-muted-foreground mt-1">Pisahkan paragraf dengan dua kali enter.</p>
+                        </div>
+                         <div>
+                            <Label>Gambar</Label>
+                            <Image src={curriculum.image} alt="Pratinjau Kurikulum" width={1200} height={400} className="w-full rounded-md object-cover aspect-[3/1] my-2" />
+                            <Input type="file" />
+                        </div>
+                    </CardContent>
+                </Card>
 
-             <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Building className="h-6 w-6 text-accent"/>
-                        <span>Struktur Pembelajaran</span>
-                    </CardTitle>
-                    <CardDescription>
-                        Edit judul, deskripsi, dan gambar untuk bagian struktur pembelajaran.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div>
-                        <Label htmlFor="structure-title">Judul</Label>
-                        <Input id="structure-title" value={learningStructure.title} onChange={(e) => setLearningStructure({...learningStructure, title: e.target.value})} />
-                    </div>
-                    <div>
-                        <Label htmlFor="structure-content">Deskripsi</Label>
-                        <Textarea id="structure-content" value={learningStructure.content.join("\n\n")} onChange={(e) => setLearningStructure({...learningStructure, content: e.target.value.split("\n\n")})} className="min-h-[150px]"/>
-                         <p className="text-xs text-muted-foreground mt-1">Pisahkan paragraf dengan dua kali enter.</p>
-                    </div>
-                     <div>
-                        <Label>Gambar</Label>
-                        <Image src={learningStructure.image} alt="Pratinjau Struktur Pembelajaran" width={1200} height={400} className="w-full rounded-md object-cover aspect-[3/1] my-2" />
-                        <Input type="file" />
-                    </div>
-                </CardContent>
-            </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Building className="h-6 w-6 text-accent"/>
+                            <span>Struktur Pembelajaran</span>
+                        </CardTitle>
+                        <CardDescription>
+                            Edit judul, deskripsi, dan gambar untuk bagian struktur pembelajaran.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div>
+                            <Label htmlFor="structure-title">Judul</Label>
+                            <Input id="structure-title" value={learningStructure.title} onChange={(e) => setLearningStructure({...learningStructure, title: e.target.value})} />
+                        </div>
+                        <div>
+                            <Label htmlFor="structure-content">Deskripsi</Label>
+                            <Textarea id="structure-content" value={learningStructure.content.join("\n\n")} onChange={(e) => setLearningStructure({...learningStructure, content: e.target.value.split("\n\n")})} className="min-h-[150px]"/>
+                             <p className="text-xs text-muted-foreground mt-1">Pisahkan paragraf dengan dua kali enter.</p>
+                        </div>
+                         <div>
+                            <Label>Gambar</Label>
+                            <Image src={learningStructure.image} alt="Pratinjau Struktur Pembelajaran" width={1200} height={400} className="w-full rounded-md object-cover aspect-[3/1] my-2" />
+                            <Input type="file" />
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
 
             <div className="flex justify-end pt-4">
                 <Button onClick={handleSaveChanges} size="lg">Simpan Semua Perubahan</Button>

@@ -24,7 +24,7 @@ export default function ProfileAdminPage() {
     const { toast } = useToast();
 
     const handleSaveChanges = () => {
-        console.log("Saving changes:", { welcomeMessage, principalImage });
+        console.log("Saving changes:", { welcomeMessage, principalName, principalImage });
         toast({
             title: "Perubahan Disimpan!",
             description: "Profil sekolah telah berhasil diperbarui.",
@@ -60,9 +60,9 @@ export default function ProfileAdminPage() {
                         Lakukan perubahan pada kata sambutan dan foto kepala sekolah yang ditampilkan di halaman profil dan beranda.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-                        <div className="md:col-span-2 space-y-4">
+                <CardContent>
+                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:items-start">
+                        <div className="lg:col-span-2 space-y-6">
                             <div>
                                 <Label htmlFor="welcomeMessage" className="text-base font-semibold">Kata Sambutan</Label>
                                 <Textarea
@@ -106,7 +106,7 @@ export default function ProfileAdminPage() {
                             </div>
                         </div>
                     </div>
-                     <div className="flex justify-end pt-4 border-t">
+                     <div className="flex justify-end pt-6 mt-6 border-t">
                         <Button onClick={handleSaveChanges}>Simpan Perubahan</Button>
                     </div>
                 </CardContent>
