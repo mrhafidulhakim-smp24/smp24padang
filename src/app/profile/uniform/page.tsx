@@ -53,7 +53,7 @@ export default function UniformPage() {
         </p>
       </div>
 
-      <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-8">
         {uniforms.map((uniform) => (
           <Card key={uniform.day} className="overflow-hidden text-center">
             <CardHeader className="p-0">
@@ -67,9 +67,9 @@ export default function UniformPage() {
                 />
               </div>
             </CardHeader>
-            <CardContent className="p-6">
-              <CardTitle className="font-headline text-xl text-primary">{uniform.day}</CardTitle>
-              <p className="mt-2 text-muted-foreground">{uniform.description}</p>
+            <CardContent className="p-4 md:p-6">
+              <CardTitle className="font-headline text-lg md:text-xl text-primary">{uniform.day}</CardTitle>
+              <p className="mt-1 text-xs md:text-sm text-muted-foreground">{uniform.description}</p>
             </CardContent>
           </Card>
         ))}
