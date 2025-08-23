@@ -6,10 +6,12 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const newsItems = [
-    { id: "1", title: "Kegiatan Class Meeting Akhir Semester", description: "Seluruh siswa mengikuti berbagai perlombaan dalam rangka class meeting untuk menyegarkan pikiran setelah ujian akhir semester. Perlombaan yang diadakan antara lain futsal, tarik tambang, dan Cerdas Cermat.", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "students competition" },
-    { id: "2", title: "Peringatan Hari Guru Nasional", description: "Peringatan Hari Guru Nasional di SMPN 24 Padang berlangsung khidmat dan meriah. Acara diisi dengan upacara bendera dan persembahan dari siswa untuk para guru.", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "teacher ceremony" },
-    { id: "3", title: "Studi Tur ke Museum Adityawarman", description: "Siswa kelas 8 melakukan studi tur edukatif ke Museum Adityawarman untuk mempelajari sejarah dan budaya Minangkabau secara langsung.", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "museum trip" },
-    { id: "4", title: "Workshop Literasi Digital untuk Siswa", description: "Bekerja sama dengan komunitas lokal, sekolah mengadakan workshop literasi digital untuk membekali siswa dengan kemampuan berpikir kritis di dunia maya.", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "digital literacy workshop" },
+    { id: "1", date: new Date(), title: "Juara 1 Lomba Cerdas Cermat Tingkat Kota", description: "Tim cerdas cermat SMPN 24 Padang berhasil meraih Juara 1 dalam kompetisi tingkat kota, menunjukkan keunggulan akademik yang membanggakan.", imageUrl: "https://placehold.co/600x400.png", hint: "students winning trophy" },
+    { id: "2", date: new Date(), title: "Kegiatan Jumat Bersih dan Sehat", description: "Seluruh warga sekolah berpartisipasi dalam kegiatan Jumat Bersih untuk menciptakan lingkungan belajar yang nyaman dan asri.", imageUrl: "https://placehold.co/600x400.png", hint: "students cleaning school" },
+    { id: "3", date: new Date(), title: "Peringatan Hari Kemerdekaan RI ke-79", description: "Upacara bendera dan berbagai lomba meriahkan peringatan HUT RI ke-79 di SMPN 24 Padang, menumbuhkan semangat nasionalisme.", imageUrl: "https://placehold.co/600x400.png", hint: "flag ceremony" },
+    { id: "4", date: new Date(), title: "Studi Tur Edukatif ke Museum Adityawarman", description: "Siswa kelas 8 melakukan studi tur ke Museum Adityawarman untuk mempelajari sejarah dan budaya Minangkabau secara langsung.", imageUrl: "https://placehold.co/600x400.png", hint: "students in museum" },
+    { id: "5", date: new Date(), title: "Pelatihan Kepemimpinan untuk Pengurus OSIS", description: "Pengurus OSIS periode baru mengikuti pelatihan kepemimpinan untuk meningkatkan kapasitas organisasi dan manajerial.", imageUrl: "https://placehold.co/600x400.png", hint: "leadership training" },
+    { id: "6", date: new Date(), title: "Pameran Karya Seni Siswa di Akhir Semester", description: "Kreativitas siswa dipamerkan dalam pameran seni rupa yang menampilkan lukisan, patung, dan kerajinan tangan.", imageUrl: "https://placehold.co/600x400.png", hint: "student art exhibition" },
 ];
 
 

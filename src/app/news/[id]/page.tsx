@@ -4,19 +4,17 @@ import { notFound } from "next/navigation";
 import { Calendar, UserCircle } from "lucide-react";
 
 const newsItems = [
-    { id: "1", title: "Kegiatan Class Meeting Akhir Semester", description: "Seluruh siswa mengikuti berbagai perlombaan dalam rangka class meeting untuk menyegarkan pikiran setelah ujian akhir semester. Perlombaan yang diadakan antara lain futsal, tarik tambang, dan Cerdas Cermat. Kegiatan ini bertujuan untuk mempererat tali persaudaraan antar siswa dan mengembangkan sportivitas.", date: new Date(), imageUrl: "https://placehold.co/1200x675.png", hint: "students competition" },
-    { id: "2", title: "Peringatan Hari Guru Nasional", description: "Peringatan Hari Guru Nasional di SMPN 24 Padang berlangsung khidmat dan meriah. Acara diisi dengan upacara bendera dan persembahan dari siswa untuk para guru sebagai bentuk penghargaan atas jasa-jasa mereka dalam mendidik.", date: new Date(), imageUrl: "https://placehold.co/1200x675.png", hint: "teacher ceremony" },
-    { id: "3", title: "Studi Tur ke Museum Adityawarman", description: "Siswa kelas 8 melakukan studi tur edukatif ke Museum Adityawarman untuk mempelajari sejarah dan budaya Minangkabau secara langsung. Para siswa terlihat antusias mengikuti penjelasan dari pemandu museum dan mencatat informasi penting.", date: new Date(), imageUrl: "https://placehold.co/1200x675.png", hint: "museum trip" },
-    { id: "4", title: "Workshop Literasi Digital untuk Siswa", description: "Bekerja sama dengan komunitas lokal, sekolah mengadakan workshop literasi digital untuk membekali siswa dengan kemampuan berpikir kritis di dunia maya. Workshop ini membahas cara mengidentifikasi berita bohong dan menjaga keamanan data pribadi.", date: new Date(), imageUrl: "https://placehold.co/1200x675.png", hint: "digital literacy workshop" },
+    { id: "1", date: new Date(), title: "Juara 1 Lomba Cerdas Cermat Tingkat Kota", description: "Tim cerdas cermat SMPN 24 Padang berhasil meraih Juara 1 dalam kompetisi tingkat kota, menunjukkan keunggulan akademik yang membanggakan. Kompetisi yang diikuti oleh puluhan sekolah terbaik ini menjadi bukti nyata dari kerja keras siswa dan bimbingan intensif para guru.\n\nKemenangan ini diharapkan dapat memotivasi siswa lain untuk terus berprestasi di berbagai bidang, baik akademik maupun non-akademik. Sekolah berkomitmen untuk terus mendukung pengembangan potensi setiap siswa secara maksimal.", imageUrl: "https://placehold.co/600x400.png", hint: "students winning trophy" },
+    { id: "2", date: new Date(), title: "Kegiatan Jumat Bersih dan Sehat", description: "Seluruh warga sekolah berpartisipasi dalam kegiatan Jumat Bersih untuk menciptakan lingkungan belajar yang nyaman dan asri. Kegiatan ini meliputi pembersihan ruang kelas, taman sekolah, dan area umum lainnya.\n\nSelain membersihkan lingkungan, kegiatan ini juga bertujuan untuk menumbuhkan rasa tanggung jawab dan kepedulian siswa terhadap kebersihan. Lingkungan yang bersih akan mendukung proses belajar mengajar yang lebih efektif.", imageUrl: "https://placehold.co/600x400.png", hint: "students cleaning school" },
+    { id: "3", date: new Date(), title: "Peringatan Hari Kemerdekaan RI ke-79", description: "Upacara bendera dan berbagai lomba meriahkan peringatan HUT RI ke-79 di SMPN 24 Padang, menumbuhkan semangat nasionalisme. Siswa-siswi antusias mengikuti berbagai perlombaan tradisional seperti panjat pinang, balap karung, dan tarik tambang.\n\nAcara ini tidak hanya menjadi ajang hiburan, tetapi juga sebagai sarana untuk mempererat tali persaudaraan antar siswa dan menanamkan nilai-nilai perjuangan para pahlawan.", imageUrl: "https://placehold.co/600x400.png", hint: "flag ceremony" },
 ];
 
-async function getArticle(id: string) {
-    const article = newsItems.find(item => item.id === id);
-    return article;
+async function getNewsArticle(id: string) {
+    return newsItems.find(item => item.id === id);
 }
 
 export default async function NewsArticlePage({ params }: { params: { id: string } }) {
-  const article = await getArticle(params.id);
+  const article = await getNewsArticle(params.id);
 
   if (!article) {
     notFound();

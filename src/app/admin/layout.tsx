@@ -1,8 +1,7 @@
 
-"use client";
-
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle } from 'lucide-react';
 
 export default function AdminLayout({
   children,
@@ -10,9 +9,10 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center bg-background text-center">
-      <div className="rounded-lg border bg-card p-8 shadow-lg">
-        <h1 className="font-headline text-3xl font-bold text-primary">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-muted/40 p-4">
+      <div className="w-full max-w-md text-center">
+        <AlertTriangle className="mx-auto h-12 w-12 text-destructive" />
+        <h1 className="mt-4 font-headline text-3xl font-bold text-primary md:text-4xl">
           Admin CMS Dinonaktifkan
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">

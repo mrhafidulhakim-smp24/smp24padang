@@ -4,7 +4,14 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, Target, Users, Award, Network, Shirt, Swords } from "lucide-react";
 
-export default function ProfilePage() {
+const profile = {
+  principalName: "Dr. Budi Santoso, M.Pd.",
+  principalWelcome: "Selamat datang di situs resmi SMPN 24 Padang. Kami berkomitmen untuk menyediakan lingkungan belajar yang menginspirasi, di mana setiap siswa dapat berkembang secara akademis, sosial, dan emosional. Dengan dukungan guru-guru yang berdedikasi dan fasilitas yang memadai, kami berupaya mencetak generasi penerus yang cerdas, berkarakter, dan siap menghadapi tantangan global. Mari bersama-sama kita wujudkan masa depan yang gemilang bagi putra-putri kita.",
+  principalImageUrl: "https://placehold.co/600x800.png",
+};
+
+
+export default async function ProfilePage() {
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -20,7 +27,7 @@ export default function ProfilePage() {
         <Card className="overflow-hidden md:grid md:grid-cols-3">
           <div className="relative h-64 md:h-full">
             <Image
-              src="https://placehold.co/600x800.png"
+              src={profile?.principalImageUrl || "https://placehold.co/600x800.png"}
               alt="Principal"
               layout="fill"
               objectFit="cover"
@@ -32,13 +39,10 @@ export default function ProfilePage() {
               Sambutan dari Kepala Sekolah
             </h2>
             <p className="mt-4 text-foreground/80">
-              Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang berdedikasi untuk menumbuhkan keunggulan akademik, pengembangan karakter, dan kecintaan belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang dan mencapai potensi penuh mereka.
-            </p>
-            <p className="mt-4 text-foreground/80">
-              Kami percaya pada pendekatan holistik terhadap pendidikan, yang menyeimbangkan kekakuan akademis dengan ekspresi artistik, prestasi atletik, dan pengabdian masyarakat. Fakultas kami yang berbakat dan berdedikasi hadir untuk membimbing dan menginspirasi siswa kami dalam perjalanan pendidikan mereka.
+             {profile?.principalWelcome}
             </p>
             <p className="mt-6 font-semibold text-primary">
-              Dr. Budi Santoso, Kepala Sekolah
+              {profile?.principalName}
             </p>
           </div>
         </Card>
@@ -135,5 +139,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    

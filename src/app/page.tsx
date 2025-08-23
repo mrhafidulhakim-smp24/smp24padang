@@ -7,23 +7,23 @@ import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
-const heroBanners = [
-    { id: "1", title: "Selamat Datang di SMPN 24 Padang", description: "Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.", imageUrl: "https://placehold.co/1920x1080.png", hint: "school campus" },
-    { id: "2", title: "Penerimaan Siswa Baru 2024/2025", description: "Jadilah bagian dari komunitas kami yang berprestasi. Pendaftaran telah dibuka!", imageUrl: "https://placehold.co/1920x1080.png", hint: "students registration" },
-    { id: "3", title: "Juara Umum Lomba Cerdas Cermat", description: "Siswa kami kembali mengharumkan nama sekolah di tingkat nasional.", imageUrl: "https://placehold.co/1920x1080.png", hint: "students winning trophy" },
+const banners = [
+  { title: "Selamat Datang di SMPN 24 Padang", description: "Membentuk Generasi Unggul, Berkarakter, dan Inovatif.", imageUrl: "https://placehold.co/1920x1080.png", hint: "school building students" },
+  { title: "Penerimaan Siswa Baru 2024/2025", description: "Bergabunglah dengan komunitas pembelajar kami yang dinamis.", imageUrl: "https://placehold.co/1920x1080.png", hint: "students registration" },
 ];
 
 const latestNews = [
-    { id: "1", title: "Kegiatan Class Meeting Akhir Semester", description: "Seluruh siswa mengikuti berbagai perlombaan dalam rangka class meeting...", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "students competition" },
-    { id: "2", title: "Peringatan Hari Guru Nasional", description: "Peringatan Hari Guru Nasional di SMPN 24 Padang berlangsung khidmat...", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "teacher ceremony" },
-    { id: "3", title: "Studi Tur ke Museum Adityawarman", description: "Siswa kelas 8 melakukan studi tur edukatif ke Museum Adityawarman...", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "museum trip" },
+    { id: "1", date: new Date(), title: "Juara 1 Lomba Cerdas Cermat Tingkat Kota", description: "Tim cerdas cermat SMPN 24 Padang berhasil meraih Juara 1 dalam kompetisi tingkat kota, menunjukkan keunggulan akademik yang membanggakan.", imageUrl: "https://placehold.co/600x400.png", hint: "students winning trophy" },
+    { id: "2", date: new Date(), title: "Kegiatan Jumat Bersih dan Sehat", description: "Seluruh warga sekolah berpartisipasi dalam kegiatan Jumat Bersih untuk menciptakan lingkungan belajar yang nyaman dan asri.", imageUrl: "https://placehold.co/600x400.png", hint: "students cleaning school" },
+    { id: "3", date: new Date(), title: "Peringatan Hari Kemerdekaan RI ke-79", description: "Upacara bendera dan berbagai lomba meriahkan peringatan HUT RI ke-79 di SMPN 24 Padang, menumbuhkan semangat nasionalisme.", imageUrl: "https://placehold.co/600x400.png", hint: "flag ceremony" },
 ];
 
 const profile = {
-    principalWelcome: "Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.",
-    principalName: "Dr. Budi Santoso, M.Pd.",
-    principalImageUrl: "https://placehold.co/600x800.png"
+  principalName: "Dr. Budi Santoso, M.Pd.",
+  principalWelcome: "Selamat datang di situs resmi SMPN 24 Padang. Kami berkomitmen untuk menyediakan lingkungan belajar yang menginspirasi, di mana setiap siswa dapat berkembang secara akademis, sosial, dan emosional. Dengan dukungan guru-guru yang berdedikasi dan fasilitas yang memadai, kami berupaya mencetak generasi penerus yang cerdas, berkarakter, dan siap menghadapi tantangan global. Mari bersama-sama kita wujudkan masa depan yang gemilang bagi putra-putri kita.",
+  principalImageUrl: "https://placehold.co/600x800.png",
 };
+
 
 async function Announcement() {
   return (
@@ -70,7 +70,6 @@ async function Announcement() {
 }
 
 export default async function Home() {
-  const principal = profile;
 
   const marqueeItems = [
       { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
@@ -89,7 +88,7 @@ export default async function Home() {
           className="w-full"
         >
           <CarouselContent>
-            {heroBanners.map((banner, index) => (
+            {banners.map((banner, index) => (
               <CarouselItem key={index}>
                 <div className="relative h-[70vh] w-full">
                   <div className="absolute inset-0 bg-black/50 z-10"></div>
@@ -129,7 +128,7 @@ export default async function Home() {
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
           <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-xl">
             <Image 
-              src={principal.principalImageUrl || "https://placehold.co/600x800.png"} 
+              src={profile?.principalImageUrl || "https://placehold.co/600x800.png"} 
               alt="Principal" 
               fill 
               style={{objectFit: 'cover'}}
@@ -144,9 +143,9 @@ export default async function Home() {
                <p className="font-semibold">Terakreditasi A - Sekolah Adiwiyata Nasional & Ramah Anak</p>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
-              {principal.principalWelcome.substring(0,200)}...
+              {profile?.principalWelcome.substring(0,200)}...
             </p>
-             <p className="mt-4 font-semibold text-primary">{principal.principalName}</p>
+             <p className="mt-4 font-semibold text-primary">{profile?.principalName}</p>
             <Button asChild variant="link" className="mt-4 p-0 text-accent hover:text-accent/80">
               <Link href="/profile">
                 Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
@@ -232,7 +231,7 @@ export default async function Home() {
                       width={600}
                       height={400}
                       className="h-56 w-full object-cover"
-                      data-ai-hint={item.hint || "news article"}
+                      data-ai-hint={"news article"}
                     />
                   </Link>
                 </CardHeader>
