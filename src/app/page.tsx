@@ -47,7 +47,7 @@ function Announcement() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
-                <p className="text-foreground/80">
+                <p className="text-foreground/80 dark:text-foreground/70">
                   {item.description.substring(0, 150)}...
                 </p>
               </CardContent>
@@ -141,9 +141,9 @@ export default function Home() {
           </div>
           <div>
             <h2 className="font-headline text-3xl font-bold text-primary">Pesan dari Kepala Sekolah</h2>
-             <div className="mt-4 flex items-center gap-3 rounded-lg bg-accent/10 p-3 text-accent">
+             <div className="mt-4 flex items-center gap-3 rounded-lg bg-accent/80 p-3 text-accent-foreground dark:bg-accent/90">
                <ShieldCheck className="h-6 w-6 flex-shrink-0" />
-               <p className="font-semibold">Sekolah Adiwiyata Nasional, Sekolah Ramah Anak</p>
+               <p className="font-semibold">Terakreditasi A - Sekolah Adiwiyata Nasional & Ramah Anak</p>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
               {principal.principalWelcome.substring(0,200)}...
@@ -243,7 +243,7 @@ export default function Home() {
                   <CardTitle className="font-headline text-xl font-bold text-primary">
                     <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
                   </CardTitle>
-                  <p className="mt-2 text-foreground/80 flex-grow">{item.description.substring(0, 100)}...</p>
+                  <p className="mt-2 text-foreground/80 dark:text-foreground/70 flex-grow">{item.description.substring(0, 100)}...</p>
                    <Button variant="link" asChild className="mt-4 p-0 self-start text-accent hover:text-accent/80">
                     <Link href={`/news/${item.id}`}>
                       Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />

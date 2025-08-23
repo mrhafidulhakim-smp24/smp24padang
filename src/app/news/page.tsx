@@ -45,7 +45,7 @@ export default function NewsPage() {
               <CardTitle className="font-headline text-xl font-bold text-primary">
                  <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
               </CardTitle>
-              <p className="mt-2 flex-grow text-foreground/80">{item.description.substring(0, 100)}...</p>
+              <p className="mt-2 flex-grow text-foreground/80 dark:text-foreground/70">{item.description.substring(0, 100)}...</p>
               <Button variant="link" asChild className="mt-4 p-0 self-start text-accent hover:text-accent/80">
                 <Link href={`/news/${item.id}`}>
                   Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />

@@ -53,7 +53,7 @@ export default function NewsArticlePage({ params }: { params: { id: string } }) 
             </div>
           </div>
           
-          <div className="space-y-6 text-foreground/90">
+          <div className="space-y-6 text-foreground/90 dark:text-foreground/80">
              {paragraphs.map((p, index) => (
               <p key={index}>{p}</p>
             ))}
