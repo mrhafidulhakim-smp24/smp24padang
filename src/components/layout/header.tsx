@@ -31,6 +31,8 @@ import {
   Wrench,
   MapPin,
   Newspaper,
+  Shirt,
+  Swords,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -53,7 +55,16 @@ export default function Header() {
         { href: "/profile/accreditation", label: "Sertifikat Akreditasi", icon: Award },
       ]
     },
-    { href: "/academics", label: "Akademik", icon: BookOpen },
+    { 
+      href: "/academics", 
+      label: "Akademik", 
+      icon: BookOpen,
+      subLinks: [
+        { href: "/academics", label: "Informasi Akademik", icon: BookOpen },
+        { href: "/academics/uniform", label: "Seragam Sekolah", icon: Shirt },
+        { href: "/academics/extracurricular", label: "Ekstrakurikuler", icon: Swords },
+      ]
+    },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/gallery", label: "Galeri", icon: Camera },
     { href: "/news", label: "Berita", icon: Newspaper },

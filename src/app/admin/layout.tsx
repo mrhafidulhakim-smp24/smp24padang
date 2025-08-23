@@ -31,6 +31,8 @@ import {
   User,
   Target,
   ChevronRight,
+  Shirt,
+  Swords,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -48,7 +50,16 @@ const adminNavItems = [
       { href: "/admin/accreditation", label: "Akreditasi", icon: Award },
     ]
   },
-  { href: "/admin/academics", label: "Akademik", icon: BookOpen },
+  { 
+    href: "/admin/academics", 
+    label: "Akademik", 
+    icon: BookOpen,
+    subLinks: [
+        { href: "/admin/academics", label: "Informasi Akademik", icon: BookOpen },
+        { href: "/admin/academics/uniform", label: "Seragam Sekolah", icon: Shirt },
+        { href: "/admin/academics/extracurricular", label: "Ekstrakurikuler", icon: Swords },
+    ]
+  },
   { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
   { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },
   { href: "/admin/news", label: "Berita", icon: Newspaper },
