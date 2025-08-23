@@ -2,12 +2,16 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Calendar, UserCircle } from "lucide-react";
-import prisma from "@/lib/prisma";
+
+const newsItems = [
+    { id: "1", title: "Kegiatan Class Meeting Akhir Semester", description: "Seluruh siswa mengikuti berbagai perlombaan dalam rangka class meeting untuk menyegarkan pikiran setelah ujian akhir semester. Perlombaan yang diadakan antara lain futsal, tarik tambang, dan Cerdas Cermat. Kegiatan ini bertujuan untuk mempererat tali persaudaraan antar siswa dan mengembangkan sportivitas.", date: new Date(), imageUrl: "https://placehold.co/1200x675.png", hint: "students competition" },
+    { id: "2", title: "Peringatan Hari Guru Nasional", description: "Peringatan Hari Guru Nasional di SMPN 24 Padang berlangsung khidmat dan meriah. Acara diisi dengan upacara bendera dan persembahan dari siswa untuk para guru sebagai bentuk penghargaan atas jasa-jasa mereka dalam mendidik.", date: new Date(), imageUrl: "https://placehold.co/1200x675.png", hint: "teacher ceremony" },
+    { id: "3", title: "Studi Tur ke Museum Adityawarman", description: "Siswa kelas 8 melakukan studi tur edukatif ke Museum Adityawarman untuk mempelajari sejarah dan budaya Minangkabau secara langsung. Para siswa terlihat antusias mengikuti penjelasan dari pemandu museum dan mencatat informasi penting.", date: new Date(), imageUrl: "https://placehold.co/1200x675.png", hint: "museum trip" },
+    { id: "4", title: "Workshop Literasi Digital untuk Siswa", description: "Bekerja sama dengan komunitas lokal, sekolah mengadakan workshop literasi digital untuk membekali siswa dengan kemampuan berpikir kritis di dunia maya. Workshop ini membahas cara mengidentifikasi berita bohong dan menjaga keamanan data pribadi.", date: new Date(), imageUrl: "https://placehold.co/1200x675.png", hint: "digital literacy workshop" },
+];
 
 async function getArticle(id: string) {
-    const article = await prisma.newsArticle.findUnique({
-        where: { id },
-    });
+    const article = newsItems.find(item => item.id === id);
     return article;
 }
 

@@ -6,27 +6,26 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import prisma from '@/lib/prisma';
-import type { Banner, NewsArticle, Profile } from '@prisma/client';
 
-async function getBanners(): Promise<Banner[]> {
-    return prisma.banner.findMany({ orderBy: { createdAt: 'desc' } });
-}
+const heroBanners = [
+    { id: "1", title: "Selamat Datang di SMPN 24 Padang", description: "Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.", imageUrl: "https://placehold.co/1920x1080.png", hint: "school campus" },
+    { id: "2", title: "Penerimaan Siswa Baru 2024/2025", description: "Jadilah bagian dari komunitas kami yang berprestasi. Pendaftaran telah dibuka!", imageUrl: "https://placehold.co/1920x1080.png", hint: "students registration" },
+    { id: "3", title: "Juara Umum Lomba Cerdas Cermat", description: "Siswa kami kembali mengharumkan nama sekolah di tingkat nasional.", imageUrl: "https://placehold.co/1920x1080.png", hint: "students winning trophy" },
+];
 
-async function getLatestNews(): Promise<NewsArticle[]> {
-    return prisma.newsArticle.findMany({
-        orderBy: { date: 'desc' },
-        take: 3,
-    });
-}
+const latestNews = [
+    { id: "1", title: "Kegiatan Class Meeting Akhir Semester", description: "Seluruh siswa mengikuti berbagai perlombaan dalam rangka class meeting...", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "students competition" },
+    { id: "2", title: "Peringatan Hari Guru Nasional", description: "Peringatan Hari Guru Nasional di SMPN 24 Padang berlangsung khidmat...", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "teacher ceremony" },
+    { id: "3", title: "Studi Tur ke Museum Adityawarman", description: "Siswa kelas 8 melakukan studi tur edukatif ke Museum Adityawarman...", date: new Date(), imageUrl: "https://placehold.co/600x400.png", hint: "museum trip" },
+];
 
-async function getProfile(): Promise<Profile | null> {
-    return prisma.profile.findFirst();
-}
+const profile = {
+    principalWelcome: "Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.",
+    principalName: "Dr. Budi Santoso, M.Pd.",
+    principalImageUrl: "https://placehold.co/600x800.png"
+};
 
 async function Announcement() {
-  const latestAnnouncements = await getLatestNews();
-
   return (
     <section className="bg-background py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -37,7 +36,7 @@ async function Announcement() {
           </p>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {latestAnnouncements.map((item) => (
+          {latestNews.map((item) => (
             <Card key={item.id} className="flex flex-col">
               <CardHeader>
                 <p className="text-sm font-semibold text-accent">{`PENGUMUMAN | ${new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
@@ -71,15 +70,7 @@ async function Announcement() {
 }
 
 export default async function Home() {
-  const heroBanners = await getBanners();
-  const latestNews = await getLatestNews();
-  const profile = await getProfile();
-
-  const principal = profile ?? {
-    principalWelcome: "Selamat datang di SMPN 24 Padang! Kami adalah komunitas yang didedikasikan untuk membina keunggulan akademik, pengembangan karakter, dan cinta belajar seumur hidup. Komitmen kami adalah menyediakan lingkungan yang aman, membina, dan merangsang di mana setiap siswa dapat berkembang.",
-    principalName: "Kepala Sekolah",
-    principalImageUrl: "https://placehold.co/600x800.png"
-  };
+  const principal = profile;
 
   const marqueeItems = [
       { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
