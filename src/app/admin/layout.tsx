@@ -38,6 +38,7 @@ import Image from "next/image";
 
 const adminNavItems = [
   { href: "/admin", label: "Dasbor", icon: LayoutDashboard },
+  { href: "/admin/banner", label: "Banner Beranda", icon: ImageIconLucide },
   { 
     href: "/admin/profile", 
     label: "Profil", 
@@ -60,7 +61,6 @@ const adminNavItems = [
   { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
   { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },
   { href: "/admin/news", label: "Berita", icon: Newspaper },
-  { href: "/admin/banner", label: "Banner Beranda", icon: ImageIconLucide },
 ];
 
 export default function AdminLayout({
