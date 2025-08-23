@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 
 const faculty = [
   { name: "Dr. Budi Santoso, M.Pd.", position: "Kepala Sekolah", subject: "Manajemen Pendidikan", initials: "BS", image: "https://placehold.co/150x150.png", hint: "man portrait" },
@@ -27,10 +27,16 @@ export default function FacultyPage() {
         <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {faculty.map((member) => (
             <div key={member.name} className="flex flex-col items-center text-center">
-              <Avatar className="h-32 w-32 border-4 border-primary/10">
-                <AvatarImage src={member.image} data-ai-hint={member.hint} alt={member.name}/>
-                <AvatarFallback className="bg-primary/20 text-3xl font-semibold text-primary">{member.initials}</AvatarFallback>
-              </Avatar>
+              <div className="relative h-40 w-40 overflow-hidden rounded-lg shadow-md">
+                <Image 
+                  src={member.image} 
+                  alt={member.name} 
+                  layout="fill" 
+                  objectFit="cover"
+                  data-ai-hint={member.hint}
+                  className="transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
               <h3 className="mt-4 text-xl font-bold text-primary">{member.name}</h3>
               <p className="font-semibold text-base text-accent-foreground">{member.position}</p>
               <p className="text-sm text-muted-foreground">{member.subject}</p>
