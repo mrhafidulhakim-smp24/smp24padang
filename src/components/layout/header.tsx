@@ -65,7 +65,6 @@ export default function Header() {
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/gallery", label: "Galeri", icon: Camera },
     { href: "/news", label: "Berita", icon: Newspaper },
-    { href: "/admin", label: "Admin", icon: Wrench },
   ];
 
   const cleanPathname = pathname;
