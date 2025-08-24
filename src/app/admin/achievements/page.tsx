@@ -1,10 +1,9 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useActionState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useFormState } from "react-dom";
 import {
   MoreHorizontal,
   Pencil,
@@ -63,11 +62,11 @@ function AchievementForm({
   initialData,
   onClose,
 }: {
-  action: (formData: FormData) => Promise<any>;
+  action: (state: { success: boolean; message: string; }, formData: FormData) => Promise<{ success: boolean; message: string; }>;
   initialData?: Achievement | null;
   onClose: () => void;
 }) {
-  const [state, formAction] = useFormState(action, {
+  const [state, formAction] = useActionState(action, {
     success: false,
     message: "",
   });

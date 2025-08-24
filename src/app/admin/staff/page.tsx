@@ -1,9 +1,8 @@
 
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent, useActionState } from "react";
 import Image from "next/image";
-import { useFormState } from "react-dom";
 import {
   MoreHorizontal,
   Pencil,
@@ -61,11 +60,11 @@ function StaffForm({
   initialData,
   onClose,
 }: {
-  action: (formData: FormData) => Promise<any>;
+  action: (state: { success: boolean; message: string; }, formData: FormData) => Promise<{ success: boolean; message: string; }>;
   initialData?: Staff | null;
   onClose: () => void;
 }) {
-  const [state, formAction] = useFormState(action, {
+  const [state, formAction] = useActionState(action, {
     success: false,
     message: "",
   });
