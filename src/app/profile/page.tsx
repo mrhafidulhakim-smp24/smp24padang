@@ -9,6 +9,8 @@ import { getProfile } from "../actions";
 export default async function ProfilePage() {
   const profile = await getProfile();
   
+  const welcomeParagraphs = profile?.principalWelcome.split('\n').filter(p => p.trim() !== '');
+
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -34,12 +36,13 @@ export default async function ProfilePage() {
             <h2 className="font-headline text-3xl font-bold text-primary">
               Sambutan dari Kepala Sekolah
             </h2>
-            <p className="mt-4 text-foreground/80">
-             {profile?.principalWelcome}
-            </p>
+            <div className="mt-4 space-y-4 text-foreground/80">
+              {welcomeParagraphs?.map((p, i) => <p key={i}>{p}</p>)}
+            </div>
             <p className="mt-6 font-semibold text-primary">
               {profile?.principalName}
             </p>
+            <p className="text-sm text-muted-foreground">Kepala SMPN 24 Padang</p>
           </div>
         </Card>
       </section>

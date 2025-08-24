@@ -15,8 +15,8 @@ const mockNews = [
 
 const mockProfile = {
     id: '1',
-    principalName: 'Drs. H. Mardan, M.Pd.',
-    principalWelcome: "Assalamualaikum Wr. Wb.\n\nSelamat datang di situs resmi SMPN 24 Padang. Kami bangga menjadi lembaga pendidikan yang berkomitmen untuk memberikan pendidikan berkualitas yang tidak hanya berfokus pada keunggulan akademik, tetapi juga pada pengembangan karakter, kreativitas, dan tanggung jawab sosial. Di SMPN 24 Padang, kami percaya bahwa setiap siswa memiliki potensi unik yang perlu digali dan dikembangkan. Melalui lingkungan belajar yang mendukung, inovatif, dan berakar pada nilai-nilai luhur, kami berusaha untuk memberdayakan siswa-siswi kami menjadi individu yang percaya diri, kritis, dan siap menghadapi tantangan masa depan. Kami mengundang Anda untuk menjelajahi situs web kami dan mengenal lebih dekat tentang program, prestasi, dan semangat komunitas sekolah kami. Terima kasih atas kunjungan Anda.",
+    principalName: 'Hasyuni Harti M.Pd',
+    principalWelcome: "Bismillahirohmannirrohim\n\nAssalamualaikum Warahmatullah Wabarakatuh\n\nKami mengucapkan selamat datang di Website kami SMP Negeri 24 Padang yang saya tujukan untuk seluruh unsur pimpinan, guru, karyawan dan siswa masyarakat guna dapat mengakses seluruh informasi tentang segala profil, aktifitas/kegiatan serta fasilitas sekolah kami.\n\nKami selaku pimpinan sekolah mengucapkan terima kasih kepada tim pembuat Website ini yang telah berusaha untuk dapat lebih memperkenalkan segala perihal yang dimiliki oleh sekolah. Dan tentunya Website sekolah kami masih terdapat banyak kekurangan, oleh karena itu kepada seluruh civitas akademika dan masyarakat umum dapat memberikan saran dan kritik yang membangun demi kemajuan Website ini lebih lanjut.\n\nSaya berharap Website ini dapat dijadikan sarana interaksi yang positif baik antar warga sekolah maupun masyarakat pada umumnya sehingga sehingga informasi dapat tersampaikan dengan baik. Semoga Allah SWT memberikan kekuatan bagi kita semua untuk mencerdaskan anak-anak bangsa.\n\nWassalamualikum Warahmatullah Wabarakatuh",
     principalImageUrl: 'https://placehold.co/600x800.png',
 };
 

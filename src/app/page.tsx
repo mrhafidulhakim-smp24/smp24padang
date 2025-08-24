@@ -136,13 +136,13 @@ export default async function Home() {
             />
           </div>
           <div>
-            <h2 className="font-headline text-3xl font-bold text-primary">Pesan dari Kepala Sekolah</h2>
+            <h2 className="font-headline text-3xl font-bold text-primary">Sambutan Kepala Sekolah</h2>
              <div className="mt-4 flex items-center gap-3 rounded-lg bg-accent/80 p-3 text-accent-foreground dark:bg-accent/90">
                <ShieldCheck className="h-6 w-6 flex-shrink-0" />
                <p className="font-semibold">Terakreditasi A - Sekolah Adiwiyata Nasional & Ramah Anak</p>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
-              {profile?.principalWelcome.substring(0,200)}...
+              {profile?.principalWelcome.substring(0,250)}...
             </p>
              <p className="mt-4 font-semibold text-primary">{profile?.principalName}</p>
             <Button asChild variant="link" className="mt-4 p-0 text-accent hover:text-accent/80">
