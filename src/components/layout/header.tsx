@@ -34,6 +34,7 @@ import {
   Shirt,
   Swords,
   GraduationCap,
+  ShieldCheck,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -76,11 +77,9 @@ export default function Header() {
       {/* Top Bar for Contact Info */}
       <div className="hidden bg-primary/90 text-primary-foreground lg:block">
         <div className="container mx-auto flex h-8 items-center justify-between px-4 text-sm">
-            <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4" />
-                    <span>Jl. Bypass, Lubuk Begalung, Padang</span>
-                </div>
+            <div className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4" />
+                <span className="font-semibold">CERDAS, TERAMPIL, DAN BERBUDAYA LINGKUNGAN</span>
             </div>
             <div className="flex items-center gap-6">
                 <a href="tel:+621234567890" className="flex items-center gap-2 transition-colors hover:text-white/80">
@@ -230,3 +229,5 @@ export default function Header() {
     </header>
   );
 }
+
+    
