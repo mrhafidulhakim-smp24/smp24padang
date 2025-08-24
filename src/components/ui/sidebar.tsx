@@ -605,7 +605,7 @@ const SidebarMenuButton = React.forwardRef<
     
     const { ...tooltipProps} = props;
     const validTooltipProps = Object.keys(tooltipProps).reduce((acc, key) => {
-        if (!/^\d+$/.test(key)) {
+        if (Number.isNaN(parseInt(key, 10))) {
             // @ts-ignore
             acc[key] = tooltipProps[key];
         }
