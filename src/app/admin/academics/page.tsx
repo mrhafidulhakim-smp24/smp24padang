@@ -5,7 +5,9 @@ import { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/hooks/use-toast';
-import { getAcademics, updateAcademics, AcademicDataSchema, type AcademicData } from './actions';
+import { getAcademics, updateAcademics } from './actions';
+import { AcademicDataSchema, type AcademicData } from './schema';
+
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,12 +18,20 @@ import Image from 'next/image';
 import { Upload } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
+// The form needs a slightly different shape than the schema, including the full image URLs
+type AcademicFormData = AcademicData & {
+    curriculumImageUrl?: string | null;
+    structureImageUrl?: string | null;
+};
+
 export default function AcademicsAdminPage() {
   const { toast } = useToast();
-  const [initialData, setInitialData] = useState<AcademicData | null>(null);
+  const [initialData, setInitialData] = useState<AcademicFormData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { register, handleSubmit, reset, watch, formState: { errors, isDirty } } = useForm<AcademicData>();
+  const { register, handleSubmit, reset, watch, formState: { errors, isDirty } } = useForm<AcademicData>({
+     resolver: zodResolver(AcademicDataSchema)
+  });
 
   const curriculumImageFile = watch('curriculumImage');
   const curriculumImagePreview = curriculumImageFile?.[0] ? URL.createObjectURL(curriculumImageFile[0]) : initialData?.curriculumImageUrl;
@@ -66,7 +76,7 @@ export default function AcademicsAdminPage() {
     }
     
     if (initialData?.id) {
-       formData.append('id', initialData.id);
+       formData.append('id', (initialData as any).id);
        formData.append('currentCurriculumImageUrl', initialData.curriculumImageUrl || '');
        formData.append('currentStructureImageUrl', initialData.structureImageUrl || '');
     }
