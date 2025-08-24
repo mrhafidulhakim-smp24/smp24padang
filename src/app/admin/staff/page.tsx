@@ -150,6 +150,15 @@ function StaffForm({
           defaultValue={initialData?.subject || ""}
         />
       </div>
+       <div>
+        <Label htmlFor="homeroomOf">Wali Kelas (Opsional)</Label>
+        <Input
+          id="homeroomOf"
+          name="homeroomOf"
+          placeholder="Contoh: Kelas 9A"
+          defaultValue={initialData?.homeroomOf || ""}
+        />
+      </div>
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>
           Batal
@@ -242,6 +251,7 @@ export default function StaffAdminPage() {
                 <TableHead>Nama</TableHead>
                 <TableHead>Jabatan</TableHead>
                 <TableHead>Bidang</TableHead>
+                <TableHead>Wali Kelas</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
@@ -260,6 +270,7 @@ export default function StaffAdminPage() {
                   <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>{item.position}</TableCell>
                   <TableCell>{item.subject}</TableCell>
+                  <TableCell>{item.homeroomOf || '-'}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

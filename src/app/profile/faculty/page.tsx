@@ -1,6 +1,7 @@
 
 import Image from "next/image";
 import { getStaff } from "./actions";
+import { Badge } from "@/components/ui/badge";
 
 
 export default async function FacultyPage() {
@@ -26,12 +27,17 @@ export default async function FacultyPage() {
                   src={member.imageUrl || "https://placehold.co/150x150.png"}
                   alt={member.name} 
                   fill
-                  objectFit="cover"
+                  style={{objectFit: 'cover'}}
                 />
               </div>
               <h3 className="mt-4 text-xl font-bold text-primary">{member.name}</h3>
               <p className="font-semibold text-base text-accent">{member.position}</p>
               <p className="text-sm text-muted-foreground">{member.subject}</p>
+               {member.homeroomOf && (
+                <Badge variant="secondary" className="mt-2">
+                  Wali Kelas {member.homeroomOf}
+                </Badge>
+              )}
             </div>
           ))}
         </div>
