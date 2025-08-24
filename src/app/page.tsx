@@ -20,8 +20,7 @@ async function AboutUs() {
             Fondasi dan komitmen yang menjadi landasan SMPN 24 Padang.
           </p>
         </div>
-        <div className="mt-12 flex justify-center">
-          <div className="w-full max-w-4xl">
+        <div className="mt-12">
             <Card className="h-full bg-primary/5">
               <CardContent className="grid grid-cols-1 gap-8 p-6 md:grid-cols-2 md:p-8">
                 <div>
@@ -49,7 +48,6 @@ async function AboutUs() {
                   </div>
               </CardContent>
             </Card>
-          </div>
         </div>
       </div>
     </section>
@@ -266,6 +264,7 @@ export default async function Home() {
               {profile?.principalWelcome.substring(0,400)}...
             </p>
              <p className="mt-4 font-semibold text-primary">{profile?.principalName}</p>
+             <p className="text-sm text-muted-foreground">Kepala SMPN 24 Padang</p>
             <Button asChild variant="link" className="mt-4 p-0 text-accent hover:text-accent/80">
               <Link href="/profile">
                 Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
