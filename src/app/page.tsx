@@ -247,7 +247,7 @@ export default async function Home() {
       {/* Welcome from Principal Section */}
       <section className="bg-primary/5 py-16 md:py-24">
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2 lg:grid-cols-5">
-          <div className="relative h-80 w-full overflow-hidden rounded-lg shadow-xl lg:col-span-2">
+          <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-xl lg:col-span-2 lg:h-[450px]">
             <Image 
               src={profile?.principalImageUrl || "https://placehold.co/600x800.png"} 
               alt="Principal" 
@@ -263,7 +263,7 @@ export default async function Home() {
                <p className="font-semibold">Terakreditasi A - Sekolah Adiwiyata Nasional & Ramah Anak</p>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
-              {profile?.principalWelcome.substring(0,250)}...
+              {profile?.principalWelcome.substring(0,400)}...
             </p>
              <p className="mt-4 font-semibold text-primary">{profile?.principalName}</p>
             <Button asChild variant="link" className="mt-4 p-0 text-accent hover:text-accent/80">
@@ -332,5 +332,3 @@ export default async function Home() {
     </div>
   );
 }
-
-    
