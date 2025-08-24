@@ -15,39 +15,38 @@ async function AboutUs() {
     <section className="bg-background py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="text-center">
-          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Tentang Kami</h2>
+          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Visi & Misi</h2>
           <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-            Mengenal lebih dekat fondasi, tujuan, dan komitmen SMPN 24 Padang.
+            Fondasi dan komitmen yang menjadi landasan SMPN 24 Padang.
           </p>
         </div>
-        <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-5">
-          <div className="lg:col-span-3">
-            <h3 className="font-headline text-2xl font-bold text-primary">Sejarah Singkat</h3>
-            <p className="mt-4 text-foreground/80">{about.history}</p>
-          </div>
-          <div className="lg:col-span-2">
+        <div className="mt-12 flex justify-center">
+          <div className="w-full max-w-4xl">
             <Card className="h-full bg-primary/5">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <Target className="h-8 w-8 text-accent" />
-                  <h4 className="font-headline text-xl font-bold text-primary">Visi</h4>
+              <CardContent className="grid grid-cols-1 gap-8 p-6 md:grid-cols-2 md:p-8">
+                <div>
+                    <div className="flex items-center gap-4">
+                      <Target className="h-8 w-8 text-accent" />
+                      <h4 className="font-headline text-xl font-bold text-primary">Visi</h4>
+                    </div>
+                    <p className="mt-2 text-muted-foreground">{about.vision}</p>
                 </div>
-                <p className="mt-2 text-sm text-muted-foreground">{about.vision}</p>
-                
-                <div className="mt-6 flex items-center gap-4">
-                  <Book className="h-8 w-8 text-accent" />
-                  <h4 className="font-headline text-xl font-bold text-primary">Misi</h4>
-                </div>
-                 <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
-                    {about.mission.slice(0, 2).map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                  <Button asChild variant="link" className="mt-4 p-0 text-accent hover:text-accent/80">
-                      <Link href="/profile/vision-mission">
-                          Baca Selengkapnya <ArrowRight className="ml-1 h-4 w-4" />
-                      </Link>
-                  </Button>
+                <div>
+                    <div className="flex items-center gap-4">
+                      <Book className="h-8 w-8 text-accent" />
+                      <h4 className="font-headline text-xl font-bold text-primary">Misi</h4>
+                    </div>
+                     <ul className="mt-2 list-disc space-y-2 pl-5 text-muted-foreground">
+                        {about.mission.slice(0, 3).map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))}
+                      </ul>
+                      <Button asChild variant="link" className="mt-4 p-0 text-accent hover:text-accent/80">
+                          <Link href="/profile/vision-mission">
+                              Baca Selengkapnya <ArrowRight className="ml-1 h-4 w-4" />
+                          </Link>
+                      </Button>
+                  </div>
               </CardContent>
             </Card>
           </div>
@@ -333,3 +332,5 @@ export default async function Home() {
     </div>
   );
 }
+
+    
