@@ -542,7 +542,7 @@ const SidebarMenuButton = React.forwardRef<
   React.ComponentProps<"button"> & {
     asChild?: boolean;
     isActive?: boolean;
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>;
+    tooltip?: React.ReactNode | Omit<React.ComponentPropsWithoutRef<typeof TooltipContent>, "children">;
     href?: string;
     icon?: React.ReactNode;
     children?: React.ReactNode;
@@ -554,7 +554,7 @@ const SidebarMenuButton = React.forwardRef<
       isActive = false,
       variant = "default",
       size = "default",
-      tooltip,
+      tooltip: tooltipProp,
       className,
       href,
       icon,
@@ -587,23 +587,21 @@ const SidebarMenuButton = React.forwardRef<
         {buttonContent}
       </Comp>
     );
+    
+    const tooltipContent = typeof tooltipProp === "object" && tooltipProp !== null && "children" in tooltipProp ? tooltipProp.children : tooltipProp;
+    const tooltipProps = typeof tooltipProp === "object" && tooltipProp !== null && "children" in tooltipProp ? { ...tooltipProp } : {};
+    if (typeof tooltipProp === "object" && tooltipProp !== null && "children" in tooltipProps) {
+        delete (tooltipProps as any).children;
+    }
 
-    if (!tooltip && state !== "collapsed") {
-      tooltip = children as string;
+
+    if (!tooltipProp && state === 'expanded') {
+      return button;
     }
     
-    if (!tooltip) {
-        return button;
+    if (state === 'expanded' && !isMobile) {
+      return button;
     }
-
-    if (typeof tooltip === "string") {
-      tooltip = {
-        children: tooltip,
-      };
-    }
-
-    const { children: tooltipChildren, ...tooltipProps } = tooltip;
-
 
     return (
       <Tooltip>
@@ -611,10 +609,9 @@ const SidebarMenuButton = React.forwardRef<
         <TooltipContent
           side="right"
           align="center"
-          hidden={(state !== "collapsed" && !isMobile) || !tooltip}
           {...tooltipProps}
         >
-          {tooltipChildren}
+          {tooltipContent || children}
         </TooltipContent>
       </Tooltip>
     );
