@@ -56,7 +56,7 @@ import {
   deleteAchievement,
   getAchievements,
 } from "./actions";
-import { type Achievement } from "@prisma/client";
+import { type Achievement } from "./schema";
 
 function AchievementForm({
   action,
@@ -172,7 +172,7 @@ export default function AchievementsAdminPage() {
     useState<Achievement | null>(null);
 
   useEffect(() => {
-    getAchievements().then(setAchievements);
+    getAchievements().then((data) => setAchievements(data as Achievement[]));
   }, []);
   
   const { toast } = useToast();
@@ -229,7 +229,7 @@ export default function AchievementsAdminPage() {
               action={createAchievement}
               onClose={() => {
                 setAddOpen(false);
-                getAchievements().then(setAchievements);
+                getAchievements().then((data) => setAchievements(data as Achievement[]));
               }}
             />
           </DialogContent>
@@ -310,7 +310,7 @@ export default function AchievementsAdminPage() {
               onClose={() => {
                 setEditOpen(false);
                 setSelectedAchievement(null);
-                getAchievements().then(setAchievements);
+                getAchievements().then((data) => setAchievements(data as Achievement[]));
               }}
             />
           )}

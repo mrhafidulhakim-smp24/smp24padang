@@ -1,14 +1,6 @@
 
 "use server";
 
-import { z } from "zod";
-
-export const AchievementSchema = z.object({
-  title: z.string().min(3, "Judul minimal 3 karakter"),
-  student: z.string().min(3, "Siswa/Tim minimal 3 karakter"),
-  description: z.string().min(10, "Deskripsi minimal 10 karakter"),
-});
-
 const mockAchievements = [
     { id: '1', title: 'Juara 1 Olimpiade Sains Nasional', student: 'Andi Pratama', description: 'Meraih medali emas dalam kompetisi sains paling bergengsi di Indonesia.', imageUrl: 'https://placehold.co/600x400.png', createdAt: new Date() },
     { id: '2', title: 'Juara 2 Lomba Debat Bahasa Inggris', student: 'Tim Debat Bahasa Inggris', description: 'Menunjukkan kemampuan argumentasi dan bahasa yang luar biasa di tingkat provinsi.', imageUrl: 'https://placehold.co/600x400.png', createdAt: new Date() },
