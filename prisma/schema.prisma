@@ -3,13 +3,13 @@
 
 generator client {
   provider        = "prisma-client-js"
-  binaryTargets   = ["native", "linux-musl"]
+  binaryTargets   = ["linux-musl"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Banner {
@@ -25,7 +25,7 @@ model Banner {
 model NewsArticle {
   id          String   @id @default(cuid())
   title       String
-  description String   @db.Text
+  description String
   date        DateTime
   imageUrl    String?
   hint        String?
@@ -45,12 +45,10 @@ model Achievement {
 }
 
 model Profile {
-  id                String   @id @default(cuid())
-  principalName     String
-  principalWelcome  String   @db.Text
-  principalImageUrl String?
-  vision            String   @db.Text
-  mission           String   @db.Text
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  principalName      String
+  principalWelcome   String   @db.Text
+  principalImageUrl  String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
