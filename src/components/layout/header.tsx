@@ -75,11 +75,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       {/* Top Bar for Contact Info */}
       <div className="hidden bg-primary/90 text-primary-foreground lg:block">
-        <div className="container mx-auto flex h-10 items-center justify-between px-4 text-sm">
+        <div className="container mx-auto flex h-8 items-center justify-between px-4 text-sm">
             <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4" />
-                    <span>Cerdas, Terampil dan Berbudidaya Lingkungan</span>
+                    <span>Jl. Bypass, Lubuk Begalung, Padang</span>
                 </div>
             </div>
             <div className="flex items-center gap-6">
