@@ -29,7 +29,8 @@ import {
   Users,
   GalleryHorizontal,
   FileBadge,
-  Network
+  Network,
+  BarChart3
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,7 @@ export default function AdminLayout({
   const menuItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/banner", label: "Banner", icon: ImageIcon },
+    { href: "/admin/statistics", label: "Statistik", icon: BarChart3 },
     { href: "/admin/news", label: "Berita", icon: Newspaper },
     { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
     {

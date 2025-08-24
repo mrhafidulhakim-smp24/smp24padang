@@ -1,12 +1,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
+import { ArrowRight, BookOpen, Sparkles, ShieldCheck, School, Users, UserCheck, BookCopy, Microscope, Library, Dumbbell } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { getBanners, getLatestNews, getProfile } from './actions';
+import { getBanners, getLatestNews, getProfile, getStatistics, getFacilities } from './actions';
 
 async function Announcement() {
   const latestNews = await getLatestNews();
@@ -67,6 +67,78 @@ async function Announcement() {
   );
 }
 
+async function Statistics() {
+  const stats = await getStatistics();
+  const statistics = [
+    { id: 'classrooms', value: stats.classrooms, label: 'Ruang Kelas', icon: School },
+    { id: 'students', value: stats.students, label: 'Jumlah Siswa', icon: Users },
+    { id: 'teachers', value: stats.teachers, label: 'Pendidik', icon: UserCheck },
+    { id: 'staff', value: stats.staff, label: 'Tenaga Pendidik', icon: BookCopy },
+  ];
+
+  return (
+     <section className="bg-primary/5 py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Statistik Data Sekolah</h2>
+            <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+              Sekilas data mengenai sumber daya di sekolah kami.
+            </p>
+          </div>
+          <div className="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4">
+            {statistics.map((stat) => (
+              <Card key={stat.id} className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                <CardHeader className="items-center">
+                  <div className="rounded-full bg-accent/20 p-4">
+                    <stat.icon className="h-10 w-10 text-accent" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-4xl font-bold text-primary">{stat.value}</p>
+                    <p className="mt-2 text-muted-foreground">{stat.label}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+  )
+}
+
+async function Facilities() {
+    const facilities = await getFacilities();
+
+    return (
+        <section className="py-16 md:py-24">
+            <div className="container mx-auto px-4">
+                <div className="text-center">
+                    <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Fasilitas Sekolah</h2>
+                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+                        Lingkungan belajar yang lengkap dan modern untuk mendukung potensi siswa.
+                    </p>
+                </div>
+                <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {facilities.map((facility) => (
+                        <div key={facility.id} className="group relative overflow-hidden rounded-lg shadow-lg">
+                             <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <Image 
+                                src={facility.imageUrl}
+                                alt={facility.name}
+                                width={600}
+                                height={400}
+                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 z-20 flex items-end p-6">
+                                <h3 className="font-headline text-xl font-bold text-white shadow-black drop-shadow-lg">{facility.name}</h3>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )
+}
+
 export default async function Home() {
   const banners = await getBanners();
   const profile = await getProfile();
@@ -125,17 +197,17 @@ export default async function Home() {
 
       {/* Welcome from Principal Section */}
       <section className="bg-background py-16 md:py-24">
-        <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
-          <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-xl">
+        <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2 lg:grid-cols-5">
+          <div className="relative h-80 w-full overflow-hidden rounded-lg shadow-xl lg:col-span-2">
             <Image 
               src={profile?.principalImageUrl || "https://placehold.co/600x800.png"} 
               alt="Principal" 
               fill 
-              style={{objectFit: 'cover'}}
+              style={{objectFit: 'cover', objectPosition: 'top'}}
               className="transition-transform duration-500 hover:scale-110"
             />
           </div>
-          <div>
+          <div className="lg:col-span-3">
             <h2 className="font-headline text-3xl font-bold text-primary">Sambutan Kepala Sekolah</h2>
              <div className="mt-4 flex items-center gap-3 rounded-lg bg-accent/80 p-3 text-accent-foreground dark:bg-accent/90">
                <ShieldCheck className="h-6 w-6 flex-shrink-0" />
@@ -157,64 +229,14 @@ export default async function Home() {
       {/* Announcements Section */}
       <Announcement />
 
-      {/* Pillars Section */}
-      <section className="bg-primary/5 py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pilar Keunggulan Kami</h2>
-            <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-              Membangun fondasi yang kuat untuk masa depan setiap siswa.
-            </p>
-          </div>
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
-            <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-              <CardHeader className="items-center">
-                <div className="rounded-full bg-accent/20 p-4">
-                  <BookOpen className="h-10 w-10 text-accent" />
-                </div>
-                <CardTitle className="font-headline pt-4 text-primary">Kurikulum Merdeka & Inovatif</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Mengadaptasi kurikulum nasional dengan pembelajaran berbasis proyek dan teknologi untuk kreativitas.</p>
-                <Button asChild variant="outline" className="mt-4">
-                   <Link href="/academics">Jelajahi Kurikulum</Link>
-                </Button>
-              </CardContent>
-            </Card>
-            <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-              <CardHeader className="items-center">
-                <div className="rounded-full bg-accent/20 p-4">
-                  <Sparkles className="h-10 w-10 text-accent" />
-                </div>
-                <CardTitle className="font-headline pt-4 text-primary">Pengembangan Karakter & Bakat</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Membentuk karakter mulia dan menggali potensi siswa melalui beragam kegiatan ekstrakurikuler.</p>
-                 <Button asChild variant="outline" className="mt-4">
-                   <Link href="/profile/extracurricular">Lihat Kegiatan</Link>
-                </Button>
-              </CardContent>
-            </Card>
-            <Card className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-              <CardHeader className="items-center">
-                <div className="rounded-full bg-accent/20 p-4">
-                  <ShieldCheck className="h-10 w-10 text-accent" />
-                </div>
-                <CardTitle className="font-headline pt-4 text-primary">Lingkungan Belajar Mendukung</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Menyediakan fasilitas modern dan komunitas sekolah yang aman, nyaman, dan inklusif bagi semua.</p>
-                 <Button asChild variant="outline" className="mt-4">
-                   <Link href="/profile/vision-mission">Pahami Nilai Kami</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+      {/* Statistics Section */}
+      <Statistics />
+
+      {/* Facilities Section */}
+      <Facilities />
 
       {/* Latest News Section */}
-      <section className="py-16 md:py-24">
+      <section className="bg-primary/5 py-16 md:py-24">
         <div className="container mx-auto px-4">
           <h2 className="font-headline mb-8 text-center text-3xl font-bold text-primary md:text-4xl">
             Berita Terbaru

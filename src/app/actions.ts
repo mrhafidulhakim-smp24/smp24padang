@@ -20,6 +20,19 @@ const mockProfile = {
     principalImageUrl: 'https://placehold.co/600x800.png',
 };
 
+const mockStatistics = {
+    classrooms: 24,
+    students: 773,
+    teachers: 30,
+    staff: 12,
+};
+
+const mockFacilities = [
+    { id: '1', name: 'Laboratorium Komputer', imageUrl: 'https://placehold.co/600x400.png' },
+    { id: '2', name: 'Perpustakaan', imageUrl: 'https://placehold.co/600x400.png' },
+    { id: '3', name: 'Lapangan Olahraga', imageUrl: 'https://placehold.co/600x400.png' },
+];
+
 export async function getBanners() {
   return mockBanners;
 }
@@ -30,4 +43,12 @@ export async function getLatestNews() {
 
 export async function getProfile() {
     return mockProfile;
+}
+
+export async function getStatistics() {
+    return mockStatistics;
+}
+
+export async function getFacilities() {
+    return mockFacilities;
 }
