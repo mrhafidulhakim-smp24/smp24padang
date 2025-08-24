@@ -1,27 +1,139 @@
 
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { AlertTriangle } from 'lucide-react';
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarTrigger,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
+} from "@/components/ui/sidebar";
+import Image from "next/image";
+import {
+  LayoutDashboard,
+  Newspaper,
+  Trophy,
+  Landmark,
+  Image as ImageIcon,
+  ChevronDown,
+} from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const menuItems = [
+    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/admin/banner", label: "Banner", icon: ImageIcon },
+    { href: "/admin/news", label: "Berita", icon: Newspaper },
+    { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
+    {
+      label: "Profil",
+      icon: Landmark,
+      subItems: [
+        { href: "/admin/profile", label: "Sekolah" },
+        { href: "/admin/profile/vision-mission", label: "Visi & Misi" },
+        { href: "/admin/profile/extracurricular", label: "Ekskul" },
+        { href: "/admin/profile/uniform", label: "Seragam" },
+      ],
+    },
+    { href: "/admin/academics", label: "Akademik" },
+    { href: "/admin/staff", label: "Guru & Staf" },
+    { href: "/admin/gallery", label: "Galeri" },
+    { href: "/admin/accreditation", label: "Akreditasi" },
+    { href: "/admin/organization", label: "Struktur Organisasi" },
+  ];
+
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-muted/40 p-4">
-      <div className="w-full max-w-md text-center">
-        <AlertTriangle className="mx-auto h-12 w-12 text-destructive" />
-        <h1 className="mt-4 font-headline text-3xl font-bold text-primary md:text-4xl">
-          Admin CMS Dinonaktifkan
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Fitur CMS dinonaktifkan sementara untuk perbaikan.
-        </p>
-        <Button asChild className="mt-8">
-          <Link href="/">Kembali ke Halaman Utama</Link>
-        </Button>
+    <SidebarProvider>
+      <div className="flex min-h-screen">
+        <Sidebar>
+          <SidebarHeader>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo.jpg"
+                alt="Logo"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+              <span className="text-lg font-semibold text-primary">
+                Admin CMS
+              </span>
+            </div>
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMenu>
+              {menuItems.map((item, index) =>
+                item.subItems ? (
+                  <SidebarMenuItem key={index}>
+                     <SidebarMenuButton
+                        icon={<item.icon />}
+                        isActive={item.subItems.some(sub => pathname.startsWith(sub.href))}
+                      >
+                       {item.label}
+                       <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform ease-in-out group-data-[state=open]:rotate-180" />
+                     </SidebarMenuButton>
+                    <SidebarMenuSub>
+                      {item.subItems.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.href}>
+                          <SidebarMenuSubButton
+                            href={subItem.href}
+                            isActive={pathname === subItem.href}
+                          >
+                            {subItem.label}
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </SidebarMenuItem>
+                ) : (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      href={item.href}
+                      icon={<item.icon />}
+                      isActive={pathname === item.href}
+                    >
+                      {item.label}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              )}
+            </SidebarMenu>
+          </SidebarContent>
+          <SidebarFooter>
+            <div className="flex items-center justify-between">
+              <Button variant="outline" asChild>
+                <Link href="/">Halaman Utama</Link>
+              </Button>
+              <ThemeToggle />
+            </div>
+          </SidebarFooter>
+        </Sidebar>
+        <main className="flex-1 p-4 md:p-8">
+          <div className="mb-4 flex items-center gap-4">
+             <SidebarTrigger className="md:hidden" />
+             <h1 className="text-2xl font-bold">
+               {menuItems.flatMap(i => i.subItems ? i.subItems : i).find(i => i.href === pathname)?.label || 'Dashboard'}
+             </h1>
+          </div>
+          {children}
+        </main>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

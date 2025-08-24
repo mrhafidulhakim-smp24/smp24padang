@@ -2,13 +2,14 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["linux-musl"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "linux-musl"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Banner {
@@ -18,6 +19,7 @@ model Banner {
   imageUrl    String?
   hint        String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model NewsArticle {
@@ -28,6 +30,7 @@ model NewsArticle {
   imageUrl    String?
   hint        String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Achievement {
@@ -38,13 +41,16 @@ model Achievement {
   imageUrl    String?
   hint        String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Profile {
-  id                  String   @id @default(cuid())
-  principalName       String
-  principalWelcome    String   @db.Text
-  principalImageUrl   String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                String   @id @default(cuid())
+  principalName     String
+  principalWelcome  String   @db.Text
+  principalImageUrl String?
+  vision            String   @db.Text
+  mission           String   @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

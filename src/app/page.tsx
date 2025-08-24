@@ -6,26 +6,24 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-
-const banners = [
-  { title: "Selamat Datang di SMPN 24 Padang", description: "Membentuk Generasi Unggul, Berkarakter, dan Inovatif.", imageUrl: "https://placehold.co/1920x1080.png", hint: "school building students" },
-  { title: "Penerimaan Siswa Baru 2024/2025", description: "Bergabunglah dengan komunitas pembelajar kami yang dinamis.", imageUrl: "https://placehold.co/1920x1080.png", hint: "students registration" },
-];
-
-const latestNews = [
-    { id: "1", date: new Date(), title: "Juara 1 Lomba Cerdas Cermat Tingkat Kota", description: "Tim cerdas cermat SMPN 24 Padang berhasil meraih Juara 1 dalam kompetisi tingkat kota, menunjukkan keunggulan akademik yang membanggakan.", imageUrl: "https://placehold.co/600x400.png", hint: "students winning trophy" },
-    { id: "2", date: new Date(), title: "Kegiatan Jumat Bersih dan Sehat", description: "Seluruh warga sekolah berpartisipasi dalam kegiatan Jumat Bersih untuk menciptakan lingkungan belajar yang nyaman dan asri.", imageUrl: "https://placehold.co/600x400.png", hint: "students cleaning school" },
-    { id: "3", date: new Date(), title: "Peringatan Hari Kemerdekaan RI ke-79", description: "Upacara bendera dan berbagai lomba meriahkan peringatan HUT RI ke-79 di SMPN 24 Padang, menumbuhkan semangat nasionalisme.", imageUrl: "https://placehold.co/600x400.png", hint: "flag ceremony" },
-];
-
-const profile = {
-  principalName: "Dr. Budi Santoso, M.Pd.",
-  principalWelcome: "Selamat datang di situs resmi SMPN 24 Padang. Kami berkomitmen untuk menyediakan lingkungan belajar yang menginspirasi, di mana setiap siswa dapat berkembang secara akademis, sosial, dan emosional. Dengan dukungan guru-guru yang berdedikasi dan fasilitas yang memadai, kami berupaya mencetak generasi penerus yang cerdas, berkarakter, dan siap menghadapi tantangan global. Mari bersama-sama kita wujudkan masa depan yang gemilang bagi putra-putri kita.",
-  principalImageUrl: "https://placehold.co/600x800.png",
-};
-
+import { getBanners, getLatestNews, getProfile } from './actions';
 
 async function Announcement() {
+  const latestNews = await getLatestNews();
+  
+  if (!latestNews || latestNews.length === 0) {
+    return (
+      <section className="bg-background py-16 md:py-24">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pengumuman Terbaru</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+            Saat ini belum ada pengumuman terbaru. Silakan periksa kembali nanti.
+          </p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="bg-background py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -70,6 +68,9 @@ async function Announcement() {
 }
 
 export default async function Home() {
+  const banners = await getBanners();
+  const profile = await getProfile();
+  const latestNews = await getLatestNews();
 
   const marqueeItems = [
       { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
