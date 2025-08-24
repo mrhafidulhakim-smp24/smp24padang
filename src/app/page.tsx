@@ -3,10 +3,60 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, Sparkles, ShieldCheck, School, Users, UserCheck, BookCopy, Microscope, Library, Dumbbell } from 'lucide-react';
+import { ArrowRight, BookOpen, ShieldCheck, School, Users, UserCheck, BookCopy, Target, Book } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { getBanners, getLatestNews, getProfile, getStatistics, getFacilities } from './actions';
+import { getBanners, getLatestNews, getProfile, getStatistics, getFacilities, getAbout } from './actions';
+
+async function AboutUs() {
+  const about = await getAbout();
+
+  return (
+    <section className="bg-background py-16 md:py-24">
+      <div className="container mx-auto px-4">
+        <div className="text-center">
+          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Tentang Kami</h2>
+          <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+            Mengenal lebih dekat fondasi, tujuan, dan komitmen SMPN 24 Padang.
+          </p>
+        </div>
+        <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <h3 className="font-headline text-2xl font-bold text-primary">Sejarah Singkat</h3>
+            <p className="mt-4 text-foreground/80">{about.history}</p>
+          </div>
+          <div className="lg:col-span-2">
+            <Card className="h-full bg-primary/5">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <Target className="h-8 w-8 text-accent" />
+                  <h4 className="font-headline text-xl font-bold text-primary">Visi</h4>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">{about.vision}</p>
+                
+                <div className="mt-6 flex items-center gap-4">
+                  <Book className="h-8 w-8 text-accent" />
+                  <h4 className="font-headline text-xl font-bold text-primary">Misi</h4>
+                </div>
+                 <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
+                    {about.mission.slice(0, 2).map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                  <Button asChild variant="link" className="mt-4 p-0 text-accent hover:text-accent/80">
+                      <Link href="/profile/vision-mission">
+                          Baca Selengkapnya <ArrowRight className="ml-1 h-4 w-4" />
+                      </Link>
+                  </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
 async function Announcement() {
   const latestNews = await getLatestNews();
@@ -196,7 +246,7 @@ export default async function Home() {
       </section>
 
       {/* Welcome from Principal Section */}
-      <section className="bg-background py-16 md:py-24">
+      <section className="bg-primary/5 py-16 md:py-24">
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2 lg:grid-cols-5">
           <div className="relative h-80 w-full overflow-hidden rounded-lg shadow-xl lg:col-span-2">
             <Image 
@@ -225,6 +275,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* About Us Section */}
+      <AboutUs />
       
       {/* Announcements Section */}
       <Announcement />

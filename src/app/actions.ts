@@ -33,6 +33,17 @@ const mockFacilities = [
     { id: '3', name: 'Lapangan Olahraga', imageUrl: 'https://placehold.co/600x400.png' },
 ];
 
+const mockAbout = {
+    history: "Didirikan dengan semangat untuk mencerdaskan kehidupan bangsa, SMPN 24 Padang telah menjadi pilar pendidikan di komunitas kami selama beberapa dekade. Kami berkomitmen untuk terus berinovasi dalam metode pengajaran dan fasilitas, memastikan setiap siswa mendapatkan pengalaman belajar terbaik. Pengakuan sebagai Sekolah Adiwiyata Nasional menjadi bukti nyata dedikasi kami dalam menciptakan lingkungan belajar yang tidak hanya unggul secara akademik, tetapi juga peduli dan berbudaya lingkungan.",
+    vision: "Menjadi lembaga pendidikan terkemuka yang diakui karena memberdayakan siswa untuk menjadi warga dunia yang welas asih, inovatif, dan bertanggung jawab.",
+    mission: [
+        "Menyediakan pendidikan berkualitas tinggi dan komprehensif yang memupuk rasa ingin tahu intelektual.",
+        "Membina budaya saling menghormati, berintegritas, dan bertanggung jawab sosial.",
+        "Membekali siswa dengan keterampilan dan pola pikir untuk berhasil di dunia yang cepat berubah.",
+        "Menciptakan komunitas siswa, orang tua, dan pendidik yang kolaboratif dan inklusif.",
+    ],
+};
+
 export async function getBanners() {
   return mockBanners;
 }
@@ -51,4 +62,8 @@ export async function getStatistics() {
 
 export async function getFacilities() {
     return mockFacilities;
+}
+
+export async function getAbout() {
+    return mockAbout;
 }
