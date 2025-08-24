@@ -2,18 +2,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Award } from "lucide-react";
-
-const achievements = [
-  { student: "Tim Robotik SMPN 24", title: "Juara 1 Nasional Kontes Robot", description: "Meraih medali emas dalam kompetisi robotik tingkat nasional.", imageUrl: "https://placehold.co/600x400.png", hint: "robotics team" },
-  { student: "Andi Pratama", title: "Olimpiade Sains Nasional", description: "Mendapatkan medali perak bidang Fisika.", imageUrl: "https://placehold.co/600x400.png", hint: "science olympiad" },
-  { student: "Tim Basket Putri", title: "Juara Provinsi", description: "Menjadi juara pertama di kejuaraan basket antar sekolah se-provinsi.", imageUrl: "https://placehold.co/600x400.png", hint: "basketball trophy" },
-  { student: "Siti Aisyah", title: "Lomba Menulis Puisi", description: "Juara 2 dalam ajang lomba menulis puisi tingkat nasional.", imageUrl: "https://placehold.co/600x400.png", hint: "writing poetry" },
-  { student: "Kelompok Paduan Suara", title: "Festival Paduan Suara Internasional", description: "Mendapatkan predikat Gold dalam festival di Singapura.", imageUrl: "https://placehold.co/600x400.png", hint: "school choir" },
-  { student: "Rina Wijaya", title: "Kejuaraan Catur", description: "Meraih juara 3 pada kejuaraan catur tingkat provinsi.", imageUrl: "https://placehold.co/600x400.png", hint: "playing chess" },
-];
-
+import { getAchievements } from "./actions";
 
 export default async function AchievementsPage() {
+  const achievements = await getAchievements();
+  
   return (
     <div className="bg-background">
       <div className="container mx-auto px-4 py-12 md:py-24">
@@ -36,7 +29,6 @@ export default async function AchievementsPage() {
                 width={600}
                 height={400}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                data-ai-hint={achievement.hint || "achievement"}
               />
               <div className="absolute inset-0 z-20 flex flex-col justify-end p-6">
                  <div className="mb-4 h-12 w-12 rounded-full bg-accent/20 p-3 ring-4 ring-accent/30 transition-all duration-500 group-hover:bg-accent group-hover:ring-accent">

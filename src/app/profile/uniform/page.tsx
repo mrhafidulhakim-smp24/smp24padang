@@ -7,37 +7,31 @@ const uniforms = [
     day: "Senin",
     description: "Seragam Putih Biru lengkap dengan atribut sekolah.",
     image: "https://placehold.co/400x600.png",
-    hint: "school uniform blue",
   },
   {
     day: "Selasa",
     description: "Seragam Putih Biru lengkap dengan atribut sekolah.",
     image: "https://placehold.co/400x600.png",
-    hint: "school uniform blue",
   },
   {
     day: "Rabu",
     description: "Seragam Batik identitas sekolah.",
     image: "https://placehold.co/400x600.png",
-    hint: "batik uniform",
   },
   {
     day: "Kamis",
     description: "Seragam Batik identitas sekolah.",
     image: "https://placehold.co/400x600.png",
-    hint: "batik uniform",
   },
   {
     day: "Jumat",
     description: "Seragam Pramuka lengkap.",
     image: "https://placehold.co/400x600.png",
-    hint: "scout uniform",
   },
   {
     day: "Seragam Olahraga",
     description: "Digunakan pada saat pelajaran Pendidikan Jasmani.",
     image: "https://placehold.co/400x600.png",
-    hint: "sport uniform",
   },
 ];
 
@@ -63,7 +57,6 @@ export default function UniformPage() {
                   alt={uniform.day}
                   fill
                   className="object-cover"
-                  data-ai-hint={uniform.hint}
                 />
               </div>
             </CardHeader>

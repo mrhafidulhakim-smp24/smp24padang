@@ -1,129 +1,35 @@
+
 "use server";
 
 import { z } from "zod";
-import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
-import { put, del } from "@vercel/blob";
-import { Prisma } from "@prisma/client";
-import { getAchievements } from "@/app/achievements/actions";
 
 export const AchievementSchema = z.object({
   title: z.string().min(3, "Judul minimal 3 karakter"),
   student: z.string().min(3, "Siswa/Tim minimal 3 karakter"),
   description: z.string().min(10, "Deskripsi minimal 10 karakter"),
-  hint: z.string().optional(),
 });
 
-async function uploadImage(image: File) {
-  const blob = await put(image.name, image, {
-    access: "public",
-  });
-  return blob.url;
+const mockAchievements = [
+    { id: '1', title: 'Juara 1 Olimpiade Sains Nasional', student: 'Andi Pratama', description: 'Meraih medali emas dalam kompetisi sains paling bergengsi di Indonesia.', imageUrl: 'https://placehold.co/600x400.png', createdAt: new Date() },
+    { id: '2', title: 'Juara 2 Lomba Debat Bahasa Inggris', student: 'Tim Debat Bahasa Inggris', description: 'Menunjukkan kemampuan argumentasi dan bahasa yang luar biasa di tingkat provinsi.', imageUrl: 'https://placehold.co/600x400.png', createdAt: new Date() },
+    { id: '3', title: 'Pameran Seni Rupa Tingkat Kota', student: 'Siti Aisyah', description: 'Karya lukisnya terpilih untuk dipamerkan dalam pameran seni tingkat kota.', imageUrl: 'https://placehold.co/600x400.png', createdAt: new Date() },
+];
+
+export async function getAchievements() {
+  return mockAchievements;
 }
 
 export async function createAchievement(formData: FormData) {
-  const validatedFields = AchievementSchema.safeParse({
-    title: formData.get("title"),
-    student: formData.get("student"),
-    description: formData.get("description"),
-    hint: formData.get("hint"),
-  });
-
-  if (!validatedFields.success) {
-    return { success: false, message: "Validasi gagal", errors: validatedFields.error.flatten().fieldErrors };
-  }
-
-  const image = formData.get("image") as File;
-  let imageUrl;
-
-  if (image && image.size > 0) {
-    imageUrl = await uploadImage(image);
-  }
-
-  try {
-    const newAchievement = await prisma.achievement.create({
-      data: {
-        ...validatedFields.data,
-        imageUrl,
-      },
-    });
-    revalidatePath("/admin/achievements");
-    revalidatePath("/achievements");
-    return { success: true, data: newAchievement };
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      return { success: false, message: `Gagal menyimpan: ${e.message}` };
-    }
-    return { success: false, message: "Terjadi kesalahan pada server." };
-  }
+  console.log("Creating achievement (mock)", Object.fromEntries(formData));
+  return { success: true, message: "Prestasi berhasil ditambahkan (mock)." };
 }
 
 export async function updateAchievement(id: string, currentImageUrl: string | null, formData: FormData) {
-    const validatedFields = AchievementSchema.safeParse({
-        title: formData.get('title'),
-        student: formData.get('student'),
-        description: formData.get('description'),
-        hint: formData.get('hint'),
-    });
-
-    if (!validatedFields.success) {
-        return { success: false, message: 'Validasi gagal', errors: validatedFields.error.flatten().fieldErrors };
-    }
-
-    const image = formData.get('image') as File;
-    let newImageUrl;
-
-    try {
-        if (image && image.size > 0) {
-            // Hapus gambar lama jika ada
-            if (currentImageUrl) {
-                await del(currentImageUrl);
-            }
-            // Unggah gambar baru
-            newImageUrl = await uploadImage(image);
-        }
-
-        const updatedAchievement = await prisma.achievement.update({
-            where: { id },
-            data: {
-                ...validatedFields.data,
-                ...(newImageUrl && { imageUrl: newImageUrl }),
-            },
-        });
-
-        revalidatePath('/admin/achievements');
-        revalidatePath('/achievements');
-        return { success: true, data: updatedAchievement };
-    } catch (e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            return { success: false, message: `Gagal memperbarui: ${e.message}` };
-        }
-        return { success: false, message: 'Terjadi kesalahan pada server.' };
-    }
+    console.log(`Updating achievement ${id} (mock)`, Object.fromEntries(formData));
+    return { success: true, message: "Prestasi berhasil diperbarui (mock)." };
 }
-
 
 export async function deleteAchievement(id: string, imageUrl: string | null) {
-    try {
-        // Hapus gambar dari Vercel Blob jika ada
-        if (imageUrl) {
-            await del(imageUrl);
-        }
-        
-        await prisma.achievement.delete({
-            where: { id },
-        });
-
-        revalidatePath('/admin/achievements');
-        revalidatePath('/achievements');
-        return { success: true, message: 'Prestasi berhasil dihapus.' };
-    } catch (e) {
-         if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            return { success: false, message: `Gagal menghapus: ${e.message}` };
-        }
-        return { success: false, message: 'Terjadi kesalahan pada server.' };
-    }
+    console.log(`Deleting achievement ${id} (mock)`);
+    return { success: true, message: 'Prestasi berhasil dihapus (mock).' };
 }
-
-// Export getAchievements to be used in the page
-export { getAchievements };

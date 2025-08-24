@@ -3,12 +3,12 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 
 const galleryItems = [
-  { id: "1", imageUrl: "https://placehold.co/600x400.png", alt: "Kegiatan Belajar Mengajar di Kelas", category: "Akademik", hint: "classroom students" },
-  { id: "2", imageUrl: "https://placehold.co/600x400.png", alt: "Tim Basket Sekolah Merayakan Kemenangan", category: "Olahraga", hint: "basketball team celebration" },
-  { id: "3", imageUrl: "https://placehold.co/600x400.png", alt: "Pameran Seni Siswa", category: "Seni & Budaya", hint: "student art exhibition" },
-  { id: "4", imageUrl: "https://placehold.co/600x400.png", alt: "Siswa Melakukan Percobaan di Laboratorium Sains", category: "Sains", hint: "science lab students" },
-  { id: "5", imageUrl: "https://placehold.co/600x500.png", alt: "Upacara Bendera Hari Senin", category: "Kegiatan Sekolah", hint: "flag ceremony" },
-  { id: "6", imageUrl: "https://placehold.co/600x800.png", alt: "Perpustakaan Sekolah", category: "Fasilitas", hint: "school library" },
+  { id: "1", imageUrl: "https://placehold.co/600x400.png", alt: "Kegiatan Belajar Mengajar di Kelas", category: "Akademik" },
+  { id: "2", imageUrl: "https://placehold.co/600x400.png", alt: "Tim Basket Sekolah Merayakan Kemenangan", category: "Olahraga" },
+  { id: "3", imageUrl: "https://placehold.co/600x400.png", alt: "Pameran Seni Siswa", category: "Seni & Budaya" },
+  { id: "4", imageUrl: "https://placehold.co/600x400.png", alt: "Siswa Melakukan Percobaan di Laboratorium Sains", category: "Sains" },
+  { id: "5", imageUrl: "https://placehold.co/600x500.png", alt: "Upacara Bendera Hari Senin", category: "Kegiatan Sekolah" },
+  { id: "6", imageUrl: "https://placehold.co/600x800.png", alt: "Perpustakaan Sekolah", category: "Fasilitas" },
 ];
 
 
@@ -34,7 +34,6 @@ export default function GalleryPage() {
                   src={item.imageUrl}
                   alt={item.alt}
                   className="h-auto w-full transform transition-transform duration-300 group-hover:scale-105"
-                  data-ai-hint={item.hint || 'gallery image'}
                 />
              </Card>
              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">

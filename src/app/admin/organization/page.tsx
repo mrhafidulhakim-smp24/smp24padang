@@ -46,12 +46,11 @@ type OrgChart = {
   id: string;
   title: string;
   image: string;
-  hint: string;
 };
 
 const initialCharts: OrgChart[] = [
-  { id: "1", title: "Struktur Pimpinan Sekolah", image: "https://placehold.co/1200x800.png", hint: "organization chart" },
-  { id: "2", title: "Struktur Organisasi Siswa Intra Sekolah (OSIS)", image: "https://placehold.co/1200x800.png", hint: "organization chart" },
+  { id: "1", title: "Struktur Pimpinan Sekolah", image: "https://placehold.co/1200x800.png" },
+  { id: "2", title: "Struktur Organisasi Siswa Intra Sekolah (OSIS)", image: "https://placehold.co/1200x800.png" },
 ];
 
 export default function OrganizationAdminPage() {
@@ -68,7 +67,6 @@ export default function OrganizationAdminPage() {
       id: Date.now().toString(),
       title: formData.get("title") as string,
       image: "https://placehold.co/1200x800.png",
-      hint: "organization chart"
     };
     setCharts([newChart, ...charts]);
     setAddOpen(false);

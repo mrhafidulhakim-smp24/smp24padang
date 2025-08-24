@@ -49,13 +49,12 @@ type Extracurricular = {
   category: string;
   description: string;
   image: string;
-  hint: string;
 };
 
 const initialData: Extracurricular[] = [
-    { id: "1", name: "Sepak Bola", category: "Olahraga", description: "Mengembangkan bakat sepak bola dan kerja sama tim.", image: "https://placehold.co/600x400.png", hint: "students playing soccer" },
-    { id: "2", name: "Tari Tradisional", category: "Seni & Budaya", description: "Mempelajari dan melestarikan seni tari daerah.", image: "https://placehold.co/600x400.png", hint: "students dancing" },
-    { id: "3", name: "Kelompok Ilmiah Remaja (KIR)", category: "Akademik & Sains", description: "Mendorong penelitian dan inovasi di kalangan siswa.", image: "https://placehold.co/600x400.png", hint: "students science club" },
+    { id: "1", name: "Sepak Bola", category: "Olahraga", description: "Mengembangkan bakat sepak bola dan kerja sama tim.", image: "https://placehold.co/600x400.png" },
+    { id: "2", name: "Tari Tradisional", category: "Seni & Budaya", description: "Mempelajari dan melestarikan seni tari daerah.", image: "https://placehold.co/600x400.png" },
+    { id: "3", name: "Kelompok Ilmiah Remaja (KIR)", category: "Akademik & Sains", description: "Mendorong penelitian dan inovasi di kalangan siswa.", image: "https://placehold.co/600x400.png" },
 ];
 
 export default function ExtracurricularAdminPage() {
@@ -74,7 +73,6 @@ export default function ExtracurricularAdminPage() {
       category: formData.get("category") as string,
       description: formData.get("description") as string,
       image: "https://placehold.co/600x400.png", // Placeholder
-      hint: "extracurricular activity"
     };
     setActivities([newData, ...activities]);
     setAddOpen(false);
@@ -261,5 +259,3 @@ export default function ExtracurricularAdminPage() {
     </div>
   );
 }
-
-    

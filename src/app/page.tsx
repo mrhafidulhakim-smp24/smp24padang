@@ -6,26 +6,11 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { getBanners, getLatestNews, getProfile } from './actions';
 
-const banners = [
-    { title: 'Selamat Datang di SMPN 24 Padang', description: 'Membina Pikiran, Membentuk Masa Depan.', imageUrl: 'https://placehold.co/1920x1080.png', hint: 'school building' },
-    { title: 'Penerimaan Siswa Baru 2024/2025', description: 'Bergabunglah dengan komunitas pembelajar kami yang dinamis.', imageUrl: 'https://placehold.co/1920x1080.png', hint: 'students smiling' },
-];
+async function Announcement() {
+  const latestNews = await getLatestNews();
 
-const latestNews = [
-    { id: "1", date: new Date(), title: "Juara 1 Lomba Cerdas Cermat", description: "Tim kami berhasil meraih juara pertama dalam kompetisi cerdas cermat tingkat kota.", imageUrl: "https://placehold.co/600x400.png" },
-    { id: "2", date: new Date(), title: "Kegiatan Jumat Bersih", description: "Seluruh warga sekolah berpartisipasi dalam kegiatan Jumat Bersih untuk menciptakan lingkungan yang sehat.", imageUrl: "https://placehold.co/600x400.png" },
-    { id: "3", date: new Date(), title: "Peringatan Hari Kemerdekaan", description: "Merayakan semangat kemerdekaan dengan berbagai lomba dan upacara bendera.", imageUrl: "https://placehold.co/600x400.png" },
-];
-
-const profile = {
-    principalName: "Dr. Budi Santoso, M.Pd.",
-    principalWelcome: "Selamat datang di situs resmi SMPN 24 Padang. Kami berkomitmen untuk menyediakan lingkungan belajar yang menginspirasi, di mana setiap siswa dapat berkembang secara akademis, sosial, dan emosional.",
-    principalImageUrl: "https://placehold.co/600x800.png",
-};
-
-
-function Announcement() {
   if (!latestNews || latestNews.length === 0) {
     return (
       <section className="bg-background py-16 md:py-24">
@@ -83,6 +68,10 @@ function Announcement() {
 }
 
 export default async function Home() {
+  const banners = await getBanners();
+  const profile = await getProfile();
+  const latestNews = await getLatestNews();
+
   const marqueeItems = [
       { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
       { type: 'Berita', text: 'Pendaftaran siswa baru tahun ajaran 2024/2025 telah dibuka.' },
@@ -110,7 +99,6 @@ export default async function Home() {
                     fill
                     style={{objectFit: 'cover'}}
                     className="z-0"
-                    data-ai-hint={banner.hint || "school event"}
                     priority={index === 0}
                   />
                   <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white p-4">
@@ -144,7 +132,6 @@ export default async function Home() {
               alt="Principal" 
               fill 
               style={{objectFit: 'cover'}}
-              data-ai-hint="professional portrait"
               className="transition-transform duration-500 hover:scale-110"
             />
           </div>
@@ -243,7 +230,6 @@ export default async function Home() {
                       width={600}
                       height={400}
                       className="h-56 w-full object-cover"
-                      data-ai-hint={"news article"}
                     />
                   </Link>
                 </CardHeader>

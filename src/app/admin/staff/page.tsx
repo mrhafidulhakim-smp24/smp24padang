@@ -150,15 +150,6 @@ function StaffForm({
           defaultValue={initialData?.subject || ""}
         />
       </div>
-      <div>
-        <Label htmlFor="hint">Petunjuk AI (opsional)</Label>
-        <Input
-          id="hint"
-          name="hint"
-          defaultValue={initialData?.hint || ""}
-          placeholder="Contoh: man portrait"
-        />
-      </div>
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>
           Batal

@@ -58,7 +58,6 @@ export default async function AcademicsPage() {
                   width={1200} 
                   height={400} 
                   className="mb-6 w-full rounded-lg object-cover" 
-                  data-ai-hint={academics.curriculumImageHint || "library books"}
                 />
               {curriculumParagraphs.map((p, i) => <p key={i}>{p}</p>)}
             </CardContent>
@@ -78,7 +77,6 @@ export default async function AcademicsPage() {
                 width={1200} 
                 height={400} 
                 className="mb-6 w-full rounded-lg object-cover" 
-                data-ai-hint={academics.structureImageHint || "school building"}
               />
               {structureParagraphs.map((p, i) => <p key={i}>{p}</p>)}
             </CardContent>

@@ -27,7 +27,6 @@ export default async function FacultyPage() {
                   alt={member.name} 
                   fill
                   objectFit="cover"
-                  data-ai-hint={member.hint || "portrait"}
                 />
               </div>
               <h3 className="mt-4 text-xl font-bold text-primary">{member.name}</h3>

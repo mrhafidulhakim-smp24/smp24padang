@@ -20,16 +20,15 @@ type Uniform = {
   day: string;
   description: string;
   image: string;
-  hint: string;
 };
 
 const initialUniforms: Uniform[] = [
-  { id: "1", day: "Senin", description: "Seragam Putih Biru lengkap.", image: "https://placehold.co/400x600.png", hint: "school uniform blue" },
-  { id: "2", day: "Selasa", description: "Seragam Putih Biru lengkap.", image: "https://placehold.co/400x600.png", hint: "school uniform blue" },
-  { id: "3", day: "Rabu", description: "Seragam Batik identitas sekolah.", image: "https://placehold.co/400x600.png", hint: "batik uniform" },
-  { id: "4", day: "Kamis", description: "Seragam Batik identitas sekolah.", image: "https://placehold.co/400x600.png", hint: "batik uniform" },
-  { id: "5", day: "Jumat", description: "Seragam Pramuka lengkap.", image: "https://placehold.co/400x600.png", hint: "scout uniform" },
-  { id: "6", day: "Olahraga", description: "Digunakan saat pelajaran Olahraga.", image: "https://placehold.co/400x600.png", hint: "sport uniform" },
+  { id: "1", day: "Senin", description: "Seragam Putih Biru lengkap.", image: "https://placehold.co/400x600.png" },
+  { id: "2", day: "Selasa", description: "Seragam Putih Biru lengkap.", image: "https://placehold.co/400x600.png" },
+  { id: "3", day: "Rabu", description: "Seragam Batik identitas sekolah.", image: "https://placehold.co/400x600.png" },
+  { id: "4", day: "Kamis", description: "Seragam Batik identitas sekolah.", image: "https://placehold.co/400x600.png" },
+  { id: "5", day: "Jumat", description: "Seragam Pramuka lengkap.", image: "https://placehold.co/400x600.png" },
+  { id: "6", day: "Olahraga", description: "Digunakan saat pelajaran Olahraga.", image: "https://placehold.co/400x600.png" },
 ];
 
 export default function UniformAdminPage() {

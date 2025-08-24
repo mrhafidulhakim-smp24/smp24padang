@@ -1,122 +1,31 @@
 
 "use server";
 
-import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
-import { put, del } from "@vercel/blob";
-import { Prisma } from "@prisma/client";
 import { StaffSchema } from "./schema";
 
-async function uploadImage(image: File) {
-  const blob = await put(image.name, image, {
-    access: "public",
-  });
-  return blob.url;
-}
+const mockStaff = [
+    { id: '1', name: 'Dr. H. Mardan, M.Pd.', position: 'Kepala Sekolah', subject: 'Manajerial', imageUrl: 'https://placehold.co/150x150.png', createdAt: new Date() },
+    { id: '2', name: 'Dra. Hj. Rita Hayati', position: 'Wakil Kepala Sekolah', subject: 'Kurikulum', imageUrl: 'https://placehold.co/150x150.png', createdAt: new Date() },
+    { id: '3', name: 'Budi Santoso, S.Pd.', position: 'Guru', subject: 'Matematika', imageUrl: 'https://placehold.co/150x150.png', createdAt: new Date() },
+    { id: '4', name: 'Siti Aminah, S.Kom.', position: 'Guru', subject: 'Informatika', imageUrl: 'https://placehold.co/150x150.png', createdAt: new Date() },
+];
 
 export async function createStaff(formData: FormData) {
-  const validatedFields = StaffSchema.safeParse({
-    name: formData.get("name"),
-    position: formData.get("position"),
-    subject: formData.get("subject"),
-    hint: formData.get("hint"),
-  });
-
-  if (!validatedFields.success) {
-    return { success: false, message: "Validasi gagal", errors: validatedFields.error.flatten().fieldErrors };
-  }
-
-  const image = formData.get("image") as File;
-  let imageUrl;
-
-  if (image && image.size > 0) {
-    imageUrl = await uploadImage(image);
-  }
-
-  try {
-    const newStaff = await prisma.staff.create({
-      data: {
-        ...validatedFields.data,
-        imageUrl,
-      },
-    });
-    revalidatePath("/admin/staff");
-    revalidatePath("/profile/faculty");
-    return { success: true, message: "Staf berhasil ditambahkan.", data: newStaff };
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      return { success: false, message: `Gagal menyimpan: ${e.message}` };
-    }
-    return { success: false, message: "Terjadi kesalahan pada server." };
-  }
+    console.log("Creating staff (mock)", Object.fromEntries(formData));
+    return { success: true, message: "Staf berhasil ditambahkan (mock)." };
 }
 
 export async function updateStaff(id: string, currentImageUrl: string | null, formData: FormData) {
-    const validatedFields = StaffSchema.safeParse({
-        name: formData.get('name'),
-        position: formData.get('position'),
-        subject: formData.get('subject'),
-        hint: formData.get('hint'),
-    });
-
-    if (!validatedFields.success) {
-        return { success: false, message: 'Validasi gagal', errors: validatedFields.error.flatten().fieldErrors };
-    }
-
-    const image = formData.get('image') as File;
-    let newImageUrl;
-
-    try {
-        if (image && image.size > 0) {
-            if (currentImageUrl) {
-                await del(currentImageUrl).catch(e => console.error("Failed to delete old image:", e));
-            }
-            newImageUrl = await uploadImage(image);
-        }
-
-        const updatedStaff = await prisma.staff.update({
-            where: { id },
-            data: {
-                ...validatedFields.data,
-                ...(newImageUrl && { imageUrl: newImageUrl }),
-            },
-        });
-
-        revalidatePath('/admin/staff');
-        revalidatePath('/profile/faculty');
-        return { success: true, message: "Data staf berhasil diperbarui.", data: updatedStaff };
-    } catch (e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            return { success: false, message: `Gagal memperbarui: ${e.message}` };
-        }
-        return { success: false, message: 'Terjadi kesalahan pada server.' };
-    }
+    console.log(`Updating staff ${id} (mock)`, Object.fromEntries(formData));
+    return { success: true, message: "Data staf berhasil diperbarui (mock)." };
 }
 
 
 export async function deleteStaff(id: string, imageUrl: string | null) {
-    try {
-        if (imageUrl) {
-            await del(imageUrl).catch(e => console.error("Failed to delete image from blob:", e));
-        }
-        
-        await prisma.staff.delete({
-            where: { id },
-        });
-
-        revalidatePath('/admin/staff');
-        revalidatePath('/profile/faculty');
-        return { success: true, message: 'Data staf berhasil dihapus.' };
-    } catch (e) {
-         if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            return { success: false, message: `Gagal menghapus: ${e.message}` };
-        }
-        return { success: false, message: 'Terjadi kesalahan pada server.' };
-    }
+    console.log(`Deleting staff ${id} (mock)`);
+    return { success: true, message: 'Data staf berhasil dihapus (mock).' };
 }
 
 export async function getStaff() {
-    return prisma.staff.findMany({
-        orderBy: { createdAt: 'asc' },
-    });
+    return mockStaff;
 }

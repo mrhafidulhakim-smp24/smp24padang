@@ -3,17 +3,16 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Calendar, UserCircle } from "lucide-react";
 
-const newsItems = [
-    { id: "1", date: new Date(), title: "Juara 1 Lomba Cerdas Cermat Tingkat Kota", description: "Tim cerdas cermat SMPN 24 Padang berhasil meraih Juara 1 dalam kompetisi tingkat kota, menunjukkan keunggulan akademik yang membanggakan. Kompetisi yang diikuti oleh puluhan sekolah terbaik ini menjadi bukti nyata dari kerja keras siswa dan bimbingan intensif para guru.\n\nKemenangan ini diharapkan dapat memotivasi siswa lain untuk terus berprestasi di berbagai bidang, baik akademik maupun non-akademik. Sekolah berkomitmen untuk terus mendukung pengembangan potensi setiap siswa secara maksimal.", imageUrl: "https://placehold.co/600x400.png", hint: "students winning trophy" },
-    { id: "2", date: new Date(), title: "Kegiatan Jumat Bersih dan Sehat", description: "Seluruh warga sekolah berpartisipasi dalam kegiatan Jumat Bersih untuk menciptakan lingkungan belajar yang nyaman dan asri. Kegiatan ini meliputi pembersihan ruang kelas, taman sekolah, dan area umum lainnya.\n\nSelain membersihkan lingkungan, kegiatan ini juga bertujuan untuk menumbuhkan rasa tanggung jawab dan kepedulian siswa terhadap kebersihan. Lingkungan yang bersih akan mendukung proses belajar mengajar yang lebih efektif.", imageUrl: "https://placehold.co/600x400.png", hint: "students cleaning school" },
-    { id: "3", date: new Date(), title: "Peringatan Hari Kemerdekaan RI ke-79", description: "Upacara bendera dan berbagai lomba meriahkan peringatan HUT RI ke-79 di SMPN 24 Padang, menumbuhkan semangat nasionalisme. Siswa-siswi antusias mengikuti berbagai perlombaan tradisional seperti panjat pinang, balap karung, dan tarik tambang.\n\nAcara ini tidak hanya menjadi ajang hiburan, tetapi juga sebagai sarana untuk mempererat tali persaudaraan antar siswa dan menanamkan nilai-nilai perjuangan para pahlawan.", imageUrl: "https://placehold.co/600x400.png", hint: "flag ceremony" },
-    { id: "4", date: new Date(), title: "Studi Tur Edukatif ke Museum Adityawarman", description: "Siswa kelas 8 melakukan studi tur ke Museum Adityawarman untuk mempelajari sejarah dan budaya Minangkabau secara langsung.", imageUrl: "https://placehold.co/600x400.png", hint: "students in museum" },
-    { id: "5", date: new Date(), title: "Pelatihan Kepemimpinan untuk Pengurus OSIS", description: "Pengurus OSIS periode baru mengikuti pelatihan kepemimpinan untuk meningkatkan kapasitas organisasi dan manajerial.", imageUrl: "https://placehold.co/600x400.png", hint: "leadership training" },
-    { id: "6", date: new Date(), title: "Pameran Karya Seni Siswa di Akhir Semester", description: "Kreativitas siswa dipamerkan dalam pameran seni rupa yang menampilkan lukisan, patung, dan kerajinan tangan.", imageUrl: "https://placehold.co/600x400.png", hint: "student art exhibition" },
+const mockNews = [
+    { id: '1', title: 'Lomba Cerdas Cermat Tingkat Kota', description: 'Siswa kami berhasil meraih juara 2 dalam Lomba Cerdas Cermat tingkat kota Padang. Prestasi ini merupakan buah dari kerja keras dan bimbingan para guru.\n\nKegiatan ini diikuti oleh puluhan sekolah dari seluruh penjuru kota, menunjukkan persaingan yang ketat dan semangat sportivitas yang tinggi.', date: new Date('2023-11-15'), imageUrl: 'https://placehold.co/1200x675.png' },
+    { id: '2', title: 'Kegiatan Jumat Bersih Lingkungan Sekolah', description: 'Dalam rangka menumbuhkan kepedulian terhadap lingkungan, kami mengadakan kegiatan Jumat Bersih yang diikuti oleh seluruh siswa dan guru. Para siswa dengan antusias membersihkan area kelas, halaman, dan taman sekolah.', date: new Date('2023-11-10'), imageUrl: 'https://placehold.co/1200x675.png' },
+    { id: '3', title: 'Peringatan Hari Pahlawan 10 November', description: 'Upacara bendera dan berbagai lomba diadakan untuk memperingati jasa para pahlawan yang telah berjuang untuk kemerdekaan Indonesia. Kegiatan ini bertujuan untuk menanamkan jiwa nasionalisme kepada para siswa.', date: new Date('2023-11-08'), imageUrl: 'https://placehold.co/1200x675.png' },
+    { id: '4', title: 'Studi Tur ke Museum Adityawarman', description: 'Siswa kelas 8 melakukan studi tur edukatif untuk mempelajari sejarah dan budaya Minangkabau secara langsung. Mereka sangat antusias melihat koleksi peninggalan sejarah yang ada.', date: new Date('2023-10-28'), imageUrl: 'https://placehold.co/1200x675.png' },
 ];
 
 async function getNewsArticle(id: string) {
-    return newsItems.find(item => item.id === id);
+    // In a real app, this would fetch from a database.
+    return mockNews.find(article => article.id === id);
 }
 
 export default async function NewsArticlePage({ params }: { params: { id: string } }) {
@@ -35,7 +34,6 @@ export default async function NewsArticlePage({ params }: { params: { id: string
               alt={article.title}
               fill
               className="object-cover"
-              data-ai-hint={article.hint || "news article"}
             />
           </div>
           

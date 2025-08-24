@@ -40,8 +40,6 @@ export default function AcademicsAdminPage() {
           curriculumDescription: data.curriculumDescription,
           structureTitle: data.structureTitle,
           structureDescription: data.structureDescription,
-          curriculumImageHint: data.curriculumImageHint,
-          structureImageHint: data.structureImageHint,
         });
       }
       setIsLoading(false);
@@ -85,8 +83,6 @@ export default function AcademicsAdminPage() {
           curriculumDescription: updatedData.curriculumDescription,
           structureTitle: updatedData.structureTitle,
           structureDescription: updatedData.structureDescription,
-          curriculumImageHint: updatedData.curriculumImageHint,
-          structureImageHint: updatedData.structureImageHint,
         });
       }
     } else {
@@ -168,10 +164,6 @@ export default function AcademicsAdminPage() {
               <Textarea id="curriculumDescription" rows={8} {...register('curriculumDescription')} />
                {errors.curriculumDescription && <p className="text-sm text-destructive mt-1">{errors.curriculumDescription.message}</p>}
             </div>
-             <div>
-              <Label htmlFor="curriculumImageHint">Petunjuk AI Gambar</Label>
-              <Input id="curriculumImageHint" {...register('curriculumImageHint')} placeholder="Contoh: library books"/>
-            </div>
           </CardContent>
         </Card>
 
@@ -208,10 +200,6 @@ export default function AcademicsAdminPage() {
               <Label htmlFor="structureDescription">Deskripsi</Label>
               <Textarea id="structureDescription" rows={8} {...register('structureDescription')} />
                {errors.structureDescription && <p className="text-sm text-destructive mt-1">{errors.structureDescription.message}</p>}
-            </div>
-             <div>
-              <Label htmlFor="structureImageHint">Petunjuk AI Gambar</Label>
-              <Input id="structureImageHint" {...register('structureImageHint')} placeholder="Contoh: school building"/>
             </div>
           </CardContent>
         </Card>

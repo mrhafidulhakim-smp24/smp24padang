@@ -33,14 +33,13 @@ type GalleryItem = {
   src: string;
   alt: string;
   category: string;
-  hint: string;
 };
 
 const initialGalleryItems: GalleryItem[] = [
-  { id: "1", src: "https://placehold.co/600x400.png", alt: "Kegiatan Belajar Mengajar di Kelas", category: "Akademik", hint: "classroom students" },
-  { id: "2", src: "https://placehold.co/600x400.png", alt: "Tim Basket Sekolah Merayakan Kemenangan", category: "Olahraga", hint: "basketball team celebration" },
-  { id: "3", src: "https://placehold.co/600x400.png", alt: "Pameran Seni Siswa", category: "Seni & Budaya", hint: "student art exhibition" },
-  { id: "4", src: "https://placehold.co/600x400.png", alt: "Siswa Melakukan Percobaan di Laboratorium Sains", category: "Sains", hint: "science lab students" },
+  { id: "1", src: "https://placehold.co/600x400.png", alt: "Kegiatan Belajar Mengajar di Kelas", category: "Akademik" },
+  { id: "2", src: "https://placehold.co/600x400.png", alt: "Tim Basket Sekolah Merayakan Kemenangan", category: "Olahraga" },
+  { id: "3", src: "https://placehold.co/600x400.png", alt: "Pameran Seni Siswa", category: "Seni & Budaya" },
+  { id: "4", src: "https://placehold.co/600x400.png", alt: "Siswa Melakukan Percobaan di Laboratorium Sains", category: "Sains" },
 ];
 
 export default function GalleryAdminPage() {
@@ -57,7 +56,6 @@ export default function GalleryAdminPage() {
       alt: formData.get("alt") as string,
       category: formData.get("category") as string,
       src: "https://placehold.co/600x400.png", // Placeholder, ideally this would be an upload
-      hint: "new image",
     };
     setGalleryItems([newItem, ...galleryItems]);
     setAddOpen(false);

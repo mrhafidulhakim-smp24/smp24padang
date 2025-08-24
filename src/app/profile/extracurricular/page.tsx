@@ -4,12 +4,12 @@ import { Award, BrainCircuit, Palette, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 
 const extracurriculars = [
-  { id: "1", name: "Sepak Bola", category: "Olahraga", description: "Mengembangkan bakat sepak bola dan kerja sama tim.", image: "https://placehold.co/600x400.png", hint: "students playing soccer" },
-  { id: "2", name: "Tari Tradisional", category: "Seni & Budaya", description: "Mempelajari dan melestarikan seni tari daerah.", image: "https://placehold.co/600x400.png", hint: "students dancing" },
-  { id: "3", name: "Kelompok Ilmiah Remaja (KIR)", category: "Akademik & Sains", description: "Mendorong penelitian dan inovasi di kalangan siswa.", image: "https://placehold.co/600x400.png", hint: "students science club" },
-  { id: "4", name: "Bola Basket", category: "Olahraga", description: "Melatih ketangkasan, strategi, dan sportivitas di lapangan.", image: "https://placehold.co/600x400.png", hint: "students playing basketball" },
-  { id: "5", name: "Paduan Suara", category: "Seni & Budaya", description: "Mengasah kemampuan vokal dan harmoni dalam sebuah tim.", image: "https://placehold.co/600x400.png", hint: "school choir" },
-  { id: "6", name: "Pramuka", category: "Pengembangan Diri", description: "Membentuk karakter mandiri, disiplin, dan cinta alam.", image: "https://placehold.co/600x400.png", hint: "scouts camping" },
+  { id: "1", name: "Sepak Bola", category: "Olahraga", description: "Mengembangkan bakat sepak bola dan kerja sama tim.", image: "https://placehold.co/600x400.png" },
+  { id: "2", name: "Tari Tradisional", category: "Seni & Budaya", description: "Mempelajari dan melestarikan seni tari daerah.", image: "https://placehold.co/600x400.png" },
+  { id: "3", name: "Kelompok Ilmiah Remaja (KIR)", category: "Akademik & Sains", description: "Mendorong penelitian dan inovasi di kalangan siswa.", image: "https://placehold.co/600x400.png" },
+  { id: "4", name: "Bola Basket", category: "Olahraga", description: "Melatih ketangkasan, strategi, dan sportivitas di lapangan.", image: "https://placehold.co/600x400.png" },
+  { id: "5", name: "Paduan Suara", category: "Seni & Budaya", description: "Mengasah kemampuan vokal dan harmoni dalam sebuah tim.", image: "https://placehold.co/600x400.png" },
+  { id: "6", name: "Pramuka", category: "Pengembangan Diri", description: "Membentuk karakter mandiri, disiplin, dan cinta alam.", image: "https://placehold.co/600x400.png" },
 ];
 
 const categories = [
@@ -52,7 +52,6 @@ export default function ExtracurricularPage() {
                           alt={activity.name}
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
-                          data-ai-hint={activity.hint}
                         />
                       </div>
                     </CardHeader>

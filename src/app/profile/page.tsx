@@ -3,15 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, Target, Users, Award, Network, Shirt, Swords } from "lucide-react";
-
-const profile = {
-  principalName: "Dr. Budi Santoso, M.Pd.",
-  principalWelcome: "Selamat datang di situs resmi SMPN 24 Padang. Kami berkomitmen untuk menyediakan lingkungan belajar yang menginspirasi, di mana setiap siswa dapat berkembang secara akademis, sosial, dan emosional. Dengan dukungan guru-guru yang berdedikasi dan fasilitas yang memadai, kami berupaya mencetak generasi penerus yang cerdas, berkarakter, dan siap menghadapi tantangan global. Mari bersama-sama kita wujudkan masa depan yang gemilang bagi putra-putri kita.",
-  principalImageUrl: "https://placehold.co/600x800.png",
-};
+import { getProfile } from "../actions";
 
 
 export default async function ProfilePage() {
+  const profile = await getProfile();
+  
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -31,7 +28,6 @@ export default async function ProfilePage() {
               alt="Principal"
               layout="fill"
               objectFit="cover"
-              data-ai-hint="professional portrait"
             />
           </div>
           <div className="p-8 md:col-span-2">

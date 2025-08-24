@@ -153,15 +153,6 @@ function AchievementForm({
           required
         />
       </div>
-      <div>
-        <Label htmlFor="hint">Petunjuk AI (opsional)</Label>
-        <Input
-          id="hint"
-          name="hint"
-          defaultValue={initialData?.hint || ""}
-          placeholder="Contoh: robotics team"
-        />
-      </div>
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>
           Batal
@@ -351,4 +342,3 @@ export default function AchievementsAdminPage() {
     </div>
   );
 }
-

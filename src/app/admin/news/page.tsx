@@ -154,15 +154,6 @@ function NewsArticleForm({
           rows={5}
         />
       </div>
-       <div>
-        <Label htmlFor="hint">Petunjuk AI (opsional)</Label>
-        <Input
-          id="hint"
-          name="hint"
-          defaultValue={initialData?.hint || ""}
-          placeholder="Contoh: students winning trophy"
-        />
-      </div>
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>
           Batal
