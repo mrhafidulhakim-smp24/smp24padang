@@ -25,6 +25,11 @@ import {
   Landmark,
   Image as ImageIcon,
   ChevronDown,
+  GraduationCap,
+  Users,
+  GalleryHorizontal,
+  FileBadge,
+  Network
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -51,11 +56,11 @@ export default function AdminLayout({
         { href: "/admin/profile/uniform", label: "Seragam" },
       ],
     },
-    { href: "/admin/academics", label: "Akademik" },
-    { href: "/admin/staff", label: "Guru & Staf" },
-    { href: "/admin/gallery", label: "Galeri" },
-    { href: "/admin/accreditation", label: "Akreditasi" },
-    { href: "/admin/organization", label: "Struktur Organisasi" },
+    { href: "/admin/academics", label: "Akademik", icon: GraduationCap },
+    { href: "/admin/staff", label: "Guru & Staf", icon: Users },
+    { href: "/admin/gallery", label: "Galeri", icon: GalleryHorizontal },
+    { href: "/admin/accreditation", label: "Akreditasi", icon: FileBadge },
+    { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },
   ];
 
   return (
@@ -82,7 +87,7 @@ export default function AdminLayout({
                 item.subItems ? (
                   <SidebarMenuItem key={index}>
                      <SidebarMenuButton
-                        icon={<item.icon />}
+                        icon={item.icon && <item.icon />}
                         isActive={item.subItems.some(sub => pathname.startsWith(sub.href))}
                       >
                        {item.label}
@@ -105,7 +110,7 @@ export default function AdminLayout({
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       href={item.href}
-                      icon={<item.icon />}
+                      icon={item.icon && <item.icon />}
                       isActive={pathname === item.href}
                     >
                       {item.label}
@@ -128,7 +133,7 @@ export default function AdminLayout({
           <div className="mb-4 flex items-center gap-4">
              <SidebarTrigger className="md:hidden" />
              <h1 className="text-2xl font-bold">
-               {menuItems.flatMap(i => i.subItems ? i.subItems : i).find(i => i.href === pathname)?.label || 'Dashboard'}
+               {menuItems.flatMap(i => i.subItems ? i.subItems.map(s => ({...s, icon: i.icon})) : i).find(i => i.href === pathname)?.label || 'Dashboard'}
              </h1>
           </div>
           {children}
