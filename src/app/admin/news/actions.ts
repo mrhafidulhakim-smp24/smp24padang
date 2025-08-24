@@ -10,7 +10,9 @@ import { Prisma } from "@prisma/client";
 export const NewsArticleSchema = z.object({
   title: z.string().min(3, "Judul minimal 3 karakter"),
   description: z.string().min(10, "Deskripsi minimal 10 karakter"),
-  date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Format tanggal tidak valid" }),
+  date: z.coerce.date({
+    errorMap: () => ({ message: "Format tanggal tidak valid" }),
+  }),
   hint: z.string().optional(),
 });
 
@@ -46,14 +48,14 @@ export async function createNewsArticle(formData: FormData) {
     const newArticle = await prisma.newsArticle.create({
       data: {
         ...rest,
-        date: new Date(date),
+        date: date,
         imageUrl,
       },
     });
     revalidatePath("/admin/news");
     revalidatePath("/news");
     revalidatePath("/");
-    return { success: true, data: newArticle };
+    return { success: true, message: "Artikel berhasil dibuat.", data: newArticle };
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       return { success: false, message: `Gagal menyimpan: ${e.message}` };
@@ -91,7 +93,7 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
             where: { id },
             data: {
                 ...rest,
-                date: new Date(date),
+                date: date,
                 ...(newImageUrl && { imageUrl: newImageUrl }),
             },
         });
@@ -99,7 +101,7 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
         revalidatePath('/admin/news');
         revalidatePath('/news');
         revalidatePath('/');
-        return { success: true, data: updatedArticle };
+        return { success: true, message: "Artikel berhasil diperbarui.", data: updatedArticle };
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             return { success: false, message: `Gagal memperbarui: ${e.message}` };
