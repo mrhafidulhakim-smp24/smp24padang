@@ -74,7 +74,7 @@ function StaffForm({
 
   useEffect(() => {
     if (state.success) {
-      toast({ title: "Sukses!", description: state.message });
+      toast({ title: "Sukses!", description: state.message || "Aksi berhasil diselesaikan." });
       onClose();
     } else if (state.message) {
       toast({

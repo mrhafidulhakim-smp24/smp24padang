@@ -1,18 +1,11 @@
 
 "use server";
 
-import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { put, del } from "@vercel/blob";
 import { Prisma } from "@prisma/client";
-
-export const StaffSchema = z.object({
-  name: z.string().min(3, "Nama minimal 3 karakter"),
-  position: z.string().min(3, "Jabatan minimal 3 karakter"),
-  subject: z.string().optional(),
-  hint: z.string().optional(),
-});
+import { StaffSchema } from "./schema";
 
 async function uploadImage(image: File) {
   const blob = await put(image.name, image, {
