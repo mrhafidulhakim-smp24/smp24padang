@@ -55,7 +55,7 @@ import {
   deleteNewsArticle,
   getNewsForAdmin,
 } from "./actions";
-import { type NewsArticle } from "@prisma/client";
+import { type NewsArticle } from "./schema";
 
 function NewsArticleForm({
   action,
@@ -174,10 +174,14 @@ export default function NewsAdminPage() {
   );
 
   useEffect(() => {
-    getNewsForAdmin().then(setArticles);
+    getNewsForAdmin().then((data) => setArticles(data as NewsArticle[]));
   }, []);
   
   const { toast } = useToast();
+
+  const handleFetchAndUpdate = () => {
+    getNewsForAdmin().then((data) => setArticles(data as NewsArticle[]));
+  };
 
   const handleDelete = async () => {
     if (!selectedArticle) return;
@@ -231,7 +235,7 @@ export default function NewsAdminPage() {
               action={createNewsArticle}
               onClose={() => {
                 setAddOpen(false);
-                getNewsForAdmin().then(setArticles);
+                handleFetchAndUpdate();
               }}
             />
           </DialogContent>
@@ -312,7 +316,7 @@ export default function NewsAdminPage() {
               onClose={() => {
                 setEditOpen(false);
                 setSelectedArticle(null);
-                getNewsForAdmin().then(setArticles);
+                handleFetchAndUpdate();
               }}
             />
           )}
