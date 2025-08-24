@@ -33,6 +33,7 @@ import {
   Newspaper,
   Shirt,
   Swords,
+  GraduationCap,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -60,7 +61,7 @@ export default function Header() {
     { 
       href: "/academics", 
       label: "Akademik", 
-      icon: BookOpen
+      icon: GraduationCap
     },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/news", label: "Berita", icon: Newspaper },
@@ -78,7 +79,7 @@ export default function Header() {
             <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4" />
-                    <span>Jl. Bypass, Kec. Lubuk Begalung, Padang</span>
+                    <span>Cerdas, Terampil dan Berbudidaya Lingkungan</span>
                 </div>
             </div>
             <div className="flex items-center gap-6">
