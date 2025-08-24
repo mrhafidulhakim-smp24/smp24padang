@@ -603,14 +603,7 @@ const SidebarMenuButton = React.forwardRef<
       };
     }
     
-    const { ...tooltipProps} = props;
-    const validTooltipProps = Object.keys(tooltipProps).reduce((acc, key) => {
-        if (Number.isNaN(parseInt(key, 10))) {
-            // @ts-ignore
-            acc[key] = tooltipProps[key];
-        }
-        return acc;
-    }, {});
+    const { ...tooltipProps } = tooltip;
 
 
     return (
@@ -620,8 +613,7 @@ const SidebarMenuButton = React.forwardRef<
           side="right"
           align="center"
           hidden={(state !== "collapsed" && !isMobile) || !tooltip}
-          {...tooltip}
-          {...validTooltipProps}
+          {...tooltipProps}
         />
       </Tooltip>
     );
