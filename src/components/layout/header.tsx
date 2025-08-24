@@ -63,8 +63,9 @@ export default function Header() {
       icon: BookOpen
     },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
-    { href: "/gallery", label: "Galeri", icon: Camera },
     { href: "/news", label: "Berita", icon: Newspaper },
+    { href: "/gallery", label: "Galeri", icon: Camera },
+    { href: "/contact", label: "Kontak", icon: Phone },
   ];
 
   const cleanPathname = pathname;
@@ -228,5 +229,3 @@ export default function Header() {
     </header>
   );
 }
-
-    
