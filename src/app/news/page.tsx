@@ -6,18 +6,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import prisma from "@/lib/prisma";
+import { db } from "@/lib/db";
+import { news, announcements } from "@/lib/db/schema";
+import { desc } from "drizzle-orm";
+
 
 async function getAllNews() {
-  return await prisma.news.findMany({
-      orderBy: { date: 'desc' }
-  });
+  return await db.select().from(news).orderBy(desc(news.date));
 }
 
 async function getLatestAnnouncement() {
-  return await prisma.announcement.findFirst({
-    orderBy: { date: 'desc' }
-  });
+  const announcementData = await db.select().from(announcements).orderBy(desc(announcements.date)).limit(1);
+  return announcementData[0] || null;
 }
 
 export default async function NewsPage() {

@@ -1,15 +1,16 @@
 
 "use server";
 
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/db';
+import { news } from '@/lib/db/schema';
+import { desc, eq } from 'drizzle-orm';
 import { put, del } from '@vercel/blob';
 import { revalidatePath } from 'next/cache';
 import { NewsArticleSchema } from './schema';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function getNewsForAdmin() {
-    return await prisma.news.findMany({
-        orderBy: { date: 'desc' }
-    });
+    return await db.select().from(news).orderBy(desc(news.date));
 }
 
 export async function createNewsArticle(prevState: any, formData: FormData) {
@@ -33,13 +34,12 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
             imageUrl = blob.url;
         }
 
-        await prisma.news.create({
-            data: {
-                title,
-                description,
-                date,
-                imageUrl,
-            }
+        await db.insert(news).values({
+            id: uuidv4(),
+            title,
+            description,
+            date: date.toISOString(),
+            imageUrl,
         });
 
         revalidatePath('/articles');
@@ -64,7 +64,13 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
 
     const { title, description, date } = validatedFields.data;
     const imageFile = formData.get('image') as File | null;
-    let newImageUrl = currentImageUrl;
+
+    const updateData: { title: string; description: string; date: string; imageUrl?: string } = {
+        title,
+        description,
+        date: date.toISOString(),
+    };
+
 
     try {
         if (imageFile && imageFile.size > 0) {
@@ -73,18 +79,10 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
                 await del(currentImageUrl);
             }
             const blob = await put(imageFile.name, imageFile, { access: 'public' });
-            newImageUrl = blob.url;
+            updateData.imageUrl = blob.url;
         }
 
-        await prisma.news.update({
-            where: { id },
-            data: {
-                title,
-                description,
-                date,
-                imageUrl: newImageUrl,
-            },
-        });
+        await db.update(news).set(updateData).where(eq(news.id, id));
 
         revalidatePath('/articles');
         revalidatePath(`/articles/${id}`);
@@ -101,7 +99,7 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
         if (imageUrl && !imageUrl.includes('placehold.co')) {
             await del(imageUrl);
         }
-        await prisma.news.delete({ where: { id } });
+        await db.delete(news).where(eq(news.id, id));
         
         revalidatePath('/articles');
         revalidatePath('/admin/news');

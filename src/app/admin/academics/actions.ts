@@ -3,16 +3,18 @@
 
 import { revalidatePath } from 'next/cache';
 import { put, del } from '@vercel/blob';
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/db';
+import { academics } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
 import type { AcademicData } from './schema';
 
 export async function getAcademics() {
-  let academics = await prisma.academics.findFirst();
+  let academicsData = await db.select().from(academics).where(eq(academics.id, '1')).limit(1);
+  let result = academicsData[0];
 
-  if (!academics) {
+  if (!result) {
     // If no data exists, create a default entry
-    academics = await prisma.academics.create({
-      data: {
+    const defaultData = {
         id: '1', // Singleton ID
         curriculumTitle: "Kurikulum Merdeka yang Adaptif & Inovatif",
         curriculumDescription: "Deskripsi kurikulum default.",
@@ -20,10 +22,11 @@ export async function getAcademics() {
         structureTitle: "Struktur Pembelajaran yang Mendukung",
         structureDescription: "Deskripsi struktur pembelajaran default.",
         structureImageUrl: "https://placehold.co/1200x400.png",
-      }
-    });
+      };
+    await db.insert(academics).values(defaultData);
+    result = defaultData;
   }
-  return academics;
+  return result;
 }
 
 export async function updateAcademics(formData: FormData) {
@@ -42,13 +45,20 @@ export async function updateAcademics(formData: FormData) {
     const structureImageFile = formData.get('structureImage') as File | null;
     
     try {
+        const updateData: any = {
+            curriculumTitle: data.curriculumTitle,
+            curriculumDescription: data.curriculumDescription,
+            structureTitle: data.structureTitle,
+            structureDescription: data.structureDescription,
+        };
+
         if (curriculumImageFile && curriculumImageFile.size > 0) {
             // Delete old image if it exists and is not a placeholder
             if (data.currentCurriculumImageUrl && !data.currentCurriculumImageUrl.includes('placehold.co')) {
                 await del(data.currentCurriculumImageUrl);
             }
             const blob = await put(curriculumImageFile.name, curriculumImageFile, { access: 'public' });
-            data.curriculumImageUrl = blob.url;
+            updateData.curriculumImageUrl = blob.url;
         }
 
         if (structureImageFile && structureImageFile.size > 0) {
@@ -57,17 +67,10 @@ export async function updateAcademics(formData: FormData) {
                 await del(data.currentStructureImageUrl);
             }
             const blob = await put(structureImageFile.name, structureImageFile, { access: 'public' });
-            data.structureImageUrl = blob.url;
+            updateData.structureImageUrl = blob.url;
         }
 
-        const updateData: any = { ...data };
-        delete updateData.currentCurriculumImageUrl;
-        delete updateData.currentStructureImageUrl;
-
-        await prisma.academics.update({
-            where: { id },
-            data: updateData
-        });
+        await db.update(academics).set(updateData).where(eq(academics.id, id));
 
         revalidatePath('/academics');
         revalidatePath('/admin/academics');

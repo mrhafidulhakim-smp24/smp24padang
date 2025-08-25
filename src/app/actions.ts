@@ -1,20 +1,17 @@
 
 "use server";
 
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/db';
+import { banners, news, announcements, profiles, statistics, facilities } from '@/lib/db/schema';
+import { asc, desc } from 'drizzle-orm';
 
 export async function getBanners() {
-  return await prisma.banner.findMany({
-    orderBy: { createdAt: 'asc' }
-  });
+  return await db.select().from(banners).orderBy(asc(banners.createdAt));
 }
 
 export async function getLatestNews() {
   try {
-    return await prisma.news.findMany({
-      take: 3,
-      orderBy: { date: 'desc' }
-    });
+    return await db.select().from(news).orderBy(desc(news.date)).limit(3);
   } catch (error) {
     console.error("Error fetching latest news:", error);
     return [];
@@ -23,10 +20,7 @@ export async function getLatestNews() {
 
 export async function getAnnouncements() {
   try {
-    return await prisma.announcement.findMany({
-        take: 3,
-        orderBy: { date: 'desc' }
-    });
+    return await db.select().from(announcements).orderBy(desc(announcements.date)).limit(3);
   } catch (error) {
     console.error("Error fetching announcements:", error);
     return [];
@@ -35,7 +29,8 @@ export async function getAnnouncements() {
 
 export async function getProfile() {
   try {
-    return await prisma.profile.findFirst();
+    const profileData = await db.select().from(profiles).limit(1);
+    return profileData[0] || null;
   } catch (error) {
     console.error("Error fetching profile:", error);
     return null;
@@ -44,7 +39,8 @@ export async function getProfile() {
 
 export async function getStatistics() {
   try {
-    return await prisma.statistics.findFirst();
+    const statsData = await db.select().from(statistics).limit(1);
+    return statsData[0] || null;
   } catch (error) {
     console.error("Error fetching statistics:", error);
     return null;
@@ -53,9 +49,7 @@ export async function getStatistics() {
 
 export async function getFacilities() {
   try {
-    return await prisma.facility.findMany({
-        orderBy: { createdAt: 'asc' }
-    });
+    return await db.select().from(facilities).orderBy(asc(facilities.createdAt));
   } catch (error) {
     console.error("Error fetching facilities:", error);
     return [];
@@ -64,7 +58,8 @@ export async function getFacilities() {
 
 export async function getAbout() {
   try {
-    const profile = await prisma.profile.findFirst();
+    const profileData = await db.select().from(profiles).limit(1);
+    const profile = profileData[0] || {};
     return {
         history: profile?.history || '',
         vision: profile?.vision || '',

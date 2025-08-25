@@ -1,14 +1,15 @@
 
 "use server";
 
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/db';
+import { galleryItems } from '@/lib/db/schema';
+import { desc, eq } from 'drizzle-orm';
 import { put, del } from '@vercel/blob';
 import { revalidatePath } from 'next/cache';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function getGalleryItems() {
-  return await prisma.galleryItem.findMany({
-    orderBy: { createdAt: 'desc' },
-  });
+  return await db.select().from(galleryItems).orderBy(desc(galleryItems.createdAt));
 }
 
 export async function createGalleryItem(prevState: any, formData: FormData) {
@@ -23,12 +24,11 @@ export async function createGalleryItem(prevState: any, formData: FormData) {
   try {
     const blob = await put(imageFile.name, imageFile, { access: 'public' });
 
-    await prisma.galleryItem.create({
-      data: {
-        src: blob.url,
-        alt,
-        category,
-      },
+    await db.insert(galleryItems).values({
+      id: uuidv4(),
+      src: blob.url,
+      alt,
+      category,
     });
 
     revalidatePath('/gallery');
@@ -45,7 +45,7 @@ export async function deleteGalleryItem(id: string, src: string) {
     if (src && !src.includes('placehold.co')) {
       await del(src);
     }
-    await prisma.galleryItem.delete({ where: { id } });
+    await db.delete(galleryItems).where(eq(galleryItems.id, id));
 
     revalidatePath('/gallery');
     revalidatePath('/admin/gallery');

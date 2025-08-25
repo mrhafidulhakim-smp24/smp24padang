@@ -1,9 +1,9 @@
 
 "use server";
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/db';
+import { achievements } from '@/lib/db/schema';
+import { desc } from 'drizzle-orm';
 
 export async function getAchievements() {
-  return await prisma.achievement.findMany({
-      orderBy: { createdAt: 'desc' }
-  });
+  return await db.select().from(achievements).orderBy(desc(achievements.createdAt));
 }

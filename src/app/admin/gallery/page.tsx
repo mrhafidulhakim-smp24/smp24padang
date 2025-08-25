@@ -29,8 +29,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { createGalleryItem, deleteGalleryItem, getGalleryItems } from "./actions";
-import type { GalleryItem } from "@prisma/client";
+import type { galleryItems as GalleryItemSchema } from "@/lib/db/schema";
+import { type InferSelectModel } from 'drizzle-orm';
 import { Skeleton } from "@/components/ui/skeleton";
+
+type GalleryItem = InferSelectModel<typeof GalleryItemSchema>;
 
 function GalleryForm({
   action,

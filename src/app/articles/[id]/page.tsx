@@ -2,14 +2,14 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Calendar, UserCircle } from "lucide-react";
-import prisma from "@/lib/prisma";
+import { db } from "@/lib/db";
+import { news } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 async function getNewsArticle(id: string) {
     try {
-        const article = await prisma.news.findUnique({
-            where: { id }
-        });
-        return article;
+        const article = await db.select().from(news).where(eq(news.id, id)).limit(1);
+        return article[0] || null;
     } catch (error) {
         console.error("Error fetching news article:", error);
         return null;

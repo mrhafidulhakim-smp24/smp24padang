@@ -1,9 +1,10 @@
 
 "use server";
 
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/db';
+import { academics } from '@/lib/db/schema';
 
 export async function getAcademics() {
-  const academics = await prisma.academics.findFirst();
-  return academics;
+  const academicsData = await db.select().from(academics).limit(1);
+  return academicsData[0] || null;
 }

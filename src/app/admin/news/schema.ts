@@ -1,5 +1,7 @@
 
 import { z } from "zod";
+import { news } from "@/lib/db/schema";
+import { createSelectSchema } from "drizzle-zod";
 
 export const NewsArticleSchema = z.object({
   title: z.string().min(3, "Judul minimal 3 karakter"),
@@ -9,9 +11,7 @@ export const NewsArticleSchema = z.object({
   }),
 });
 
-export type NewsArticle = z.infer<typeof NewsArticleSchema> & {
-    id: string;
-    imageUrl: string | null;
-    createdAt: Date;
-    updatedAt: Date;
-};
+export type NewsArticleFormData = z.infer<typeof NewsArticleSchema>;
+
+export const SelectNewsArticleSchema = createSelectSchema(news);
+export type NewsArticle = z.infer<typeof SelectNewsArticleSchema>;

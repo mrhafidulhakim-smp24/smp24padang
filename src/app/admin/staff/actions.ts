@@ -1,10 +1,13 @@
 
 "use server";
 
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/db';
+import { staff } from '@/lib/db/schema';
+import { asc, eq } from 'drizzle-orm';
 import { StaffSchema } from "./schema";
 import { put, del } from '@vercel/blob';
 import { revalidatePath } from 'next/cache';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function createStaff(prevState: any, formData: FormData) {
     const validatedFields = StaffSchema.safeParse(Object.fromEntries(formData.entries()));
@@ -22,9 +25,7 @@ export async function createStaff(prevState: any, formData: FormData) {
             imageUrl = blob.url;
         }
 
-        await prisma.staff.create({
-            data: { name, position, subject, homeroomOf, imageUrl }
-        });
+        await db.insert(staff).values({ id: uuidv4(), name, position, subject, homeroomOf, imageUrl });
 
         revalidatePath('/profile/faculty');
         revalidatePath('/admin/staff');
@@ -43,7 +44,10 @@ export async function updateStaff(id: string, currentImageUrl: string | null, pr
 
     const { name, position, subject, homeroomOf } = validatedFields.data;
     const imageFile = formData.get('image') as File | null;
-    let newImageUrl = currentImageUrl;
+    
+    const updateData: { name: string, position: string, subject?: string | null, homeroomOf?: string | null, imageUrl?: string } = {
+        name, position, subject, homeroomOf
+    };
 
     try {
         if (imageFile && imageFile.size > 0) {
@@ -51,13 +55,10 @@ export async function updateStaff(id: string, currentImageUrl: string | null, pr
                 await del(currentImageUrl);
             }
             const blob = await put(imageFile.name, imageFile, { access: 'public' });
-            newImageUrl = blob.url;
+            updateData.imageUrl = blob.url;
         }
 
-        await prisma.staff.update({
-            where: { id },
-            data: { name, position, subject, homeroomOf, imageUrl: newImageUrl }
-        });
+        await db.update(staff).set(updateData).where(eq(staff.id, id));
 
         revalidatePath('/profile/faculty');
         revalidatePath('/admin/staff');
@@ -74,7 +75,7 @@ export async function deleteStaff(id: string, imageUrl: string | null) {
         if (imageUrl && !imageUrl.includes('placehold.co')) {
             await del(imageUrl);
         }
-        await prisma.staff.delete({ where: { id } });
+        await db.delete(staff).where(eq(staff.id, id));
         
         revalidatePath('/profile/faculty');
         revalidatePath('/admin/staff');
@@ -86,7 +87,5 @@ export async function deleteStaff(id: string, imageUrl: string | null) {
 }
 
 export async function getStaff() {
-    return await prisma.staff.findMany({
-        orderBy: { createdAt: 'asc' }
-    });
+    return await db.select().from(staff).orderBy(asc(staff.createdAt));
 }

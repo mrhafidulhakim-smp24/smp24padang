@@ -1,12 +1,10 @@
 
 "use server";
 
-import prisma from "@/lib/prisma";
+import { db } from "@/lib/db";
+import { galleryItems } from "@/lib/db/schema";
+import { desc } from 'drizzle-orm';
 
 export async function getGalleryItems() {
-    return await prisma.galleryItem.findMany({
-        orderBy: {
-            createdAt: 'desc'
-        }
-    });
+    return await db.select().from(galleryItems).orderBy(desc(galleryItems.createdAt));
 }

@@ -5,7 +5,8 @@ import Image from "next/image";
 import { getStaff } from "./actions";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect, useMemo } from "react";
-import type { Staff } from "@prisma/client";
+import type { staff as StaffSchema } from "@/lib/db/schema";
+import { type InferSelectModel } from 'drizzle-orm';
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -15,6 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
+
+type Staff = InferSelectModel<typeof StaffSchema>;
 
 export default function FacultyPage() {
   const [allStaff, setAllStaff] = useState<Staff[]>([]);

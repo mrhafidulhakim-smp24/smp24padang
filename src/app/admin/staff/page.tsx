@@ -53,7 +53,11 @@ import {
   deleteStaff,
   getStaff,
 } from "./actions";
-import { type Staff } from "@prisma/client";
+import type { staff as StaffSchema } from "@/lib/db/schema";
+import { type InferSelectModel } from 'drizzle-orm';
+
+type Staff = InferSelectModel<typeof StaffSchema>;
+
 
 function StaffForm({
   action,
