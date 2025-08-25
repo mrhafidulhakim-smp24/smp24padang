@@ -60,8 +60,11 @@ export default function Footer() {
         </div>
       </div>
       <div className="bg-primary py-4">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-2 px-4 text-center text-sm text-primary-foreground/70 sm:flex-row">
-          <p>© {currentYear} SMPN 24 Padang. Hak Cipta Dilindungi Undang-Undang.</p>
+        <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-center text-sm text-primary-foreground/70 sm:flex-row">
+            <div className="flex flex-col items-center sm:items-start">
+                 <p className="font-semibold">Kerja Praktek Informatika UPI "YPTK" Padang</p>
+                 <p>© {currentYear} SMPN 24 Padang. Hak Cipta Dilindungi Undang-Undang.</p>
+            </div>
           <Link href="/admin" className="transition-colors hover:text-white">
             Login Admin
           </Link>

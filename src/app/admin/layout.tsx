@@ -42,25 +42,23 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/homepage", label: "Beranda", icon: Home },
-    { href: "/admin/news", label: "Berita", icon: Newspaper },
+    { href: "/admin/news", label: "Berita & Pengumuman", icon: Newspaper },
     { href: "/admin/achievements", label: "Prestasi", icon: Trophy },
     {
       label: "Profil",
       icon: Landmark,
       subItems: [
-        { href: "/admin/profile", label: "Sekolah" },
         { href: "/admin/profile/vision-mission", label: "Visi & Misi" },
+        { href: "/admin/staff", label: "Guru & Staf" },
+        { href: "/admin/organization", label: "Struktur Organisasi" },
+        { href: "/admin/accreditation", label: "Sertifikasi & Penghargaan" },
         { href: "/admin/profile/extracurricular", label: "Ekskul" },
         { href: "/admin/profile/uniform", label: "Seragam" },
       ],
     },
     { href: "/admin/academics", label: "Akademik", icon: GraduationCap },
-    { href: "/admin/staff", label: "Guru & Staf", icon: Users },
     { href: "/admin/gallery", label: "Galeri", icon: GalleryHorizontal },
-    { href: "/admin/accreditation", label: "Akreditasi", icon: FileBadge },
-    { href: "/admin/organization", label: "Struktur Organisasi", icon: Network },
   ];
 
   return (

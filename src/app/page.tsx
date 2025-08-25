@@ -72,25 +72,34 @@ async function Announcement() {
   }
 
   return (
-    <section className="bg-background py-16 md:py-24">
+    <section className="bg-primary/5 py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="text-center">
-          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Pengumuman Terbaru</h2>
+          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Berita & Pengumuman Terbaru</h2>
           <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
             Informasi terbaru dan terpenting seputar kegiatan sekolah.
           </p>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {latestNews.map((item) => (
-            <Card key={item.id} className="flex flex-col">
-              <CardHeader>
-                <p className="text-sm font-semibold text-accent">{`PENGUMUMAN | ${new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
-                <CardTitle className="font-headline text-xl text-primary">
-                  {item.title}
-                </CardTitle>
+            <Card key={item.id} className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+              <CardHeader className="p-0">
+                 <Link href={`/news/${item.id}`}>
+                    <Image
+                      src={item.imageUrl || "https://placehold.co/600x400.png"}
+                      alt={item.title}
+                      width={600}
+                      height={400}
+                      className="h-56 w-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </Link>
               </CardHeader>
-              <CardContent className="flex-grow">
-                <p className="text-foreground/80 dark:text-foreground/70">
+              <CardContent className="flex flex-grow flex-col p-6">
+                <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <CardTitle className="font-headline text-xl font-bold text-primary">
+                  <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
+                </CardTitle>
+                <p className="mt-2 flex-grow text-foreground/80 dark:text-foreground/70">
                   {item.description.substring(0, 150)}...
                 </p>
               </CardContent>
@@ -106,7 +115,7 @@ async function Announcement() {
         </div>
          <div className="mt-12 text-center">
            <Button asChild size="lg">
-              <Link href="/news">Lihat Semua Pengumuman</Link>
+              <Link href="/news">Lihat Semua Berita & Pengumuman</Link>
            </Button>
          </div>
       </div>
@@ -189,7 +198,6 @@ async function Facilities() {
 export default async function Home() {
   const banners = await getBanners();
   const profile = await getProfile();
-  const latestNews = await getLatestNews();
 
   const marqueeItems = [
       { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
@@ -245,7 +253,7 @@ export default async function Home() {
       {/* Welcome from Principal Section */}
       <section className="bg-primary/5 py-16 md:py-24">
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2 lg:grid-cols-5">
-          <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-xl lg:col-span-2 lg:h-[450px]">
+          <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-xl lg:h-[450px]">
             <Image 
               src={profile?.principalImageUrl || "https://placehold.co/600x800.png"} 
               alt="Principal" 
@@ -285,49 +293,6 @@ export default async function Home() {
 
       {/* Facilities Section */}
       <Facilities />
-
-      {/* Latest News Section */}
-      <section className="bg-primary/5 py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <h2 className="font-headline mb-8 text-center text-3xl font-bold text-primary md:text-4xl">
-            Berita Terbaru
-          </h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {latestNews.map((item) => (
-              <Card key={item.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
-                <CardHeader className="p-0">
-                  <Link href={`/news/${item.id}`}>
-                    <Image
-                      src={item.imageUrl || "https://placehold.co/600x400.png"}
-                      alt={item.title}
-                      width={600}
-                      height={400}
-                      className="h-56 w-full object-cover"
-                    />
-                  </Link>
-                </CardHeader>
-                <CardContent className="flex flex-grow flex-col p-6">
-                  <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                  <CardTitle className="font-headline text-xl font-bold text-primary">
-                    <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
-                  </CardTitle>
-                  <p className="mt-2 text-foreground/80 dark:text-foreground/70 flex-grow">{item.description.substring(0, 100)}...</p>
-                   <Button variant="link" asChild className="mt-4 p-0 self-start text-accent hover:text-accent/80">
-                    <Link href={`/news/${item.id}`}>
-                      Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-           <div className="mt-12 text-center">
-             <Button asChild size="lg">
-                <Link href="/news">Lihat Semua Berita</Link>
-             </Button>
-           </div>
-        </div>
-      </section>
     </div>
   );
 }

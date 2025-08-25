@@ -125,7 +125,7 @@ function NewsArticleForm({
         </div>
       </div>
       <div>
-        <Label htmlFor="title">Judul Berita</Label>
+        <Label htmlFor="title">Judul Berita/Pengumuman</Label>
         <Input
           id="title"
           name="title"
@@ -144,7 +144,7 @@ function NewsArticleForm({
         />
       </div>
       <div>
-        <Label htmlFor="description">Isi Berita</Label>
+        <Label htmlFor="description">Isi Berita/Pengumuman</Label>
         <Textarea
           id="description"
           name="description"
@@ -213,7 +213,7 @@ export default function NewsAdminPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-            Kelola Berita
+            Kelola Berita & Pengumuman
           </h1>
           <p className="mt-2 text-lg text-muted-foreground">
             Tambah, edit, atau hapus artikel berita dan pengumuman.
