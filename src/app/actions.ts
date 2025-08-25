@@ -4,14 +4,9 @@
 import prisma from '@/lib/prisma';
 
 export async function getBanners() {
-  try {
-    return await prisma.banner.findMany({
-      orderBy: { createdAt: 'asc' }
-    });
-  } catch (error) {
-    console.error("Error fetching banners:", error);
-    return [];
-  }
+  return await prisma.banner.findMany({
+    orderBy: { createdAt: 'asc' }
+  });
 }
 
 export async function getLatestNews() {

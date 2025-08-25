@@ -4,14 +4,24 @@ import { notFound } from "next/navigation";
 import { Calendar, UserCircle } from "lucide-react";
 import prisma from "@/lib/prisma";
 
-
-async function getNewsArticle(id: string) {
-    return await prisma.news.findUnique({
-        where: { id }
-    });
+interface PageProps {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export default async function NewsArticlePage({ params }: { params: { id: string } }) {
+async function getNewsArticle(id: string) {
+    try {
+        const article = await prisma.news.findUnique({
+            where: { id }
+        });
+        return article;
+    } catch (error) {
+        console.error("Error fetching news article:", error);
+        return null;
+    }
+}
+
+export default async function NewsArticlePage({ params }: PageProps) {
   const article = await getNewsArticle(params.id);
 
   if (!article) {
