@@ -6,70 +6,20 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  id    String @id @default(cuid())
-  email String @unique
-  name  String
-}
-
-model Banner {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  imageUrl    String
-  createdAt   DateTime @default(now())
-}
-
-model News {
-  id          String   @id @default(cuid())
-  title       String
-  description String   @db.Text
-  imageUrl    String?
-  date        DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Announcement {
-  id          String   @id @default(cuid())
-  title       String
-  description String   @db.Text
-  date        DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Profile {
-  id                String   @id @default(cuid())
-  principalName     String
-  principalWelcome  String   @db.Text
-  principalImageUrl String
-  history           String   @db.Text
-  vision            String
-  mission           String   @db.Text
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-}
-
-model Statistics {
-  id         String @id @default(cuid())
-  classrooms Int
-  students   Int
-  teachers   Int
-  staff      Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
-model Facility {
-  id        String   @id @default(cuid())
-  name      String
-  imageUrl  String
-  createdAt DateTime @default(now())
+  id                  String   @id @default(cuid())
+  principalName       String
+  principalWelcome    String
+  principalImageUrl   String?
+  history             String
+  vision              String
+  mission             String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model Staff {
@@ -77,38 +27,85 @@ model Staff {
   name        String
   position    String
   subject     String?
-  imageUrl    String?
   homeroomOf  String?
+  imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model Academics {
-  id                     String @id @default(cuid())
-  curriculumTitle        String
-  curriculumDescription  String @db.Text
-  curriculumImageUrl     String?
-  structureTitle         String
-  structureDescription   String @db.Text
-  structureImageUrl      String?
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
-}
-
-model Achievement {
+model Banner {
   id          String   @id @default(cuid())
   title       String
-  student     String
   description String
   imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Achievement {
+    id          String   @id @default(cuid())
+    title       String
+    student     String
+    description String
+    imageUrl    String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
 model GalleryItem {
-  id        String   @id @default(cuid())
-  src       String
-  alt       String
-  category  String
-  createdAt DateTime @default(now())
+    id        String   @id @default(cuid())
+    src       String
+    alt       String
+    category  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Academics {
+  id                    String   @id @default("1")
+  curriculumTitle       String
+  curriculumDescription String
+  curriculumImageUrl    String?
+  structureTitle        String
+  structureDescription  String
+  structureImageUrl     String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Statistics {
+  id          String @id @default("1")
+  classrooms  Int
+  students    Int
+  teachers    Int
+  staff       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Facility {
+  id          String @id @default(cuid())
+  name        String
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
