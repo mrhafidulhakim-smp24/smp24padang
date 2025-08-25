@@ -16,7 +16,7 @@ async function getNewsArticle(id: string) {
     }
 }
 
-export default async function NewsArticlePage({ params }: { params: { id: string } }) {
+export default async function NewsArticlePage({ params }: { params: { id: string, locale: string } }) {
   const article = await getNewsArticle(params.id);
 
   if (!article) {
