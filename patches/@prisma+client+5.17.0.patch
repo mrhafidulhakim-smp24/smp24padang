@@ -1,0 +1,46 @@
+diff --git a/node_modules/@prisma/client/runtime/library.js b/node_modules/@prisma/client/runtime/library.js
+index 2350433..831a48c 100644
+--- a/node_modules/@prisma/client/runtime/library.js
++++ b/node_modules/@prisma/client/runtime/library.js
+@@ -107,7 +107,7 @@
+ var Nt = "5.17.0";
+ var Rt = "5.17.0";
+ var It = "https://pris.ly/d/engine-ЛЕ";
+-var Ot = "debian-openssl-1.1.x";
++var Ot = "debian-openssl-3.0.x";
+ var jt = {
+   "prisma-client-js": {
+     id: "prisma-client-js",
+@@ -121,7 +121,7 @@
+   }
+ };
+ var At = ["darwin", "darwin-arm64", "debian-openssl-1.0.x", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "rhel-openssl-1.0.x", "rhel-openssl-1.1.x", "rhel-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "linux-arm64-openssl-1.0.x", "linux-arm64-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-1.1.x", "linux-nixos", "linux-arm-openssl-1.1.x", "linux-arm-openssl-1.0.x", "windows", "freebsd", "freebsd11", "freebsd12", "freebsd13", "openbsd", "netbsd", "arm", "native"];
+ var xt = "library";
+-var Pt = "debian-openssl-1.1.x";
++var Pt = "debian-openssl-3.0.x";
+ var _t = __filename;
+ function Dt(e) {
+   let t;
+diff --git a/node_modules/@prisma/client/runtime/proxy.js b/node_modules/@prisma/client/runtime/proxy.js
+index 287b8d8..6e3f89e 100644
+--- a/node_modules/@prisma/client/runtime/proxy.js
++++ b/node_modules/@prisma/client/runtime/proxy.js
+@@ -108,7 +108,7 @@
+ var $ = "5.17.0";
+ var Y = "5.17.0";
+ var ee = "https://pris.ly/d/engine-ЛЕ";
+-var te = "debian-openssl-1.1.x";
++var te = "debian-openssl-3.0.x";
+ var ne = {
+   "prisma-client-js": {
+     id: "prisma-client-js",
+@@ -122,7 +122,7 @@
+   }
+ };
+ var re = ["darwin", "darwin-arm64", "debian-openssl-1.0.x", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "rhel-openssl-1.0.x", "rhel-openssl-1.1.x", "rhel-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "linux-arm64-openssl-1.0.x", "linux-arm64-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-1.1.x", "linux-nixos", "linux-arm-openssl-1.1.x", "linux-arm-openssl-1.0.x", "windows", "freebsd", "freebsd11", "freebsd12", "freebsd13", "openbsd", "netbsd", "arm", "native"];
+ var se = "proxy";
+-var ie = "debian-openssl-1.1.x";
++var ie = "debian-openssl-3.0.x";
+ var oe = __filename;
+ function ae(e) {
+   let t;
