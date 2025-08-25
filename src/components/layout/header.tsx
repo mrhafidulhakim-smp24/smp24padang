@@ -134,7 +134,7 @@ export default function Header() {
                     href={link.href}
                     className={cn(
                         "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-                        (cleanPathname === link.href) && "text-primary font-semibold"
+                        (cleanPathname.startsWith(link.href) || (link.href === '/news' && cleanPathname.startsWith('/articles'))) && "text-primary font-semibold"
                     )}
                 >
                     {link.label}
@@ -172,7 +172,7 @@ export default function Header() {
                                 onClick={() => setSheetOpen(false)}
                                 className={cn(
                                     "flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
-                                    cleanPathname === link.href && "bg-accent text-accent-foreground"
+                                    (cleanPathname.startsWith(link.href) || (link.href === '/news' && cleanPathname.startsWith('/articles'))) && "bg-accent text-accent-foreground"
                                 )}
                                 >
                                 <link.icon className="h-5 w-5" />
@@ -229,5 +229,3 @@ export default function Header() {
     </header>
   );
 }
-
-    

@@ -89,7 +89,7 @@ async function Announcements() {
                         })}
                       </p>
                       <Link
-                        href={`/news/${item.id}`}
+                        href={`/articles/${item.id}`}
                         className="font-semibold text-foreground hover:text-primary hover:underline"
                       >
                         {item.title}
@@ -142,7 +142,7 @@ async function LatestNews() {
           {latestNews.map((item) => (
             <Card key={item.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
               <CardHeader className="p-0">
-                <Link href={`/news/${item.id}`}>
+                <Link href={`/articles/${item.id}`}>
                   <Image
                     src={item.imageUrl || "https://placehold.co/600x400.png"}
                     alt={item.title}
@@ -156,11 +156,11 @@ async function LatestNews() {
               <CardContent className="flex flex-grow flex-col p-6">
                 <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 <CardTitle className="font-headline text-xl font-bold text-primary">
-                  <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
+                  <Link href={`/articles/${item.id}`} className="hover:underline">{item.title}</Link>
                 </CardTitle>
                 <p className="mt-2 flex-grow text-foreground/80 dark:text-foreground/70">{item.description.substring(0, 100)}...</p>
                 <Button variant="link" asChild className="mt-4 p-0 self-start text-accent hover:text-accent/80">
-                  <Link href={`/news/${item.id}`}>
+                  <Link href={`/articles/${item.id}`}>
                     Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
                 </Button>

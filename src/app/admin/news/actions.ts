@@ -42,7 +42,7 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
             }
         });
 
-        revalidatePath('/news');
+        revalidatePath('/articles');
         revalidatePath('/admin/news');
         return { success: true, message: 'Artikel berhasil dibuat.' };
     } catch (error) {
@@ -86,8 +86,8 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
             },
         });
 
-        revalidatePath('/news');
-        revalidatePath(`/news/${id}`);
+        revalidatePath('/articles');
+        revalidatePath(`/articles/${id}`);
         revalidatePath('/admin/news');
         return { success: true, message: "Artikel berhasil diperbarui." };
     } catch (error) {
@@ -103,7 +103,7 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
         }
         await prisma.news.delete({ where: { id } });
         
-        revalidatePath('/news');
+        revalidatePath('/articles');
         revalidatePath('/admin/news');
         return { success: true, message: 'Berita berhasil dihapus.' };
     } catch (error) {
