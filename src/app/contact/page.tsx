@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -37,7 +38,6 @@ export default function ContactPage() {
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
         toast({
             title: "Message Sent!",
             description: "Thank you for your message. We will get back to you shortly.",

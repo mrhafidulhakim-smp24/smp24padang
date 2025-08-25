@@ -1,16 +1,13 @@
 
 "use client";
 
-import { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 
-export default function DeprecatedNewsPage() {
+export default function DeprecatedNewsPage({ params }: { params: { id: string }}) {
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const pathParts = window.location.pathname.split('/');
-            const id = pathParts[pathParts.length - 1];
-            window.location.replace(`/articles/${id}`);
-        }
-    }, []);
+        redirect(`/articles/${params.id}`);
+    }, [params.id]);
 
     return (
         <div className="container mx-auto flex h-screen items-center justify-center text-center">
