@@ -22,15 +22,14 @@ model Banner {
   description String
   imageUrl    String
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model News {
   id          String   @id @default(cuid())
   title       String
   description String   @db.Text
-  date        DateTime
   imageUrl    String?
+  date        DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -44,6 +43,58 @@ model Announcement {
   updatedAt   DateTime @updatedAt
 }
 
+model Profile {
+  id                String   @id @default(cuid())
+  principalName     String
+  principalWelcome  String   @db.Text
+  principalImageUrl String
+  history           String   @db.Text
+  vision            String
+  mission           String   @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Statistics {
+  id         String @id @default(cuid())
+  classrooms Int
+  students   Int
+  teachers   Int
+  staff      Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Facility {
+  id        String   @id @default(cuid())
+  name      String
+  imageUrl  String
+  createdAt DateTime @default(now())
+}
+
+model Staff {
+  id          String   @id @default(cuid())
+  name        String
+  position    String
+  subject     String?
+  imageUrl    String?
+  homeroomOf  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Academics {
+  id                     String @id @default(cuid())
+  curriculumTitle        String
+  curriculumDescription  String @db.Text
+  curriculumImageUrl     String?
+  structureTitle         String
+  structureDescription   String @db.Text
+  structureImageUrl      String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
 model Achievement {
   id          String   @id @default(cuid())
   title       String
@@ -54,62 +105,10 @@ model Achievement {
   updatedAt   DateTime @updatedAt
 }
 
-model Profile {
-  id                String   @id @default(cuid())
-  principalName     String
-  principalWelcome  String   @db.Text
-  principalImageUrl String
-  history           String   @db.Text
-  vision            String   @db.Text
-  mission           String   @db.Text
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-}
-
-model Statistics {
-  id          String   @id @default("1")
-  classrooms  Int
-  students    Int
-  teachers    Int
-  staff       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Facility {
-    id          String @id @default(cuid())
-    name        String
-    imageUrl    String
-    createdAt   DateTime @default(now())
-}
-
 model GalleryItem {
   id        String   @id @default(cuid())
   src       String
   alt       String
   category  String
   createdAt DateTime @default(now())
-}
-
-model Staff {
-  id          String    @id @default(cuid())
-  name        String
-  position    String
-  subject     String?
-  homeroomOf  String?
-  imageUrl    String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-model Academics {
-  id                    String @id @default("1")
-  curriculumTitle       String
-  curriculumDescription String @db.Text
-  curriculumImageUrl    String?
-  structureTitle        String
-  structureDescription  String @db.Text
-  structureImageUrl     String?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
 }
