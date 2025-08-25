@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -29,7 +30,8 @@ import {
   GalleryHorizontal,
   FileBadge,
   Network,
-  Home
+  Home,
+  Phone
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -59,6 +61,7 @@ export default function AdminLayout({
     },
     { href: "/admin/academics", label: "Akademik", icon: GraduationCap },
     { href: "/admin/gallery", label: "Galeri", icon: GalleryHorizontal },
+    { href: "/admin/contact", label: "Kontak", icon: Phone },
   ];
 
   return (

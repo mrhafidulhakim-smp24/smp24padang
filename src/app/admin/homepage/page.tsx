@@ -21,11 +21,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Pencil } from "lucide-react";
+import { PlusCircle, Trash2, Pencil, MoreHorizontal } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type Banner = {
   id: string;
@@ -38,6 +44,12 @@ type Facility = {
   id: string;
   name: string;
   imageUrl: string;
+}
+
+type MarqueeItem = {
+    id: string;
+    type: 'Berita' | 'Prestasi' | 'Pengumuman';
+    text: string;
 }
 
 const initialBanners: Banner[] = [
@@ -56,6 +68,14 @@ const initialFacilities: Facility[] = [
     { id: '1', name: 'Laboratorium Komputer', imageUrl: 'https://placehold.co/600x400.png' },
     { id: '2', name: 'Perpustakaan', imageUrl: 'https://placehold.co/600x400.png' },
     { id: '3', name: 'Lapangan Olahraga', imageUrl: 'https://placehold.co/600x400.png' },
+];
+
+const initialMarqueeItems: MarqueeItem[] = [
+    { id: '1', type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
+    { id: '2', type: 'Berita', text: 'Pendaftaran siswa baru tahun ajaran 2024/2025 telah dibuka.' },
+    { id: '3', type: 'Pengumuman', text: 'Jadwal Ujian Akhir Semester akan diumumkan minggu depan.' },
+    { id: '4', type: 'Prestasi', text: 'Tim Basket Sekolah meraih Juara 1 tingkat Provinsi.' },
+    { id: '5', type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
 ];
 
 
@@ -97,6 +117,57 @@ function BannersTab() {
                                     <Image src={item.imageUrl} alt={item.title} width={120} height={67} className="rounded-md object-cover" />
                                 </TableCell>
                                 <TableCell className="font-medium">{item.title}</TableCell>
+                                <TableCell className="text-right">
+                                    <div className="flex justify-end gap-2">
+                                        <Button variant="outline" size="icon"><Pencil className="h-4 w-4" /></Button>
+                                        <Button variant="destructive" size="icon"><Trash2 className="h-4 w-4" /></Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    );
+}
+
+function MarqueeTab() {
+    const [marqueeItems, setMarqueeItems] = useState<MarqueeItem[]>(initialMarqueeItems);
+    // Add logic for marquee item management
+    return (
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                    <CardTitle>Kelola Teks Berjalan</CardTitle>
+                    <CardDescription>Tambah, edit, atau hapus item teks berjalan (marquee).</CardDescription>
+                </div>
+                 <Dialog>
+                    <DialogTrigger asChild>
+                        <Button><PlusCircle className="mr-2 h-4 w-4" /> Tambah Item</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Tambah Item Teks Baru</DialogTitle>
+                        </DialogHeader>
+                        {/* Form to add a new marquee item */}
+                    </DialogContent>
+                </Dialog>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Tipe</TableHead>
+                            <TableHead>Teks</TableHead>
+                            <TableHead className="text-right">Aksi</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {marqueeItems.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell>{item.type}</TableCell>
+                                <TableCell className="font-medium">{item.text}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button variant="outline" size="icon"><Pencil className="h-4 w-4" /></Button>
@@ -231,13 +302,17 @@ export default function HomepageAdminPage() {
       </div>
 
       <Tabs defaultValue="banners" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="banners">Banner</TabsTrigger>
+          <TabsTrigger value="marquee">Teks Berjalan</TabsTrigger>
           <TabsTrigger value="statistics">Statistik</TabsTrigger>
           <TabsTrigger value="facilities">Fasilitas</TabsTrigger>
         </TabsList>
         <TabsContent value="banners" className="mt-4">
           <BannersTab />
+        </TabsContent>
+         <TabsContent value="marquee" className="mt-4">
+          <MarqueeTab />
         </TabsContent>
         <TabsContent value="statistics" className="mt-4">
           <StatisticsTab />

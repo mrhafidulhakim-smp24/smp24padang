@@ -1,0 +1,79 @@
+
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { Mail, Phone, MapPin } from "lucide-react";
+
+const initialContactInfo = {
+  address: "Jalan Pendidikan 123, Padang, Indonesia",
+  phone: "+62 123 456 7890",
+  email: "info@smpn24padang.sch.id",
+};
+
+export default function ContactAdminPage() {
+  const [contactInfo, setContactInfo] = useState(initialContactInfo);
+  const { toast } = useToast();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setContactInfo(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Saving contact info:", contactInfo);
+    toast({
+      title: "Sukses!",
+      description: "Informasi kontak berhasil diperbarui (mode simulasi).",
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+      <div>
+        <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+          Kelola Informasi Kontak
+        </h1>
+        <p className="mt-2 text-lg text-muted-foreground">
+          Perbarui alamat, telepon, dan email yang ditampilkan di seluruh situs.
+        </p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Detail Kontak</CardTitle>
+          <CardDescription>Informasi ini akan muncul di header, footer, dan halaman kontak.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="address" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" /> Alamat
+            </Label>
+            <Input id="address" name="address" value={contactInfo.address} onChange={handleChange} required />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="phone" className="flex items-center gap-2">
+              <Phone className="h-4 w-4" /> Nomor Telepon
+            </Label>
+            <Input id="phone" name="phone" type="tel" value={contactInfo.phone} onChange={handleChange} required />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="email" className="flex items-center gap-2">
+              <Mail className="h-4 w-4" /> Alamat Email
+            </Label>
+            <Input id="email" name="email" type="email" value={contactInfo.email} onChange={handleChange} required />
+          </div>
+        </CardContent>
+      </Card>
+      
+      <div className="flex justify-end">
+        <Button type="submit" size="lg">Simpan Perubahan</Button>
+      </div>
+    </form>
+  );
+}
