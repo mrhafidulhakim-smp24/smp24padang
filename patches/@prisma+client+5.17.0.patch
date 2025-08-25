@@ -1,0 +1,79 @@
+diff --git a/node_modules/@prisma/client/scripts/default-index.js b/node_modules/@prisma/client/scripts/default-index.js
+index 9951c6c986702795f750b327914757c3e536136a..159846b0773531b268b6d85a11c1ddb0abe30d6b 100644
+--- a/node_modules/@prisma/client/scripts/default-index.js
++++ b/node_modules/@prisma/client/scripts/default-index.js
+@@ -1,5 +1,5 @@
+ const path = require('path')
+-const fs = require('fs')
++const fs = require('fs/promises')
+ const os = require('os')
+ const { getPlatform } = require('@prisma/get-platform')
+ const { getEnginesPath } = require('@prisma/engines')
+@@ -10,13 +10,14 @@ const GENERATED_OUTPUT_PATH = path.join(__dirname, '../.prisma/client')
+ async function main() {
+   if (process.env.PRISMA_CLIENT_SKIP_GENERATE) {
+     return
+-  }
+-  if (fs.existsSync(path.join(GENERATED_OUTPUT_PATH, 'index.js'))) {
+-    return
+   }
+ 
+   const platform = await getPlatform()
+   const enginesPath = getEnginesPath()
++
++  // We overwrite the contents of the `.prisma/client` directory with the default generated client.
++  // This is required because `postinstall` will not be executed in some environments (e.g. Vercel).
++  await fs.cp(path.join(enginesPath, 'default-index'), GENERATED_OUTPUT_PATH, { recursive: true })
+ 
+   // We only generate a client if there is none yet, and we don't have the `skip-generate` env var.
+   // This is needed on platforms like Vercel, where `prisma generate` is not called by default.
+diff --git a/node_modules/@prisma/client/scripts/postinstall.js b/node_modules/@prisma/client/scripts/postinstall.js
+index 725d7743d8324838b9318a6a61f2385ff23b2046..fdce7840134f59114f24f5a34e89139f41b306b8 100644
+--- a/node_modules/@prisma/client/scripts/postinstall.js
++++ b/node_modules/@prisma/client/scripts/postinstall.js
+@@ -10,6 +10,13 @@
+ 
+ async function main() {
+   try {
++    // On Vercel, the `postinstall` script is not run, but this is fine as we have a workaround
++    // for it in our `default-index.js` file. We will not run the generate command on Vercel.
++    if (process.env.VERCEL) {
++      return
++    }
++
+     const options = getGeneratorOptionsFromEnv()
+ 
+     if (options) {
+diff --git a/node_modules/@prisma/client/src/getEngines.ts b/node_modules/@prisma/client/src/getEngines.ts
+index b0c2730766324b1a80445d4750c766b44743282b..a5b172a39c5950d99539209559c4a86b970868a8 100644
+--- a/node_modules/@prisma/client/src/getEngines.ts
++++ b/node_modules/@prisma/client/src/getEngines.ts
+@@ -10,7 +10,12 @@ export function getEngines() {
+     // this is required for the cloudflare integration, and only for it
+     if (globalThis.navigator?.userAgent === 'Cloudflare-Workers') {
+       return {
+-        queryEngine: 'libquery_engine-wasm.so.node',
++        queryEngine: {
++          // wasm is the only supported engine on CF workers
++          [EngineType.QueryEngine]: 'libquery_engine-wasm.so.node',
++          // not used, but required by the type
++          [EngineType.LibraryEngine]: 'libquery_engine-wasm.so.node',
++        },
+       }
+     }
+ 
+@@ -34,7 +39,12 @@ export function getEngines() {
+     }
+ 
+     return {
+-      queryEngine: `libquery_engine-${platform}.so.node`,
++      queryEngine: {
++        [EngineType.QueryEngine]: `libquery_engine-${platform}.so.node`,
++        // this is not used on vercel, but required by the type
++        // we set it to the query engine name to avoid bundling it
++        [EngineType.LibraryEngine]: `libquery_engine-${platform}.so.node`,
++      },
+     }
+   }
+ 
+

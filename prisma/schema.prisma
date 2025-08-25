@@ -2,35 +2,27 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Profile {
-  id                  String   @id @default(cuid())
-  principalName       String
-  principalWelcome    String
-  principalImageUrl   String?
-  history             String
-  vision              String
-  mission             String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-}
+  id                  String @id @default(cuid())
+  schoolName          String @default("SMPN 24 Padang")
+  principalName       String @default("Dra. Hj. Deswati, MM")
+  principalImageUrl   String @default("https://placehold.co/600x800.png")
+  principalWelcome    String @default("Selamat datang di website resmi SMPN 24 Padang. Kami berkomitmen untuk menyediakan lingkungan belajar yang inspiratif dan mendukung bagi semua siswa.")
+  history             String @default("Didirikan pada tahun 1985, SMPN 24 Padang telah berkembang menjadi salah satu sekolah menengah pertama terkemuka di kota ini.")
+  vision              String @default("Menjadi sekolah unggul yang menghasilkan lulusan cerdas, berkarakter, dan berdaya saing global.")
+  mission             String @default("Menyelenggarakan pendidikan berkualitas...\nMengembangkan potensi siswa secara holistik...\nMembina karakter siswa...")
 
-model Staff {
-  id          String   @id @default(cuid())
-  name        String
-  position    String
-  subject     String?
-  homeroomOf  String?
-  imageUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Banner {
@@ -62,50 +54,60 @@ model Announcement {
 }
 
 model Achievement {
-    id          String   @id @default(cuid())
-    title       String
-    student     String
-    description String
-    imageUrl    String?
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-}
-
-model GalleryItem {
-    id        String   @id @default(cuid())
-    src       String
-    alt       String
-    category  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-model Academics {
-  id                    String   @id @default("1")
-  curriculumTitle       String
-  curriculumDescription String
-  curriculumImageUrl    String?
-  structureTitle        String
-  structureDescription  String
-  structureImageUrl     String?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id          String   @id @default(cuid())
+  title       String
+  student     String
+  description String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Statistics {
-  id          String @id @default("1")
-  classrooms  Int
-  students    Int
-  teachers    Int
-  staff       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String @id @default("1") // Singleton
+  classrooms Int    @default(24)
+  students   Int    @default(773)
+  teachers   Int    @default(30)
+  staff      Int    @default(12)
+  updatedAt  DateTime @updatedAt
 }
 
 model Facility {
-  id          String @id @default(cuid())
-  name        String
-  imageUrl    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GalleryItem {
+  id        String   @id @default(cuid())
+  src       String
+  alt       String
+  category  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Staff {
+  id         String   @id @default(cuid())
+  name       String
+  position   String // e.g. "Guru Matematika", "Kepala Sekolah", "Staf TU"
+  subject    String?  // e.g. "Matematika", "Bahasa Inggris"
+  homeroomOf String?  // e.g. "Kelas 9A"
+  imageUrl   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Academics {
+  id                     String @id @default("1") // Singleton
+  curriculumTitle        String
+  curriculumDescription  String
+  curriculumImageUrl     String?
+  structureTitle         String
+  structureDescription   String
+  structureImageUrl      String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 }

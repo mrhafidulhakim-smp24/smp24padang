@@ -4,11 +4,6 @@ import { notFound } from "next/navigation";
 import { Calendar, UserCircle } from "lucide-react";
 import prisma from "@/lib/prisma";
 
-interface PageProps {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
 async function getNewsArticle(id: string) {
     try {
         const article = await prisma.news.findUnique({
@@ -21,7 +16,7 @@ async function getNewsArticle(id: string) {
     }
 }
 
-export default async function NewsArticlePage({ params }: PageProps) {
+export default async function NewsArticlePage({ params }: { params: { id: string } }) {
   const article = await getNewsArticle(params.id);
 
   if (!article) {
