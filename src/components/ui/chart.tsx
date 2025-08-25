@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
+import { TooltipPayload } from "recharts"; // Import TooltipPayload
 
 import { cn } from "@/lib/utils"
 
@@ -111,6 +112,9 @@ const ChartTooltipContent = React.forwardRef<
       indicator?: "line" | "dot" | "dashed"
       nameKey?: string
       labelKey?: string
+      labelClassName?: string
+      labelFormatter?: (value: any, payload: readonly RechartsPrimitive.TooltipPayload[]) => React.ReactNode;
+      formatter?: (value: any, name: any, props: any, index: number, payload: any) => React.ReactNode; // Explicitly define formatter type
     }
 >(
   (
@@ -192,7 +196,7 @@ const ChartTooltipContent = React.forwardRef<
 
             return (
               <div
-                key={item.dataKey}
+                key={key}
                 className={cn(
                   "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
                   indicator === "dot" && "items-center"
@@ -286,7 +290,7 @@ const ChartLegendContent = React.forwardRef<
         )}
       >
         {payload.map((item) => {
-          const key = `${nameKey || item.dataKey || "value"}`
+          const key = `${nameKey || item.value || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
 
           return (

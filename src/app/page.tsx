@@ -5,10 +5,12 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, ShieldCheck, School, Users, UserCheck, BookCopy, Target, Book, Newspaper, Megaphone } from 'lucide-react';
-import { Marquee } from '@/components/ui/marquee';
+import { Marquee, MarqueeItem } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { getBanners, getLatestNews, getProfile, getStatistics, getFacilities, getAbout, getAnnouncements } from './actions';
 import { Separator } from '@/components/ui/separator';
+
+export const dynamic = 'force-dynamic';
 
 async function AboutUs() {
   const about = await getAbout();
@@ -251,7 +253,7 @@ export default async function Home() {
   const banners = await getBanners();
   const profile = await getProfile();
 
-  const marqueeItems = [
+  const marqueeItems: MarqueeItem[] = [
       { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
       { type: 'Berita', text: 'Pendaftaran siswa baru tahun ajaran 2024/2025 telah dibuka.' },
       { type: 'Pengumuman', text: 'Jadwal Ujian Akhir Semester akan diumumkan minggu depan.' },

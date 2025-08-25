@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 
-interface MarqueeItem {
+export interface MarqueeItem {
   type: 'Berita' | 'Prestasi' | 'Pengumuman';
   text: string;
 }

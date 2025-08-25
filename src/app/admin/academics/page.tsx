@@ -20,6 +20,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 // The form needs a slightly different shape than the schema, including the full image URLs
 type AcademicFormData = AcademicData & {
+    id?: string; // Add id property
     curriculumImageUrl?: string | null;
     structureImageUrl?: string | null;
 };
