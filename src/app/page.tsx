@@ -148,6 +148,7 @@ async function LatestNews() {
                     alt={item.title}
                     width={600}
                     height={400}
+                    data-ai-hint="news event"
                     className="h-56 w-full object-cover"
                   />
                 </Link>
@@ -174,6 +175,7 @@ async function LatestNews() {
 
 async function Statistics() {
   const stats = await getStatistics();
+  if (!stats) return null;
   const statistics = [
     { id: 'classrooms', value: stats.classrooms, label: 'Ruang Kelas', icon: School },
     { id: 'students', value: stats.students, label: 'Jumlah Siswa', icon: Users },
@@ -231,6 +233,7 @@ async function Facilities() {
                                 alt={facility.name}
                                 width={600}
                                 height={400}
+                                data-ai-hint="school facility"
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 z-20 flex items-end p-6">
@@ -274,6 +277,7 @@ export default async function Home() {
                     alt={banner.title}
                     fill
                     style={{objectFit: 'cover'}}
+                    data-ai-hint="school students"
                     className="z-0"
                     priority={index === 0}
                   />
@@ -308,6 +312,7 @@ export default async function Home() {
               alt="Principal" 
               fill 
               style={{objectFit: 'cover', objectPosition: 'top'}}
+              data-ai-hint="school principal"
               className="transition-transform duration-500 hover:scale-110"
             />
           </div>
