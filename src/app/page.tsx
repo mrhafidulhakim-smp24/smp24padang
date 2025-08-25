@@ -1,12 +1,14 @@
 
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, ShieldCheck, School, Users, UserCheck, BookCopy, Target, Book } from 'lucide-react';
+import { ArrowRight, BookOpen, ShieldCheck, School, Users, UserCheck, BookCopy, Target, Book, Newspaper } from 'lucide-react';
 import { Marquee } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { getBanners, getLatestNews, getProfile, getStatistics, getFacilities, getAbout } from './actions';
+import { Separator } from '@/components/ui/separator';
 
 async function AboutUs() {
   const about = await getAbout();
@@ -74,50 +76,43 @@ async function Announcement() {
   return (
     <section className="bg-primary/5 py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="text-center">
-          <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">Berita & Pengumuman Terbaru</h2>
-          <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-            Informasi terbaru dan terpenting seputar kegiatan sekolah.
-          </p>
-        </div>
-        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {latestNews.map((item) => (
-            <Card key={item.id} className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl">
-              <CardHeader className="p-0">
-                 <Link href={`/news/${item.id}`}>
-                    <Image
-                      src={item.imageUrl || "https://placehold.co/600x400.png"}
-                      alt={item.title}
-                      width={600}
-                      height={400}
-                      className="h-56 w-full object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                  </Link>
-              </CardHeader>
-              <CardContent className="flex flex-grow flex-col p-6">
-                <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                <CardTitle className="font-headline text-xl font-bold text-primary">
-                  <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
-                </CardTitle>
-                <p className="mt-2 flex-grow text-foreground/80 dark:text-foreground/70">
-                  {item.description.substring(0, 150)}...
-                </p>
-              </CardContent>
-              <div className="p-6 pt-0">
-                <Button asChild variant="link" className="p-0 text-accent hover:text-accent/80">
-                  <Link href={`/news/${item.id}`}>
-                    Baca Selengkapnya <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
-         <div className="mt-12 text-center">
-           <Button asChild size="lg">
-              <Link href="/news">Lihat Semua Berita & Pengumuman</Link>
-           </Button>
-         </div>
+        <Card className="mx-auto max-w-4xl">
+           <CardHeader>
+            <CardTitle className="flex items-center gap-3 font-headline text-3xl text-primary">
+              <Newspaper className="h-8 w-8 text-accent"/>
+              Berita & Pengumuman
+            </CardTitle>
+            <CardDescription>
+              Informasi terbaru dan terpenting seputar kegiatan sekolah.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+             <div className="flex flex-col gap-4">
+              {latestNews.map((item, index) => (
+                <React.Fragment key={item.id}>
+                  <div className="flex flex-col gap-1.5">
+                     <p className="text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                     <Link href={`/news/${item.id}`} className="font-semibold text-foreground hover:text-primary hover:underline">
+                        {item.title}
+                      </Link>
+                     <p className="text-sm text-muted-foreground">{item.description.substring(0, 120)}...</p>
+                      <Button variant="link" asChild className="-ml-1 p-0 self-start text-accent hover:text-accent/80 text-sm">
+                        <Link href={`/news/${item.id}`}>
+                          Baca Lebih Lanjut <ArrowRight className="ml-1 h-3 w-3" />
+                        </Link>
+                      </Button>
+                  </div>
+                  {index < latestNews.length - 1 && <Separator />}
+                </React.Fragment>
+              ))}
+            </div>
+             <div className="mt-8 text-center">
+               <Button asChild>
+                  <Link href="/news">Lihat Semua Berita & Pengumuman</Link>
+               </Button>
+             </div>
+          </CardContent>
+        </Card>
       </div>
     </section>
   );

@@ -12,11 +12,6 @@ const mockNews = [
     { id: '4', title: 'Studi Tur ke Museum Adityawarman', description: 'Siswa kelas 8 melakukan studi tur edukatif untuk mempelajari sejarah dan budaya Minangkabau secara langsung.', date: new Date('2023-10-28'), imageUrl: 'https://placehold.co/600x400.png' },
 ];
 
-const mainAnnouncement = {
-  title: "Penerimaan Peserta Didik Baru (PPDB) Tahun Ajaran 2024/2025 Telah Dibuka!",
-  description: "Jangan lewatkan kesempatan untuk menjadi bagian dari keluarga besar SMPN 24 Padang. Pendaftaran dibuka mulai tanggal 1 hingga 15 Juli 2024. Klik untuk melihat informasi selengkapnya mengenai jadwal, persyaratan, dan alur pendaftaran.",
-  link: "/penerimaan-siswa-baru", // Halaman ini belum ada, namun bisa dibuat nanti.
-}
 
 async function getAllNews() {
   // In a real app, this would fetch from a database.
@@ -37,29 +32,7 @@ export default async function NewsPage() {
         </p>
       </div>
       
-      {/* Main Announcement Section */}
-      <section className="mt-12">
-        <Card className="bg-primary/5 border-primary/20 w-full overflow-hidden">
-            <CardContent className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-                 <div className="flex-shrink-0 rounded-full bg-accent/20 p-4">
-                    <Megaphone className="h-10 w-10 text-accent" />
-                  </div>
-                <div className="flex-grow text-center md:text-left">
-                    <h2 className="font-headline text-2xl font-bold text-primary">{mainAnnouncement.title}</h2>
-                    <p className="mt-2 text-muted-foreground">{mainAnnouncement.description}</p>
-                </div>
-                <div className="flex-shrink-0 mt-4 md:mt-0">
-                    <Button asChild>
-                        <Link href={mainAnnouncement.link}>
-                            Lihat Detail <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                    </Button>
-                </div>
-            </CardContent>
-        </Card>
-      </section>
-
-      {/* Other News Section */}
+      {/* News Section */}
       <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {newsItems.map((item) => (
           <Card key={item.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
