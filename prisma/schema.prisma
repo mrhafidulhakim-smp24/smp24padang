@@ -1,13 +1,15 @@
 
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Banner {
@@ -16,45 +18,14 @@ model Banner {
   description String
   imageUrl    String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Profile {
-  id                  String   @id @default(cuid())
-  principalName       String
-  principalImageUrl   String
-  principalWelcome    String
-  history             String
-  vision              String
-  mission             String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-}
-
-model Statistics {
-  id          String   @id @default(cuid())
-  classrooms  Int
-  students    Int
-  teachers    Int
-  staff       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Facility {
-  id        String   @id @default(cuid())
-  name      String
-  imageUrl  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model News {
   id          String   @id @default(cuid())
   title       String
   description String
-  imageUrl    String?
   date        DateTime
+  imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -68,6 +39,47 @@ model Announcement {
   updatedAt   DateTime @updatedAt
 }
 
+model Profile {
+  id                String   @id @default(cuid())
+  principalName     String
+  principalWelcome  String
+  principalImageUrl String?
+  history           String
+  vision            String
+  mission           String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Statistics {
+  id          String @id @default(cuid())
+  classrooms  Int
+  students    Int
+  teachers    Int
+  staff       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Facility {
+  id        String   @id @default(cuid())
+  name      String
+  imageUrl  String
+  createdAt DateTime @default(now())
+}
+
+model Academics {
+  id                      String   @id @default("1")
+  curriculumTitle         String
+  curriculumDescription   String
+  curriculumImageUrl      String?
+  structureTitle          String
+  structureDescription    String
+  structureImageUrl       String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
 model Achievement {
   id          String   @id @default(cuid())
   title       String
@@ -75,7 +87,6 @@ model Achievement {
   description String
   imageUrl    String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model GalleryItem {
@@ -84,7 +95,6 @@ model GalleryItem {
   alt       String
   category  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Staff {
@@ -95,15 +105,4 @@ model Staff {
   homeroomOf  String?
   imageUrl    String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Academics {
-  id                      String      @id @default("1")
-  curriculumTitle         String
-  curriculumDescription   String
-  curriculumImageUrl      String?
-  structureTitle          String
-  structureDescription    String
-  structureImageUrl       String?
 }
