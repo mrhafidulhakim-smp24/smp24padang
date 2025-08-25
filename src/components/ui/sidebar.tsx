@@ -19,7 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import Link from "next/link";
+import Link, { type LinkProps } from "next/link";
 
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
@@ -536,18 +536,18 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
+type SidebarMenuButtonProps = (
+  | (Omit<React.ComponentPropsWithoutRef<'button'>, 'href'> & { href?: never })
+  | (Omit<React.ComponentPropsWithoutRef<typeof Link>, 'href'> & { href: LinkProps['href'] })
+) & {
+  asChild?: boolean;
+  isActive?: boolean;
+  tooltip?: React.ReactNode | Omit<React.ComponentPropsWithoutRef<typeof TooltipContent>, 'children'>;
+  icon?: React.ReactNode;
+} & VariantProps<typeof sidebarMenuButtonVariants>;
 
-const SidebarMenuButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentProps<"button"> & {
-    asChild?: boolean;
-    isActive?: boolean;
-    tooltip?: React.ReactNode | Omit<React.ComponentPropsWithoutRef<typeof TooltipContent>, "children">;
-    href?: string;
-    icon?: React.ReactNode;
-    children?: React.ReactNode;
-  } & VariantProps<typeof sidebarMenuButtonVariants>
->(
+
+const SidebarMenuButton = React.forwardRef<HTMLButtonElement, SidebarMenuButtonProps>(
   (
     {
       asChild = false,
@@ -564,7 +564,7 @@ const SidebarMenuButton = React.forwardRef<
     ref
   ) => {
     const { isMobile, state } = useSidebar();
-    const Comp = href ? asChild ? Slot : Link : asChild ? Slot : "button";
+    const Comp = href ? (asChild ? Slot : Link) : (asChild ? Slot : "button");
 
     const buttonContent = (
       <>
@@ -573,21 +573,25 @@ const SidebarMenuButton = React.forwardRef<
       </>
     );
 
-    const button = (
-      // @ts-ignore - href is a valid prop for Link
-      <Comp
-        ref={ref}
-        href={href}
-        data-sidebar="menu-button"
-        data-size={size}
-        data-active={isActive}
-        className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-        {...props}
-      >
-        {buttonContent}
-      </Comp>
+    const commonProps = {
+      "data-sidebar": "menu-button",
+      "data-size": size,
+      "data-active": isActive,
+      className: cn(sidebarMenuButtonVariants({ variant, size }), className),
+      ...props
+    };
+
+    const buttonElement = href ? (
+        <Link href={href} {...(commonProps as any)} ref={ref as React.Ref<HTMLAnchorElement>}>
+            {buttonContent}
+        </Link>
+    ) : (
+        <button {...commonProps} ref={ref}>
+            {buttonContent}
+        </button>
     );
-    
+
+
     const tooltipContent = typeof tooltipProp === "object" && tooltipProp !== null && "children" in tooltipProp ? tooltipProp.children : tooltipProp;
     const tooltipProps = typeof tooltipProp === "object" && tooltipProp !== null && "children" in tooltipProp ? { ...tooltipProp } : {};
     if (typeof tooltipProp === "object" && tooltipProp !== null && "children" in tooltipProps) {
@@ -596,16 +600,16 @@ const SidebarMenuButton = React.forwardRef<
 
 
     if (!tooltipProp && state === 'expanded') {
-      return button;
+      return buttonElement;
     }
     
     if (state === 'expanded' && !isMobile) {
-      return button;
+      return buttonElement;
     }
 
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipTrigger asChild>{buttonElement}</TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"
@@ -790,3 +794,4 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
