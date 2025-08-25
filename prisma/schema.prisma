@@ -3,12 +3,12 @@
 
 generator client {
   provider        = "prisma-client-js"
-  binaryTargets   = ["native", "debian-openssl-3.0.x"]
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Banner {
@@ -30,26 +30,34 @@ model News {
   updatedAt   DateTime @updatedAt
 }
 
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Profile {
-  id                  String   @id @default(cuid())
-  principalName       String
-  principalWelcome    String
-  principalImageUrl   String?
-  history             String
-  vision              String
-  mission             String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                String   @id @default(cuid())
+  principalName     String
+  principalWelcome  String   @db.Text
+  principalImageUrl String?
+  history           String   @db.Text
+  vision            String   @db.Text
+  mission           String   @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Statistics {
-  id          String   @id @default("1")
-  classrooms  Int
-  students    Int
-  teachers    Int
-  staff       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String @id @default("1") // Singleton
+  classrooms Int
+  students   Int
+  teachers   Int
+  staff      Int
+  updatedAt  DateTime @updatedAt
 }
 
 model Facility {
@@ -57,19 +65,18 @@ model Facility {
   name      String
   imageUrl  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Academics {
-  id                      String   @id @default("1")
-  curriculumTitle         String
-  curriculumDescription   String
-  curriculumImageUrl      String?
-  structureTitle          String
-  structureDescription    String
-  structureImageUrl       String?
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
+  id                    String   @id @default("1") // Singleton
+  curriculumTitle       String
+  curriculumDescription String   @db.Text
+  curriculumImageUrl    String?
+  structureTitle        String
+  structureDescription  String   @db.Text
+  structureImageUrl     String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 }
 
 model Achievement {
@@ -88,7 +95,6 @@ model GalleryItem {
   alt       String
   category  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Staff {
@@ -100,13 +106,4 @@ model Staff {
   imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-model Announcement {
-    id String @id @default(cuid())
-    title String
-    description String
-    date DateTime
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 }
