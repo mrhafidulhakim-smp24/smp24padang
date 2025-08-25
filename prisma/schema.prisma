@@ -1,32 +1,26 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-1.1.x"]
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id    String @id @default(cuid())
+  email String @unique
+  name  String
 }
 
 model Banner {
   id          String   @id @default(cuid())
   title       String
   description String
-  imageUrl    String?
-  link        String?
+  imageUrl    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -35,8 +29,8 @@ model News {
   id          String   @id @default(cuid())
   title       String
   description String   @db.Text
-  imageUrl    String?
   date        DateTime
+  imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -60,15 +54,33 @@ model Achievement {
   updatedAt   DateTime @updatedAt
 }
 
-model Staff {
-  id          String   @id @default(cuid())
-  name        String
-  position    String
-  subject     String?
-  homeroomOf  String?
-  imageUrl    String?
+model Profile {
+  id                String   @id @default(cuid())
+  principalName     String
+  principalWelcome  String   @db.Text
+  principalImageUrl String
+  history           String   @db.Text
+  vision            String   @db.Text
+  mission           String   @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Statistics {
+  id          String   @id @default("1")
+  classrooms  Int
+  students    Int
+  teachers    Int
+  staff       Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Facility {
+    id          String @id @default(cuid())
+    name        String
+    imageUrl    String
+    createdAt   DateTime @default(now())
 }
 
 model GalleryItem {
@@ -77,47 +89,27 @@ model GalleryItem {
   alt       String
   category  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
-model Profile {
-  id                  String   @id @default(cuid())
-  history             String   @db.Text
-  vision              String   @db.Text
-  mission             String   @db.Text
-  principalName       String
-  principalWelcome    String   @db.Text
-  principalImageUrl   String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-}
-
-model Statistics {
-  id         String @id @default(cuid())
-  classrooms Int
-  students   Int
-  teachers   Int
-  staff      Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
-model Facility {
-  id        String   @id @default(cuid())
-  name      String
-  imageUrl  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Staff {
+  id          String    @id @default(cuid())
+  name        String
+  position    String
+  subject     String?
+  homeroomOf  String?
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Academics {
-  id                   String @id @default("1")
-  curriculumTitle      String
+  id                    String @id @default("1")
+  curriculumTitle       String
   curriculumDescription String @db.Text
-  curriculumImageUrl   String?
-  structureTitle       String
-  structureDescription String @db.Text
-  structureImageUrl    String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  curriculumImageUrl    String?
+  structureTitle        String
+  structureDescription  String @db.Text
+  structureImageUrl     String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 }
