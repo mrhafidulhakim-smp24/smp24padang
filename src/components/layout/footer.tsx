@@ -21,6 +21,9 @@ export default function Footer() {
           <p className="text-primary-foreground/80">
             Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.
           </p>
+           <div className="pt-4 text-primary-foreground/80">
+                <p className="font-semibold">Kerja Praktek Informatika UPI "YPTK" Padang</p>
+            </div>
           <div className="flex space-x-4">
             <Link href="#" className="text-primary-foreground/80 transition-colors hover:text-white"><Facebook className="h-6 w-6" /></Link>
             <Link href="#" className="text-primary-foreground/80 transition-colors hover:text-white"><Twitter className="h-6 w-6" /></Link>
@@ -62,7 +65,6 @@ export default function Footer() {
       <div className="bg-primary py-4">
         <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-center text-sm text-primary-foreground/70 sm:flex-row">
             <div className="flex flex-col items-center sm:items-start">
-                 <p className="font-semibold">Kerja Praktek Informatika UPI "YPTK" Padang</p>
                  <p>© {currentYear} SMPN 24 Padang. Hak Cipta Dilindungi Undang-Undang.</p>
             </div>
           <Link href="/admin" className="transition-colors hover:text-white">
