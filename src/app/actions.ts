@@ -7,6 +7,12 @@ const mockBanners = [
   { id: '2', title: 'Penerimaan Siswa Baru 2024/2025', description: 'Bergabunglah dengan komunitas kami dan mulailah perjalanan pendidikan Anda.', imageUrl: 'https://placehold.co/1920x1080.png', createdAt: new Date() },
 ];
 
+const mockAnnouncements = [
+    { id: 'ann1', title: 'Penerimaan Peserta Didik Baru (PPDB) 2024/2025 Telah Dibuka!', date: new Date('2024-06-15'), description: 'Jangan lewatkan kesempatan untuk menjadi bagian dari keluarga besar SMPN 24 Padang. Pendaftaran dibuka hingga 15 Juli 2024. Klik untuk info selengkapnya.' },
+    { id: 'ann2', title: 'Jadwal Ujian Akhir Semester Genap', date: new Date('2024-06-10'), description: 'Ujian Akhir Semester (UAS) Genap akan dilaksanakan mulai tanggal 20 hingga 27 Juni 2024. Pastikan untuk mempersiapkan diri dengan baik.' },
+    { id: 'ann3', title: 'Libur Sekolah dan Pembagian Rapor', date: new Date('2024-06-08'), description: 'Pembagian rapor akan dilaksanakan pada tanggal 29 Juni 2024, diikuti dengan libur akhir tahun ajaran.' },
+];
+
 const mockNews = [
     { id: '1', title: 'Lomba Cerdas Cermat Tingkat Kota', description: 'Siswa kami berhasil meraih juara 2 dalam Lomba Cerdas Cermat tingkat kota Padang. Prestasi ini merupakan buah dari kerja keras dan bimbingan para guru.', date: new Date('2023-11-15'), imageUrl: 'https://placehold.co/600x400.png' },
     { id: '2', title: 'Kegiatan Jumat Bersih Lingkungan Sekolah', description: 'Dalam rangka menumbuhkan kepedulian terhadap lingkungan, kami mengadakan kegiatan Jumat Bersih yang diikuti oleh seluruh siswa dan guru.', date: new Date('2023-11-10'), imageUrl: 'https://placehold.co/600x400.png' },
@@ -50,6 +56,10 @@ export async function getBanners() {
 
 export async function getLatestNews() {
   return mockNews.slice(0, 3);
+}
+
+export async function getAnnouncements() {
+    return mockAnnouncements.slice(0, 3);
 }
 
 export async function getProfile() {
