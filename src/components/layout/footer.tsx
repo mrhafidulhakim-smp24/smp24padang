@@ -13,7 +13,7 @@ export default function Footer() {
       <div className="container mx-auto grid grid-cols-1 gap-12 px-4 py-12 md:grid-cols-3">
         <div className="space-y-4">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.jpg" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto rounded-full" />
+            <Image src="/logo.png" alt="SMPN 24 Padang Logo" width={40} height={40} className="h-8 w-auto" />
             <span className="font-headline text-xl font-bold text-white">
               SMPN 24 Padang
             </span>

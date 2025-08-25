@@ -71,11 +71,11 @@ export default function AdminLayout({
           <SidebarHeader>
             <div className="flex items-center gap-2">
               <Image
-                src="/logo.jpg"
+                src="/logo.png"
                 alt="Logo"
                 width={32}
                 height={32}
-                className="rounded-full"
+                className=""
               />
               <span className="text-lg font-semibold text-primary">
                 Admin CMS

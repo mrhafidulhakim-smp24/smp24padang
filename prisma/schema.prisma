@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  binaryTargets   = ["native", "debian-openssl-3.0.x"]
+  binaryTargets   = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -12,32 +12,70 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
   name      String?
-  password  String // In a real app, this should be a hash
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Banner {
   id          String   @id @default(cuid())
   title       String
   description String
-  imageUrl    String
+  imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model News {
-  id          String   @id @default(cuid())
-  title       String
-  description String   @db.Text
-  imageUrl    String?
-  date        DateTime
-  isPinned    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+    id          String @id @default(cuid())
+    title       String
+    description String @db.Text
+    imageUrl    String?
+    date        DateTime
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Announcement {
+    id          String @id @default(cuid())
+    title       String
+    description String
+    date        DateTime
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Profile {
+    id                  String @id @default(cuid())
+    principalName       String
+    principalWelcome    String @db.Text
+    principalImageUrl   String?
+    history             String @db.Text
+    vision              String @db.Text
+    mission             String @db.Text
+    createdAt           DateTime @default(now())
+    updatedAt           DateTime @updatedAt
+}
+
+model Statistics {
+    id          String @id @default(cuid())
+    classrooms  Int
+    students    Int
+    teachers    Int
+    staff       Int
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Facility {
+    id          String @id @default(cuid())
+    name        String
+    imageUrl    String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
 model Achievement {
@@ -50,73 +88,51 @@ model Achievement {
     updatedAt   DateTime @updatedAt
 }
 
-model Staff {
-    id         String   @id @default(cuid())
-    name       String
-    position   String
-    subject    String?
-    homeroomOf String?
-    imageUrl   String?
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-}
-
 model GalleryItem {
-    id        String   @id @default(cuid())
-    src       String
-    alt       String
-    category  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-model Announcement {
-    id          String   @id @default(cuid())
-    title       String
-    description String
-    date        DateTime
+    id          String @id @default(cuid())
+    src         String
+    alt         String
+    category    String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }
 
-model Profile {
-    id                  String   @id @default(cuid())
-    principalName       String
-    principalWelcome    String   @db.Text
-    principalImageUrl   String
-    vision              String   @db.Text
-    mission             String   @db.Text
-    history             String   @db.Text
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-}
-
-model Statistics {
-    id          String @id @default("1")
-    classrooms  Int
-    students    Int
-    teachers    Int
-    staff       Int
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-}
-
-model Facility {
-    id        String   @id @default(cuid())
-    name      String
-    imageUrl  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Staff {
+  id          String    @id @default(cuid())
+  name        String
+  position    String
+  subject     String?
+  homeroomOf  String?
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Academics {
-  id                    String @id @default("1")
-  curriculumTitle       String
-  curriculumDescription String @db.Text
-  curriculumImageUrl    String?
-  structureTitle        String
-  structureDescription  String @db.Text
-  structureImageUrl     String?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                      String      @id @default(cuid())
+  curriculumTitle         String
+  curriculumDescription   String      @db.Text
+  curriculumImageUrl      String?
+  structureTitle          String
+  structureDescription    String      @db.Text
+  structureImageUrl       String?
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+}
+
+model Contact {
+  id        String      @id @default(cuid())
+  address   String
+  phone     String
+  email     String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model MarqueeItem {
+    id          String @id @default(cuid())
+    type        String // "Berita", "Prestasi", "Pengumuman"
+    text        String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
