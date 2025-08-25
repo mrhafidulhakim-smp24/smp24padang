@@ -44,7 +44,7 @@ export default function ExtracurricularPage() {
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {activities.map((activity) => (
-                  <Card key={activity.id} className="group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                  <Card key={activity.id} className="group flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <CardHeader className="p-0">
                       <div className="relative aspect-video w-full">
                         <Image
@@ -55,9 +55,9 @@ export default function ExtracurricularPage() {
                         />
                       </div>
                     </CardHeader>
-                    <CardContent className="p-4">
+                    <CardContent className="flex flex-1 flex-col p-4">
                       <CardTitle className="font-headline text-xl text-primary">{activity.name}</CardTitle>
-                      <CardDescription className="mt-2">{activity.description}</CardDescription>
+                      <CardDescription className="mt-2 flex-1">{activity.description}</CardDescription>
                     </CardContent>
                   </Card>
                 ))}

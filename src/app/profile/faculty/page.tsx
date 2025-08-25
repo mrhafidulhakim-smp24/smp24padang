@@ -1,11 +1,49 @@
 
+"use client";
+
 import Image from "next/image";
 import { getStaff } from "./actions";
 import { Badge } from "@/components/ui/badge";
+import { useState, useEffect, useMemo } from "react";
+import type { Staff } from "@prisma/client";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Search } from "lucide-react";
 
+export default function FacultyPage() {
+  const [allStaff, setAllStaff] = useState<Staff[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("all");
 
-export default async function FacultyPage() {
-  const faculty = await getStaff();
+  useEffect(() => {
+    getStaff().then(setAllStaff);
+  }, []);
+
+  const filteredStaff = useMemo(() => {
+    return allStaff
+      .filter((member) => {
+        if (filter === "all") return true;
+        if (filter === "homeroom") return !!member.homeroomOf;
+        return member.position === filter;
+      })
+      .filter((member) =>
+        member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (member.subject && member.subject.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+  }, [allStaff, searchTerm, filter]);
+
+  const positions = useMemo(() => {
+    const uniquePositions = [...new Set(allStaff.map(s => s.position))];
+    return uniquePositions;
+  }, [allStaff]);
+
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
@@ -18,11 +56,36 @@ export default async function FacultyPage() {
         </p>
       </div>
 
-      <section className="mt-16">
+      <div className="my-12 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="relative w-full md:max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Cari nama, jabatan, atau mapel..."
+            className="pl-10"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <Select value={filter} onValueChange={setFilter}>
+          <SelectTrigger className="w-full md:w-[200px]">
+            <SelectValue placeholder="Filter berdasarkan Jabatan" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Semua Jabatan</SelectItem>
+            <SelectItem value="homeroom">Wali Kelas</SelectItem>
+            {positions.map(pos => (
+               <SelectItem key={pos} value={pos}>{pos}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <section>
         <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {faculty.map((member) => (
+          {filteredStaff.map((member) => (
             <div key={member.id} className="flex flex-col items-center text-center group">
-              <div className="relative h-40 w-40 overflow-hidden rounded-full shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
+              <div className="relative aspect-square w-full max-w-[200px] overflow-hidden rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
                 <Image 
                   src={member.imageUrl || "https://placehold.co/150x150.png"}
                   alt={member.name} 
@@ -41,6 +104,11 @@ export default async function FacultyPage() {
             </div>
           ))}
         </div>
+         {filteredStaff.length === 0 && (
+          <div className="py-16 text-center text-muted-foreground">
+            <p>Tidak ada staf yang cocok dengan kriteria pencarian Anda.</p>
+          </div>
+        )}
       </section>
     </div>
   );

@@ -21,14 +21,14 @@ export default function Footer() {
           <p className="text-primary-foreground/80">
             Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia pembelajaran dan penemuan kami.
           </p>
-           <div className="pt-4 text-primary-foreground/80">
-                <p className="font-semibold">Kerja Praktek Informatika UPI "YPTK" Padang</p>
-            </div>
           <div className="flex space-x-4">
             <Link href="#" className="text-primary-foreground/80 transition-colors hover:text-white"><Facebook className="h-6 w-6" /></Link>
             <Link href="#" className="text-primary-foreground/80 transition-colors hover:text-white"><Twitter className="h-6 w-6" /></Link>
             <Link href="#" className="text-primary-foreground/80 transition-colors hover:text-white"><Instagram className="h-6 w-6" /></Link>
           </div>
+           <div className="pt-4 text-primary-foreground/80">
+                <p className="font-semibold">Kerja Praktek Informatika UPI "YPTK" Padang</p>
+            </div>
         </div>
         
         <div className="space-y-4">

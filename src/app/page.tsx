@@ -252,8 +252,8 @@ export default async function Home() {
 
       {/* Welcome from Principal Section */}
       <section className="bg-primary/5 py-16 md:py-24">
-        <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2 lg:grid-cols-5">
-          <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-xl lg:h-[450px]">
+        <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-3 lg:grid-cols-5">
+          <div className="relative mx-auto h-96 w-80 overflow-hidden rounded-lg shadow-xl md:h-[450px] md:w-full lg:col-span-2">
             <Image 
               src={profile?.principalImageUrl || "https://placehold.co/600x800.png"} 
               alt="Principal" 
