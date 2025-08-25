@@ -2,32 +2,120 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["linux-musl"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
+// ==================================================================
+// AUTHENTICATION & USERS
+// ==================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String // In a real app, this should be a hashed password.
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  news          News[]
+  achievements  Achievement[]
+  staff         Staff[]
+  galleryItems  GalleryItem[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+
+// ==================================================================
+// WEBSITE CONTENT MODELS
+// ==================================================================
+
+// Single-instance model for general school profile information
+model SchoolProfile {
+  id                String   @id @default(cuid())
+  principalName     String
+  principalWelcome  String   @db.Text
+  principalImageUrl String?
+  history           String   @db.Text
+  vision            String   @db.Text
+  mission           String[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// Single-instance model for Academic page content
+model AcademicProfile {
+  id                   String   @id @default(cuid())
+  curriculumTitle      String
+  curriculumDescription String   @db.Text
+  curriculumImageUrl   String?
+  structureTitle       String
+  structureDescription String   @db.Text
+  structureImageUrl    String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+// Single-instance model for school-wide contact info & statistics
+model SiteConfiguration {
+  id              String   @id @default(cuid())
+  address         String
+  phone           String
+  email           String
+  statClassrooms  Int      @default(0)
+  statStudents    Int      @default(0)
+  statTeachers    Int      @default(0)
+  statStaff       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+
+// ==================================================================
+// MULTI-INSTANCE CONTENT MODELS
+// ==================================================================
 
 model Banner {
   id          String   @id @default(cuid())
   title       String
   description String
-  imageUrl    String?
-  hint        String?
+  imageUrl    String
+  isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("banners")
 }
 
-model NewsArticle {
-  id          String   @id @default(cuid())
+model News {
+  id          String    @id @default(cuid())
   title       String
-  description String
-  date        DateTime
+  description String    @db.Text
   imageUrl    String?
-  hint        String?
-  createdAt   DateTime @default(now())
+  date        DateTime
+  type        NewsType  @default(NEWS)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id])
+
+  @@map("news")
+}
+
+enum NewsType {
+  NEWS
+  ANNOUNCEMENT
 }
 
 model Achievement {
@@ -36,15 +124,108 @@ model Achievement {
   student     String
   description String
   imageUrl    String?
-  hint        String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+
+  @@map("achievements")
 }
 
-model Profile {
-  id                  String   @id @default(cuid())
-  principalName       String
-  principalWelcome    String
-  principalImageUrl   String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+model Staff {
+  id          String   @id @default(cuid())
+  name        String
+  position    String
+  subject     String?
+  homeroomOf  String?  @map("homeroom_of")
+  imageUrl    String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+
+  @@map("staff")
+}
+
+model Facility {
+  id        String   @id @default(cuid())
+  name      String
+  imageUrl  String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("facilities")
+}
+
+model GalleryItem {
+  id          String   @id @default(cuid())
+  alt         String
+  category    String
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+
+  @@map("gallery_items")
+}
+
+model AccreditationDoc {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  link        String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("accreditation_docs")
+}
+
+model Extracurricular {
+  id          String   @id @default(cuid())
+  name        String
+  category    String
+  description String
+  imageUrl    String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("extracurriculars")
+}
+
+model Uniform {
+  id          String @id @default(cuid())
+  day         String // e.g., "Senin", "Selasa", "Olahraga"
+  description String
+  imageUrl    String
+  order       Int    @default(0)
+
+  @@map("uniforms")
+}
+
+model MarqueeItem {
+  id        String   @id @default(cuid())
+  type      String // "Berita", "Prestasi", "Pengumuman"
+  text      String
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("marquee_items")
+}
+
+model OrgChart {
+  id        String   @id @default(cuid())
+  title     String
+  imageUrl  String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("org_charts")
 }
