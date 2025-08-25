@@ -11,25 +11,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Profile {
-  id                  String @id @default(cuid())
-  schoolName          String @default("SMPN 24 Padang")
-  principalName       String @default("Dra. Hj. Deswati, MM")
-  principalImageUrl   String @default("https://placehold.co/600x800.png")
-  principalWelcome    String @default("Selamat datang di website resmi SMPN 24 Padang. Kami berkomitmen untuk menyediakan lingkungan belajar yang inspiratif dan mendukung bagi semua siswa.")
-  history             String @default("Didirikan pada tahun 1985, SMPN 24 Padang telah berkembang menjadi salah satu sekolah menengah pertama terkemuka di kota ini.")
-  vision              String @default("Menjadi sekolah unggul yang menghasilkan lulusan cerdas, berkarakter, dan berdaya saing global.")
-  mission             String @default("Menyelenggarakan pendidikan berkualitas...\nMengembangkan potensi siswa secara holistik...\nMembina karakter siswa...")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+  name  String
 }
 
 model Banner {
   id          String   @id @default(cuid())
   title       String
   description String
-  imageUrl    String?
+  imageUrl    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -37,9 +29,9 @@ model Banner {
 model News {
   id          String   @id @default(cuid())
   title       String
-  description String
-  date        DateTime
+  description String   @db.Text
   imageUrl    String?
+  date        DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -53,22 +45,25 @@ model Announcement {
   updatedAt   DateTime @updatedAt
 }
 
-model Achievement {
-  id          String   @id @default(cuid())
-  title       String
-  student     String
-  description String
-  imageUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Profile {
+  id                String   @id @default(cuid())
+  principalName     String
+  principalWelcome  String   @db.Text
+  principalImageUrl String
+  history           String   @db.Text
+  vision            String
+  mission           String   @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Statistics {
-  id         String @id @default("1") // Singleton
-  classrooms Int    @default(24)
-  students   Int    @default(773)
-  teachers   Int    @default(30)
-  staff      Int    @default(12)
+  id         String @id @default(cuid())
+  classrooms Int
+  students   Int
+  teachers   Int
+  staff      Int
+  createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
 
@@ -80,6 +75,27 @@ model Facility {
   updatedAt DateTime @updatedAt
 }
 
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String
+  student     String
+  description String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Staff {
+  id          String   @id @default(cuid())
+  name        String
+  position    String
+  subject     String?
+  homeroomOf  String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model GalleryItem {
   id        String   @id @default(cuid())
   src       String
@@ -89,25 +105,14 @@ model GalleryItem {
   updatedAt DateTime @updatedAt
 }
 
-model Staff {
-  id         String   @id @default(cuid())
-  name       String
-  position   String // e.g. "Guru Matematika", "Kepala Sekolah", "Staf TU"
-  subject    String?  // e.g. "Matematika", "Bahasa Inggris"
-  homeroomOf String?  // e.g. "Kelas 9A"
-  imageUrl   String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
 model Academics {
-  id                     String @id @default("1") // Singleton
-  curriculumTitle        String
-  curriculumDescription  String
-  curriculumImageUrl     String?
-  structureTitle         String
-  structureDescription   String
-  structureImageUrl      String?
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  id                   String @id @default(cuid())
+  curriculumTitle      String
+  curriculumDescription String @db.Text
+  curriculumImageUrl   String?
+  structureTitle       String
+  structureDescription String @db.Text
+  structureImageUrl    String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }
