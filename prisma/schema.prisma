@@ -1,3 +1,5 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider        = "prisma-client-js"
@@ -5,8 +7,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Banner {
@@ -22,52 +25,52 @@ model News {
   id          String   @id @default(cuid())
   title       String
   description String
-  imageUrl    String?
   date        DateTime
+  imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Profile {
-  id                  String   @id @default(cuid())
-  history             String   @db.Text
-  vision              String   @db.Text
-  mission             String   @db.Text
-  principalName       String
-  principalWelcome    String   @db.Text
-  principalImageUrl   String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                String   @id @default(cuid())
+  principalName     String
+  principalWelcome  String
+  principalImageUrl String?
+  history           String
+  vision            String
+  mission           String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Statistics {
-  id          String   @id @default("singleton")
-  classrooms  Int
-  students    Int
-  teachers    Int
-  staff       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  classrooms Int
+  students   Int
+  teachers   Int
+  staff      Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Facility {
-  id          String   @id @default(cuid())
-  name        String
-  imageUrl    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Academics {
-  id                      String @id @default("1")
-  curriculumTitle         String
-  curriculumDescription   String @db.Text
-  curriculumImageUrl      String?
-  structureTitle          String
-  structureDescription    String @db.Text
-  structureImageUrl       String?
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
+  id                     String   @id @default(cuid())
+  curriculumTitle        String
+  curriculumDescription  String
+  curriculumImageUrl     String?
+  structureTitle         String
+  structureDescription   String
+  structureImageUrl      String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 }
 
 model Achievement {
@@ -103,7 +106,7 @@ model Staff {
 model Announcement {
   id          String   @id @default(cuid())
   title       String
-  description String   @db.Text
+  description String
   date        DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
