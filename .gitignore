@@ -10,8 +10,12 @@
 !.yarn/releases
 !.yarn/versions
 
+/.docs
+/.idx
 # testing
 /coverage
+
+/src/ai
 
 # next.js
 /.next/

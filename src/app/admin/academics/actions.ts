@@ -1,26 +1,80 @@
 
 "use server";
 
+import { revalidatePath } from 'next/cache';
+import { put, del } from '@vercel/blob';
+import prisma from '@/lib/prisma';
 import type { AcademicData } from './schema';
 
-const mockAcademicData: AcademicData & {id: string, curriculumImageUrl: string, structureImageUrl: string} = {
-    id: '1',
-    curriculumTitle: "Kurikulum Merdeka yang Adaptif & Inovatif",
-    curriculumDescription: "SMPN 24 Padang menerapkan **Kurikulum Merdeka**, sebuah pendekatan pendidikan yang memberikan keleluasaan bagi guru untuk menciptakan pembelajaran berkualitas yang sesuai dengan kebutuhan dan minat belajar siswa. Kurikulum ini dirancang untuk menumbuhkan siswa yang kreatif, mandiri, dan bernalar kritis.\n\nKami fokus pada pembelajaran intrakurikuler yang beragam, di mana konten dioptimalkan agar siswa memiliki cukup waktu untuk mendalami konsep dan menguatkan kompetensi. Selain itu, kami mengintegrasikan **Projek Penguatan Profil Pelajar Pancasila (P5)** yang memungkinkan siswa untuk mengeksplorasi isu-isu aktual seperti lingkungan, kesehatan, dan kewirausahaan melalui pembelajaran berbasis proyek yang kolaboratif.",
-    curriculumImageUrl: "https://placehold.co/1200x400.png",
-    structureTitle: "Struktur Pembelajaran yang Mendukung",
-    structureDescription: "Struktur pembelajaran kami dirancang untuk menciptakan lingkungan belajar yang kondusif dan terarah bagi siswa jenjang Sekolah Menengah Pertama (Kelas 7-9). Setiap kelas dibimbing oleh seorang wali kelas yang berdedikasi, yang berperan sebagai fasilitator utama dan jembatan komunikasi antara sekolah, siswa, dan orang tua.\n\nWali kelas bekerja sama dengan tim guru mata pelajaran yang ahli di bidangnya untuk memastikan setiap siswa mendapatkan perhatian yang dibutuhkan, baik secara akademik maupun personal. Pendekatan ini memungkinkan kami untuk memantau perkembangan siswa secara holistik dan memberikan dukungan yang tepat waktu untuk membantu mereka mencapai potensi maksimal.",
-    structureImageUrl: "https://placehold.co/1200x400.png",
-};
-
 export async function getAcademics() {
-  // In a real app, you'd fetch this from a database.
-  // We'll just return the mock data with the extra fields needed by the form.
-  return mockAcademicData;
+  let academics = await prisma.academics.findFirst();
+
+  if (!academics) {
+    // If no data exists, create a default entry
+    academics = await prisma.academics.create({
+      data: {
+        id: '1', // Singleton ID
+        curriculumTitle: "Kurikulum Merdeka yang Adaptif & Inovatif",
+        curriculumDescription: "Deskripsi kurikulum default.",
+        curriculumImageUrl: "https://placehold.co/1200x400.png",
+        structureTitle: "Struktur Pembelajaran yang Mendukung",
+        structureDescription: "Deskripsi struktur pembelajaran default.",
+        structureImageUrl: "https://placehold.co/1200x400.png",
+      }
+    });
+  }
+  return academics;
 }
 
 export async function updateAcademics(formData: FormData) {
-    console.log("Updating academics (mock):", Object.fromEntries(formData.entries()));
-    // In a real app, you would process the form data, handle file uploads, and update the database.
-    return { success: true, message: 'Data akademik berhasil diperbarui (mock).' };
+    const id = '1'; // Singleton ID
+    
+    const data: Partial<AcademicData> & { currentCurriculumImageUrl?: string, currentStructureImageUrl?: string } = {
+        curriculumTitle: formData.get('curriculumTitle') as string,
+        curriculumDescription: formData.get('curriculumDescription') as string,
+        structureTitle: formData.get('structureTitle') as string,
+        structureDescription: formData.get('structureDescription') as string,
+        currentCurriculumImageUrl: formData.get('currentCurriculumImageUrl') as string,
+        currentStructureImageUrl: formData.get('currentStructureImageUrl') as string,
+    };
+
+    const curriculumImageFile = formData.get('curriculumImage') as File | null;
+    const structureImageFile = formData.get('structureImage') as File | null;
+    
+    try {
+        if (curriculumImageFile && curriculumImageFile.size > 0) {
+            // Delete old image if it exists and is not a placeholder
+            if (data.currentCurriculumImageUrl && !data.currentCurriculumImageUrl.includes('placehold.co')) {
+                await del(data.currentCurriculumImageUrl);
+            }
+            const blob = await put(curriculumImageFile.name, curriculumImageFile, { access: 'public' });
+            data.curriculumImageUrl = blob.url;
+        }
+
+        if (structureImageFile && structureImageFile.size > 0) {
+            // Delete old image if it exists and is not a placeholder
+            if (data.currentStructureImageUrl && !data.currentStructureImageUrl.includes('placehold.co')) {
+                await del(data.currentStructureImageUrl);
+            }
+            const blob = await put(structureImageFile.name, structureImageFile, { access: 'public' });
+            data.structureImageUrl = blob.url;
+        }
+
+        const updateData: any = { ...data };
+        delete updateData.currentCurriculumImageUrl;
+        delete updateData.currentStructureImageUrl;
+
+        await prisma.academics.update({
+            where: { id },
+            data: updateData
+        });
+
+        revalidatePath('/academics');
+        revalidatePath('/admin/academics');
+
+        return { success: true, message: 'Data akademik berhasil diperbarui.' };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Gagal memperbarui data akademik.' };
+    }
 }

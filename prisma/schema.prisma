@@ -1,3 +1,4 @@
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -10,112 +11,87 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ==================================================================
-// AUTHENTICATION & USERS
-// ==================================================================
-
 model User {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  password  String // In a real app, this should be a hashed password.
-  role      Role     @default(ADMIN)
+  id            String          @id @default(cuid())
+  name          String?
+  email         String?         @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  news          News[]
-  achievements  Achievement[]
-  staff         Staff[]
-  galleryItems  GalleryItem[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("users")
+  @@unique([provider, providerAccountId])
 }
 
-enum Role {
-  ADMIN
-  EDITOR
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
 
-// ==================================================================
-// WEBSITE CONTENT MODELS
-// ==================================================================
-
-// Single-instance model for general school profile information
-model SchoolProfile {
-  id                String   @id @default(cuid())
-  principalName     String
-  principalWelcome  String   @db.Text
-  principalImageUrl String?
-  history           String   @db.Text
-  vision            String   @db.Text
-  mission           String[]
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  @@unique([identifier, token])
 }
 
-// Single-instance model for Academic page content
-model AcademicProfile {
-  id                   String   @id @default(cuid())
-  curriculumTitle      String
-  curriculumDescription String   @db.Text
-  curriculumImageUrl   String?
-  structureTitle       String
-  structureDescription String   @db.Text
-  structureImageUrl    String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-}
-
-// Single-instance model for school-wide contact info & statistics
-model SiteConfiguration {
-  id              String   @id @default(cuid())
-  address         String
-  phone           String
-  email           String
-  statClassrooms  Int      @default(0)
-  statStudents    Int      @default(0)
-  statTeachers    Int      @default(0)
-  statStaff       Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
-
-
-// ==================================================================
-// MULTI-INSTANCE CONTENT MODELS
-// ==================================================================
+// ============== APP MODELS ==============
 
 model Banner {
   id          String   @id @default(cuid())
   title       String
   description String
   imageUrl    String
-  isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  @@map("banners")
 }
 
 model News {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
-  description String    @db.Text
+  description String   @db.Text
   imageUrl    String?
   date        DateTime
-  type        NewsType  @default(NEWS)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  authorId    String
-  author      User      @relation(fields: [authorId], references: [id])
-
-  @@map("news")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-enum NewsType {
-  NEWS
-  ANNOUNCEMENT
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Achievement {
@@ -126,10 +102,6 @@ model Achievement {
   imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id])
-
-  @@map("achievements")
 }
 
 model Staff {
@@ -139,93 +111,77 @@ model Staff {
   subject     String?
   homeroomOf  String?  @map("homeroom_of")
   imageUrl    String?
-  order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id])
+}
 
-  @@map("staff")
+model GalleryItem {
+  id          String   @id @default(cuid())
+  src         String
+  alt         String
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Facility {
   id        String   @id @default(cuid())
   name      String
   imageUrl  String
-  order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("facilities")
 }
 
-model GalleryItem {
-  id          String   @id @default(cuid())
-  alt         String
-  category    String
-  imageUrl    String
+// Singleton model for general school profile info
+model Profile {
+  id                String @id @default("1")
+  principalName     String @map("principal_name")
+  principalWelcome  String @db.Text @map("principal_welcome")
+  principalImageUrl String @map("principal_image_url")
+  history           String @db.Text
+  vision            String @db.Text
+  mission           String @db.Text // Store as newline-separated string
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// Singleton model for school statistics
+model Statistics {
+  id          String @id @default("1")
+  classrooms  Int
+  students    Int
+  teachers    Int
+  staff       Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id])
-
-  @@map("gallery_items")
 }
 
-model AccreditationDoc {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  link        String
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@map("accreditation_docs")
+// Singleton model for Academics page content
+model Academics {
+  id                      String @id @default("1")
+  curriculumTitle         String @map("curriculum_title")
+  curriculumDescription   String @db.Text @map("curriculum_description")
+  curriculumImageUrl      String @map("curriculum_image_url")
+  structureTitle          String @map("structure_title")
+  structureDescription    String @db.Text @map("structure_description")
+  structureImageUrl       String @map("structure_image_url")
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
 
-model Extracurricular {
-  id          String   @id @default(cuid())
-  name        String
-  category    String
-  description String
-  imageUrl    String?
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@map("extracurriculars")
-}
-
-model Uniform {
-  id          String @id @default(cuid())
-  day         String // e.g., "Senin", "Selasa", "Olahraga"
-  description String
-  imageUrl    String
-  order       Int    @default(0)
-
-  @@map("uniforms")
+model ContactInfo {
+  id        String @id @default("1")
+  address   String
+  phone     String
+  email     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model MarqueeItem {
-  id        String   @id @default(cuid())
-  type      String // "Berita", "Prestasi", "Pengumuman"
-  text      String
-  isActive  Boolean  @default(true)
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("marquee_items")
-}
-
-model OrgChart {
-  id        String   @id @default(cuid())
-  title     String
-  imageUrl  String
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("org_charts")
+    id        String @id @default(cuid())
+    type      String // Berita, Prestasi, Pengumuman
+    text      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

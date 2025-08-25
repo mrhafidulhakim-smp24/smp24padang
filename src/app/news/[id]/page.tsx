@@ -2,17 +2,13 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Calendar, UserCircle } from "lucide-react";
+import prisma from "@/lib/prisma";
 
-const mockNews = [
-    { id: '1', title: 'Lomba Cerdas Cermat Tingkat Kota', description: 'Siswa kami berhasil meraih juara 2 dalam Lomba Cerdas Cermat tingkat kota Padang. Prestasi ini merupakan buah dari kerja keras dan bimbingan para guru.\n\nKegiatan ini diikuti oleh puluhan sekolah dari seluruh penjuru kota, menunjukkan persaingan yang ketat dan semangat sportivitas yang tinggi.', date: new Date('2023-11-15'), imageUrl: 'https://placehold.co/1200x675.png' },
-    { id: '2', title: 'Kegiatan Jumat Bersih Lingkungan Sekolah', description: 'Dalam rangka menumbuhkan kepedulian terhadap lingkungan, kami mengadakan kegiatan Jumat Bersih yang diikuti oleh seluruh siswa dan guru. Para siswa dengan antusias membersihkan area kelas, halaman, dan taman sekolah.', date: new Date('2023-11-10'), imageUrl: 'https://placehold.co/1200x675.png' },
-    { id: '3', title: 'Peringatan Hari Pahlawan 10 November', description: 'Upacara bendera dan berbagai lomba diadakan untuk memperingati jasa para pahlawan yang telah berjuang untuk kemerdekaan Indonesia. Kegiatan ini bertujuan untuk menanamkan jiwa nasionalisme kepada para siswa.', date: new Date('2023-11-08'), imageUrl: 'https://placehold.co/1200x675.png' },
-    { id: '4', title: 'Studi Tur ke Museum Adityawarman', description: 'Siswa kelas 8 melakukan studi tur edukatif untuk mempelajari sejarah dan budaya Minangkabau secara langsung. Mereka sangat antusias melihat koleksi peninggalan sejarah yang ada.', date: new Date('2023-10-28'), imageUrl: 'https://placehold.co/1200x675.png' },
-];
 
 async function getNewsArticle(id: string) {
-    // In a real app, this would fetch from a database.
-    return mockNews.find(article => article.id === id);
+    return await prisma.news.findUnique({
+        where: { id }
+    });
 }
 
 export default async function NewsArticlePage({ params }: { params: { id: string } }) {

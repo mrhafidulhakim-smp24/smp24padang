@@ -1,18 +1,11 @@
 
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { getGalleryItems } from "./actions";
 
-const galleryItems = [
-  { id: "1", imageUrl: "https://placehold.co/600x400.png", alt: "Kegiatan Belajar Mengajar di Kelas", category: "Akademik" },
-  { id: "2", imageUrl: "https://placehold.co/600x400.png", alt: "Tim Basket Sekolah Merayakan Kemenangan", category: "Olahraga" },
-  { id: "3", imageUrl: "https://placehold.co/600x400.png", alt: "Pameran Seni Siswa", category: "Seni & Budaya" },
-  { id: "4", imageUrl: "https://placehold.co/600x400.png", alt: "Siswa Melakukan Percobaan di Laboratorium Sains", category: "Sains" },
-  { id: "5", imageUrl: "https://placehold.co/600x500.png", alt: "Upacara Bendera Hari Senin", category: "Kegiatan Sekolah" },
-  { id: "6", imageUrl: "https://placehold.co/600x800.png", alt: "Perpustakaan Sekolah", category: "Fasilitas" },
-];
+export default async function GalleryPage() {
+  const galleryItems = await getGalleryItems();
 
-
-export default function GalleryPage() {
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -24,24 +17,31 @@ export default function GalleryPage() {
         </p>
       </div>
 
-      <div className="mt-12 columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4">
-        {galleryItems.map((item, index) => (
-          <div key={index} className="group relative mb-4 break-inside-avoid">
-             <Card className="overflow-hidden">
+      {galleryItems.length > 0 ? (
+        <div className="mt-12 columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4">
+          {galleryItems.map((item, index) => (
+            <div key={index} className="group relative mb-4 break-inside-avoid">
+              <Card className="overflow-hidden">
                 <Image
                   width={600}
-                  height={item.imageUrl.includes('600x800') ? 800 : item.imageUrl.includes('600x500') ? 500 : 400}
-                  src={item.imageUrl}
+                  height={400} // This is a default, aspect ratio will be maintained
+                  src={item.src}
                   alt={item.alt}
                   className="h-auto w-full transform transition-transform duration-300 group-hover:scale-105"
                 />
-             </Card>
-             <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              </Card>
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <p className="text-sm font-bold text-white">{item.category}</p>
-             </div>
-          </div>
-        ))}
-      </div>
+                <p className="text-xs text-white/90">{item.alt}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-16 text-center text-muted-foreground">
+          <p>Belum ada gambar di galeri. Silakan periksa kembali nanti.</p>
+        </div>
+      )}
     </div>
   );
 }

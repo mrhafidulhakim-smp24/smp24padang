@@ -1,32 +1,23 @@
 
+"use server";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const mockNews = [
-    { id: '1', title: 'Lomba Cerdas Cermat Tingkat Kota', description: 'Siswa kami berhasil meraih juara 2 dalam Lomba Cerdas Cermat tingkat kota Padang. Prestasi ini merupakan buah dari kerja keras dan bimbingan para guru.', date: new Date('2023-11-15'), imageUrl: 'https://placehold.co/600x400.png' },
-    { id: '2', title: 'Kegiatan Jumat Bersih Lingkungan Sekolah', description: 'Dalam rangka menumbuhkan kepedulian terhadap lingkungan, kami mengadakan kegiatan Jumat Bersih yang diikuti oleh seluruh siswa dan guru.', date: new Date('2023-11-10'), imageUrl: 'https://placehold.co/600x400.png' },
-    { id: '3', title: 'Peringatan Hari Pahlawan 10 November', description: 'Upacara bendera dan berbagai lomba diadakan untuk memperingati jasa para pahlawan yang telah berjuang untuk kemerdekaan Indonesia.', date: new Date('2023-11-08'), imageUrl: 'https://placehold.co/600x400.png' },
-    { id: '4', title: 'Studi Tur ke Museum Adityawarman', description: 'Siswa kelas 8 melakukan studi tur edukatif untuk mempelajari sejarah dan budaya Minangkabau secara langsung.', date: new Date('2023-10-28'), imageUrl: 'https://placehold.co/600x400.png' },
-];
-
-const mockAnnouncement = { 
-    id: 'ann1', 
-    title: 'Penerimaan Peserta Didik Baru (PPDB) Tahun Ajaran 2024/2025 Telah Dibuka!', 
-    date: new Date('2024-06-15'), 
-    description: 'Jangan lewatkan kesempatan untuk menjadi bagian dari keluarga besar SMPN 24 Padang. Pendaftaran dibuka mulai tanggal 1 hingga 15 Juli 2024. Klik untuk melihat informasi selengkapnya mengenai jadwal, persyaratan, dan alur pendaftaran.' 
-};
-
+import prisma from "@/lib/prisma";
 
 async function getAllNews() {
-  // In a real app, this would fetch from a database.
-  return mockNews;
+  return await prisma.news.findMany({
+      orderBy: { date: 'desc' }
+  });
 }
 
 async function getLatestAnnouncement() {
-  return mockAnnouncement;
+  return await prisma.announcement.findFirst({
+    orderBy: { date: 'desc' }
+  });
 }
 
 export default async function NewsPage() {
@@ -44,66 +35,68 @@ export default async function NewsPage() {
         </p>
       </div>
 
-       {/* Announcement Section */}
-      <section className="mt-16">
-        <Card className="w-full bg-primary/5 border-primary/20">
-          <CardHeader>
-            <div className="flex items-center gap-4">
-              <Megaphone className="h-8 w-8 text-accent" />
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                  Pengumuman Penting
+       {announcement && (
+         <section className="mt-16">
+            <Card className="w-full bg-primary/5 border-primary/20">
+            <CardHeader>
+                <div className="flex items-center gap-4">
+                <Megaphone className="h-8 w-8 text-accent" />
+                <div>
+                    <p className="text-sm font-semibold uppercase tracking-wider text-accent">
+                    Pengumuman Penting
+                    </p>
+                    <CardTitle className="font-headline text-2xl text-primary">
+                      {announcement.title}
+                    </CardTitle>
+                </div>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <p className="text-muted-foreground">
+                {announcement.description}
                 </p>
-                <CardTitle className="font-headline text-2xl text-primary">
-                  <Link href={`/news/${announcement.id}`} className="hover:underline">
-                    {announcement.title}
-                  </Link>
-                </CardTitle>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              {announcement.description}
-            </p>
-          </CardContent>
-        </Card>
-      </section>
+            </CardContent>
+            </Card>
+        </section>
+       )}
       
-      {/* News Section */}
       <section className="mt-12">
          <h2 className="font-headline text-3xl font-bold text-primary mb-8">
             Berita Lainnya
          </h2>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {newsItems.map((item) => (
-            <Card key={item.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
-              <CardHeader className="p-0">
-                <Link href={`/news/${item.id}`}>
-                  <Image
-                    src={item.imageUrl || "https://placehold.co/600x400.png"}
-                    alt={item.title}
-                    width={600}
-                    height={400}
-                    className="h-56 w-full object-cover"
-                  />
-                </Link>
-              </CardHeader>
-              <CardContent className="flex flex-grow flex-col p-6">
-                <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                <CardTitle className="font-headline text-xl font-bold text-primary">
-                  <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
-                </CardTitle>
-                <p className="mt-2 flex-grow text-foreground/80 dark:text-foreground/70">{item.description.substring(0, 100)}...</p>
-                <Button variant="link" asChild className="mt-4 p-0 self-start text-accent hover:text-accent/80">
-                  <Link href={`/news/${item.id}`}>
-                    Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {newsItems.length > 0 ? (
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {newsItems.map((item) => (
+                <Card key={item.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
+                <CardHeader className="p-0">
+                    <Link href={`/news/${item.id}`}>
+                    <Image
+                        src={item.imageUrl || "https://placehold.co/600x400.png"}
+                        alt={item.title}
+                        width={600}
+                        height={400}
+                        className="h-56 w-full object-cover"
+                    />
+                    </Link>
+                </CardHeader>
+                <CardContent className="flex flex-grow flex-col p-6">
+                    <p className="mb-2 text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <CardTitle className="font-headline text-xl font-bold text-primary">
+                    <Link href={`/news/${item.id}`} className="hover:underline">{item.title}</Link>
+                    </CardTitle>
+                    <p className="mt-2 flex-grow text-foreground/80 dark:text-foreground/70">{item.description.substring(0, 100)}...</p>
+                    <Button variant="link" asChild className="mt-4 p-0 self-start text-accent hover:text-accent/80">
+                    <Link href={`/news/${item.id}`}>
+                        Baca Lebih Lanjut <ArrowRight className="ml-1 h-4 w-4" />
+                    </Link>
+                    </Button>
+                </CardContent>
+                </Card>
+            ))}
+            </div>
+        ) : (
+            <p className="text-center text-muted-foreground mt-8">Belum ada berita yang dipublikasikan.</p>
+        )}
       </section>
     </div>
   );

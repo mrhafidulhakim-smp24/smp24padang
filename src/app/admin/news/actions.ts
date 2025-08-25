@@ -1,28 +1,113 @@
 
 "use server";
 
-const mockNews = [
-    { id: '1', title: 'Lomba Cerdas Cermat Tingkat Kota', description: 'Siswa kami berhasil meraih juara 2 dalam Lomba Cerdas Cermat tingkat kota Padang. Prestasi ini merupakan buah dari kerja keras dan bimbingan para guru.', date: new Date('2023-11-15'), imageUrl: 'https://placehold.co/600x400.png', createdAt: new Date(), updatedAt: new Date() },
-    { id: '2', title: 'Kegiatan Jumat Bersih Lingkungan Sekolah', description: 'Dalam rangka menumbuhkan kepedulian terhadap lingkungan, kami mengadakan kegiatan Jumat Bersih yang diikuti oleh seluruh siswa dan guru.', date: new Date('2023-11-10'), imageUrl: 'https://placehold.co/600x400.png', createdAt: new Date(), updatedAt: new Date() },
-    { id: '3', title: 'Peringatan Hari Pahlawan 10 November', description: 'Upacara bendera dan berbagai lomba diadakan untuk memperingati jasa para pahlawan yang telah berjuang untuk kemerdekaan Indonesia.', date: new Date('2023-11-08'), imageUrl: 'https://placehold.co/600x400.png', createdAt: new Date(), updatedAt: new Date() },
-];
+import prisma from '@/lib/prisma';
+import { put, del } from '@vercel/blob';
+import { revalidatePath } from 'next/cache';
+import { NewsArticleSchema } from './schema';
 
-
-export async function createNewsArticle(formData: FormData) {
-    console.log("Creating news article (mock):", Object.fromEntries(formData.entries()));
-    return { success: true, message: 'Artikel berhasil dibuat (mock).' };
+export async function getNewsForAdmin() {
+    return await prisma.news.findMany({
+        orderBy: { date: 'desc' }
+    });
 }
 
-export async function updateNewsArticle(id: string, currentImageUrl: string | null, formData: FormData) {
-    console.log(`Updating news article ${id} (mock):`, Object.fromEntries(formData.entries()));
-    return { success: true, message: "Artikel berhasil diperbarui (mock)." };
+export async function createNewsArticle(prevState: any, formData: FormData) {
+    const validatedFields = NewsArticleSchema.safeParse({
+        title: formData.get('title'),
+        description: formData.get('description'),
+        date: formData.get('date'),
+    });
+
+    if (!validatedFields.success) {
+        return { success: false, message: 'Validasi data gagal.' };
+    }
+    
+    const { title, description, date } = validatedFields.data;
+    const imageFile = formData.get('image') as File | null;
+    let imageUrl: string | null = null;
+
+    try {
+        if (imageFile && imageFile.size > 0) {
+            const blob = await put(imageFile.name, imageFile, { access: 'public' });
+            imageUrl = blob.url;
+        }
+
+        await prisma.news.create({
+            data: {
+                title,
+                description,
+                date,
+                imageUrl,
+            }
+        });
+
+        revalidatePath('/news');
+        revalidatePath('/admin/news');
+        return { success: true, message: 'Artikel berhasil dibuat.' };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Gagal membuat artikel.' };
+    }
+}
+
+export async function updateNewsArticle(id: string, currentImageUrl: string | null, prevState: any, formData: FormData) {
+    const validatedFields = NewsArticleSchema.safeParse({
+        title: formData.get('title'),
+        description: formData.get('description'),
+        date: formData.get('date'),
+    });
+
+    if (!validatedFields.success) {
+        return { success: false, message: 'Validasi data gagal.' };
+    }
+
+    const { title, description, date } = validatedFields.data;
+    const imageFile = formData.get('image') as File | null;
+    let newImageUrl = currentImageUrl;
+
+    try {
+        if (imageFile && imageFile.size > 0) {
+            // Delete old image if it exists and is not a placeholder
+            if (currentImageUrl && !currentImageUrl.includes('placehold.co')) {
+                await del(currentImageUrl);
+            }
+            const blob = await put(imageFile.name, imageFile, { access: 'public' });
+            newImageUrl = blob.url;
+        }
+
+        await prisma.news.update({
+            where: { id },
+            data: {
+                title,
+                description,
+                date,
+                imageUrl: newImageUrl,
+            },
+        });
+
+        revalidatePath('/news');
+        revalidatePath(`/news/${id}`);
+        revalidatePath('/admin/news');
+        return { success: true, message: "Artikel berhasil diperbarui." };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: "Gagal memperbarui artikel." };
+    }
 }
 
 export async function deleteNewsArticle(id: string, imageUrl: string | null) {
-    console.log(`Deleting news article ${id} (mock)`);
-    return { success: true, message: 'Berita berhasil dihapus (mock).' };
-}
-
-export async function getNewsForAdmin() {
-    return mockNews;
+    try {
+        if (imageUrl && !imageUrl.includes('placehold.co')) {
+            await del(imageUrl);
+        }
+        await prisma.news.delete({ where: { id } });
+        
+        revalidatePath('/news');
+        revalidatePath('/admin/news');
+        return { success: true, message: 'Berita berhasil dihapus.' };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Gagal menghapus berita.' };
+    }
 }
