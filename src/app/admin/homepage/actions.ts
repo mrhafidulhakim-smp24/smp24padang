@@ -11,6 +11,7 @@ import {
 } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { put, del } from '@vercel/blob';
 
 // Unified data fetching
 export async function getHomepageData() {
@@ -40,9 +41,19 @@ function revalidateHomepage() {
 }
 
 // Banner Actions
-export async function createBanner(data: { title: string; description: string; imageUrl: string; }) {
+export async function createBanner(formData: FormData) {
   try {
-    await db.insert(banners).values({ id: uuidv4(), ...data });
+    const title = formData.get('title') as string;
+    const description = formData.get('description') as string;
+    const imageFile = formData.get('image') as File | null;
+    let imageUrl: string | null = null;
+
+    if (imageFile && imageFile.size > 0) {
+      const blob = await put(imageFile.name, imageFile, { access: 'public' });
+      imageUrl = blob.url;
+    }
+
+    await db.insert(banners).values({ id: uuidv4(), title, description, imageUrl });
     revalidateHomepage();
     return { success: true };
   } catch (error) {
@@ -50,9 +61,27 @@ export async function createBanner(data: { title: string; description: string; i
   }
 }
 
-export async function updateBanner(id: string, data: { title: string; description: string; imageUrl: string; }) {
+export async function updateBanner(id: string, currentImageUrl: string | null, formData: FormData) {
   try {
-    await db.update(banners).set({ ...data, updatedAt: new Date() }).where(eq(banners.id, id));
+    const title = formData.get('title') as string;
+    const description = formData.get('description') as string;
+    const imageFile = formData.get('image') as File | null;
+    
+    const updateData: { title: string, description: string, imageUrl?: string, updatedAt: Date } = {
+        title,
+        description,
+        updatedAt: new Date(),
+    };
+
+    if (imageFile && imageFile.size > 0) {
+        if (currentImageUrl) {
+            await del(currentImageUrl);
+        }
+        const blob = await put(imageFile.name, imageFile, { access: 'public' });
+        updateData.imageUrl = blob.url;
+    }
+
+    await db.update(banners).set(updateData).where(eq(banners.id, id));
     revalidateHomepage();
     return { success: true };
   } catch (error) {
@@ -60,8 +89,11 @@ export async function updateBanner(id: string, data: { title: string; descriptio
   }
 }
 
-export async function deleteBanner(id: string) {
+export async function deleteBanner(id: string, imageUrl: string | null) {
   try {
+    if (imageUrl) {
+        await del(imageUrl);
+    }
     await db.delete(banners).where(eq(banners.id, id));
     revalidateHomepage();
     return { success: true };
@@ -118,9 +150,22 @@ export async function updateStatistics(data: { classrooms: number; students: num
 }
 
 // Facility Actions
-export async function createFacility(data: { name: string; imageUrl: string; }) {
+export async function createFacility(formData: FormData) {
   try {
-    await db.insert(facilities).values({ id: uuidv4(), ...data });
+    const name = formData.get('name') as string;
+    const imageFile = formData.get('image') as File | null;
+    let imageUrl: string | null = null;
+
+    if (imageFile && imageFile.size > 0) {
+      const blob = await put(imageFile.name, imageFile, { access: 'public' });
+      imageUrl = blob.url;
+    }
+
+    if (!imageUrl) {
+        return { success: false, error: "Image is required." };
+    }
+
+    await db.insert(facilities).values({ id: uuidv4(), name, imageUrl });
     revalidateHomepage();
     return { success: true };
   } catch (error) {
@@ -128,9 +173,25 @@ export async function createFacility(data: { name: string; imageUrl: string; }) 
   }
 }
 
-export async function updateFacility(id: string, data: { name: string; imageUrl: string; }) {
+export async function updateFacility(id: string, currentImageUrl: string | null, formData: FormData) {
   try {
-    await db.update(facilities).set({ ...data, updatedAt: new Date() }).where(eq(facilities.id, id));
+    const name = formData.get('name') as string;
+    const imageFile = formData.get('image') as File | null;
+    
+    const updateData: { name: string, imageUrl?: string, updatedAt: Date } = {
+        name,
+        updatedAt: new Date(),
+    };
+
+    if (imageFile && imageFile.size > 0) {
+        if (currentImageUrl) {
+            await del(currentImageUrl);
+        }
+        const blob = await put(imageFile.name, imageFile, { access: 'public' });
+        updateData.imageUrl = blob.url;
+    }
+
+    await db.update(facilities).set(updateData).where(eq(facilities.id, id));
     revalidateHomepage();
     return { success: true };
   } catch (error) {
@@ -138,8 +199,11 @@ export async function updateFacility(id: string, data: { name: string; imageUrl:
   }
 }
 
-export async function deleteFacility(id: string) {
+export async function deleteFacility(id: string, imageUrl: string | null) {
   try {
+    if (imageUrl) {
+        await del(imageUrl);
+    }
     await db.delete(facilities).where(eq(facilities.id, id));
     revalidateHomepage();
     return { success: true };

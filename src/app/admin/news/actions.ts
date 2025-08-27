@@ -21,7 +21,8 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
     });
 
     if (!validatedFields.success) {
-        return { success: false, message: 'Validasi data gagal.' };
+        const errorMessages = Object.values(validatedFields.error.flatten().fieldErrors).flat().join(', ');
+        return { success: false, message: `Validasi gagal: ${errorMessages}` };
     }
     
     const { title, description, date } = validatedFields.data;
@@ -42,8 +43,10 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
             imageUrl,
         });
 
-        revalidatePath('/articles');
-        revalidatePath('/admin/news');
+        setTimeout(() => {
+            revalidatePath('/articles');
+            revalidatePath('/admin/news');
+        }, 0);
         return { success: true, message: 'Artikel berhasil dibuat.' };
     } catch (error) {
         console.error(error);
@@ -59,7 +62,8 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
     });
 
     if (!validatedFields.success) {
-        return { success: false, message: 'Validasi data gagal.' };
+        const errorMessages = Object.values(validatedFields.error.flatten().fieldErrors).flat().join(', ');
+        return { success: false, message: `Validasi gagal: ${errorMessages}` };
     }
 
     const { title, description, date } = validatedFields.data;
@@ -84,9 +88,11 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
 
         await db.update(news).set(updateData).where(eq(news.id, id));
 
-        revalidatePath('/articles');
-        revalidatePath(`/articles/${id}`);
-        revalidatePath('/admin/news');
+        setTimeout(() => {
+            revalidatePath('/articles');
+            revalidatePath(`/articles/${id}`);
+            revalidatePath('/admin/news');
+        }, 0);
         return { success: true, message: "Artikel berhasil diperbarui." };
     } catch (error) {
         console.error(error);
@@ -101,8 +107,10 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
         }
         await db.delete(news).where(eq(news.id, id));
         
-        revalidatePath('/articles');
-        revalidatePath('/admin/news');
+        setTimeout(() => {
+            revalidatePath('/articles');
+            revalidatePath('/admin/news');
+        }, 0);
         return { success: true, message: 'Berita berhasil dihapus.' };
     } catch (error) {
         console.error(error);

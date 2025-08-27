@@ -1,37 +1,68 @@
-
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, MapPin } from "lucide-react";
-
-const initialContactInfo = {
-  address: "Jalan Pendidikan 123, Padang, Indonesia",
-  phone: "+62 123 456 7890",
-  email: "info@smpn24padang.sch.id",
-};
+import { getContactInfo, updateContactInfo } from "./actions";
 
 export default function ContactAdminPage() {
-  const [contactInfo, setContactInfo] = useState(initialContactInfo);
+  const [contactInfo, setContactInfo] = useState({
+    address: "",
+    phone: "",
+    email: "",
+  });
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+
+  useEffect(() => {
+    async function fetchContactInfo() {
+      const data = await getContactInfo();
+      if (data) {
+        setContactInfo(data);
+      }
+      setLoading(false);
+    }
+    fetchContactInfo();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setContactInfo(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Saving contact info:", contactInfo);
-    toast({
-      title: "Sukses!",
-      description: "Informasi kontak berhasil diperbarui (mode simulasi).",
-    });
+    const result = await updateContactInfo(contactInfo);
+    if (result.success) {
+      toast({
+        title: "Sukses!",
+        description: result.message,
+      });
+    } else {
+      toast({
+        title: "Gagal!",
+        description: result.message,
+        variant: "destructive",
+      });
+    }
   };
+
+  if (loading) {
+    return (
+        <div className="flex flex-col gap-8">
+            <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                Kelola Informasi Kontak
+            </h1>
+            <p className="mt-2 text-lg text-muted-foreground">
+                Memuat data...
+            </p>
+        </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">

@@ -1,8 +1,7 @@
-
 "use server";
 
 import { db } from '@/lib/db';
-import { banners, news, announcements, profiles, statistics, facilities } from '@/lib/db/schema';
+import { banners, news, announcements, profiles, statistics, facilities, marquee } from '@/lib/db/schema';
 import { asc, desc, sql } from 'drizzle-orm';
 
 export async function getBanners() {
@@ -73,5 +72,14 @@ export async function getAbout() {
         vision: '',
         mission: [],
     };
+  }
+}
+
+export async function getMarqueeItems() {
+  try {
+    return await db.select().from(marquee).orderBy(desc(marquee.createdAt));
+  } catch (error) {
+    console.error("Error fetching marquee items:", error);
+    return [];
   }
 }

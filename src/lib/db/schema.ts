@@ -1,4 +1,3 @@
-
 import {
   pgTable,
   text,
@@ -110,4 +109,22 @@ export const marquee = pgTable("marquee", {
   type: text("type", { enum: ["Berita", "Prestasi", "Pengumuman"] }).notNull(),
   text: text("text").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const contact = pgTable("contact", {
+  id: varchar("id").primaryKey(),
+  address: text("address").notNull(),
+  phone: text("phone").notNull(),
+  email: text("email").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export const accreditations = pgTable("accreditations", {
+  id: varchar("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  link: text("link").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });

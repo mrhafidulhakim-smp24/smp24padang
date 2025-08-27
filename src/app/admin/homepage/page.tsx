@@ -39,19 +39,34 @@ function BannersTab({ data, refreshData }: { data: Banner[], refreshData: () => 
     const { toast } = useToast();
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (editingBanner) {
+            setPreview(editingBanner.imageUrl);
+        } else {
+            setPreview(null);
+        }
+    }, [editingBanner]);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        const bannerData = {
-            title: formData.get('title') as string,
-            description: formData.get('description') as string,
-            imageUrl: formData.get('imageUrl') as string,
-        };
 
-        const result = editingBanner 
-            ? await updateBanner(editingBanner.id, bannerData)
-            : await createBanner(bannerData);
+        const result = editingBanner
+            ? await updateBanner(editingBanner.id, editingBanner.imageUrl, formData)
+            : await createBanner(formData);
 
         if (result.success) {
             toast({ title: `Banner ${editingBanner ? 'diperbarui' : 'dibuat'}!`, description: "Halaman beranda telah diperbarui." });
@@ -62,8 +77,8 @@ function BannersTab({ data, refreshData }: { data: Banner[], refreshData: () => 
         }
     };
 
-    const handleDelete = async (id: string) => {
-        const result = await deleteBanner(id);
+    const handleDelete = async (id: string, imageUrl: string | null) => {
+        const result = await deleteBanner(id, imageUrl);
         if (result.success) {
             toast({ title: "Banner dihapus!", description: "Data banner telah dihapus." });
             refreshData();
@@ -98,7 +113,7 @@ function BannersTab({ data, refreshData }: { data: Banner[], refreshData: () => 
                                                 <AlertDialogHeader><AlertDialogTitle>Anda yakin?</AlertDialogTitle><AlertDialogDescription>Tindakan ini tidak bisa dibatalkan. Ini akan menghapus banner secara permanen.</AlertDialogDescription></AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                     <AlertDialogCancel>Batal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleDelete(item.id)}>Hapus</AlertDialogAction>
+                                                    <AlertDialogAction onClick={() => handleDelete(item.id, item.imageUrl)}>Hapus</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
@@ -109,7 +124,12 @@ function BannersTab({ data, refreshData }: { data: Banner[], refreshData: () => 
                     </TableBody>
                 </Table>
             </CardContent>
-            <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+            <Dialog open={isDialogOpen} onOpenChange={(open) => {
+                setDialogOpen(open);
+                if (!open) {
+                    setEditingBanner(null);
+                }
+            }}>
                 <DialogContent>
                     <DialogHeader><DialogTitle>{editingBanner ? 'Edit' : 'Tambah'} Banner</DialogTitle></DialogHeader>
                     <form onSubmit={handleFormSubmit} className="grid gap-4 py-4">
@@ -122,9 +142,30 @@ function BannersTab({ data, refreshData }: { data: Banner[], refreshData: () => 
                             <Textarea id="description" name="description" defaultValue={editingBanner?.description} required />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="imageUrl">URL Gambar</Label>
-                            <Input id="imageUrl" name="imageUrl" defaultValue={editingBanner?.imageUrl || ''} placeholder="https://..." required />
-                            {/* TODO: Ganti input ini dengan komponen upload Vercel Blob untuk pengalaman pengguna yang lebih baik */}
+                            <Label>Gambar</Label>
+                            <div className="mt-1 flex items-center gap-4">
+                                {preview ? (
+                                    <Image
+                                        src={preview}
+                                        alt="Preview"
+                                        width={120}
+                                        height={67}
+                                        className="rounded-md object-cover"
+                                    />
+                                ) : (
+                                    <div className="flex h-[67px] w-[120px] items-center justify-center rounded-md bg-muted">
+                                        <p className="text-sm text-muted-foreground">Pilih Gambar</p>
+                                    </div>
+                                )}
+                                <Input
+                                    id="image"
+                                    name="image"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="max-w-xs"
+                                />
+                            </div>
                         </div>
                         <DialogFooter>
                             <DialogClose asChild><Button type="button" variant="secondary">Batal</Button></DialogClose>
@@ -304,18 +345,34 @@ function FacilitiesTab({ data, refreshData }: { data: Facility[], refreshData: (
     const { toast } = useToast();
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [editingFacility, setEditingFacility] = useState<Facility | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (editingFacility) {
+            setPreview(editingFacility.imageUrl);
+        } else {
+            setPreview(null);
+        }
+    }, [editingFacility]);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        const facilityData = {
-            name: formData.get('name') as string,
-            imageUrl: formData.get('imageUrl') as string,
-        };
 
         const result = editingFacility
-            ? await updateFacility(editingFacility.id, facilityData)
-            : await createFacility(facilityData);
+            ? await updateFacility(editingFacility.id, editingFacility.imageUrl, formData)
+            : await createFacility(formData);
 
         if (result.success) {
             toast({ title: `Fasilitas ${editingFacility ? 'diperbarui' : 'dibuat'}!`, description: "Data fasilitas telah diperbarui." });
@@ -326,8 +383,8 @@ function FacilitiesTab({ data, refreshData }: { data: Facility[], refreshData: (
         }
     };
 
-    const handleDelete = async (id: string) => {
-        const result = await deleteFacility(id);
+    const handleDelete = async (id: string, imageUrl: string | null) => {
+        const result = await deleteFacility(id, imageUrl);
         if (result.success) {
             toast({ title: "Fasilitas dihapus!" });
             refreshData();
@@ -362,7 +419,7 @@ function FacilitiesTab({ data, refreshData }: { data: Facility[], refreshData: (
                                                 <AlertDialogHeader><AlertDialogTitle>Anda yakin?</AlertDialogTitle><AlertDialogDescription>Tindakan ini akan menghapus fasilitas secara permanen.</AlertDialogDescription></AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                     <AlertDialogCancel>Batal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleDelete(item.id)}>Hapus</AlertDialogAction>
+                                                    <AlertDialogAction onClick={() => handleDelete(item.id, item.imageUrl)}>Hapus</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
@@ -373,7 +430,12 @@ function FacilitiesTab({ data, refreshData }: { data: Facility[], refreshData: (
                     </TableBody>
                 </Table>
             </CardContent>
-            <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+            <Dialog open={isDialogOpen} onOpenChange={(open) => {
+                setDialogOpen(open);
+                if (!open) {
+                    setEditingFacility(null);
+                }
+            }}>
                 <DialogContent>
                     <DialogHeader><DialogTitle>{editingFacility ? 'Edit' : 'Tambah'} Fasilitas</DialogTitle></DialogHeader>
                     <form onSubmit={handleFormSubmit} className="grid gap-4 py-4">
@@ -382,8 +444,30 @@ function FacilitiesTab({ data, refreshData }: { data: Facility[], refreshData: (
                             <Input id="name" name="name" defaultValue={editingFacility?.name} required />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="imageUrl">URL Gambar</Label>
-                            <Input id="imageUrl" name="imageUrl" defaultValue={editingFacility?.imageUrl} placeholder="https://..." required />
+                            <Label>Gambar</Label>
+                            <div className="mt-1 flex items-center gap-4">
+                                {preview ? (
+                                    <Image
+                                        src={preview}
+                                        alt="Preview"
+                                        width={120}
+                                        height={80}
+                                        className="rounded-md object-cover"
+                                    />
+                                ) : (
+                                    <div className="flex h-[80px] w-[120px] items-center justify-center rounded-md bg-muted">
+                                        <p className="text-sm text-muted-foreground">Pilih Gambar</p>
+                                    </div>
+                                )}
+                                <Input
+                                    id="image"
+                                    name="image"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="max-w-xs"
+                                />
+                            </div>
                         </div>
                         <DialogFooter>
                             <DialogClose asChild><Button type="button" variant="secondary">Batal</Button></DialogClose>

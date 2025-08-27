@@ -2,26 +2,23 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, FileText } from "lucide-react";
 import Link from "next/link";
+import { getAccreditations } from "@/app/admin/accreditation/actions";
 
-// PENTING: Untuk menyematkan pratinjau, ubah URL Google Drive Anda dari
-// '.../view' menjadi '.../preview'.
-const accreditations = [
-    {
-        title: "Sertifikat Akreditasi Nasional",
-        description: "Sertifikat akreditasi resmi dari Badan Akreditasi Nasional Sekolah/Madrasah (BAN-S/M).",
-        // Ganti dengan tautan Google Drive Anda yang sebenarnya dalam format pratinjau
-        link: "https://drive.google.com/file/d/your_file_id/view?usp=sharing",
-        embedLink: "https://drive.google.com/file/d/your_file_id/preview"
-    },
-    {
-        title: "Piagam Penghargaan Sekolah Adiwiyata",
-        description: "Pengakuan atas komitmen sekolah terhadap lingkungan.",
-        link: "https://drive.google.com/file/d/your_file_id/view?usp=sharing",
-        embedLink: "https://drive.google.com/file/d/your_file_id/preview"
+function getGoogleDriveEmbedLink(url: string): string {
+    if (!url) return "";
+    // Regular expression to find the file ID from a Google Drive link
+    const fileIdRegex = /\/d\/([a-zA-Z0-9_-]+)/;
+    const match = url.match(fileIdRegex);
+    if (match && match[1]) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`;
     }
-]
+    // Return the original URL if it doesn't match the expected format
+    return url;
+}
 
-export default function AccreditationPage() {
+export default async function AccreditationPage() {
+  const accreditations = await getAccreditations();
+
   return (
     <div className="container mx-auto max-w-5xl px-4 py-12 md:py-24">
       <div className="text-center">
@@ -56,7 +53,7 @@ export default function AccreditationPage() {
                 <CardContent>
                     <div className="aspect-h-4 aspect-w-3 w-full rounded-md border bg-muted">
                        <iframe
-                        src={doc.embedLink}
+                        src={getGoogleDriveEmbedLink(doc.link)}
                         className="h-full w-full"
                         style={{ border: 0, minHeight: '800px' }}
                         allow="fullscreen"
@@ -66,6 +63,11 @@ export default function AccreditationPage() {
                 </CardContent>
             </Card>
         ))}
+        {accreditations.length === 0 && (
+            <div className="pt-16 text-center text-muted-foreground">
+                <p>Belum ada data sertifikasi atau penghargaan yang ditambahkan.</p>
+            </div>
+        )}
         <div className="pt-4 text-center text-sm text-muted-foreground">
             <p>Untuk pengalaman terbaik, gunakan tombol unduh untuk melihat dokumen secara penuh.</p>
         </div>

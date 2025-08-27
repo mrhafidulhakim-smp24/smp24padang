@@ -15,6 +15,20 @@
       "when": 1756265040814,
       "tag": "0001_windy_titania",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1756313267894,
+      "tag": "0002_opposite_marvel_apes",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1756314012145,
+      "tag": "0003_third_tarantula",
+      "breakpoints": true
     }
   ]
 }

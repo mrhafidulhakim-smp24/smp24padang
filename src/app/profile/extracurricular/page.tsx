@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Award, BrainCircuit, Palette, ShieldCheck } from "lucide-react";
+import { Award, BrainCircuit, Palette, ShieldCheck, Dumbbell, Paintbrush, FlaskConical, Users } from "lucide-react";
 import Image from "next/image";
 
 const extracurriculars = [
@@ -13,10 +13,10 @@ const extracurriculars = [
 ];
 
 const categories = [
-  { name: "Olahraga", icon: Award },
-  { name: "Seni & Budaya", icon: Palette },
-  { name: "Akademik & Sains", icon: BrainCircuit },
-  { name: "Pengembangan Diri", icon: ShieldCheck },
+  { name: "Olahraga", icon: Dumbbell },
+  { name: "Seni & Budaya", icon: Paintbrush },
+  { name: "Akademik & Sains", icon: FlaskConical },
+  { name: "Pengembangan Diri", icon: Users },
 ];
 
 export default function ExtracurricularPage() {

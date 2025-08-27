@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { getProfile } from "@/app/actions";
 import { Book, Target } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; 
 
 export const revalidate = 0;
 
@@ -15,7 +16,7 @@ export default async function VisionMissionPage() {
   const mission = data?.mission ? data.mission.split("\n") : ["Misi belum tersedia."];
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-12 md:py-24">
+    <div className="container mx-auto max-w-6xl px-4 py-12 md:py-24"> 
       <div className="text-center">
         <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
           Visi & Misi
@@ -25,31 +26,32 @@ export default async function VisionMissionPage() {
         </p>
       </div>
 
-      <section className="mt-16">
-        <Accordion type="single" collapsible defaultValue="item-1" className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger className="font-headline text-2xl">
-                <Target className="mr-3 h-6 w-6 text-accent" /> Visi Kami
-              </AccordionTrigger>
-              <AccordionContent className="py-4 text-base text-foreground/80">
+      <section className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2"> 
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Target className="h-6 w-6 text-accent" /> Visi Kami
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="py-4 text-base text-foreground/80">
                 {vision}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger className="font-headline text-2xl">
-                <Book className="mr-3 h-6 w-6 text-accent" /> Misi Kami
-              </AccordionTrigger>
-              <AccordionContent className="py-4 text-base text-foreground/80">
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Book className="h-6 w-6 text-accent" /> Misi Kami
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="py-4 text-base text-foreground/80">
                 <ul className="list-disc space-y-3 pl-6">
                   {mission.map((item, index) => (
                     <li key={index}>{item}</li>
                   ))}
                 </ul>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+            </CardContent>
+        </Card>
       </section>
     </div>
   );
 }
-

@@ -85,7 +85,7 @@ export default function FacultyPage() {
       </div>
 
       <section>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-3 gap-x-4 gap-y-8 md:grid-cols-4 lg:grid-cols-5">
           {filteredStaff.map((member) => (
             <div key={member.id} className="flex flex-col items-center text-center group">
               <div className="relative aspect-square w-full max-w-[200px] overflow-hidden rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">

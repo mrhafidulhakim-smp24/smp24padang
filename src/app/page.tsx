@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, ShieldCheck, School, Users, UserCheck, BookCopy, Target, Book, Newspaper, Megaphone } from 'lucide-react';
 import { Marquee, MarqueeItem } from '@/components/ui/marquee';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { getBanners, getLatestNews, getProfile, getStatistics, getFacilities, getAbout, getAnnouncements } from './actions';
+import { getBanners, getLatestNews, getProfile, getStatistics, getFacilities, getAbout, getAnnouncements, getMarqueeItems } from './actions';
 import { Separator } from '@/components/ui/separator';
 
 export const dynamic = 'force-dynamic';
@@ -140,7 +139,7 @@ async function LatestNews() {
             Ikuti kegiatan dan prestasi terbaru dari lingkungan sekolah kami.
           </p>
         </div>
-        <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4">
           {latestNews.map((item) => (
             <Card key={item.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
               <CardHeader className="p-0">
@@ -252,14 +251,7 @@ async function Facilities() {
 export default async function Home() {
   const banners = await getBanners();
   const profile = await getProfile();
-
-  const marqueeItems: MarqueeItem[] = [
-      { type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
-      { type: 'Berita', text: 'Pendaftaran siswa baru tahun ajaran 2024/2025 telah dibuka.' },
-      { type: 'Pengumuman', text: 'Jadwal Ujian Akhir Semester akan diumumkan minggu depan.' },
-      { type: 'Prestasi', text: 'Tim Basket Sekolah meraih Juara 1 tingkat Provinsi.' },
-      { type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
-  ];
+  const marqueeItems = await getMarqueeItems();
 
   return (
     <div className="flex flex-col">

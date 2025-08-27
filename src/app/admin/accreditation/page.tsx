@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -42,71 +41,78 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-
-type AccreditationDoc = {
-  id: string;
-  title: string;
-  description: string;
-  link: string;
-};
-
-const initialAccreditations: AccreditationDoc[] = [
-    {
-        id: "1",
-        title: "Sertifikat Akreditasi Nasional",
-        description: "Sertifikat akreditasi resmi dari Badan Akreditasi Nasional Sekolah/Madrasah (BAN-S/M).",
-        link: "https://drive.google.com/file/d/your_file_id/view?usp=sharing",
-    },
-    {
-        id: "2",
-        title: "Piagam Penghargaan Sekolah Adiwiyata",
-        description: "Pengakuan atas komitmen sekolah terhadap lingkungan.",
-        link: "https://drive.google.com/file/d/your_file_id/view?usp=sharing",
-    }
-];
+import { useToast } from "@/hooks/use-toast";
+import { getAccreditations, createAccreditation, updateAccreditation, deleteAccreditation } from "./actions";
+import { type accreditations as AccreditationDoc } from "@/lib/db/schema";
 
 export default function AccreditationAdminPage() {
-  const [documents, setDocuments] = useState<AccreditationDoc[]>(initialAccreditations);
+  const [documents, setDocuments] = useState<typeof AccreditationDoc.$inferSelect[]>([]);
   const [isAddOpen, setAddOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const [selectedDoc, setSelectedDoc] = useState<AccreditationDoc | null>(null);
+  const [selectedDoc, setSelectedDoc] = useState<typeof AccreditationDoc.$inferSelect | null>(null);
+  const { toast } = useToast();
 
-  const handleAddDoc = (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    fetchAccreditations();
+  }, []);
+
+  const fetchAccreditations = async () => {
+    const data = await getAccreditations();
+    setDocuments(data);
+  };
+
+  const handleAddDoc = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const newDoc: AccreditationDoc = {
-      id: Date.now().toString(),
+    const data = {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       link: formData.get("link") as string,
     };
-    setDocuments([newDoc, ...documents]);
-    setAddOpen(false);
+    const result = await createAccreditation(data);
+    if (result.success) {
+      toast({ title: "Sukses!", description: result.message });
+      fetchAccreditations();
+      setAddOpen(false);
+    } else {
+      toast({ title: "Gagal!", description: result.message, variant: "destructive" });
+    }
   };
 
-  const handleEditDoc = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEditDoc = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedDoc) return;
     
     const formData = new FormData(event.currentTarget);
-    const updatedDoc: AccreditationDoc = {
-      ...selectedDoc,
+    const data = {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       link: formData.get("link") as string,
     };
 
-    setDocuments(documents.map(d => d.id === selectedDoc.id ? updatedDoc : d));
-    setEditOpen(false);
-    setSelectedDoc(null);
+    const result = await updateAccreditation(selectedDoc.id, data);
+    if (result.success) {
+        toast({ title: "Sukses!", description: result.message });
+        fetchAccreditations();
+        setEditOpen(false);
+        setSelectedDoc(null);
+    } else {
+        toast({ title: "Gagal!", description: result.message, variant: "destructive" });
+    }
   };
   
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!selectedDoc) return;
-    setDocuments(documents.filter(d => d.id !== selectedDoc.id));
-    setDeleteOpen(false);
-    setSelectedDoc(null);
+    const result = await deleteAccreditation(selectedDoc.id);
+    if (result.success) {
+        toast({ title: "Sukses!", description: result.message });
+        fetchAccreditations();
+        setDeleteOpen(false);
+        setSelectedDoc(null);
+    } else {
+        toast({ title: "Gagal!", description: result.message, variant: "destructive" });
+    }
   };
 
   return (
@@ -142,7 +148,7 @@ export default function AccreditationAdminPage() {
               </div>
               <div>
                 <Label htmlFor="link-add">Tautan Google Drive</Label>
-                <Input id="link-add" name="link" type="url" placeholder="https://drive.google.com/..." required />
+                <Input id="link-add" name="link" type="url" placeholder="https://drive.google.com/.../view" required />
               </div>
               <DialogFooter>
                 <Button type="submit">Simpan</Button>

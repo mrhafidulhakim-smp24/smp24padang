@@ -21,7 +21,8 @@ export async function createAchievement(prevState: any, formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    return { success: false, message: 'Validasi gagal.' };
+    const errorMessages = Object.values(validatedFields.error.flatten().fieldErrors).flat().join(', ');
+    return { success: false, message: `Validasi gagal: ${errorMessages}` };
   }
   
   const { title, student, description } = validatedFields.data;
@@ -59,7 +60,8 @@ export async function updateAchievement(id: string, currentImageUrl: string | nu
     });
 
     if (!validatedFields.success) {
-        return { success: false, message: 'Validasi gagal.' };
+        const errorMessages = Object.values(validatedFields.error.flatten().fieldErrors).flat().join(', ');
+        return { success: false, message: `Validasi gagal: ${errorMessages}` };
     }
 
     const { title, student, description } = validatedFields.data;
