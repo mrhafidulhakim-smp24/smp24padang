@@ -28,8 +28,7 @@ export async function getAnnouncements() {
 
 export async function getProfile() {
   try {
-    // @ts-ignore
-    const profileData = await db.select().from(profiles).limit(1).where(sql`random() < 0.99`);
+    const profileData = await db.select().from(profiles).limit(1);
     return profileData[0] || null;
   } catch (error) {
     console.error("Error fetching profile:", error);

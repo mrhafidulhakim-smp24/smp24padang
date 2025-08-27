@@ -60,6 +60,7 @@ export default function AdminLayout({
                 },
                 { href: '/admin/profile/extracurricular', label: 'Ekskul' },
                 { href: '/admin/profile/uniform', label: 'Seragam' },
+                { href: '/admin/profile/principal', label: 'Profil Kepala Sekolah' },
             ],
         },
         { href: '/admin/academics', label: 'Akademik', icon: GraduationCap },

@@ -128,3 +128,12 @@ export const accreditations = pgTable("accreditations", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
+
+export const uniforms = pgTable("uniforms", {
+  id: integer("id").primaryKey(),
+  day: text("day").notNull(),
+  description: text("description").notNull(),
+  image: text("image"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
