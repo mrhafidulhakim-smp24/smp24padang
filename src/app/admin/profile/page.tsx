@@ -8,11 +8,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { getProfileDetails, updateProfileDetails } from "./actions";
+import Image from "next/image"; // Import Image component
 
 export default function ProfileAdminPage() {
     const [principalName, setPrincipalName] = useState("");
     const [principalWelcome, setPrincipalWelcome] = useState("");
-    const [principalImageUrl, setPrincipalImageUrl] = useState("");
+    const [principalImageUrl, setPrincipalImageUrl] = useState(""); // This will store the URL from DB
+    const [principalImageFile, setPrincipalImageFile] = useState<File | null>(null); // This will store the selected file
+    const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null); // For image preview
     const [loading, setLoading] = useState(true);
     const { toast } = useToast();
 
@@ -23,24 +26,54 @@ export default function ProfileAdminPage() {
                 setPrincipalName(data.principalName);
                 setPrincipalWelcome(data.principalWelcome);
                 setPrincipalImageUrl(data.principalImageUrl || "");
+                setPreviewImageUrl(data.principalImageUrl || null); // Set initial preview
             }
             setLoading(false);
         }
         fetchProfile();
     }, []);
 
-    const handleSaveChanges = async () => {
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setPrincipalImageFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImageUrl(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPrincipalImageFile(null);
+            setPreviewImageUrl(principalImageUrl || null); // Revert to current URL if no file selected
+        }
+    };
+
+    const handleSaveChanges = async (e: React.FormEvent) => {
+        e.preventDefault(); // Prevent default form submission
         setLoading(true);
-        const result = await updateProfileDetails({ 
-            principalName, 
-            principalWelcome, 
-            principalImageUrl 
-        });
+
+        const formData = new FormData();
+        formData.append('principalName', principalName);
+        formData.append('principalWelcome', principalWelcome);
+        if (principalImageFile) {
+            formData.append('principalImage', principalImageFile);
+        }
+        formData.append('currentPrincipalImageUrl', principalImageUrl); // Pass current URL for deletion
+
+        const result = await updateProfileDetails(formData); // This is the line that needs to be fixed
         if (result.success) {
             toast({
                 title: "Perubahan Disimpan!",
-                description: "Profil sekolah telah berhasil diperbarui.",
+                description: result.message,
             });
+            // Re-fetch data to ensure UI is updated with new image URL from server
+            const updatedData = await getProfileDetails();
+            if (updatedData) {
+                setPrincipalName(updatedData.principalName);
+                setPrincipalWelcome(updatedData.principalWelcome);
+                setPrincipalImageUrl(updatedData.principalImageUrl || "");
+                setPreviewImageUrl(updatedData.principalImageUrl || null);
+            }
         } else {
             toast({
                 title: "Gagal Menyimpan!",
@@ -65,7 +98,7 @@ export default function ProfileAdminPage() {
     }
 
     return (
-        <div className="flex flex-col gap-8">
+        <form onSubmit={handleSaveChanges} className="flex flex-col gap-8">
             <div>
                 <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                     Kelola Profil Sekolah
@@ -87,6 +120,7 @@ export default function ProfileAdminPage() {
                         <Label htmlFor="principalName">Nama Kepala Sekolah</Label>
                         <Input
                             id="principalName"
+                            name="principalName" // Add name prop for FormData
                             value={principalName}
                             onChange={(e) => setPrincipalName(e.target.value)}
                             placeholder="Masukkan nama lengkap..."
@@ -96,6 +130,7 @@ export default function ProfileAdminPage() {
                         <Label htmlFor="principalWelcome">Kata Sambutan</Label>
                         <Textarea
                             id="principalWelcome"
+                            name="principalWelcome" // Add name prop for FormData
                             value={principalWelcome}
                             onChange={(e) => setPrincipalWelcome(e.target.value)}
                             className="min-h-[200px]"
@@ -103,22 +138,39 @@ export default function ProfileAdminPage() {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="principalImageUrl">URL Gambar Kepala Sekolah</Label>
-                        <Input
-                            id="principalImageUrl"
-                            value={principalImageUrl}
-                            onChange={(e) => setPrincipalImageUrl(e.target.value)}
-                            placeholder="https://example.com/image.png"
-                        />
+                        <Label htmlFor="principalImage">Foto Kepala Sekolah</Label>
+                        <div className="mt-1 flex items-center gap-4">
+                            {previewImageUrl ? (
+                                <Image
+                                    src={previewImageUrl}
+                                    alt="Foto Kepala Sekolah"
+                                    width={120}
+                                    height={120}
+                                    className="rounded-full object-cover"
+                                />
+                            ) : (
+                                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-muted">
+                                    <p className="text-sm text-muted-foreground text-center">Pilih Foto</p>
+                                </div>
+                            )}
+                            <Input
+                                id="principalImage"
+                                name="principalImage" // Add name prop for FormData
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="max-w-xs"
+                            />
+                        </div>
                     </div>
                 </CardContent>
             </Card>
             
             <div className="flex justify-end pt-4">
-                <Button onClick={handleSaveChanges} size="lg" disabled={loading}>
+                <Button type="submit" size="lg" disabled={loading}>
                     {loading ? "Menyimpan..." : "Simpan Perubahan Profil"}
                 </Button>
             </div>
-        </div>
+        </form>
     );
 }

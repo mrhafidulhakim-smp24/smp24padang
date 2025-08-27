@@ -42,7 +42,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -50,6 +50,7 @@ import { useToast } from '@/hooks/use-toast';
 import { createStaff, updateStaff, deleteStaff, getStaff } from './actions';
 import type { staff as StaffSchema } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';
+import { Badge } from '@/components/ui/badge';
 
 type Staff = InferSelectModel<typeof StaffSchema>;
 
@@ -245,80 +246,60 @@ export default function StaffAdminPage() {
             </div>
 
             <Card>
-                <CardContent className="p-0">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Foto</TableHead>
-                                <TableHead>Nama</TableHead>
-                                <TableHead>Jabatan</TableHead>
-                                <TableHead>Bidang</TableHead>
-                                <TableHead>Wali Kelas</TableHead>
-                                <TableHead className="text-right">
-                                    Aksi
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
+                <CardContent className="p-4">
+                    {staff.length > 0 ? (
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             {staff.map((item) => (
-                                <TableRow key={item.id}>
-                                    <TableCell>
-                                        <Image
-                                            src={
-                                                item.imageUrl ||
-                                                'https://placehold.co/80x80.png'
-                                            }
-                                            alt={item.name}
-                                            width={60}
-                                            height={60}
-                                            className="rounded-full object-cover"
-                                        />
-                                    </TableCell>
-                                    <TableCell className="font-medium">
-                                        {item.name}
-                                    </TableCell>
-                                    <TableCell>{item.position}</TableCell>
-                                    <TableCell>{item.subject}</TableCell>
-                                    <TableCell>
-                                        {item.homeroomOf || '-'}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    className="h-8 w-8 p-0"
-                                                >
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem
-                                                    onSelect={() => {
-                                                        setSelectedStaff(item);
-                                                        setEditOpen(true);
-                                                    }}
-                                                >
-                                                    <Pencil className="mr-2 h-4 w-4" />
-                                                    <span>Edit</span>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onSelect={() => {
-                                                        setSelectedStaff(item);
-                                                        setDeleteOpen(true);
-                                                    }}
-                                                    className="text-destructive focus:bg-destructive/10 focus:text-destructive"
-                                                >
-                                                    <Trash2 className="mr-2 h-4 w-4" />
-                                                    <span>Hapus</span>
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </TableCell>
-                                </TableRow>
+                                <Card key={item.id} className="flex flex-col items-center text-center group">
+                                    <CardHeader className="p-0">
+                                        <div className="relative aspect-square w-full max-w-[150px] overflow-hidden rounded-full shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl mt-4">
+                                            <Image
+                                                src={item.imageUrl || "https://placehold.co/150x150.png"}
+                                                alt={item.name}
+                                                width={150}
+                                                height={150}
+                                                className="rounded-full object-cover"
+                                            />
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent className="flex flex-col items-center p-4">
+                                        <h3 className="mt-2 text-lg font-bold text-primary">{item.name}</h3>
+                                        <p className="font-semibold text-sm text-accent">{item.position}</p>
+                                        <p className="text-xs text-muted-foreground">{item.subject}</p>
+                                        {item.homeroomOf && (
+                                            <Badge variant="secondary" className="mt-2">
+                                                Wali Kelas {item.homeroomOf}
+                                            </Badge>
+                                        )}
+                                        <div className="mt-4 flex gap-2">
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={() => {
+                                                    setSelectedStaff(item);
+                                                    setEditOpen(true);
+                                                }}
+                                            >
+                                                <Pencil className="h-4 w-4" />
+                                            </Button>
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                onClick={() => {
+                                                    setSelectedStaff(item);
+                                                    setDeleteOpen(true);
+                                                }}
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    </CardContent>
+                                </Card>
                             ))}
-                        </TableBody>
-                    </Table>
+                        </div>
+                    ) : (
+                        <p className="text-center text-muted-foreground py-8">Belum ada data staf.</p>
+                    )}
                 </CardContent>
             </Card>
 
