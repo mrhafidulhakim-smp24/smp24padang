@@ -4,9 +4,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { getProfile } from "@/app/actions";
 import { Book, Target } from "lucide-react";
 
-export default function VisionMissionPage() {
+export const revalidate = 0;
+
+export default async function VisionMissionPage() {
+  const data = await getProfile();
+  const vision = data?.vision || "Visi belum tersedia.";
+  const mission = data?.mission ? data.mission.split("\n") : ["Misi belum tersedia."];
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 md:py-24">
       <div className="text-center">
@@ -25,7 +32,7 @@ export default function VisionMissionPage() {
                 <Target className="mr-3 h-6 w-6 text-accent" /> Visi Kami
               </AccordionTrigger>
               <AccordionContent className="py-4 text-base text-foreground/80">
-                Menjadi lembaga pendidikan terkemuka yang diakui karena memberdayakan siswa untuk menjadi warga dunia yang welas asih, inovatif, dan bertanggung jawab.
+                {vision}
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
@@ -34,10 +41,9 @@ export default function VisionMissionPage() {
               </AccordionTrigger>
               <AccordionContent className="py-4 text-base text-foreground/80">
                 <ul className="list-disc space-y-3 pl-6">
-                  <li>Menyediakan pendidikan berkualitas tinggi dan komprehensif yang memupuk rasa ingin tahu intelektual.</li>
-                  <li>Membina budaya saling menghormati, berintegritas, dan bertanggung jawab sosial.</li>
-                  <li>Membekali siswa dengan keterampilan dan pola pikir untuk berhasil di dunia yang cepat berubah.</li>
-                  <li>Menciptakan komunitas siswa, orang tua, dan pendidik yang kolaboratif dan inklusif.</li>
+                  {mission.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -46,3 +52,4 @@ export default function VisionMissionPage() {
     </div>
   );
 }
+

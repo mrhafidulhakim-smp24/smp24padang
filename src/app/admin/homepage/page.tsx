@@ -1,126 +1,107 @@
-
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+import { 
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+import { 
+    Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose 
 } from "@/components/ui/dialog";
+import { 
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger 
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Pencil, MoreHorizontal } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PlusCircle, Trash2, Pencil } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { 
+    getHomepageData, 
+    createBanner, updateBanner, deleteBanner,
+    createMarqueeItem, updateMarqueeItem, deleteMarqueeItem,
+    updateStatistics,
+    createFacility, updateFacility, deleteFacility
+} from "./actions";
 
-type Banner = {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-};
+// Type definitions from schema
+type Banner = Awaited<ReturnType<typeof getHomepageData>>['banners'][0];
+type MarqueeItem = Awaited<ReturnType<typeof getHomepageData>>['marquee'][0];
+type Statistics = NonNullable<Awaited<ReturnType<typeof getHomepageData>>['statistics']>;
+type Facility = Awaited<ReturnType<typeof getHomepageData>>['facilities'][0];
 
-type Facility = {
-  id: string;
-  name: string;
-  imageUrl: string;
-}
+// --- Banners Tab --- //
+function BannersTab({ data, refreshData }: { data: Banner[], refreshData: () => void }) {
+    const { toast } = useToast();
+    const [isDialogOpen, setDialogOpen] = useState(false);
+    const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
 
-type MarqueeItem = {
-    id: string;
-    type: 'Berita' | 'Prestasi' | 'Pengumuman';
-    text: string;
-}
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const bannerData = {
+            title: formData.get('title') as string,
+            description: formData.get('description') as string,
+            imageUrl: formData.get('imageUrl') as string,
+        };
 
-const initialBanners: Banner[] = [
-  { id: '1', title: 'Selamat Datang di SMPN 24 Padang', description: 'Sekolah unggul yang berdedikasi untuk membentuk generasi masa depan yang cerdas, kreatif, dan berkarakter.', imageUrl: 'https://placehold.co/1920x1080.png' },
-  { id: '2', title: 'Penerimaan Siswa Baru 2024/2025', description: 'Bergabunglah dengan komunitas kami dan mulailah perjalanan pendidikan Anda.', imageUrl: 'https://placehold.co/1920x1080.png' },
-];
+        const result = editingBanner 
+            ? await updateBanner(editingBanner.id, bannerData)
+            : await createBanner(bannerData);
 
-const initialStats = {
-  classrooms: 24,
-  students: 773,
-  teachers: 30,
-  staff: 12,
-};
+        if (result.success) {
+            toast({ title: `Banner ${editingBanner ? 'diperbarui' : 'dibuat'}!`, description: "Halaman beranda telah diperbarui." });
+            refreshData();
+            setDialogOpen(false);
+        } else {
+            toast({ title: "Gagal!", description: result.error, variant: "destructive" });
+        }
+    };
 
-const initialFacilities: Facility[] = [
-    { id: '1', name: 'Laboratorium Komputer', imageUrl: 'https://placehold.co/600x400.png' },
-    { id: '2', name: 'Perpustakaan', imageUrl: 'https://placehold.co/600x400.png' },
-    { id: '3', name: 'Lapangan Olahraga', imageUrl: 'https://placehold.co/600x400.png' },
-];
+    const handleDelete = async (id: string) => {
+        const result = await deleteBanner(id);
+        if (result.success) {
+            toast({ title: "Banner dihapus!", description: "Data banner telah dihapus." });
+            refreshData();
+        } else {
+            toast({ title: "Gagal!", description: result.error, variant: "destructive" });
+        }
+    };
 
-const initialMarqueeItems: MarqueeItem[] = [
-    { id: '1', type: 'Prestasi', text: 'Andi Pratama memenangkan Olimpiade Sains Nasional!' },
-    { id: '2', type: 'Berita', text: 'Pendaftaran siswa baru tahun ajaran 2024/2025 telah dibuka.' },
-    { id: '3', type: 'Pengumuman', text: 'Jadwal Ujian Akhir Semester akan diumumkan minggu depan.' },
-    { id: '4', type: 'Prestasi', text: 'Tim Basket Sekolah meraih Juara 1 tingkat Provinsi.' },
-    { id: '5', type: 'Berita', text: 'Sekolah kami mengadakan pameran seni pada tanggal 20 Desember.' },
-];
-
-
-function BannersTab() {
-    const [banners, setBanners] = useState<Banner[]>(initialBanners);
-    // Add logic for banner management (add, edit, delete) here
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex-row items-center justify-between">
                 <div>
                     <CardTitle>Kelola Banner</CardTitle>
-                    <CardDescription>Tambah, edit, atau hapus banner yang tampil di halaman utama.</CardDescription>
+                    <CardDescription>Tambah, edit, atau hapus banner di halaman utama.</CardDescription>
                 </div>
-                 <Dialog>
-                    <DialogTrigger asChild>
-                        <Button><PlusCircle className="mr-2 h-4 w-4" /> Tambah Banner</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Tambah Banner Baru</DialogTitle>
-                        </DialogHeader>
-                        {/* Form to add a new banner */}
-                    </DialogContent>
-                </Dialog>
+                <Button onClick={() => { setEditingBanner(null); setDialogOpen(true); }}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Banner</Button>
             </CardHeader>
             <CardContent>
                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Gambar</TableHead>
-                            <TableHead>Judul</TableHead>
-                            <TableHead className="text-right">Aksi</TableHead>
-                        </TableRow>
-                    </TableHeader>
+                    <TableHeader><TableRow><TableHead>Gambar</TableHead><TableHead>Judul</TableHead><TableHead className="text-right">Aksi</TableHead></TableRow></TableHeader>
                     <TableBody>
-                        {banners.map((item) => (
+                        {data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell>
-                                    <Image src={item.imageUrl} alt={item.title} width={120} height={67} className="rounded-md object-cover" />
-                                </TableCell>
+                                <TableCell><Image src={item.imageUrl || ''} alt={item.title} width={120} height={67} className="rounded-md bg-muted object-cover" /></TableCell>
                                 <TableCell className="font-medium">{item.title}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
-                                        <Button variant="outline" size="icon"><Pencil className="h-4 w-4" /></Button>
-                                        <Button variant="destructive" size="icon"><Trash2 className="h-4 w-4" /></Button>
+                                        <Button variant="outline" size="icon" onClick={() => { setEditingBanner(item); setDialogOpen(true); }}><Pencil className="h-4 w-4" /></Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild><Button variant="destructive" size="icon"><Trash2 className="h-4 w-4" /></Button></AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader><AlertDialogTitle>Anda yakin?</AlertDialogTitle><AlertDialogDescription>Tindakan ini tidak bisa dibatalkan. Ini akan menghapus banner secara permanen.</AlertDialogDescription></AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => handleDelete(item.id)}>Hapus</AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -128,50 +109,101 @@ function BannersTab() {
                     </TableBody>
                 </Table>
             </CardContent>
+            <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+                <DialogContent>
+                    <DialogHeader><DialogTitle>{editingBanner ? 'Edit' : 'Tambah'} Banner</DialogTitle></DialogHeader>
+                    <form onSubmit={handleFormSubmit} className="grid gap-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="title">Judul</Label>
+                            <Input id="title" name="title" defaultValue={editingBanner?.title} required />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="description">Deskripsi</Label>
+                            <Textarea id="description" name="description" defaultValue={editingBanner?.description} required />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="imageUrl">URL Gambar</Label>
+                            <Input id="imageUrl" name="imageUrl" defaultValue={editingBanner?.imageUrl || ''} placeholder="https://..." required />
+                            {/* TODO: Ganti input ini dengan komponen upload Vercel Blob untuk pengalaman pengguna yang lebih baik */}
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild><Button type="button" variant="secondary">Batal</Button></DialogClose>
+                            <Button type="submit">Simpan</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 }
 
-function MarqueeTab() {
-    const [marqueeItems, setMarqueeItems] = useState<MarqueeItem[]>(initialMarqueeItems);
-    // Add logic for marquee item management
+// --- Marquee Tab --- //
+function MarqueeTab({ data, refreshData }: { data: MarqueeItem[], refreshData: () => void }) {
+    const { toast } = useToast();
+    const [isDialogOpen, setDialogOpen] = useState(false);
+    const [editingItem, setEditingItem] = useState<MarqueeItem | null>(null);
+
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const itemData = {
+            type: formData.get('type') as MarqueeItem['type'],
+            text: formData.get('text') as string,
+        };
+
+        const result = editingItem
+            ? await updateMarqueeItem(editingItem.id, itemData)
+            : await createMarqueeItem(itemData);
+
+        if (result.success) {
+            toast({ title: `Item ${editingItem ? 'diperbarui' : 'dibuat'}!`, description: "Teks berjalan telah diperbarui." });
+            refreshData();
+            setDialogOpen(false);
+        } else {
+            toast({ title: "Gagal!", description: result.error, variant: "destructive" });
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        const result = await deleteMarqueeItem(id);
+        if (result.success) {
+            toast({ title: "Item dihapus!" });
+            refreshData();
+        } else {
+            toast({ title: "Gagal!", description: result.error, variant: "destructive" });
+        }
+    };
+
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex-row items-center justify-between">
                 <div>
                     <CardTitle>Kelola Teks Berjalan</CardTitle>
-                    <CardDescription>Tambah, edit, atau hapus item teks berjalan (marquee).</CardDescription>
+                    <CardDescription>Tambah, edit, atau hapus item teks berjalan.</CardDescription>
                 </div>
-                 <Dialog>
-                    <DialogTrigger asChild>
-                        <Button><PlusCircle className="mr-2 h-4 w-4" /> Tambah Item</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Tambah Item Teks Baru</DialogTitle>
-                        </DialogHeader>
-                        {/* Form to add a new marquee item */}
-                    </DialogContent>
-                </Dialog>
+                <Button onClick={() => { setEditingItem(null); setDialogOpen(true); }}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Item</Button>
             </CardHeader>
             <CardContent>
                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Tipe</TableHead>
-                            <TableHead>Teks</TableHead>
-                            <TableHead className="text-right">Aksi</TableHead>
-                        </TableRow>
-                    </TableHeader>
+                    <TableHeader><TableRow><TableHead>Tipe</TableHead><TableHead>Teks</TableHead><TableHead className="text-right">Aksi</TableHead></TableRow></TableHeader>
                     <TableBody>
-                        {marqueeItems.map((item) => (
+                        {data.map((item) => (
                             <TableRow key={item.id}>
                                 <TableCell>{item.type}</TableCell>
                                 <TableCell className="font-medium">{item.text}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
-                                        <Button variant="outline" size="icon"><Pencil className="h-4 w-4" /></Button>
-                                        <Button variant="destructive" size="icon"><Trash2 className="h-4 w-4" /></Button>
+                                        <Button variant="outline" size="icon" onClick={() => { setEditingItem(item); setDialogOpen(true); }}><Pencil className="h-4 w-4" /></Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild><Button variant="destructive" size="icon"><Trash2 className="h-4 w-4" /></Button></AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader><AlertDialogTitle>Anda yakin?</AlertDialogTitle><AlertDialogDescription>Tindakan ini akan menghapus item teks berjalan secara permanen.</AlertDialogDescription></AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => handleDelete(item.id)}>Hapus</AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -179,37 +211,69 @@ function MarqueeTab() {
                     </TableBody>
                 </Table>
             </CardContent>
+            <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+                <DialogContent>
+                    <DialogHeader><DialogTitle>{editingItem ? 'Edit' : 'Tambah'} Item Teks Berjalan</DialogTitle></DialogHeader>
+                    <form onSubmit={handleFormSubmit} className="grid gap-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="type">Tipe</Label>
+                            <Select name="type" defaultValue={editingItem?.type} required>
+                                <SelectTrigger><SelectValue placeholder="Pilih tipe..." /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Berita">Berita</SelectItem>
+                                    <SelectItem value="Prestasi">Prestasi</SelectItem>
+                                    <SelectItem value="Pengumuman">Pengumuman</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="text">Teks</Label>
+                            <Textarea id="text" name="text" defaultValue={editingItem?.text} required />
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild><Button type="button" variant="secondary">Batal</Button></DialogClose>
+                            <Button type="submit">Simpan</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 }
 
-function StatisticsTab() {
-  const [stats, setStats] = useState(initialStats);
-  const { toast } = useToast();
+// --- Statistics Tab --- //
+function StatisticsTab({ data, refreshData }: { data: Statistics | null, refreshData: () => void }) {
+    const [stats, setStats] = useState(data || { classrooms: 0, students: 0, teachers: 0, staff: 0 });
+    const { toast } = useToast();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setStats(prev => ({ ...prev, [name]: Number(value) }));
-  };
+    useEffect(() => {
+        setStats(data || { classrooms: 0, students: 0, teachers: 0, staff: 0 });
+    }, [data]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Saving statistics:", stats);
-    toast({
-      title: "Sukses!",
-      description: "Data statistik berhasil diperbarui (mode simulasi).",
-    });
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setStats(prev => ({ ...prev, [name]: Number(value) }));
+    };
 
-  return (
-    <form onSubmit={handleSubmit}>
-        <Card>
-            <CardHeader>
-                <CardTitle>Data Statistik Sekolah</CardTitle>
-                <CardDescription>Perbarui data statistik yang ditampilkan di halaman beranda.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const result = await updateStatistics(stats);
+        if (result.success) {
+            toast({ title: "Statistik diperbarui!", description: "Data statistik di halaman beranda telah diperbarui." });
+            refreshData();
+        } else {
+            toast({ title: "Gagal!", description: result.error, variant: "destructive" });
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Data Statistik Sekolah</CardTitle>
+                    <CardDescription>Perbarui data statistik yang ditampilkan di halaman beranda.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="space-y-2">
                         <Label htmlFor="classrooms">Jumlah Ruang Kelas</Label>
                         <Input id="classrooms" name="classrooms" type="number" value={stats.classrooms} onChange={handleChange} required />
@@ -226,58 +290,82 @@ function StatisticsTab() {
                         <Label htmlFor="staff">Jumlah Tenaga Kependidikan</Label>
                         <Input id="staff" name="staff" type="number" value={stats.staff} onChange={handleChange} required />
                     </div>
-                </div>
-            </CardContent>
-            <div className="flex justify-end p-6">
-                <Button type="submit">Simpan Statistik</Button>
-            </div>
-        </Card>
-    </form>
-  );
+                </CardContent>
+                <CardFooter className="flex justify-end">
+                    <Button type="submit">Simpan Statistik</Button>
+                </CardFooter>
+            </Card>
+        </form>
+    );
 }
 
-function FacilitiesTab() {
-    const [facilities, setFacilities] = useState<Facility[]>(initialFacilities);
-    // Add logic for facility management here
-     return (
+// --- Facilities Tab --- //
+function FacilitiesTab({ data, refreshData }: { data: Facility[], refreshData: () => void }) {
+    const { toast } = useToast();
+    const [isDialogOpen, setDialogOpen] = useState(false);
+    const [editingFacility, setEditingFacility] = useState<Facility | null>(null);
+
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const facilityData = {
+            name: formData.get('name') as string,
+            imageUrl: formData.get('imageUrl') as string,
+        };
+
+        const result = editingFacility
+            ? await updateFacility(editingFacility.id, facilityData)
+            : await createFacility(facilityData);
+
+        if (result.success) {
+            toast({ title: `Fasilitas ${editingFacility ? 'diperbarui' : 'dibuat'}!`, description: "Data fasilitas telah diperbarui." });
+            refreshData();
+            setDialogOpen(false);
+        } else {
+            toast({ title: "Gagal!", description: result.error, variant: "destructive" });
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        const result = await deleteFacility(id);
+        if (result.success) {
+            toast({ title: "Fasilitas dihapus!" });
+            refreshData();
+        } else {
+            toast({ title: "Gagal!", description: result.error, variant: "destructive" });
+        }
+    };
+
+    return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex-row items-center justify-between">
                 <div>
                     <CardTitle>Kelola Fasilitas</CardTitle>
                     <CardDescription>Tambah, edit, atau hapus fasilitas sekolah.</CardDescription>
                 </div>
-                 <Dialog>
-                    <DialogTrigger asChild>
-                        <Button><PlusCircle className="mr-2 h-4 w-4" /> Tambah Fasilitas</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Tambah Fasilitas Baru</DialogTitle>
-                        </DialogHeader>
-                        {/* Form to add a new facility */}
-                    </DialogContent>
-                </Dialog>
+                <Button onClick={() => { setEditingFacility(null); setDialogOpen(true); }}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Fasilitas</Button>
             </CardHeader>
             <CardContent>
                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Gambar</TableHead>
-                            <TableHead>Nama Fasilitas</TableHead>
-                            <TableHead className="text-right">Aksi</TableHead>
-                        </TableRow>
-                    </TableHeader>
+                    <TableHeader><TableRow><TableHead>Gambar</TableHead><TableHead>Nama Fasilitas</TableHead><TableHead className="text-right">Aksi</TableHead></TableRow></TableHeader>
                     <TableBody>
-                        {facilities.map((item) => (
+                        {data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell>
-                                    <Image src={item.imageUrl} alt={item.name} width={120} height={80} className="rounded-md object-cover" />
-                                </TableCell>
+                                <TableCell><Image src={item.imageUrl} alt={item.name} width={120} height={80} className="rounded-md bg-muted object-cover" /></TableCell>
                                 <TableCell className="font-medium">{item.name}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
-                                        <Button variant="outline" size="icon"><Pencil className="h-4 w-4" /></Button>
-                                        <Button variant="destructive" size="icon"><Trash2 className="h-4 w-4" /></Button>
+                                        <Button variant="outline" size="icon" onClick={() => { setEditingFacility(item); setDialogOpen(true); }}><Pencil className="h-4 w-4" /></Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild><Button variant="destructive" size="icon"><Trash2 className="h-4 w-4" /></Button></AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader><AlertDialogTitle>Anda yakin?</AlertDialogTitle><AlertDialogDescription>Tindakan ini akan menghapus fasilitas secara permanen.</AlertDialogDescription></AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => handleDelete(item.id)}>Hapus</AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -285,42 +373,72 @@ function FacilitiesTab() {
                     </TableBody>
                 </Table>
             </CardContent>
+            <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+                <DialogContent>
+                    <DialogHeader><DialogTitle>{editingFacility ? 'Edit' : 'Tambah'} Fasilitas</DialogTitle></DialogHeader>
+                    <form onSubmit={handleFormSubmit} className="grid gap-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Nama Fasilitas</Label>
+                            <Input id="name" name="name" defaultValue={editingFacility?.name} required />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="imageUrl">URL Gambar</Label>
+                            <Input id="imageUrl" name="imageUrl" defaultValue={editingFacility?.imageUrl} placeholder="https://..." required />
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild><Button type="button" variant="secondary">Batal</Button></DialogClose>
+                            <Button type="submit">Simpan</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 }
 
+// --- Main Page Component --- //
 export default function HomepageAdminPage() {
-  return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-          Kelola Halaman Beranda
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Kelola semua konten yang ada di halaman beranda dari satu tempat.
-        </p>
-      </div>
+    const [loading, setLoading] = useState(true);
+    const [homepageData, setHomepageData] = useState<Awaited<ReturnType<typeof getHomepageData>> | null>(null);
 
-      <Tabs defaultValue="banners" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="banners">Banner</TabsTrigger>
-          <TabsTrigger value="marquee">Teks Berjalan</TabsTrigger>
-          <TabsTrigger value="statistics">Statistik</TabsTrigger>
-          <TabsTrigger value="facilities">Fasilitas</TabsTrigger>
-        </TabsList>
-        <TabsContent value="banners" className="mt-4">
-          <BannersTab />
-        </TabsContent>
-         <TabsContent value="marquee" className="mt-4">
-          <MarqueeTab />
-        </TabsContent>
-        <TabsContent value="statistics" className="mt-4">
-          <StatisticsTab />
-        </TabsContent>
-        <TabsContent value="facilities" className="mt-4">
-            <FacilitiesTab />
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
+    const fetchData = async () => {
+        const data = await getHomepageData();
+        setHomepageData(data);
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    if (loading || !homepageData) {
+        return (
+            <div className="flex flex-col gap-8">
+                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">Kelola Halaman Beranda</h1>
+                <p className="mt-2 text-lg text-muted-foreground">Memuat data manajemen beranda...</p>
+                {/* TODO: Add skeleton loaders for a better UX */}
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex flex-col gap-8">
+            <div>
+                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">Kelola Halaman Beranda</h1>
+                <p className="mt-2 text-lg text-muted-foreground">Kelola semua konten yang ada di halaman beranda dari satu tempat.</p>
+            </div>
+            <Tabs defaultValue="banners" className="w-full">
+                <TabsList className="grid w-full grid-cols-4">
+                    <TabsTrigger value="banners">Banner</TabsTrigger>
+                    <TabsTrigger value="marquee">Teks Berjalan</TabsTrigger>
+                    <TabsTrigger value="statistics">Statistik</TabsTrigger>
+                    <TabsTrigger value="facilities">Fasilitas</TabsTrigger>
+                </TabsList>
+                <TabsContent value="banners" className="mt-4"><BannersTab data={homepageData.banners} refreshData={fetchData} /></TabsContent>
+                <TabsContent value="marquee" className="mt-4"><MarqueeTab data={homepageData.marquee} refreshData={fetchData} /></TabsContent>
+                <TabsContent value="statistics" className="mt-4"><StatisticsTab data={homepageData.statistics} refreshData={fetchData} /></TabsContent>
+                <TabsContent value="facilities" className="mt-4"><FacilitiesTab data={homepageData.facilities} refreshData={fetchData} /></TabsContent>
+            </Tabs>
+        </div>
+    );
 }

@@ -104,3 +104,10 @@ export const staff = pgTable("staff", {
     imageUrl: text("imageUrl"),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+export const marquee = pgTable("marquee", {
+  id: varchar("id").primaryKey(),
+  type: text("type", { enum: ["Berita", "Prestasi", "Pengumuman"] }).notNull(),
+  text: text("text").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});

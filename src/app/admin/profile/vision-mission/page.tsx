@@ -1,36 +1,64 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Target, Book } from "lucide-react";
-
-const initialData = {
-  vision: "Menjadi lembaga pendidikan terkemuka yang diakui karena memberdayakan siswa untuk menjadi warga dunia yang welas asih, inovatif, dan bertanggung jawab.",
-  mission: [
-    "Menyediakan pendidikan berkualitas tinggi dan komprehensif yang memupuk rasa ingin tahu intelektual.",
-    "Membina budaya saling menghormati, berintegritas, dan bertanggung jawab sosial.",
-    "Membekali siswa dengan keterampilan dan pola pikir untuk berhasil di dunia yang cepat berubah.",
-    "Menciptakan komunitas siswa, orang tua, dan pendidik yang kolaboratif dan inklusif.",
-  ],
-};
+import { getVisionMission, updateVisionMission } from "./actions";
 
 export default function VisionMissionAdminPage() {
-    const [vision, setVision] = useState(initialData.vision);
-    const [mission, setMission] = useState(initialData.mission.join("\n"));
+    const [vision, setVision] = useState("");
+    const [mission, setMission] = useState("");
+    const [loading, setLoading] = useState(true);
     const { toast } = useToast();
 
-    const handleSaveChanges = () => {
-        console.log("Saving changes:", { vision, mission: mission.split("\n") });
-        toast({
-            title: "Perubahan Disimpan!",
-            description: "Visi & Misi sekolah telah berhasil diperbarui.",
-        });
+    useEffect(() => {
+        async function fetchVisionMission() {
+            const data = await getProfile();
+            if (data) {
+                setVision(data.vision);
+                setMission(data.mission);
+            }
+            setLoading(false);
+        }
+        fetchVisionMission();
+    }, []);
+
+    const handleSaveChanges = async () => {
+        setLoading(true);
+        const result = await updateVisionMission(vision, mission);
+        if (result.success) {
+            toast({
+                title: "Perubahan Disimpan!",
+                description: "Visi & Misi sekolah telah berhasil diperbarui.",
+            });
+        } else {
+            toast({
+                title: "Gagal Menyimpan!",
+                description: result.error || "Terjadi kesalahan saat memperbarui Visi & Misi.",
+                variant: "destructive",
+            });
+        }
+        setLoading(false);
     };
+
+    if (loading) {
+        return (
+            <div className="flex flex-col gap-8">
+                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                    Kelola Visi & Misi
+                </h1>
+                <p className="mt-2 text-lg text-muted-foreground">
+                    Memuat data...
+                </p>
+            </div>
+        );
+    }
+
 
     return (
         <div className="flex flex-col gap-8">
