@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Target, Book } from "lucide-react";
-import { getVisionMission, updateVisionMission } from "./actions";
+import { getProfile, updateVisionMission } from "./actions";
 
 export default function VisionMissionAdminPage() {
     const [vision, setVision] = useState("");

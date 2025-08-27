@@ -1,4 +1,3 @@
-
 "use server";
 
 import { db } from "@/lib/db";
@@ -40,4 +39,12 @@ export async function updateVisionMission(vision: string, mission: string) {
     console.error("Error updating vision and mission:", error);
     return { success: false, error: "Failed to update vision and mission." };
   }
+}
+
+export async function getProfile() {
+  const profile = await db.select().from(profiles).limit(1);
+  if (profile.length === 0) {
+    return null;
+  }
+  return profile[0];
 }

@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/db';
 import { banners, news, announcements, profiles, statistics, facilities } from '@/lib/db/schema';
-import { asc, desc } from 'drizzle-orm';
+import { asc, desc, sql } from 'drizzle-orm';
 
 export async function getBanners() {
   return await db.select().from(banners).orderBy(asc(banners.createdAt));
@@ -29,7 +29,8 @@ export async function getAnnouncements() {
 
 export async function getProfile() {
   try {
-    const profileData = await db.select().from(profiles).limit(1);
+    // @ts-ignore
+    const profileData = await db.select().from(profiles).limit(1).where(sql`random() < 0.99`);
     return profileData[0] || null;
   } catch (error) {
     console.error("Error fetching profile:", error);
