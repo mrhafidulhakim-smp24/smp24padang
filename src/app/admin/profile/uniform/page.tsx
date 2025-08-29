@@ -2,13 +2,7 @@ import { db } from '@/lib/db';
 import { uniforms } from '@/lib/db/schema';
 import UniformList from './uniform-list';
 
-type Uniform = {
-    id: number;
-    day: string | null;
-    description: string;
-    image: string | null;
-    type: 'daily' | 'sport';
-};
+type Uniform = typeof uniforms.$inferSelect;
 
 export default async function UniformAdminPage() {
     const uniformsData: Uniform[] = await db.query.uniforms.findMany({

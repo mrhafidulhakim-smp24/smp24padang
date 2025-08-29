@@ -5,7 +5,19 @@ import { extracurriculars } from '@/lib/db/schema';
 import { put, del } from '@vercel/blob';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
+
+export async function getExtracurriculars() {
+  try {
+    const data = await db.query.extracurriculars.findMany({
+      orderBy: [desc(extracurriculars.createdAt)],
+    });
+    return { success: true, data };
+  } catch (error) {
+    console.error("Failed to fetch extracurriculars:", error);
+    return { success: false, message: 'Gagal memuat data ekstrakurikuler.' };
+  }
+}
 
 const extracurricularSchema = z.object({
   name: z.string().min(1, 'Nama kegiatan tidak boleh kosong'),

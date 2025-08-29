@@ -41,13 +41,9 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
-type Uniform = {
-    id: number;
-    day: string | null;
-    type: 'daily' | 'sport';
-    description: string;
-    image: string | null;
-};
+import { uniforms } from '@/lib/db/schema';
+
+type Uniform = typeof uniforms.$inferSelect;
 
 type UniformListProps = {
     initialUniformsData: Uniform[];
@@ -55,7 +51,8 @@ type UniformListProps = {
 
 export default function UniformList({ initialUniformsData }: UniformListProps) {
     const { toast } = useToast();
-    const [uniformsData, setUniformsData] = useState<Uniform[]>(initialUniformsData);
+    const [uniformsData, setUniformsData] =
+        useState<Uniform[]>(initialUniformsData);
     const [isAddOpen, setAddOpen] = useState(false);
     const [isEditOpen, setEditOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
@@ -68,11 +65,7 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
         setUniformsData(initialUniformsData);
     }, [initialUniformsData]);
 
-    const refreshUniforms = async () => {
-        // This is a placeholder. In a real app, you'd re-fetch from the DB.
-        // For now, we rely on revalidatePath in server actions.
-        // If immediate client-side refresh is needed, consider SWR/React Query.
-    };
+    const refreshUniforms = async () => {};
 
     const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -90,8 +83,6 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
             });
             setAddOpen(false);
             setImageFile(null);
-            // Re-fetch data or update state directly if not relying on revalidatePath
-            // For now, assume revalidatePath handles it on next render.
         } else {
             toast({
                 title: 'Error',
@@ -121,7 +112,6 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
             setEditOpen(false);
             setSelectedUniform(null);
             setImageFile(null);
-            // Re-fetch data or update state directly if not relying on revalidatePath
         } else {
             toast({
                 title: 'Error',
@@ -143,7 +133,6 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
             });
             setDeleteOpen(false);
             setSelectedUniform(null);
-            // Re-fetch data or update state directly if not relying on revalidatePath
         } else {
             toast({
                 title: 'Error',
@@ -183,18 +172,34 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                                         <SelectValue placeholder="Pilih jenis seragam" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="daily">Harian</SelectItem>
-                                        <SelectItem value="sport">Olah Raga</SelectItem>
+                                        <SelectItem value="daily">
+                                            Harian
+                                        </SelectItem>
+                                        <SelectItem value="sport">
+                                            Olah Raga
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
                             <div>
-                                <Label htmlFor="day-add">Hari (Opsional untuk Olah Raga)</Label>
-                                <Input id="day-add" name="day" placeholder="Contoh: Senin" />
+                                <Label htmlFor="day-add">
+                                    Hari (Opsional untuk Olah Raga)
+                                </Label>
+                                <Input
+                                    id="day-add"
+                                    name="day"
+                                    placeholder="Contoh: Senin"
+                                />
                             </div>
                             <div>
-                                <Label htmlFor="description-add">Deskripsi</Label>
-                                <Input id="description-add" name="description" required />
+                                <Label htmlFor="description-add">
+                                    Deskripsi
+                                </Label>
+                                <Input
+                                    id="description-add"
+                                    name="description"
+                                    required
+                                />
                             </div>
                             <div>
                                 <Label>Gambar</Label>
@@ -210,10 +215,20 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                                                 id="file-upload-add"
                                                 type="file"
                                                 className="sr-only"
-                                                onChange={(e) => setImageFile(e.target.files ? e.target.files[0] : null)}
+                                                onChange={(e) =>
+                                                    setImageFile(
+                                                        e.target.files
+                                                            ? e.target.files[0]
+                                                            : null,
+                                                    )
+                                                }
                                             />
                                         </Label>
-                                        {imageFile && <p className="text-sm text-gray-500">Selected: {imageFile.name}</p>}
+                                        {imageFile && (
+                                            <p className="text-sm text-gray-500">
+                                                Selected: {imageFile.name}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -248,7 +263,9 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                         </CardHeader>
                         <CardContent className="p-4">
                             <CardTitle className="font-headline text-xl text-primary">
-                                {uniform.type === 'daily' ? uniform.day : 'Seragam Olah Raga'}
+                                {uniform.type === 'daily'
+                                    ? uniform.day
+                                    : 'Seragam Olah Raga'}
                             </CardTitle>
                             <CardDescription>
                                 {uniform.description}
@@ -285,24 +302,34 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            Edit Seragam: {selectedUniform?.day || selectedUniform?.type}
+                            Edit Seragam:{' '}
+                            {selectedUniform?.day || selectedUniform?.type}
                         </DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleEdit} className="space-y-4">
                         <div>
                             <Label htmlFor="type-edit">Jenis Seragam</Label>
-                            <Select name="type" defaultValue={selectedUniform?.type}>
+                            <Select
+                                name="type"
+                                defaultValue={selectedUniform?.type}
+                            >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Pilih jenis seragam" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="daily">Harian</SelectItem>
-                                    <SelectItem value="sport">Olah Raga</SelectItem>
+                                    <SelectItem value="daily">
+                                        Harian
+                                    </SelectItem>
+                                    <SelectItem value="sport">
+                                        Olah Raga
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div>
-                            <Label htmlFor="day-edit">Hari (Opsional untuk Olah Raga)</Label>
+                            <Label htmlFor="day-edit">
+                                Hari (Opsional untuk Olah Raga)
+                            </Label>
                             <Input
                                 id="day-edit"
                                 name="day"
@@ -374,7 +401,11 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setSelectedUniform(null)}>Batal</AlertDialogCancel>
+                        <AlertDialogCancel
+                            onClick={() => setSelectedUniform(null)}
+                        >
+                            Batal
+                        </AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleDeleteConfirm}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"

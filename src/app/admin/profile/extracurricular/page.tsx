@@ -41,17 +41,10 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
-import { createExtracurricular, updateExtracurricular, deleteExtracurricular, seedExtracurriculars } from './actions';
-import { db } from '@/lib/db';
+import { createExtracurricular, updateExtracurricular, deleteExtracurricular, seedExtracurriculars, getExtracurriculars } from './actions';
 import { extracurriculars } from '@/lib/db/schema';
 
-type Extracurricular = {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  image: string | null;
-};
+type Extracurricular = typeof extracurriculars.$inferSelect;
 
 export default function ExtracurricularAdminPage() {
   const [activities, setActivities] = useState<Extracurricular[]>([]);
@@ -64,17 +57,18 @@ export default function ExtracurricularAdminPage() {
   const { toast } = useToast();
 
   const refreshActivities = useCallback(async () => {
-    try {
-      const data = await db.query.extracurriculars.findMany();
-      setActivities(data);
-    } catch (error) {
-      console.error("Failed to fetch extracurriculars:", error);
-      toast({
-        title: 'Error',
-        description: 'Gagal memuat data ekstrakurikuler.',
-        variant: 'destructive',
-      });
-    }
+    startTransition(async () => {
+      const result = await getExtracurriculars();
+      if (result.success && result.data) {
+        setActivities(result.data);
+      } else {
+        toast({
+          title: 'Error',
+          description: result.message || 'Gagal memuat data ekstrakurikuler.',
+          variant: 'destructive',
+        });
+      }
+    });
   }, [toast]);
 
   useEffect(() => {

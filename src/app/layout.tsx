@@ -1,9 +1,21 @@
 
-import type { Metadata } from 'next';
+import { Roboto, Montserrat } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 import ConditionalLayout from '@/components/layout/conditional-layout';
 import './globals.css';
 import {ThemeProvider} from '@/components/theme-provider';
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-roboto',
+});
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['700', '800'],
+  variable: '--font-montserrat',
+});
 
 export const metadata: Metadata = {
   title: 'SMPN 24 Padang',
@@ -19,10 +31,6 @@ export default function RootLayout({
   return (
     <html lang="id" className="!scroll-smooth" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify({
@@ -41,7 +49,7 @@ export default function RootLayout({
           }) }}
         />
       </head>
-      <body className="font-body antialiased">
+      <body className={`${roboto.variable} ${montserrat.variable} font-body antialiased`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
