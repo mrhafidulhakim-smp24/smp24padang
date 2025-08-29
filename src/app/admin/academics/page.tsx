@@ -23,10 +23,10 @@ function ImageUpload({
 }: { 
     label: string, 
     name: string, 
-    currentImageUrl: string | null | undefined, 
+    currentImageUrl: string | null,
     onFileChange: (file: File | null) => void 
 }) {
-    const [preview, setPreview] = useState<string | null>(currentImageUrl);
+    const [preview, setPreview] = useState<string | null>(currentImageUrl || null);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
