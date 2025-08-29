@@ -5,7 +5,7 @@ import UniformList from './uniform-list';
 type Uniform = typeof uniforms.$inferSelect;
 
 export default async function UniformAdminPage() {
-    const uniformsData: Uniform[] = await db.query.uniforms.findMany({
+    const uniformsData = await db.query.uniforms.findMany({
         orderBy: (uniforms, { asc }) => [asc(uniforms.id)],
     });
 
