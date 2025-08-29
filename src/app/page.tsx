@@ -64,7 +64,7 @@ async function AboutUs() {
                         <CardContent className="grid grid-cols-1 gap-8 p-6 md:grid-cols-2 md:p-8">
                             <div>
                                 <div className="flex items-center gap-4">
-                                    <Target className="h-8 w-8 text-accent" />
+                                    <Target className="h-8 w-8 text-green-600" />
                                     <h4 className="font-headline text-xl font-bold text-primary">
                                         Visi
                                     </h4>
@@ -75,7 +75,7 @@ async function AboutUs() {
                             </div>
                             <div>
                                 <div className="flex items-center gap-4">
-                                    <Book className="h-8 w-8 text-accent" />
+                                    <Book className="h-8 w-8 text-green-600" />
                                     <h4 className="font-headline text-xl font-bold text-primary">
                                         Misi
                                     </h4>
@@ -87,19 +87,21 @@ async function AboutUs() {
                                             <li key={index}>{item}</li>
                                         ))}
                                 </ul>
-                                <Button
-                                    asChild
-                                    variant="link"
-                                    className="mt-4 p-0 text-accent hover:text-accent/80"
-                                >
-                                    <Link href="/profile/vision-mission">
-                                        Baca Selengkapnya{' '}
-                                        <ArrowRight className="ml-1 h-4 w-4" />
-                                    </Link>
-                                </Button>
                             </div>
                         </CardContent>
                     </Card>
+                    <div className="mt-6 text-center">
+                        <Button
+                            asChild
+                            variant="link"
+                            className="p-0 text-green-600 hover:text-green-700"
+                        >
+                            <Link href="/profile/vision-mission">
+                                Baca Selengkapnya{' '}
+                                <ArrowRight className="ml-1 h-4 w-4" />
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -119,7 +121,7 @@ async function Announcements() {
                 <Card className="mx-auto max-w-4xl">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-3 font-headline text-3xl text-primary">
-                            <Megaphone className="h-8 w-8 text-accent" />
+                            <Megaphone className="h-8 w-8 text-green-600" />
                             Pengumuman Terbaru
                         </CardTitle>
                         <CardDescription>
@@ -199,7 +201,7 @@ async function LatestNews() {
                         sekolah kami.
                     </p>
                 </div>
-                <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-8">
                     {latestNews.map((item) => (
                         <Card
                             key={item.id}
@@ -245,7 +247,7 @@ async function LatestNews() {
                                 <Button
                                     variant="link"
                                     asChild
-                                    className="mt-4 p-0 self-start text-accent hover:text-accent/80"
+                                    className="mt-4 p-0 self-start text-green-600 hover:text-green-700"
                                 >
                                     <Link href={`/articles/${item.id}`}>
                                         Baca Lebih Lanjut{' '}
@@ -309,8 +311,8 @@ async function Statistics() {
                             className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
                         >
                             <CardHeader className="items-center">
-                                <div className="rounded-full bg-accent/20 p-4">
-                                    <stat.icon className="h-10 w-10 text-accent" />
+                                <div className="rounded-full bg-green-600/20 p-4">
+                                    <stat.icon className="h-10 w-10 text-green-600" />
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -344,7 +346,7 @@ async function Facilities() {
                         mendukung potensi siswa.
                     </p>
                 </div>
-                <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
                     {facilities.map((facility) => (
                         <div
                             key={facility.id}
@@ -463,7 +465,7 @@ export default async function Home() {
                         <Button
                             asChild
                             variant="link"
-                            className="mt-4 p-0 text-accent hover:text-accent/80"
+                            className="mt-4 p-0 text-green-600 hover:text-green-700"
                         >
                             <Link href="/profile">
                                 Baca Lebih Lanjut{' '}

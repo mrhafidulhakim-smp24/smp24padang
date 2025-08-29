@@ -51,78 +51,25 @@ export default function AdminLayout({
 
     const menuItems = [
         { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+        { href: '/admin/homepage', label: 'Beranda', icon: Home },
         {
-            label: 'Konten Website',
-            icon: Newspaper,
+            label: 'Profil',
+            icon: UserCircle,
             subItems: [
-                {
-                    href: '/admin/news',
-                    label: 'Berita & Pengumuman',
-                    icon: Newspaper,
-                },
-                {
-                    href: '/admin/achievements',
-                    label: 'Prestasi',
-                    icon: Trophy,
-                },
-                {
-                    href: '/admin/gallery',
-                    label: 'Galeri',
-                    icon: GalleryHorizontal,
-                },
-            ],
+                { href: '/admin/profile/principal', label: 'Profil Sekolah', icon: UserCircle },
+                { href: '/admin/profile/vision-mission', label: 'Visi & Misi', icon: Target },
+                { href: '/admin/organization', label: 'Struktur Organisasi', icon: Network },
+                { href: '/admin/accreditation', label: 'Sertifikasi & Penghargaan', icon: Award },
+                { href: '/admin/profile/uniform', label: 'Seragam', icon: Shirt },
+                { href: '/admin/profile/extracurricular', label: 'Ekskul', icon: Swords },
+            ]
         },
-        {
-            label: 'Profil Sekolah',
-            icon: Landmark,
-            subItems: [
-                {
-                    href: '/admin/profile/principal',
-                    label: 'Profil Kepala Sekolah',
-                    icon: UserCircle,
-                },
-                {
-                    href: '/admin/profile/vision-mission',
-                    label: 'Visi & Misi',
-                    icon: Target,
-                },
-                {
-                    href: '/admin/organization',
-                    label: 'Struktur Organisasi',
-                    icon: Network,
-                },
-                { href: '/admin/staff', label: 'Guru & Staf', icon: Users },
-                {
-                    href: '/admin/accreditation',
-                    label: 'Sertifikasi & Penghargaan',
-                    icon: Award,
-                },
-            ],
-        },
-        {
-            label: 'Akademik',
-            icon: GraduationCap,
-            subItems: [
-                {
-                    href: '/admin/profile/extracurricular',
-                    label: 'Ekskul',
-                    icon: Swords,
-                },
-                {
-                    href: '/admin/profile/uniform',
-                    label: 'Seragam',
-                    icon: Shirt,
-                },
-            ],
-        },
-        {
-            label: 'Pengaturan',
-            icon: Settings,
-            subItems: [
-                { href: '/admin/contact', label: 'Kontak', icon: Phone },
-                { href: '/admin/homepage', label: 'Beranda', icon: Home },
-            ],
-        },
+        { href: '/admin/staff', label: 'Guru & Staf', icon: Users },
+        { href: '/admin/news', label: 'Berita', icon: Newspaper },
+        { href: '/admin/academics', label: 'Akademik', icon: GraduationCap },
+        { href: '/admin/achievements', label: 'Prestasi', icon: Trophy },
+        { href: '/admin/gallery', label: 'Galeri', icon: ImageIcon },
+        { href: '/admin/contact', label: 'Kontak', icon: Phone },
     ];
 
     return (

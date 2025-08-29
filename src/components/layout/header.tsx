@@ -123,7 +123,7 @@ export default function Header() {
             {/* Desktop Navigation */}
             <nav className="items-center justify-end gap-8 hidden md:flex">
             {navLinks.map((link) => {
-              const isDropdownActive = link.subLinks && link.href !== "/" && pathname.startsWith(link.href);
+              const isDropdownActive = link.subLinks && link.subLinks.some(sub => pathname === sub.href);
               const isLinkActive = (link.href === "/" && pathname === "/") || (link.href !== "/" && pathname.startsWith(link.href) && !link.subLinks) || (link.href === '/news' && pathname.startsWith('/articles'));
 
               return link.subLinks ? (

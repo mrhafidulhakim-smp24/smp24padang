@@ -18,7 +18,7 @@ export default async function UniformPage() {
         </p>
       </div>
 
-      <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-8">
+      <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-8">
         {uniforms.map((uniform) => (
           <Card key={uniform.id} className="overflow-hidden text-center">
             <CardHeader className="p-0">
@@ -37,6 +37,22 @@ export default async function UniformPage() {
             </CardContent>
           </Card>
         ))}
+        <Card className="overflow-hidden text-center">
+          <CardHeader className="p-0">
+            <div className="relative aspect-[4/6] w-full">
+              <Image
+                src={'https://placehold.co/400x600.png'}
+                alt={"Pakaian Olahraga"}
+                fill
+                className="object-cover"
+              />
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 md:p-6">
+            <CardTitle className="font-headline text-lg md:text-xl text-primary">Pakaian Olahraga</CardTitle>
+            <p className="mt-1 text-xs md:text-sm text-muted-foreground">Digunakan saat pelajaran olahraga</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

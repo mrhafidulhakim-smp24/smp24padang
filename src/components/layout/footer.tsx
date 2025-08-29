@@ -14,14 +14,14 @@ import { useState, useEffect } from 'react';
 import { getContactInfo } from '@/app/admin/contact/actions';
 
 type ContactInfo = {
-  address: string;
-  phone: string;
-  email: string;
-  googleMapsUrl: string | null;
+    address: string;
+    phone: string;
+    email: string;
+    googleMapsUrl: string | null;
 };
 
 type FooterProps = {
-  showMap?: boolean;
+    showMap?: boolean;
 };
 
 export default function Footer({ showMap = true }: FooterProps) {
@@ -80,7 +80,8 @@ export default function Footer({ showMap = true }: FooterProps) {
                     </div>
                     <div className="pt-4 text-primary-foreground/80">
                         <p className="font-semibold">
-                            Kerja Praktek Informatika UPI &quot;YPTK&quot; Padang
+                            Team Kerja Praktek Teknik Informatika UPI
+                            &quot;YPTK&quot; Padang
                         </p>
                     </div>
                 </div>
