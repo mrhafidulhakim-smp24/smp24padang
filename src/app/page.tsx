@@ -199,28 +199,28 @@ async function LatestNews() {
                         sekolah kami.
                     </p>
                 </div>
-                <div className="mx-auto mt-12 grid grid-cols-1 gap-8 md:max-w-4xl">
+                <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                     {latestNews.map((item) => (
                         <Card
                             key={item.id}
-                            className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl sm:flex-row"
+                            className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
                         >
-                            <div className="relative w-full sm:w-1/3">
+                            <CardHeader className="p-0">
                                 <Link href={`/articles/${item.id}`}>
                                     <Image
                                         src={
                                             item.imageUrl ||
-                                            'https://placehold.co/400x300.png'
+                                            'https://placehold.co/600x400.png'
                                         }
                                         alt={item.title}
-                                        width={400}
-                                        height={300}
+                                        width={600}
+                                        height={400}
                                         data-ai-hint="news event"
-                                        className="h-full w-full object-cover"
+                                        className="h-56 w-full object-cover"
                                     />
                                 </Link>
-                            </div>
-                            <CardContent className="flex w-full flex-col p-6 sm:w-2/3">
+                            </CardHeader>
+                            <CardContent className="flex flex-grow flex-col p-6">
                                 <p className="mb-2 text-sm text-muted-foreground">
                                     {new Date(item.date).toLocaleDateString(
                                         'id-ID',
@@ -240,7 +240,7 @@ async function LatestNews() {
                                     </Link>
                                 </CardTitle>
                                 <p className="mt-2 flex-grow text-foreground/80 dark:text-foreground/70">
-                                    {item.description.substring(0, 250)}...
+                                    {item.description.substring(0, 150)}...
                                 </p>
                                 <Button
                                     variant="link"
@@ -392,24 +392,20 @@ export default async function Home() {
                                             banner.imageUrl ||
                                             'https://placehold.co/1920x1080.png'
                                         }
-                                        alt={banner.title || 'Banner Image'}
+                                        alt={banner.title}
                                         fill
-                                        style={{ objectFit: 'contain' }}
+                                        style={{ objectFit: 'cover' }}
                                         data-ai-hint="school students"
                                         className="z-0"
                                         priority={index === 0}
                                     />
                                     <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white p-4">
-                                        {banner.title && (
-                                            <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
-                                                {banner.title}
-                                            </h1>
-                                        )}
-                                        {banner.description && (
-                                            <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm">
-                                                {banner.description}
-                                            </p>
-                                        )}
+                                        <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
+                                            {banner.title}
+                                        </h1>
+                                        <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm">
+                                            {banner.description}
+                                        </p>
                                     </div>
                                 </div>
                             </CarouselItem>

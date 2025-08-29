@@ -9,8 +9,8 @@ import {
 
 export const banners = pgTable("banners", {
   id: varchar("id").primaryKey(),
-  title: text("title"),
-  description: text("description"),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
   imageUrl: text("imageUrl"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
