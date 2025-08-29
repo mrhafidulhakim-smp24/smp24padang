@@ -10,9 +10,33 @@ import {
     Phone,
     MapPin,
 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { getContactInfo } from '@/app/admin/contact/actions';
 
-export default function Footer() {
+type ContactInfo = {
+  address: string;
+  phone: string;
+  email: string;
+  googleMapsUrl: string | null;
+};
+
+type FooterProps = {
+  showMap?: boolean;
+};
+
+export default function Footer({ showMap = true }: FooterProps) {
     const currentYear = new Date().getFullYear();
+    const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
+
+    useEffect(() => {
+        async function fetchContactInfo() {
+            const data = await getContactInfo();
+            if (data) {
+                setContactInfo(data);
+            }
+        }
+        fetchContactInfo();
+    }, []);
 
     return (
         <footer className="bg-primary/90 text-primary-foreground">
@@ -56,7 +80,7 @@ export default function Footer() {
                     </div>
                     <div className="pt-4 text-primary-foreground/80">
                         <p className="font-semibold">
-                            Kerja Praktek Informatika UPI "YPTK" Padang
+                            Kerja Praktek Informatika UPI &quot;YPTK&quot; Padang
                         </p>
                     </div>
                 </div>
@@ -68,31 +92,33 @@ export default function Footer() {
                     <ul className="space-y-2 text-primary-foreground/80">
                         <li className="flex items-start gap-3">
                             <MapPin className="mt-1 h-5 w-5 flex-shrink-0 text-accent" />
-                            <span>Jalan Pendidikan 123, Padang, Indonesia</span>
+                            <span>{contactInfo?.address}</span>
                         </li>
                         <li className="flex items-center gap-3">
                             <Phone className="h-5 w-5 flex-shrink-0 text-accent" />
-                            <span>+62 123 456 7890</span>
+                            <span>{contactInfo?.phone}</span>
                         </li>
                         <li className="flex items-center gap-3">
                             <Mail className="h-5 w-5 flex-shrink-0 text-accent" />
-                            <span>info@smpn24padang.sch.id</span>
+                            <span>{contactInfo?.email}</span>
                         </li>
                     </ul>
                 </div>
 
-                <div className="overflow-hidden rounded-lg">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.2592592721826!2d100.40036647496517!3d-0.9591703990315668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2fd4ba2cd220b3df%3A0x2cf43a3d3912b76a!2sSMP%20Negeri%2024%20Padang!5e0!3m2!1sid!2sid!4v1756312839255!5m2!1sid!2sid"
-                        width="100%"
-                        height="200"
-                        style={{ border: 0 }}
-                        allowFullScreen={true}
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title="Peta Lokasi Sekolah"
-                    ></iframe>
-                </div>
+                {showMap && contactInfo?.googleMapsUrl && (
+                    <div className="overflow-hidden rounded-lg">
+                        <iframe
+                            src={contactInfo.googleMapsUrl}
+                            width="100%"
+                            height="200"
+                            style={{ border: 0 }}
+                            allowFullScreen={true}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="Peta Lokasi Sekolah"
+                        ></iframe>
+                    </div>
+                )}
             </div>
             <div className="bg-primary py-4">
                 <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-center text-sm text-primary-foreground/70 sm:flex-row">

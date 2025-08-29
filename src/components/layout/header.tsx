@@ -1,8 +1,7 @@
-
-"use client";
+'use client';
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -38,10 +37,28 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
+import { getContactInfo } from "@/app/admin/contact/actions";
+
+type ContactInfo = {
+  address: string;
+  phone: string;
+  email: string;
+};
 
 export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
+  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    async function fetchContactInfo() {
+      const data = await getContactInfo();
+      if (data) {
+        setContactInfo(data);
+      }
+    }
+    fetchContactInfo();
+  }, []);
 
   const navLinks = [
     { href: "/", label: "Beranda", icon: Home },
@@ -52,20 +69,20 @@ export default function Header() {
       subLinks: [
         { href: "/profile", label: "Profil Sekolah", icon: User },
         { href: "/profile/vision-mission", label: "Visi & Misi", icon: Target },
-        { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
         { href: "/profile/organization-structure", label: "Struktur Organisasi", icon: Network },
         { href: "/profile/accreditation", label: "Sertifikasi & Penghargaan", icon: Award },
         { href: "/profile/uniform", label: "Seragam Sekolah", icon: Shirt },
         { href: "/profile/extracurricular", label: "Ekstrakurikuler", icon: Swords },
       ]
     },
+    { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
+    { href: "/news", label: "Berita", icon: Newspaper },
     { 
       href: "/academics", 
       label: "Akademik", 
       icon: GraduationCap
     },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
-    { href: "/news", label: "Berita", icon: Newspaper },
     { href: "/gallery", label: "Galeri", icon: Camera },
     { href: "/contact", label: "Kontak", icon: Phone },
   ];
@@ -82,13 +99,13 @@ export default function Header() {
                 <span className="font-semibold">CERDAS, TERAMPIL, DAN BERBUDAYA LINGKUNGAN</span>
             </div>
             <div className="flex items-center gap-6">
-                <a href="tel:+621234567890" className="flex items-center gap-2 transition-colors hover:text-white/80">
+                <a href={`tel:${contactInfo?.phone}`} className="flex items-center gap-2 transition-colors hover:text-white/80">
                     <Phone className="h-4 w-4" />
-                    <span>+62 123 456 7890</span>
+                    <span>{contactInfo?.phone}</span>
                 </a>
-                <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-2 transition-colors hover:text-white/80">
+                <a href={`mailto:${contactInfo?.email}`} className="flex items-center gap-2 transition-colors hover:text-white/80">
                     <Mail className="h-4 w-4" />
-                    <span>info@smpn24padang.sch.id</span>
+                    <span>{contactInfo?.email}</span>
                 </a>
             </div>
         </div>
@@ -215,15 +232,15 @@ export default function Header() {
                         <div className="mt-4 flex flex-col gap-4 border-t pt-4">
                              <div className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground">
                                 <MapPin className="h-5 w-5" />
-                                <span>Jl. Bypass, Lubuk Begalung, Padang</span>
+                                <span>{contactInfo?.address}</span>
                             </div>
-                            <a href="tel:+62 123 456 7890" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                            <a href={`tel:${contactInfo?.phone}`} className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                                 <Phone className="h-5 w-5" />
-                                <span>+62 123 456 7890</span>
+                                <span>{contactInfo?.phone}</span>
                             </a>
-                            <a href="mailto:info@smpn24padang.sch.id" className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                            <a href={`mailto:${contactInfo?.email}`} className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
                                 <Mail className="h-5 w-5" />
-                                <span>info@smpn24padang.sch.id</span>
+                                <span>{contactInfo?.email}</span>
                             </a>
                         </div>
                     </div>

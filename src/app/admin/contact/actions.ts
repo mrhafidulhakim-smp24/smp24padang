@@ -1,4 +1,3 @@
-
 "use server";
 
 import { db } from "@/lib/db";
@@ -17,7 +16,7 @@ export async function getContactInfo() {
   }
 }
 
-export async function updateContactInfo(data: { address: string; phone: string; email: string; }) {
+export async function updateContactInfo(data: { address: string; phone: string; email: string; googleMapsUrl: string | null; }) {
   try {
     const existingContact = await db.select().from(contact).limit(1);
 

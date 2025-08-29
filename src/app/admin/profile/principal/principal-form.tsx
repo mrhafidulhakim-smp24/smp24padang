@@ -114,7 +114,7 @@ export default function PrincipalForm({ initialProfileData }: PrincipalFormProps
                   alt="Preview"
                   width={150}
                   height={150}
-                  className="mx-auto rounded-full object-cover"
+                  className="mx-auto object-cover"
                 />
               ) : (
                 <Upload className="mx-auto h-12 w-12 text-gray-400" />

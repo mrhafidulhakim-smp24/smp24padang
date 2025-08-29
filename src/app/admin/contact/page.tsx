@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,10 +10,16 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import { getContactInfo, updateContactInfo } from "./actions";
 
 export default function ContactAdminPage() {
-  const [contactInfo, setContactInfo] = useState({
+  const [contactInfo, setContactInfo] = useState<{
+    address: string;
+    phone: string;
+    email: string;
+    googleMapsUrl: string | null;
+  }> ({
     address: "",
     phone: "",
     email: "",
+    googleMapsUrl: null,
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -98,6 +104,12 @@ export default function ContactAdminPage() {
               <Mail className="h-4 w-4" /> Alamat Email
             </Label>
             <Input id="email" name="email" type="email" value={contactInfo.email} onChange={handleChange} required />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="googleMapsUrl" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" /> URL Google Maps
+            </Label>
+            <Input id="googleMapsUrl" name="googleMapsUrl" value={contactInfo.googleMapsUrl || ''} onChange={handleChange} />
           </div>
         </CardContent>
       </Card>

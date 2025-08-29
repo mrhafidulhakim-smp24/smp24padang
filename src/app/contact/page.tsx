@@ -1,138 +1,100 @@
+'use client';
 
-"use client";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { getContactInfo } from "@/app/admin/contact/actions";
+import Footer from '@/components/layout/footer';
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  email: z.string().email("Please enter a valid email address."),
-  message: z.string().min(10, "Message must be at least 10 characters."),
-});
+type ContactInfo = {
+  address: string;
+  phone: string;
+  email: string;
+  googleMapsUrl: string | null;
+};
 
 export default function ContactPage() {
-    const { toast } = useToast();
+  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: "",
-            email: "",
-            message: "",
-        },
-    });
-
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        toast({
-            title: "Message Sent!",
-            description: "Thank you for your message. We will get back to you shortly.",
-        });
-        form.reset();
+  useEffect(() => {
+    async function fetchContactInfo() {
+      const data = await getContactInfo();
+      if (data) {
+        setContactInfo(data);
+      }
+      setLoading(false);
     }
+    fetchContactInfo();
+  }, []);
+
+  if (loading) {
+    return (
+        <div className="container mx-auto px-4 py-12 md:py-24">
+            <div className="text-center">
+                <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
+                    Hubungi Kami
+                </h1>
+                <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+                    Memuat data...
+                </p>
+            </div>
+        </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
         <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
-          Get in Touch
+          Hubungi Kami
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          We're here to help. Contact us with any questions or inquiries.
+          Kami siap membantu. Hubungi kami jika ada pertanyaan atau keperluan lainnya.
         </p>
       </div>
 
       <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2">
         <div className="space-y-6">
-          <h2 className="font-headline text-2xl font-bold text-primary">Contact Information</h2>
+          <h2 className="font-headline text-2xl font-bold text-primary">Informasi Kontak</h2>
           <div className="flex items-start gap-4">
             <MapPin className="mt-1 h-6 w-6 text-accent" />
             <div>
-              <h3 className="font-semibold">Address</h3>
-              <p className="text-muted-foreground">123 Education Lane, Padang, Indonesia</p>
+              <h3 className="font-semibold">Alamat</h3>
+              <p className="text-muted-foreground">{contactInfo?.address}</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
             <Phone className="mt-1 h-6 w-6 text-accent" />
             <div>
-              <h3 className="font-semibold">Phone</h3>
-              <p className="text-muted-foreground">+62 123 456 7890</p>
+              <h3 className="font-semibold">Telepon</h3>
+              <p className="text-muted-foreground">{contactInfo?.phone}</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
             <Mail className="mt-1 h-6 w-6 text-accent" />
             <div>
               <h3 className="font-semibold">Email</h3>
-              <p className="text-muted-foreground">info@duapat.edu</p>
+              <p className="text-muted-foreground">{contactInfo?.email}</p>
             </div>
           </div>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline text-2xl text-primary">Send us a Message</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="john.doe@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Message</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="How can we help you?" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">Send Message</Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+        <div className="overflow-hidden rounded-lg">
+          {contactInfo?.googleMapsUrl && (
+            <iframe
+              src={contactInfo.googleMapsUrl}
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Peta Lokasi Sekolah"
+            ></iframe>
+          )}
+        </div>
       </div>
     </div>
   );

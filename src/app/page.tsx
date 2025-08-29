@@ -199,7 +199,7 @@ async function LatestNews() {
                         sekolah kami.
                     </p>
                 </div>
-                <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                     {latestNews.map((item) => (
                         <Card
                             key={item.id}
@@ -344,7 +344,7 @@ async function Facilities() {
                         mendukung potensi siswa.
                     </p>
                 </div>
-                <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {facilities.map((facility) => (
                         <div
                             key={facility.id}
@@ -444,9 +444,9 @@ export default async function Home() {
                         <h2 className="font-headline text-3xl font-bold text-primary">
                             Sambutan Kepala Sekolah
                         </h2>
-                        <div className="mt-4 flex items-center gap-3 rounded-lg bg-accent/80 p-3 text-accent-foreground dark:bg-accent/90">
-                            <ShieldCheck className="h-6 w-6 flex-shrink-0" />
-                            <p className="font-semibold">
+                        <div className="mt-4 flex items-center gap-3 rounded-lg bg-green-100 p-3 dark:bg-green-900/30">
+                            <ShieldCheck className="h-6 w-6 flex-shrink-0 text-green-600 dark:text-green-400" />
+                            <p className="font-semibold text-green-800 dark:text-green-200">
                                 Terakreditasi A - Sekolah Adiwiyata Mandiri
                                 Nasional & Sekolah Ramah Anak
                             </p>

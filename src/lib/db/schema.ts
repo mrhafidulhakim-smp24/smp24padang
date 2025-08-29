@@ -16,6 +16,16 @@ export const banners = pgTable("banners", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 
+export const extracurriculars = pgTable("extracurriculars", {
+  id: varchar("id").primaryKey(),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
+  description: text("description").notNull(),
+  image: text("image"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
 export const news = pgTable("news", {
   id: varchar("id").primaryKey(),
   title: text("title").notNull(),
@@ -116,6 +126,7 @@ export const contact = pgTable("contact", {
   address: text("address").notNull(),
   phone: text("phone").notNull(),
   email: text("email").notNull(),
+  googleMapsUrl: text("googleMapsUrl"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });

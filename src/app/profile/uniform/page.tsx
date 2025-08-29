@@ -1,41 +1,12 @@
-
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getUniforms } from "./actions";
 
-const uniforms = [
-  {
-    day: "Senin",
-    description: "Seragam Putih Biru lengkap dengan atribut sekolah.",
-    image: "https://placehold.co/400x600.png",
-  },
-  {
-    day: "Selasa",
-    description: "Seragam Putih Biru lengkap dengan atribut sekolah.",
-    image: "https://placehold.co/400x600.png",
-  },
-  {
-    day: "Rabu",
-    description: "Seragam Batik identitas sekolah.",
-    image: "https://placehold.co/400x600.png",
-  },
-  {
-    day: "Kamis",
-    description: "Seragam Batik identitas sekolah.",
-    image: "https://placehold.co/400x600.png",
-  },
-  {
-    day: "Jumat",
-    description: "Seragam Pramuka lengkap.",
-    image: "https://placehold.co/400x600.png",
-  },
-  {
-    day: "Seragam Olahraga",
-    description: "Digunakan pada saat pelajaran Pendidikan Jasmani.",
-    image: "https://placehold.co/400x600.png",
-  },
-];
+export const dynamic = 'force-dynamic';
 
-export default function UniformPage() {
+export default async function UniformPage() {
+  const uniforms = await getUniforms();
+
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -49,11 +20,11 @@ export default function UniformPage() {
 
       <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-8">
         {uniforms.map((uniform) => (
-          <Card key={uniform.day} className="overflow-hidden text-center">
+          <Card key={uniform.id} className="overflow-hidden text-center">
             <CardHeader className="p-0">
               <div className="relative aspect-[4/6] w-full">
                 <Image
-                  src={uniform.image}
+                  src={uniform.image || 'https://placehold.co/400x600.png'}
                   alt={uniform.day}
                   fill
                   className="object-cover"

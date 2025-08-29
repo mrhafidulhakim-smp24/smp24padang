@@ -31,6 +31,12 @@ import {
     Network,
     Home,
     Phone,
+    UserCircle,
+    Target,
+    Swords,
+    Shirt,
+    Settings,
+    Award,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
@@ -44,28 +50,79 @@ export default function AdminLayout({
     const pathname = usePathname();
 
     const menuItems = [
-        { href: '/admin/homepage', label: 'Beranda', icon: Home },
-        { href: '/admin/news', label: 'Berita & Pengumuman', icon: Newspaper },
-        { href: '/admin/achievements', label: 'Prestasi', icon: Trophy },
+        { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
         {
-            label: 'Profil',
+            label: 'Konten Website',
+            icon: Newspaper,
+            subItems: [
+                {
+                    href: '/admin/news',
+                    label: 'Berita & Pengumuman',
+                    icon: Newspaper,
+                },
+                {
+                    href: '/admin/achievements',
+                    label: 'Prestasi',
+                    icon: Trophy,
+                },
+                {
+                    href: '/admin/gallery',
+                    label: 'Galeri',
+                    icon: GalleryHorizontal,
+                },
+            ],
+        },
+        {
+            label: 'Profil Sekolah',
             icon: Landmark,
             subItems: [
-                { href: '/admin/profile/vision-mission', label: 'Visi & Misi' },
-                { href: '/admin/staff', label: 'Guru & Staf' },
-                { href: '/admin/organization', label: 'Struktur Organisasi' },
+                {
+                    href: '/admin/profile/principal',
+                    label: 'Profil Kepala Sekolah',
+                    icon: UserCircle,
+                },
+                {
+                    href: '/admin/profile/vision-mission',
+                    label: 'Visi & Misi',
+                    icon: Target,
+                },
+                {
+                    href: '/admin/organization',
+                    label: 'Struktur Organisasi',
+                    icon: Network,
+                },
+                { href: '/admin/staff', label: 'Guru & Staf', icon: Users },
                 {
                     href: '/admin/accreditation',
                     label: 'Sertifikasi & Penghargaan',
+                    icon: Award,
                 },
-                { href: '/admin/profile/extracurricular', label: 'Ekskul' },
-                { href: '/admin/profile/uniform', label: 'Seragam' },
-                { href: '/admin/profile/principal', label: 'Profil Kepala Sekolah' },
             ],
         },
-        { href: '/admin/academics', label: 'Akademik', icon: GraduationCap },
-        { href: '/admin/gallery', label: 'Galeri', icon: GalleryHorizontal },
-        { href: '/admin/contact', label: 'Kontak', icon: Phone },
+        {
+            label: 'Akademik',
+            icon: GraduationCap,
+            subItems: [
+                {
+                    href: '/admin/profile/extracurricular',
+                    label: 'Ekskul',
+                    icon: Swords,
+                },
+                {
+                    href: '/admin/profile/uniform',
+                    label: 'Seragam',
+                    icon: Shirt,
+                },
+            ],
+        },
+        {
+            label: 'Pengaturan',
+            icon: Settings,
+            subItems: [
+                { href: '/admin/contact', label: 'Kontak', icon: Phone },
+                { href: '/admin/homepage', label: 'Beranda', icon: Home },
+            ],
+        },
     ];
 
     return (
