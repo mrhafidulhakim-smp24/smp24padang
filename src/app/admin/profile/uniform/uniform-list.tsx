@@ -7,10 +7,12 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogTrigger,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Upload, Pencil } from 'lucide-react';
+import { Upload, Pencil, PlusCircle } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -19,12 +21,30 @@ import {
     CardDescription,
 } from '@/components/ui/card';
 import Image from 'next/image';
-import { updateUniform } from './actions';
+import { updateUniform, createUniform, deleteUniform } from './actions';
 import { useToast } from '@/hooks/use-toast';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 type Uniform = {
     id: number;
-    day: string;
+    day: string | null;
+    type: 'daily' | 'sport';
     description: string;
     image: string | null;
 };
@@ -36,7 +56,9 @@ type UniformListProps = {
 export default function UniformList({ initialUniformsData }: UniformListProps) {
     const { toast } = useToast();
     const [uniformsData, setUniformsData] = useState<Uniform[]>(initialUniformsData);
+    const [isAddOpen, setAddOpen] = useState(false);
     const [isEditOpen, setEditOpen] = useState(false);
+    const [isDeleteOpen, setDeleteOpen] = useState(false);
     const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(
         null,
     );
@@ -45,6 +67,39 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
     useEffect(() => {
         setUniformsData(initialUniformsData);
     }, [initialUniformsData]);
+
+    const refreshUniforms = async () => {
+        // This is a placeholder. In a real app, you'd re-fetch from the DB.
+        // For now, we rely on revalidatePath in server actions.
+        // If immediate client-side refresh is needed, consider SWR/React Query.
+    };
+
+    const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+
+        const result = await createUniform(formData);
+
+        if (result.success) {
+            toast({
+                title: 'Success',
+                description: result.message,
+            });
+            setAddOpen(false);
+            setImageFile(null);
+            // Re-fetch data or update state directly if not relying on revalidatePath
+            // For now, assume revalidatePath handles it on next render.
+        } else {
+            toast({
+                title: 'Error',
+                description: result.message,
+                variant: 'destructive',
+            });
+        }
+    };
 
     const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -56,21 +111,17 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
             formData.append('image', imageFile);
         }
 
-        const result = await updateUniform(formData);
+        const result = await updateUniform(selectedUniform.id, formData);
 
         if (result.success) {
             toast({
                 title: 'Success',
                 description: result.message,
             });
-
-            // Re-fetch data to ensure UI is updated with latest from DB
-            // This part needs to be handled by revalidatePath in the server action
-            // For now, we'll assume the revalidatePath in updateUniform is sufficient
-            // and the data will be fresh on next render/navigation.
-            // If immediate UI update is needed without full page re-render,
-            // consider SWR or similar client-side data fetching.
-
+            setEditOpen(false);
+            setSelectedUniform(null);
+            setImageFile(null);
+            // Re-fetch data or update state directly if not relying on revalidatePath
         } else {
             toast({
                 title: 'Error',
@@ -78,21 +129,100 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                 variant: 'destructive',
             });
         }
+    };
 
-        setEditOpen(false);
-        setSelectedUniform(null);
-        setImageFile(null);
+    const handleDeleteConfirm = async () => {
+        if (!selectedUniform) return;
+
+        const result = await deleteUniform(selectedUniform.id);
+
+        if (result.success) {
+            toast({
+                title: 'Success',
+                description: result.message,
+            });
+            setDeleteOpen(false);
+            setSelectedUniform(null);
+            // Re-fetch data or update state directly if not relying on revalidatePath
+        } else {
+            toast({
+                title: 'Error',
+                description: result.message,
+                variant: 'destructive',
+            });
+        }
     };
 
     return (
         <div className="flex flex-col gap-8">
-            <div>
-                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Kelola Seragam Sekolah
-                </h1>
-                <p className="mt-2 text-lg text-muted-foreground">
-                    Perbarui gambar dan deskripsi untuk setiap seragam.
-                </p>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                        Kelola Seragam Sekolah
+                    </h1>
+                    <p className="mt-2 text-lg text-muted-foreground">
+                        Perbarui gambar dan deskripsi untuk setiap seragam.
+                    </p>
+                </div>
+                <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
+                    <DialogTrigger asChild>
+                        <Button>
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            Tambah Seragam
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Tambah Seragam Baru</DialogTitle>
+                        </DialogHeader>
+                        <form onSubmit={handleAdd} className="space-y-4">
+                            <div>
+                                <Label htmlFor="type-add">Jenis Seragam</Label>
+                                <Select name="type" defaultValue="daily">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Pilih jenis seragam" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="daily">Harian</SelectItem>
+                                        <SelectItem value="sport">Olah Raga</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div>
+                                <Label htmlFor="day-add">Hari (Opsional untuk Olah Raga)</Label>
+                                <Input id="day-add" name="day" placeholder="Contoh: Senin" />
+                            </div>
+                            <div>
+                                <Label htmlFor="description-add">Deskripsi</Label>
+                                <Input id="description-add" name="description" required />
+                            </div>
+                            <div>
+                                <Label>Gambar</Label>
+                                <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
+                                    <div className="space-y-1 text-center">
+                                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                                        <Label
+                                            htmlFor="file-upload-add"
+                                            className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none hover:text-primary/80"
+                                        >
+                                            <span>Unggah file</span>
+                                            <Input
+                                                id="file-upload-add"
+                                                type="file"
+                                                className="sr-only"
+                                                onChange={(e) => setImageFile(e.target.files ? e.target.files[0] : null)}
+                                            />
+                                        </Label>
+                                        {imageFile && <p className="text-sm text-gray-500">Selected: {imageFile.name}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button type="submit">Simpan</Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -105,7 +235,7 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                             {uniform.image ? (
                                 <Image
                                     src={uniform.image}
-                                    alt={uniform.day}
+                                    alt={uniform.day || uniform.type}
                                     width={400}
                                     height={600}
                                     className="aspect-[4/6] w-full object-cover"
@@ -118,7 +248,7 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                         </CardHeader>
                         <CardContent className="p-4">
                             <CardTitle className="font-headline text-xl text-primary">
-                                {uniform.day}
+                                {uniform.type === 'daily' ? uniform.day : 'Seragam Olah Raga'}
                             </CardTitle>
                             <CardDescription>
                                 {uniform.description}
@@ -135,6 +265,17 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                             >
                                 <Pencil className="mr-2 h-4 w-4" /> Edit
                             </Button>
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                className="ml-2"
+                                onClick={() => {
+                                    setSelectedUniform(uniform);
+                                    setDeleteOpen(true);
+                                }}
+                            >
+                                Hapus
+                            </Button>
                         </div>
                     </Card>
                 ))}
@@ -144,10 +285,40 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            Edit Seragam: {selectedUniform?.day}
+                            Edit Seragam: {selectedUniform?.day || selectedUniform?.type}
                         </DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleEdit} className="space-y-4">
+                        <div>
+                            <Label htmlFor="type-edit">Jenis Seragam</Label>
+                            <Select name="type" defaultValue={selectedUniform?.type}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Pilih jenis seragam" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="daily">Harian</SelectItem>
+                                    <SelectItem value="sport">Olah Raga</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div>
+                            <Label htmlFor="day-edit">Hari (Opsional untuk Olah Raga)</Label>
+                            <Input
+                                id="day-edit"
+                                name="day"
+                                defaultValue={selectedUniform?.day || ''}
+                                placeholder="Contoh: Senin"
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="description-edit">Deskripsi</Label>
+                            <Input
+                                id="description-edit"
+                                name="description"
+                                defaultValue={selectedUniform?.description}
+                                required
+                            />
+                        </div>
                         <div>
                             <Label>Ganti Gambar</Label>
                             <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
@@ -180,15 +351,6 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <Label htmlFor="description-edit">Deskripsi</Label>
-                            <Input
-                                id="description-edit"
-                                name="description"
-                                defaultValue={selectedUniform?.description}
-                                required
-                            />
-                        </div>
                         <div className="flex justify-end gap-2 pt-4">
                             <Button
                                 type="button"
@@ -202,6 +364,26 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                     </form>
                 </DialogContent>
             </Dialog>
+
+            <AlertDialog open={isDeleteOpen} onOpenChange={setDeleteOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Tindakan ini tidak dapat dibatalkan.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setSelectedUniform(null)}>Batal</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleDeleteConfirm}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            Hapus
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

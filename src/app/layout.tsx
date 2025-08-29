@@ -23,6 +23,23 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "SMPN 24 Padang",
+            "url": "https://www.smpn24padang.sch.id",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://www.smpn24padang.sch.id/search?q={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          }) }}
+        />
       </head>
       <body className="font-body antialiased">
           <ThemeProvider

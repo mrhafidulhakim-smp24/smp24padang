@@ -144,7 +144,8 @@ export const accreditations = pgTable("accreditations", {
 
 export const uniforms = pgTable("uniforms", {
   id: integer("id").primaryKey(),
-  day: text("day").notNull(),
+  day: text("day"), // Make day optional as sport uniforms might not have a specific day
+  type: text("type", { enum: ["daily", "sport"] }).notNull().default("daily"),
   description: text("description").notNull(),
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

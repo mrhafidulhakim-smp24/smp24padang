@@ -63,12 +63,22 @@ export default function ExtracurricularAdminPage() {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
-  useEffect(() => {
-    async function getActivities() {
+  const refreshActivities = async () => {
+    try {
       const data = await db.query.extracurriculars.findMany();
       setActivities(data);
+    } catch (error) {
+      console.error("Failed to fetch extracurriculars:", error);
+      toast({
+        title: 'Error',
+        description: 'Gagal memuat data ekstrakurikuler.',
+        variant: 'destructive',
+      });
     }
-    getActivities();
+  };
+
+  useEffect(() => {
+    refreshActivities();
   }, []);
 
   const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -83,6 +93,7 @@ export default function ExtracurricularAdminPage() {
       if (result.success) {
         toast({ title: 'Success', description: result.message });
         setAddOpen(false);
+        await refreshActivities();
       } else {
         toast({ title: 'Error', description: result.message, variant: 'destructive' });
       }
@@ -103,6 +114,7 @@ export default function ExtracurricularAdminPage() {
       if (result.success) {
         toast({ title: 'Success', description: result.message });
         setEditOpen(false);
+        await refreshActivities();
       } else {
         toast({ title: 'Error', description: result.message, variant: 'destructive' });
       }
@@ -117,6 +129,7 @@ export default function ExtracurricularAdminPage() {
       if (result.success) {
         toast({ title: 'Success', description: result.message });
         setDeleteOpen(false);
+        await refreshActivities();
       } else {
         toast({ title: 'Error', description: result.message, variant: 'destructive' });
       }
