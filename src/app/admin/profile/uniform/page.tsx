@@ -4,9 +4,10 @@ import UniformList from './uniform-list';
 
 type Uniform = {
     id: number;
-    day: string;
+    day: string | null;
     description: string;
     image: string | null;
+    type: 'daily' | 'sport';
 };
 
 export default async function UniformAdminPage() {

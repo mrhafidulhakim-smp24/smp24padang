@@ -155,3 +155,38 @@ export async function deleteExtracurricular(id: string) {
     };
   }
 }
+
+export async function seedExtracurriculars() {
+  try {
+    await db.insert(extracurriculars).values([
+      {
+        id: crypto.randomUUID(),
+        name: 'Pramuka',
+        category: 'Organisasi',
+        description: 'Kegiatan kepanduan untuk melatih kemandirian dan kepemimpinan.',
+        image: 'https://placehold.co/600x400.png?text=Pramuka',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Futsal',
+        category: 'Olahraga',
+        description: 'Olahraga tim yang populer di kalangan siswa.',
+        image: 'https://placehold.co/600x400.png?text=Futsal',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Paduan Suara',
+        category: 'Seni',
+        description: 'Melatih vokal dan harmoni dalam kelompok.',
+        image: 'https://placehold.co/600x400.png?text=Paduan+Suara',
+      },
+    ]);
+
+    revalidatePath('/admin/profile/extracurricular');
+
+    return { success: true, message: 'Data ekstrakurikuler berhasil ditambahkan.' };
+  } catch (error) {
+    console.error("Error seeding extracurriculars:", error);
+    return { success: false, message: 'Gagal menambahkan data ekstrakurikuler.' };
+  }
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, useEffect } from 'react';
+import { useState, useTransition, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -41,7 +41,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
-import { createExtracurricular, updateExtracurricular, deleteExtracurricular } from './actions';
+import { createExtracurricular, updateExtracurricular, deleteExtracurricular, seedExtracurriculars } from './actions';
 import { db } from '@/lib/db';
 import { extracurriculars } from '@/lib/db/schema';
 
@@ -63,7 +63,7 @@ export default function ExtracurricularAdminPage() {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
-  const refreshActivities = async () => {
+  const refreshActivities = useCallback(async () => {
     try {
       const data = await db.query.extracurriculars.findMany();
       setActivities(data);
@@ -75,7 +75,7 @@ export default function ExtracurricularAdminPage() {
         variant: 'destructive',
       });
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     refreshActivities();
@@ -200,6 +200,20 @@ export default function ExtracurricularAdminPage() {
             </form>
           </DialogContent>
         </Dialog>
+        <Button
+          onClick={async () => {
+            const result = await seedExtracurriculars();
+            if (result.success) {
+              toast({ title: 'Success', description: result.message });
+              await refreshActivities();
+            } else {
+              toast({ title: 'Error', description: result.message, variant: 'destructive' });
+            }
+          }}
+          className="ml-2"
+        >
+          Seed Data (Temporary)
+        </Button>
       </div>
 
       <Card>
