@@ -1,0 +1,1 @@
+ALTER TABLE "uniforms" ALTER COLUMN "id" SET DATA TYPE serial;

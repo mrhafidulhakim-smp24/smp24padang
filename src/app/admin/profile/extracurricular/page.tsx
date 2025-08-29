@@ -79,7 +79,7 @@ export default function ExtracurricularAdminPage() {
 
   useEffect(() => {
     refreshActivities();
-  }, []);
+  }, [refreshActivities]);
 
   const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

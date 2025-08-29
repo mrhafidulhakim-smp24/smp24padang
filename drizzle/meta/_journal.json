@@ -64,6 +64,13 @@
       "when": 1756481239435,
       "tag": "0008_shiny_jackpot",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1756482714587,
+      "tag": "0009_stormy_deathstrike",
+      "breakpoints": true
     }
   ]
 }
