@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -52,6 +52,7 @@ export default function AccreditationAdminPage() {
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState<typeof AccreditationDoc.$inferSelect | null>(null);
   const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     fetchAccreditations();
@@ -62,7 +63,7 @@ export default function AccreditationAdminPage() {
     setDocuments(data);
   };
 
-  const handleAddDoc = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddDoc = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = {
@@ -70,17 +71,19 @@ export default function AccreditationAdminPage() {
       description: formData.get("description") as string,
       link: formData.get("link") as string,
     };
-    const result = await createAccreditation(data);
-    if (result.success) {
-      toast({ title: "Sukses!", description: result.message });
-      fetchAccreditations();
-      setAddOpen(false);
-    } else {
-      toast({ title: "Gagal!", description: result.message, variant: "destructive" });
-    }
+    startTransition(async () => {
+        const result = await createAccreditation(data);
+        if (result.success) {
+          toast({ title: "Sukses!", description: result.message });
+          fetchAccreditations();
+          setAddOpen(false);
+        } else {
+          toast({ title: "Gagal!", description: result.message, variant: "destructive" });
+        }
+    });
   };
 
-  const handleEditDoc = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEditDoc = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedDoc) return;
     
@@ -91,28 +94,32 @@ export default function AccreditationAdminPage() {
       link: formData.get("link") as string,
     };
 
-    const result = await updateAccreditation(selectedDoc.id, data);
-    if (result.success) {
-        toast({ title: "Sukses!", description: result.message });
-        fetchAccreditations();
-        setEditOpen(false);
-        setSelectedDoc(null);
-    } else {
-        toast({ title: "Gagal!", description: result.message, variant: "destructive" });
-    }
+    startTransition(async () => {
+        const result = await updateAccreditation(selectedDoc.id, data);
+        if (result.success) {
+            toast({ title: "Sukses!", description: result.message });
+            fetchAccreditations();
+            setEditOpen(false);
+            setSelectedDoc(null);
+        } else {
+            toast({ title: "Gagal!", description: result.message, variant: "destructive" });
+        }
+    });
   };
   
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = () => {
     if (!selectedDoc) return;
-    const result = await deleteAccreditation(selectedDoc.id);
-    if (result.success) {
-        toast({ title: "Sukses!", description: result.message });
-        fetchAccreditations();
-        setDeleteOpen(false);
-        setSelectedDoc(null);
-    } else {
-        toast({ title: "Gagal!", description: result.message, variant: "destructive" });
-    }
+    startTransition(async () => {
+        const result = await deleteAccreditation(selectedDoc.id);
+        if (result.success) {
+            toast({ title: "Sukses!", description: result.message });
+            fetchAccreditations();
+            setDeleteOpen(false);
+            setSelectedDoc(null);
+        } else {
+            toast({ title: "Gagal!", description: result.message, variant: "destructive" });
+        }
+    });
   };
 
   return (
@@ -151,7 +158,9 @@ export default function AccreditationAdminPage() {
                 <Input id="link-add" name="link" type="url" placeholder="https://drive.google.com/.../view" required />
               </div>
               <DialogFooter>
-                <Button type="submit">Simpan</Button>
+                <Button type="submit" disabled={isPending}>
+                    {isPending ? 'Menyimpan...' : 'Simpan'}
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -225,7 +234,9 @@ export default function AccreditationAdminPage() {
               </div>
               <DialogFooter>
                  <Button type="button" variant="outline" onClick={() => setEditOpen(false)}>Batal</Button>
-                 <Button type="submit">Simpan Perubahan</Button>
+                 <Button type="submit" disabled={isPending}>
+                    {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
+                 </Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -241,8 +252,8 @@ export default function AccreditationAdminPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setSelectedDoc(null)}>Batal</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Hapus
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90" disabled={isPending}>
+              {isPending ? 'Menghapus...' : 'Hapus'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

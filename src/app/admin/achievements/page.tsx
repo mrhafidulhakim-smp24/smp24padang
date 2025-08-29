@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useFormState } from 'react-dom';
+import { useState, useEffect, useTransition } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -56,6 +56,15 @@ import {
     getAchievements,
 } from './actions';
 import { type Achievement } from './schema';
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending ? 'Menyimpan...' : 'Simpan'}
+        </Button>
+    );
+}
 
 function AchievementForm({
     action,
@@ -159,7 +168,7 @@ function AchievementForm({
                 <Button type="button" variant="outline" onClick={onClose}>
                     Batal
                 </Button>
-                <Button type="submit">Simpan</Button>
+                <SubmitButton />
             </DialogFooter>
         </form>
     );
@@ -172,6 +181,7 @@ export default function AchievementsAdminPage() {
     const [isDeleteOpen, setDeleteOpen] = useState(false);
     const [selectedAchievement, setSelectedAchievement] =
         useState<Achievement | null>(null);
+    const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
         getAchievements().then((data) =>
@@ -181,26 +191,28 @@ export default function AchievementsAdminPage() {
 
     const { toast } = useToast();
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
         if (!selectedAchievement) return;
-        const result = await deleteAchievement(
-            selectedAchievement.id,
-            selectedAchievement.imageUrl,
-        );
-        if (result.success) {
-            toast({ title: 'Sukses!', description: result.message });
-            setAchievements(
-                achievements.filter((a) => a.id !== selectedAchievement.id),
+        startTransition(async () => {
+            const result = await deleteAchievement(
+                selectedAchievement.id,
+                selectedAchievement.imageUrl,
             );
-            setDeleteOpen(false);
-            setSelectedAchievement(null);
-        } else {
-            toast({
-                title: 'Gagal',
-                description: result.message,
-                variant: 'destructive',
-            });
-        }
+            if (result.success) {
+                toast({ title: 'Sukses!', description: result.message });
+                setAchievements(
+                    achievements.filter((a) => a.id !== selectedAchievement.id),
+                );
+                setDeleteOpen(false);
+                setSelectedAchievement(null);
+            } else {
+                toast({
+                    title: 'Gagal',
+                    description: result.message,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
     const boundUpdateAchievement = updateAchievement.bind(
@@ -360,8 +372,9 @@ export default function AchievementsAdminPage() {
                         <AlertDialogAction
                             onClick={handleDelete}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            disabled={isPending}
                         >
-                            Hapus
+                            {isPending ? 'Menghapus...' : 'Hapus'}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

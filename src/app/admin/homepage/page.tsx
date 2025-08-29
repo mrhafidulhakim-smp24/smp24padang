@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
@@ -81,6 +81,7 @@ function BannersTab({
     refreshData: () => void;
 }) {
     const { toast } = useToast();
+    const [isPending, startTransition] = useTransition();
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -104,49 +105,53 @@ function BannersTab({
         }
     };
 
-    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
 
-        const result = editingBanner
-            ? await updateBanner(
-                  editingBanner.id,
-                  editingBanner.imageUrl,
-                  formData,
-              )
-            : await createBanner(formData);
+        startTransition(async () => {
+            const result = editingBanner
+                ? await updateBanner(
+                      editingBanner.id,
+                      editingBanner.imageUrl,
+                      formData,
+                  )
+                : await createBanner(formData);
 
-        if (result.success) {
-            toast({
-                title: `Banner ${editingBanner ? 'diperbarui' : 'dibuat'}!`,
-                description: 'Halaman beranda telah diperbarui.',
-            });
-            refreshData();
-            setDialogOpen(false);
-        } else {
-            toast({
-                title: 'Gagal!',
-                description: result.error,
-                variant: 'destructive',
-            });
-        }
+            if (result.success) {
+                toast({
+                    title: `Banner ${editingBanner ? 'diperbarui' : 'dibuat'}!`,
+                    description: 'Halaman beranda telah diperbarui.',
+                });
+                refreshData();
+                setDialogOpen(false);
+            } else {
+                toast({
+                    title: 'Gagal!',
+                    description: result.error,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
-    const handleDelete = async (id: string, imageUrl: string | null) => {
-        const result = await deleteBanner(id, imageUrl);
-        if (result.success) {
-            toast({
-                title: 'Banner dihapus!',
-                description: 'Data banner telah dihapus.',
-            });
-            refreshData();
-        } else {
-            toast({
-                title: 'Gagal!',
-                description: result.error,
-                variant: 'destructive',
-            });
-        }
+    const handleDelete = (id: string, imageUrl: string | null) => {
+        startTransition(async () => {
+            const result = await deleteBanner(id, imageUrl);
+            if (result.success) {
+                toast({
+                    title: 'Banner dihapus!',
+                    description: 'Data banner telah dihapus.',
+                });
+                refreshData();
+            } else {
+                toast({
+                    title: 'Gagal!',
+                    description: result.error,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
     return (
@@ -235,8 +240,9 @@ function BannersTab({
                                                                 item.imageUrl,
                                                             )
                                                         }
+                                                        disabled={isPending}
                                                     >
-                                                        Hapus
+                                                        {isPending ? 'Menghapus...' : 'Hapus'}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
@@ -319,7 +325,9 @@ function BannersTab({
                                     Batal
                                 </Button>
                             </DialogClose>
-                            <Button type="submit">Simpan</Button>
+                            <Button type="submit" disabled={isPending}>
+                                {isPending ? 'Menyimpan...' : 'Simpan'}
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
@@ -336,10 +344,11 @@ function MarqueeTab({
     refreshData: () => void;
 }) {
     const { toast } = useToast();
+    const [isPending, startTransition] = useTransition();
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<MarqueeItem | null>(null);
 
-    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const itemData = {
@@ -347,38 +356,42 @@ function MarqueeTab({
             text: formData.get('text') as string,
         };
 
-        const result = editingItem
-            ? await updateMarqueeItem(editingItem.id, itemData)
-            : await createMarqueeItem(itemData);
+        startTransition(async () => {
+            const result = editingItem
+                ? await updateMarqueeItem(editingItem.id, itemData)
+                : await createMarqueeItem(itemData);
 
-        if (result.success) {
-            toast({
-                title: `Item ${editingItem ? 'diperbarui' : 'dibuat'}!`,
-                description: 'Teks berjalan telah diperbarui.',
-            });
-            refreshData();
-            setDialogOpen(false);
-        } else {
-            toast({
-                title: 'Gagal!',
-                description: result.error,
-                variant: 'destructive',
-            });
-        }
+            if (result.success) {
+                toast({
+                    title: `Item ${editingItem ? 'diperbarui' : 'dibuat'}!`,
+                    description: 'Teks berjalan telah diperbarui.',
+                });
+                refreshData();
+                setDialogOpen(false);
+            } else {
+                toast({
+                    title: 'Gagal!',
+                    description: result.error,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
-    const handleDelete = async (id: string) => {
-        const result = await deleteMarqueeItem(id);
-        if (result.success) {
-            toast({ title: 'Item dihapus!' });
-            refreshData();
-        } else {
-            toast({
-                title: 'Gagal!',
-                description: result.error,
-                variant: 'destructive',
-            });
-        }
+    const handleDelete = (id: string) => {
+        startTransition(async () => {
+            const result = await deleteMarqueeItem(id);
+            if (result.success) {
+                toast({ title: 'Item dihapus!' });
+                refreshData();
+            } else {
+                toast({
+                    title: 'Gagal!',
+                    description: result.error,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
     return (
@@ -458,8 +471,9 @@ function MarqueeTab({
                                                                 item.id,
                                                             )
                                                         }
+                                                        disabled={isPending}
                                                     >
-                                                        Hapus
+                                                        {isPending ? 'Menghapus...' : 'Hapus'}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
@@ -520,7 +534,9 @@ function MarqueeTab({
                                     Batal
                                 </Button>
                             </DialogClose>
-                            <Button type="submit">Simpan</Button>
+                            <Button type="submit" disabled={isPending}>
+                                {isPending ? 'Menyimpan...' : 'Simpan'}
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
@@ -540,6 +556,7 @@ function StatisticsTab({
         data || { classrooms: 0, students: 0, teachers: 0, staff: 0 },
     );
     const { toast } = useToast();
+    const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
         setStats(data || { classrooms: 0, students: 0, teachers: 0, staff: 0 });
@@ -550,23 +567,25 @@ function StatisticsTab({
         setStats((prev) => ({ ...prev, [name]: Number(value) }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await updateStatistics(stats);
-        if (result.success) {
-            toast({
-                title: 'Statistik diperbarui!',
-                description:
-                    'Data statistik di halaman beranda telah diperbarui.',
-            });
-            refreshData();
-        } else {
-            toast({
-                title: 'Gagal!',
-                description: result.error,
-                variant: 'destructive',
-            });
-        }
+        startTransition(async () => {
+            const result = await updateStatistics(stats);
+            if (result.success) {
+                toast({
+                    title: 'Statistik diperbarui!',
+                    description:
+                        'Data statistik di halaman beranda telah diperbarui.',
+                });
+                refreshData();
+            } else {
+                toast({
+                    title: 'Gagal!',
+                    description: result.error,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
     return (
@@ -628,7 +647,9 @@ function StatisticsTab({
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                    <Button type="submit">Simpan Statistik</Button>
+                    <Button type="submit" disabled={isPending}>
+                        {isPending ? 'Menyimpan...' : 'Simpan Statistik'}
+                    </Button>
                 </CardFooter>
             </Card>
         </form>
@@ -643,6 +664,7 @@ function FacilitiesTab({
     refreshData: () => void;
 }) {
     const { toast } = useToast();
+    const [isPending, startTransition] = useTransition();
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [editingFacility, setEditingFacility] = useState<Facility | null>(
         null,
@@ -668,48 +690,52 @@ function FacilitiesTab({
         }
     };
 
-    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
 
-        const result = editingFacility
-            ? await updateFacility(
-                  editingFacility.id,
-                  editingFacility.imageUrl,
-                  formData,
-              )
-            : await createFacility(formData);
+        startTransition(async () => {
+            const result = editingFacility
+                ? await updateFacility(
+                      editingFacility.id,
+                      editingFacility.imageUrl,
+                      formData,
+                  )
+                : await createFacility(formData);
 
-        if (result.success) {
-            toast({
-                title: `Fasilitas ${
-                    editingFacility ? 'diperbarui' : 'dibuat'
-                }!`,
-                description: 'Data fasilitas telah diperbarui.',
-            });
-            refreshData();
-            setDialogOpen(false);
-        } else {
-            toast({
-                title: 'Gagal!',
-                description: result.error,
-                variant: 'destructive',
-            });
-        }
+            if (result.success) {
+                toast({
+                    title: `Fasilitas ${
+                        editingFacility ? 'diperbarui' : 'dibuat'
+                    }!`,
+                    description: 'Data fasilitas telah diperbarui.',
+                });
+                refreshData();
+                setDialogOpen(false);
+            } else {
+                toast({
+                    title: 'Gagal!',
+                    description: result.error,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
-    const handleDelete = async (id: string, imageUrl: string | null) => {
-        const result = await deleteFacility(id, imageUrl);
-        if (result.success) {
-            toast({ title: 'Fasilitas dihapus!' });
-            refreshData();
-        } else {
-            toast({
-                title: 'Gagal!',
-                description: result.error,
-                variant: 'destructive',
-            });
-        }
+    const handleDelete = (id: string, imageUrl: string | null) => {
+        startTransition(async () => {
+            const result = await deleteFacility(id, imageUrl);
+            if (result.success) {
+                toast({ title: 'Fasilitas dihapus!' });
+                refreshData();
+            } else {
+                toast({
+                    title: 'Gagal!',
+                    description: result.error,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
     return (
@@ -797,8 +823,9 @@ function FacilitiesTab({
                                                                 item.imageUrl,
                                                             )
                                                         }
+                                                        disabled={isPending}
                                                     >
-                                                        Hapus
+                                                        {isPending ? 'Menghapus...' : 'Hapus'}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
@@ -872,7 +899,9 @@ function FacilitiesTab({
                                     Batal
                                 </Button>
                             </DialogClose>
-                            <Button type="submit">Simpan</Button>
+                            <Button type="submit" disabled={isPending}>
+                                {isPending ? 'Menyimpan...' : 'Simpan'}
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>

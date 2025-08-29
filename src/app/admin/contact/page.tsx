@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -27,7 +27,8 @@ export default function ContactAdminPage() {
         email: '',
         googleMapsUrl: null,
     });
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
 
     useEffect(() => {
@@ -36,7 +37,7 @@ export default function ContactAdminPage() {
             if (data) {
                 setContactInfo(data);
             }
-            setLoading(false);
+            setIsLoading(false);
         }
         fetchContactInfo();
     }, []);
@@ -46,24 +47,26 @@ export default function ContactAdminPage() {
         setContactInfo((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await updateContactInfo(contactInfo);
-        if (result.success) {
-            toast({
-                title: 'Sukses!',
-                description: result.message,
-            });
-        } else {
-            toast({
-                title: 'Gagal!',
-                description: result.message,
-                variant: 'destructive',
-            });
-        }
+        startTransition(async () => {
+            const result = await updateContactInfo(contactInfo);
+            if (result.success) {
+                toast({
+                    title: 'Sukses!',
+                    description: result.message,
+                });
+            } else {
+                toast({
+                    title: 'Gagal!',
+                    description: result.message,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex flex-col gap-8">
                 <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
@@ -162,8 +165,8 @@ export default function ContactAdminPage() {
             </Card>
 
             <div className="flex justify-end">
-                <Button type="submit" size="lg">
-                    Simpan Perubahan
+                <Button type="submit" size="lg" disabled={isPending}>
+                    {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
                 </Button>
             </div>
         </form>

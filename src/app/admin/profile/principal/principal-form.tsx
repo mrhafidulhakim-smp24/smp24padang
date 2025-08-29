@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +26,7 @@ type PrincipalFormProps = {
 
 export default function PrincipalForm({ initialProfileData }: PrincipalFormProps) {
   const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
   const [profileData, setProfileData] = useState<Profile | null>(initialProfileData);
   const [principalImageFile, setPrincipalImageFile] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(initialProfileData?.principalImageUrl || null);
@@ -43,21 +44,25 @@ export default function PrincipalForm({ initialProfileData }: PrincipalFormProps
       formData.append('principalImage', principalImageFile);
     }
 
-    const result = await updatePrincipalProfile(formData);
+    startTransition(async () => {
+        const result = await updatePrincipalProfile(formData);
 
-    if (result.success) {
-      toast({
-        title: "Success",
-        description: result.message,
-      });
-      // No need to re-fetch here, revalidatePath in action will handle it
-    } else {
-      toast({
-        title: "Error",
-        description: result.message,
-        variant: "destructive",
-      });
-    }
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: result.message,
+          });
+          if (result.newImageUrl) {
+            setPreviewImageUrl(result.newImageUrl);
+          }
+        } else {
+          toast({
+            title: "Error",
+            description: result.message,
+            variant: "destructive",
+          });
+        }
+    });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,7 +140,9 @@ export default function PrincipalForm({ initialProfileData }: PrincipalFormProps
           </div>
         </div>
 
-        <Button type="submit">Simpan Perubahan</Button>
+        <Button type="submit" disabled={isPending}>
+            {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
+        </Button>
       </form>
     </div>
   );

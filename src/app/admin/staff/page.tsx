@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useFormState } from 'react-dom';
+import { useState, useEffect, useTransition } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import Image from 'next/image';
 import {
     MoreHorizontal,
@@ -53,6 +53,15 @@ import { type InferSelectModel } from 'drizzle-orm';
 import { Badge } from '@/components/ui/badge';
 
 type Staff = InferSelectModel<typeof StaffSchema>;
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending ? 'Menyimpan...' : 'Simpan'}
+        </Button>
+    );
+}
 
 function StaffForm({
     action,
@@ -167,7 +176,7 @@ function StaffForm({
                 <Button type="button" variant="outline" onClick={onClose}>
                     Batal
                 </Button>
-                <Button type="submit">Simpan</Button>
+                <SubmitButton />
             </DialogFooter>
         </form>
     );
@@ -179,6 +188,7 @@ export default function StaffAdminPage() {
     const [isEditOpen, setEditOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
     const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
+    const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
         getStaff().then(setStaff);
@@ -186,24 +196,26 @@ export default function StaffAdminPage() {
 
     const { toast } = useToast();
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
         if (!selectedStaff) return;
-        const result = await deleteStaff(
-            selectedStaff.id,
-            selectedStaff.imageUrl,
-        );
-        if (result.success) {
-            toast({ title: 'Sukses!', description: result.message });
-            setStaff(staff.filter((a) => a.id !== selectedStaff.id));
-            setDeleteOpen(false);
-            setSelectedStaff(null);
-        } else {
-            toast({
-                title: 'Gagal',
-                description: result.message,
-                variant: 'destructive',
-            });
-        }
+        startTransition(async () => {
+            const result = await deleteStaff(
+                selectedStaff.id,
+                selectedStaff.imageUrl,
+            );
+            if (result.success) {
+                toast({ title: 'Sukses!', description: result.message });
+                setStaff(staff.filter((a) => a.id !== selectedStaff.id));
+                setDeleteOpen(false);
+                setSelectedStaff(null);
+            } else {
+                toast({
+                    title: 'Gagal',
+                    description: result.message,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
     const boundUpdateStaff = updateStaff.bind(
@@ -340,8 +352,9 @@ export default function StaffAdminPage() {
                         <AlertDialogAction
                             onClick={handleDelete}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            disabled={isPending}
                         >
-                            Hapus
+                            {isPending ? 'Menghapus...' : 'Hapus'}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

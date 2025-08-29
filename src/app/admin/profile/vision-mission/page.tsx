@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,8 @@ import { getProfile, updateVisionMission } from "./actions";
 export default function VisionMissionAdminPage() {
     const [vision, setVision] = useState("");
     const [mission, setMission] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
 
     useEffect(() => {
@@ -23,30 +24,30 @@ export default function VisionMissionAdminPage() {
                 setVision(data.vision);
                 setMission(data.mission);
             }
-            setLoading(false);
+            setIsLoading(false);
         }
         fetchVisionMission();
     }, []);
 
-    const handleSaveChanges = async () => {
-        setLoading(true);
-        const result = await updateVisionMission(vision, mission);
-        if (result.success) {
-            toast({
-                title: "Perubahan Disimpan!",
-                description: "Visi & Misi sekolah telah berhasil diperbarui.",
-            });
-        } else {
-            toast({
-                title: "Gagal Menyimpan!",
-                description: result.error || "Terjadi kesalahan saat memperbarui Visi & Misi.",
-                variant: "destructive",
-            });
-        }
-        setLoading(false);
+    const handleSaveChanges = () => {
+        startTransition(async () => {
+            const result = await updateVisionMission(vision, mission);
+            if (result.success) {
+                toast({
+                    title: "Perubahan Disimpan!",
+                    description: "Visi & Misi sekolah telah berhasil diperbarui.",
+                });
+            } else {
+                toast({
+                    title: "Gagal Menyimpan!",
+                    description: result.error || "Terjadi kesalahan saat memperbarui Visi & Misi.",
+                    variant: "destructive",
+                });
+            }
+        });
     };
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex flex-col gap-8">
                 <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
@@ -116,7 +117,9 @@ export default function VisionMissionAdminPage() {
             </div>
             
             <div className="flex justify-end pt-4">
-                <Button onClick={handleSaveChanges} size="lg">Simpan Semua Perubahan</Button>
+                <Button onClick={handleSaveChanges} size="lg" disabled={isPending}>
+                    {isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
+                </Button>
             </div>
         </div>
     );

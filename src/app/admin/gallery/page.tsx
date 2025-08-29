@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useFormState } from 'react-dom';
+import { useState, useEffect, useTransition } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -38,6 +38,15 @@ import { type InferSelectModel } from 'drizzle-orm';
 import { Skeleton } from '@/components/ui/skeleton';
 
 type GalleryItem = InferSelectModel<typeof GalleryItemSchema>;
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending ? 'Menyimpan...' : 'Simpan'}
+        </Button>
+    );
+}
 
 function GalleryForm({
     action,
@@ -115,7 +124,7 @@ function GalleryForm({
                 <Input id="category" name="category" required />
             </div>
             <DialogFooter>
-                <Button type="submit">Simpan</Button>
+                <SubmitButton />
             </DialogFooter>
         </form>
     );
@@ -128,6 +137,7 @@ export default function GalleryAdminPage() {
     const [isDeleteOpen, setDeleteOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
     const { toast } = useToast();
+    const [isPending, startTransition] = useTransition();
 
     const fetchItems = async () => {
         setIsLoading(true);
@@ -140,26 +150,28 @@ export default function GalleryAdminPage() {
         fetchItems();
     }, []);
 
-    const handleDeleteConfirm = async () => {
+    const handleDeleteConfirm = () => {
         if (!selectedItem) return;
-        const result = await deleteGalleryItem(
-            selectedItem.id,
-            selectedItem.src,
-        );
-        if (result.success) {
-            toast({ title: 'Sukses!', description: result.message });
-            setGalleryItems(
-                galleryItems.filter((item) => item.id !== selectedItem.id),
+        startTransition(async () => {
+            const result = await deleteGalleryItem(
+                selectedItem.id,
+                selectedItem.src,
             );
-        } else {
-            toast({
-                title: 'Gagal',
-                description: result.message,
-                variant: 'destructive',
-            });
-        }
-        setDeleteOpen(false);
-        setSelectedItem(null);
+            if (result.success) {
+                toast({ title: 'Sukses!', description: result.message });
+                setGalleryItems(
+                    galleryItems.filter((item) => item.id !== selectedItem.id),
+                );
+            } else {
+                toast({
+                    title: 'Gagal',
+                    description: result.message,
+                    variant: 'destructive',
+                });
+            }
+            setDeleteOpen(false);
+            setSelectedItem(null);
+        });
     };
 
     return (
@@ -261,8 +273,9 @@ export default function GalleryAdminPage() {
                         <AlertDialogAction
                             onClick={handleDeleteConfirm}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            disabled={isPending}
                         >
-                            Hapus
+                            {isPending ? 'Menghapus...' : 'Hapus'}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

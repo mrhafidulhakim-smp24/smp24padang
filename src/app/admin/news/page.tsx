@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useFormState } from 'react-dom';
+import { useState, useEffect, useTransition } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import Image from 'next/image';
 import {
     MoreHorizontal,
@@ -55,6 +55,15 @@ import {
     getNewsForAdmin,
 } from './actions';
 import { type NewsArticle } from './schema';
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending ? 'Menyimpan...' : 'Simpan'}
+        </Button>
+    );
+}
 
 function NewsArticleForm({
     action,
@@ -166,7 +175,7 @@ function NewsArticleForm({
                 <Button type="button" variant="outline" onClick={onClose}>
                     Batal
                 </Button>
-                <Button type="submit">Simpan</Button>
+                <SubmitButton />
             </DialogFooter>
         </form>
     );
@@ -180,6 +189,7 @@ export default function NewsAdminPage() {
     const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(
         null,
     );
+    const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
         getNewsForAdmin().then((data) => setArticles(data as NewsArticle[]));
@@ -191,24 +201,26 @@ export default function NewsAdminPage() {
         getNewsForAdmin().then((data) => setArticles(data as NewsArticle[]));
     };
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
         if (!selectedArticle) return;
-        const result = await deleteNewsArticle(
-            selectedArticle.id,
-            selectedArticle.imageUrl,
-        );
-        if (result.success) {
-            toast({ title: 'Sukses!', description: result.message });
-            setArticles(articles.filter((a) => a.id !== selectedArticle.id));
-            setDeleteOpen(false);
-            setSelectedArticle(null);
-        } else {
-            toast({
-                title: 'Gagal',
-                description: result.message,
-                variant: 'destructive',
-            });
-        }
+        startTransition(async () => {
+            const result = await deleteNewsArticle(
+                selectedArticle.id,
+                selectedArticle.imageUrl,
+            );
+            if (result.success) {
+                toast({ title: 'Sukses!', description: result.message });
+                setArticles(articles.filter((a) => a.id !== selectedArticle.id));
+                setDeleteOpen(false);
+                setSelectedArticle(null);
+            } else {
+                toast({
+                    title: 'Gagal',
+                    description: result.message,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
     const boundUpdateArticle = updateNewsArticle.bind(
@@ -372,8 +384,9 @@ export default function NewsAdminPage() {
                         <AlertDialogAction
                             onClick={handleDelete}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            disabled={isPending}
                         >
-                            Hapus
+                            {isPending ? 'Menghapus...' : 'Hapus'}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
