@@ -25,7 +25,7 @@ export default async function UniformPage() {
               <div className="relative aspect-[4/6] w-full">
                 <Image
                   src={uniform.image || 'https://placehold.co/400x600.png'}
-                  alt={uniform.day}
+                  alt={uniform.day || ''}
                   fill
                   className="object-cover"
                 />
