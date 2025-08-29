@@ -1,0 +1,1 @@
+-- This migration was intentionally left blank to resolve a Vercel deployment issue.
