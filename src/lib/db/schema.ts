@@ -5,6 +5,7 @@ import {
   varchar,
   integer,
   boolean,
+  serial,
 } from "drizzle-orm/pg-core";
 
 export const banners = pgTable("banners", {
@@ -130,7 +131,7 @@ export const accreditations = pgTable("accreditations", {
 });
 
 export const uniforms = pgTable("uniforms", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
   day: text("day").notNull(),
   description: text("description").notNull(),
   image: text("image"),

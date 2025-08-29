@@ -74,7 +74,7 @@ export default async function ProfilePage() {
                         kami istimewa.
                     </p>
                 </div>
-                <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                <div className="mt-12 grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-4">
                     <Link href="/profile/vision-mission">
                         <Card className="h-full transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
                             <CardHeader className="items-center">

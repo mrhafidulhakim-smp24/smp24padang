@@ -51,11 +51,11 @@ export default async function AccreditationPage() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="aspect-h-4 aspect-w-3 w-full rounded-md border bg-muted">
+                    <div className="aspect-video w-full rounded-md border bg-muted">
                        <iframe
                         src={getGoogleDriveEmbedLink(doc.link)}
                         className="h-full w-full"
-                        style={{ border: 0, minHeight: '800px' }}
+                        style={{ border: 0 }}
                         allow="fullscreen"
                         title={`Pratinjau ${doc.title}`}
                        ></iframe>

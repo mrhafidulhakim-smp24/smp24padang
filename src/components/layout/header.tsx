@@ -104,28 +104,34 @@ export default function Header() {
             
         <div className="flex w-full items-center justify-end">
             {/* Desktop Navigation */}
-            <nav className="items-center justify-end gap-6 hidden md:flex">
-            {navLinks.map((link) => 
-                link.subLinks ? (
+            <nav className="items-center justify-end gap-8 hidden md:flex">
+            {navLinks.map((link) => {
+              const isDropdownActive = link.subLinks && link.href !== "/" && pathname.startsWith(link.href);
+              const isLinkActive = (link.href === "/" && pathname === "/") || (link.href !== "/" && pathname.startsWith(link.href) && !link.subLinks) || (link.href === '/news' && pathname.startsWith('/articles'));
+
+              return link.subLinks ? (
                 <DropdownMenu key={link.href}>
                     <DropdownMenuTrigger className={cn(
-                        "flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none",
-                        cleanPathname.startsWith(link.href) && "text-primary"
+                        "relative flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-in-out",
+                        isDropdownActive ? "text-primary after:scale-x-100" : "after:scale-x-0"
                     )}>
                     {link.label} <ChevronDown className="ml-1 h-4 w-4" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                    {link.subLinks.map(subLink => (
+                    {link.subLinks.map(subLink => {
+                      const isSubLinkActive = pathname === subLink.href;
+                      return (
                         <DropdownMenuItem key={subLink.href} asChild>
                         <Link href={subLink.href} className={cn(
                             "flex items-center gap-2",
-                            cleanPathname === subLink.href && "font-semibold text-primary"
+                            isSubLinkActive && "font-semibold text-primary"
                         )}>
                             <subLink.icon className="h-4 w-4 text-muted-foreground" />
                             {subLink.label}
                         </Link>
                         </DropdownMenuItem>
-                    ))}
+                      )
+                    })}
                     </DropdownMenuContent>
                 </DropdownMenu>
                 ) : (
@@ -133,14 +139,14 @@ export default function Header() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                        "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-                        (cleanPathname.startsWith(link.href) || (link.href === '/news' && cleanPathname.startsWith('/articles'))) && "text-primary font-semibold"
+                        "relative text-sm font-medium text-muted-foreground transition-colors hover:text-primary after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out",
+                        isLinkActive ? "text-primary after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
                     )}
                 >
                     {link.label}
                 </Link>
                 )
-            )}
+            })}
             </nav>
 
             <div className="ml-4">
