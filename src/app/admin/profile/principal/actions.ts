@@ -56,7 +56,7 @@ export async function updatePrincipalProfile(formData: FormData) {
 
     revalidatePath('/admin/profile/principal');
     revalidatePath('/'); // Revalidate homepage as well
-    return { success: true, message: 'Principal profile updated successfully.' };
+    return { success: true, message: 'Principal profile updated successfully.', newImageUrl: principalImageUrl || undefined };
   } catch (error) {
     console.error("Error updating principal profile in DB:", error);
     return { success: false, message: 'Failed to update principal profile.' };
