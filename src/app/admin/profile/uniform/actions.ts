@@ -154,3 +154,28 @@ export async function deleteUniform(id: number) {
     return { success: false, message: 'Gagal menghapus seragam.' };
   }
 }
+
+export async function seedSportUniform() {
+  try {
+    const existingSportUniform = await db.query.uniforms.findFirst({
+      where: eq(uniforms.type, 'sport'),
+    });
+
+    if (existingSportUniform) {
+      return { success: true, message: 'Seragam olah raga sudah ada.' };
+    }
+
+    await db.insert(uniforms).values({
+      type: 'sport',
+      description: 'Seragam olah raga untuk kegiatan jasmani.',
+      // day is intentionally left null
+    });
+
+    revalidatePath('/admin/profile/uniform');
+    revalidatePath('/profile/uniform');
+    return { success: true, message: 'Contoh seragam olah raga berhasil ditambahkan.' };
+  } catch (error) {
+    console.error("Error seeding sport uniform:", error);
+    return { success: false, message: 'Gagal menambahkan contoh seragam.' };
+  }
+}

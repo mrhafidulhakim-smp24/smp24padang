@@ -105,7 +105,11 @@ export async function updateExtracurricular(id: string, formData: FormData) {
 
   if (image && image.size > 0) {
     if (existingExtracurricular.image) {
-      await del(existingExtracurricular.image);
+      try {
+        await del(existingExtracurricular.image);
+      } catch (error) {
+        console.error("Vercel Blob deletion error during update:", error);
+      }
     }
     const blob = await put(image.name, image, {
       access: 'public',
@@ -148,7 +152,11 @@ export async function deleteExtracurricular(id: string) {
   }
 
   if (existingExtracurricular.image) {
-    await del(existingExtracurricular.image);
+    try {
+      await del(existingExtracurricular.image);
+    } catch (error) {
+      console.error("Vercel Blob deletion error during delete:", error);
+    }
   }
 
   try {

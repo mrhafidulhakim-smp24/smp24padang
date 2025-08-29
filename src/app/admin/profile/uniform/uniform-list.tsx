@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -21,7 +21,7 @@ import {
     CardDescription,
 } from '@/components/ui/card';
 import Image from 'next/image';
-import { updateUniform, createUniform, deleteUniform } from './actions';
+import { updateUniform, createUniform, deleteUniform, seedSportUniform } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import {
     Select,
@@ -49,6 +49,7 @@ type UniformListProps = {
 
 export default function UniformList({ initialUniformsData }: UniformListProps) {
     const { toast } = useToast();
+    const [isPending, startTransition] = useTransition();
     const [uniformsData, setUniformsData] =
         useState<Uniform[]>(initialUniformsData);
     const [isAddOpen, setAddOpen] = useState(false);
@@ -63,34 +64,34 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
         setUniformsData(initialUniformsData);
     }, [initialUniformsData]);
 
-    const refreshUniforms = async () => {};
-
-    const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleAdd = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         if (imageFile) {
             formData.append('image', imageFile);
         }
 
-        const result = await createUniform(formData);
-
-        if (result.success) {
-            toast({
-                title: 'Success',
-                description: result.message,
-            });
-            setAddOpen(false);
-            setImageFile(null);
-        } else {
-            toast({
-                title: 'Error',
-                description: result.message,
-                variant: 'destructive',
-            });
-        }
+        startTransition(async () => {
+            const result = await createUniform(formData);
+            if (result.success) {
+                toast({
+                    title: 'Success',
+                    description: result.message,
+                });
+                setAddOpen(false);
+                setImageFile(null);
+                // Note: We are relying on revalidatePath to refresh the data.
+            } else {
+                toast({
+                    title: 'Error',
+                    description: result.message,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
-    const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleEdit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!selectedUniform) return;
 
@@ -100,44 +101,59 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
             formData.append('image', imageFile);
         }
 
-        const result = await updateUniform(selectedUniform.id, formData);
+        startTransition(async () => {
+            const result = await updateUniform(selectedUniform.id, formData);
 
-        if (result.success) {
-            toast({
-                title: 'Success',
-                description: result.message,
-            });
-            setEditOpen(false);
-            setSelectedUniform(null);
-            setImageFile(null);
-        } else {
-            toast({
-                title: 'Error',
-                description: result.message,
-                variant: 'destructive',
-            });
-        }
+            if (result.success) {
+                toast({
+                    title: 'Success',
+                    description: result.message,
+                });
+                setEditOpen(false);
+                setSelectedUniform(null);
+                setImageFile(null);
+            } else {
+                toast({
+                    title: 'Error',
+                    description: result.message,
+                    variant: 'destructive',
+                });
+            }
+        });
     };
 
-    const handleDeleteConfirm = async () => {
+    const handleDeleteConfirm = () => {
         if (!selectedUniform) return;
 
-        const result = await deleteUniform(selectedUniform.id);
+        startTransition(async () => {
+            const result = await deleteUniform(selectedUniform.id);
 
-        if (result.success) {
-            toast({
-                title: 'Success',
-                description: result.message,
-            });
-            setDeleteOpen(false);
-            setSelectedUniform(null);
-        } else {
-            toast({
-                title: 'Error',
-                description: result.message,
-                variant: 'destructive',
-            });
-        }
+            if (result.success) {
+                toast({
+                    title: 'Success',
+                    description: result.message,
+                });
+                setDeleteOpen(false);
+                setSelectedUniform(null);
+            } else {
+                toast({
+                    title: 'Error',
+                    description: result.message,
+                    variant: 'destructive',
+                });
+            }
+        });
+    };
+
+    const handleSeed = () => {
+        startTransition(async () => {
+            const result = await seedSportUniform();
+            if (result.success) {
+                toast({ title: 'Success', description: result.message });
+            } else {
+                toast({ title: 'Error', description: result.message, variant: 'destructive' });
+            }
+        });
     };
 
     return (
@@ -151,92 +167,98 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                         Perbarui gambar dan deskripsi untuk setiap seragam.
                     </p>
                 </div>
-                <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
-                    <DialogTrigger asChild>
-                        <Button>
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Tambah Seragam
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Tambah Seragam Baru</DialogTitle>
-                        </DialogHeader>
-                        <form onSubmit={handleAdd} className="space-y-4">
-                            <div>
-                                <Label htmlFor="type-add">Jenis Seragam</Label>
-                                <Select name="type" defaultValue="daily">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Pilih jenis seragam" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="daily">
-                                            Harian
-                                        </SelectItem>
-                                        <SelectItem value="sport">
-                                            Olah Raga
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div>
-                                <Label htmlFor="day-add">
-                                    Hari (Opsional untuk Olah Raga)
-                                </Label>
-                                <Input
-                                    id="day-add"
-                                    name="day"
-                                    placeholder="Contoh: Senin"
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="description-add">
-                                    Deskripsi
-                                </Label>
-                                <Input
-                                    id="description-add"
-                                    name="description"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <Label>Gambar</Label>
-                                <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
-                                    <div className="space-y-1 text-center">
-                                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                                        <Label
-                                            htmlFor="file-upload-add"
-                                            className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none hover:text-primary/80"
-                                        >
-                                            <span>Unggah file</span>
-                                            <Input
-                                                id="file-upload-add"
-                                                type="file"
-                                                className="sr-only"
-                                                onChange={(e) =>
-                                                    setImageFile(
-                                                        e.target.files
-                                                            ? e.target.files[0]
-                                                            : null,
-                                                    )
-                                                }
-                                            />
-                                        </Label>
-                                        {imageFile && (
-                                            <p className="text-sm text-gray-500">
-                                                Selected: {imageFile.name}
-                                            </p>
-                                        )}
+                <div className="flex gap-2">
+                    <Button onClick={handleSeed} variant="outline" disabled={isPending}>
+                        {isPending ? 'Processing...' : 'Tambah Data Contoh'}
+                    </Button>
+                    <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
+                        <DialogTrigger asChild>
+                            <Button>
+                                <PlusCircle className="mr-2 h-4 w-4" />
+                                Tambah Seragam
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Tambah Seragam Baru</DialogTitle>
+                            </DialogHeader>
+                            <form onSubmit={handleAdd} className="space-y-4">
+                                <div>
+                                    <Label htmlFor="type-add">Jenis Seragam</Label>
+                                    <Select name="type" defaultValue="daily">
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Pilih jenis seragam" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="daily">
+                                                Harian
+                                            </SelectItem>
+                                            <SelectItem value="sport">
+                                                Olah Raga
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <Label htmlFor="day-add">
+                                        Hari (Opsional untuk Olah Raga)
+                                    </Label>
+                                    <Input
+                                        id="day-add"
+                                        name="day"
+                                        placeholder="Contoh: Senin"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="description-add">
+                                        Deskripsi
+                                    </Label>
+                                    <Input
+                                        id="description-add"
+                                        name="description"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <Label>Gambar</Label>
+                                    <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
+                                        <div className="space-y-1 text-center">
+                                            <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                                            <Label
+                                                htmlFor="file-upload-add"
+                                                className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none hover:text-primary/80"
+                                            >
+                                                <span>Unggah file</span>
+                                                <Input
+                                                    id="file-upload-add"
+                                                    type="file"
+                                                    className="sr-only"
+                                                    onChange={(e) =>
+                                                        setImageFile(
+                                                            e.target.files
+                                                                ? e.target.files[0]
+                                                                : null,
+                                                        )
+                                                    }
+                                                />
+                                            </Label>
+                                            {imageFile && (
+                                                <p className="text-sm text-gray-500">
+                                                    Selected: {imageFile.name}
+                                                </p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <DialogFooter>
-                                <Button type="submit">Simpan</Button>
-                            </DialogFooter>
-                        </form>
-                    </DialogContent>
-                </Dialog>
-            </div>
+                                <DialogFooter>
+                                    <Button type="submit" disabled={isPending}>
+                                        {isPending ? 'Menyimpan...' : 'Simpan'}
+                                    </Button>
+                                </DialogFooter>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
+                </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {uniformsData.map((uniform) => (
@@ -384,7 +406,9 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                             >
                                 Batal
                             </Button>
-                            <Button type="submit">Simpan Perubahan</Button>
+                            <Button type="submit" disabled={isPending}>
+                                {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
+                            </Button>
                         </div>
                     </form>
                 </DialogContent>
@@ -407,8 +431,9 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                         <AlertDialogAction
                             onClick={handleDeleteConfirm}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            disabled={isPending}
                         >
-                            Hapus
+                            {isPending ? 'Menghapus...' : 'Hapus'}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
