@@ -1,4 +1,5 @@
 
+import type { Metadata } from 'next';
 import { Roboto, Montserrat } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 import ConditionalLayout from '@/components/layout/conditional-layout';
