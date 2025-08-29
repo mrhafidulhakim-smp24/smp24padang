@@ -5,13 +5,12 @@ import {
   varchar,
   integer,
   boolean,
-  serial,
 } from "drizzle-orm/pg-core";
 
 export const banners = pgTable("banners", {
   id: varchar("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
+  title: text("title"),
+  description: text("description"),
   imageUrl: text("imageUrl"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
@@ -130,8 +129,10 @@ export const accreditations = pgTable("accreditations", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 
+
+
 export const uniforms = pgTable("uniforms", {
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey(),
   day: text("day").notNull(),
   description: text("description").notNull(),
   image: text("image"),

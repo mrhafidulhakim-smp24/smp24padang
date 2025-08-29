@@ -392,20 +392,24 @@ export default async function Home() {
                                             banner.imageUrl ||
                                             'https://placehold.co/1920x1080.png'
                                         }
-                                        alt={banner.title}
+                                        alt={banner.title || 'Banner Image'}
                                         fill
-                                        style={{ objectFit: 'cover' }}
+                                        style={{ objectFit: 'contain' }}
                                         data-ai-hint="school students"
                                         className="z-0"
                                         priority={index === 0}
                                     />
                                     <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white p-4">
-                                        <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
-                                            {banner.title}
-                                        </h1>
-                                        <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm">
-                                            {banner.description}
-                                        </p>
+                                        {banner.title && (
+                                            <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
+                                                {banner.title}
+                                            </h1>
+                                        )}
+                                        {banner.description && (
+                                            <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm">
+                                                {banner.description}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             </CarouselItem>

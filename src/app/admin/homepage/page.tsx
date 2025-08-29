@@ -102,8 +102,8 @@ function BannersTab({ data, refreshData }: { data: Banner[], refreshData: () => 
                     <TableBody>
                         {data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell><Image src={item.imageUrl || ''} alt={item.title} width={120} height={67} className="rounded-md bg-muted object-cover" /></TableCell>
-                                <TableCell className="font-medium">{item.title}</TableCell>
+                                <TableCell><Image src={item.imageUrl || ''} alt={item.title || 'Banner'} width={120} height={67} className="rounded-md bg-muted object-cover" /></TableCell>
+                                <TableCell className="font-medium">{item.title || '(Tanpa Judul)'}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button variant="outline" size="icon" onClick={() => { setEditingBanner(item); setDialogOpen(true); }}><Pencil className="h-4 w-4" /></Button>
@@ -134,12 +134,12 @@ function BannersTab({ data, refreshData }: { data: Banner[], refreshData: () => 
                     <DialogHeader><DialogTitle>{editingBanner ? 'Edit' : 'Tambah'} Banner</DialogTitle></DialogHeader>
                     <form onSubmit={handleFormSubmit} className="grid gap-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="title">Judul</Label>
-                            <Input id="title" name="title" defaultValue={editingBanner?.title} required />
+                            <Label htmlFor="title">Judul (Opsional)</Label>
+                            <Input id="title" name="title" defaultValue={editingBanner?.title || ''} />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="description">Deskripsi</Label>
-                            <Textarea id="description" name="description" defaultValue={editingBanner?.description} required />
+                            <Label htmlFor="description">Deskripsi (Opsional)</Label>
+                            <Textarea id="description" name="description" defaultValue={editingBanner?.description || ''} />
                         </div>
                         <div className="space-y-2">
                             <Label>Gambar</Label>

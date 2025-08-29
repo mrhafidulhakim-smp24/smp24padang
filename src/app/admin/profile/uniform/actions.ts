@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { uniforms } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, max } from 'drizzle-orm';
 import { put } from '@vercel/blob';
 
 export async function createUniform(formData: FormData) {
@@ -30,7 +30,12 @@ export async function createUniform(formData: FormData) {
   }
 
   try {
+    // Get the current maximum ID
+    const maxIdResult = await db.select({ value: max(uniforms.id) }).from(uniforms);
+    const newId = (maxIdResult[0]?.value || 0) + 1;
+
     await db.insert(uniforms).values({
+      id: newId,
       day,
       description,
       image: imageUrl,
