@@ -56,13 +56,37 @@ export default function AdminLayout({
             label: 'Profil',
             icon: UserCircle,
             subItems: [
-                { href: '/admin/profile/principal', label: 'Profil Sekolah', icon: UserCircle },
-                { href: '/admin/profile/vision-mission', label: 'Visi & Misi', icon: Target },
-                { href: '/admin/organization', label: 'Struktur Organisasi', icon: Network },
-                { href: '/admin/accreditation', label: 'Sertifikasi & Penghargaan', icon: Award },
-                { href: '/admin/profile/uniform', label: 'Seragam', icon: Shirt },
-                { href: '/admin/profile/extracurricular', label: 'Ekskul', icon: Swords },
-            ]
+                {
+                    href: '/admin/profile/principal',
+                    label: 'Profil Sekolah',
+                    icon: UserCircle,
+                },
+                {
+                    href: '/admin/profile/vision-mission',
+                    label: 'Visi & Misi',
+                    icon: Target,
+                },
+                {
+                    href: '/admin/organization',
+                    label: 'Struktur Organisasi',
+                    icon: Network,
+                },
+                {
+                    href: '/admin/accreditation',
+                    label: 'Sertifikasi & Penghargaan',
+                    icon: Award,
+                },
+                {
+                    href: '/admin/profile/uniform',
+                    label: 'Seragam',
+                    icon: Shirt,
+                },
+                {
+                    href: '/admin/profile/extracurricular',
+                    label: 'Ekskul',
+                    icon: Swords,
+                },
+            ],
         },
         { href: '/admin/staff', label: 'Guru & Staf', icon: Users },
         { href: '/admin/news', label: 'Berita', icon: Newspaper },

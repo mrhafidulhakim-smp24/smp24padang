@@ -41,9 +41,7 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
-import { uniforms } from '@/lib/db/schema';
-
-type Uniform = typeof uniforms.$inferSelect;
+import { Uniform } from './types';
 
 type UniformListProps = {
     initialUniformsData: Uniform[];
