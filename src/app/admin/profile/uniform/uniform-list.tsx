@@ -21,15 +21,8 @@ import {
     CardDescription,
 } from '@/components/ui/card';
 import Image from 'next/image';
-import { updateUniform, createUniform, deleteUniform, seedSportUniform } from './actions';
+import { updateUniform, createSportUniform, deleteUniform } from './actions';
 import { useToast } from '@/hooks/use-toast';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -72,7 +65,7 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
         }
 
         startTransition(async () => {
-            const result = await createUniform(formData);
+            const result = await createSportUniform(formData);
             if (result.success) {
                 toast({
                     title: 'Success',
@@ -145,70 +138,30 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
         });
     };
 
-    const handleSeed = () => {
-        startTransition(async () => {
-            const result = await seedSportUniform();
-            if (result.success) {
-                toast({ title: 'Success', description: result.message });
-            } else {
-                toast({ title: 'Error', description: result.message, variant: 'destructive' });
-            }
-        });
-    };
-
     return (
         <div className="flex flex-col gap-8">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Kelola Seragam Sekolah
+                        Kelola Seragam Olahraga
                     </h1>
                     <p className="mt-2 text-lg text-muted-foreground">
-                        Perbarui gambar dan deskripsi untuk setiap seragam.
+                        Perbarui gambar dan deskripsi untuk setiap seragam olahraga.
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <Button onClick={handleSeed} variant="outline" disabled={isPending}>
-                        {isPending ? 'Processing...' : 'Tambah Data Contoh'}
-                    </Button>
                     <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
                         <DialogTrigger asChild>
                             <Button>
                                 <PlusCircle className="mr-2 h-4 w-4" />
-                                Tambah Seragam
+                                Tambah Seragam Olahraga
                             </Button>
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>Tambah Seragam Baru</DialogTitle>
+                                <DialogTitle>Tambah Seragam Olahraga Baru</DialogTitle>
                             </DialogHeader>
                             <form onSubmit={handleAdd} className="space-y-4">
-                                <div>
-                                    <Label htmlFor="type-add">Jenis Seragam</Label>
-                                    <Select name="type" defaultValue="daily">
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Pilih jenis seragam" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="daily">
-                                                Harian
-                                            </SelectItem>
-                                            <SelectItem value="sport">
-                                                Olah Raga
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div>
-                                    <Label htmlFor="day-add">
-                                        Hari (Opsional untuk Olah Raga)
-                                    </Label>
-                                    <Input
-                                        id="day-add"
-                                        name="day"
-                                        placeholder="Contoh: Senin"
-                                    />
-                                </div>
                                 <div>
                                     <Label htmlFor="description-add">
                                         Deskripsi
@@ -271,7 +224,7 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                             {uniform.image ? (
                                 <Image
                                     src={uniform.image}
-                                    alt={uniform.day || uniform.type}
+                                    alt={uniform.description}
                                     width={400}
                                     height={600}
                                     className="aspect-[4/6] w-full object-cover"
@@ -284,9 +237,7 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                         </CardHeader>
                         <CardContent className="p-4">
                             <CardTitle className="font-headline text-xl text-primary">
-                                {uniform.type === 'daily'
-                                    ? uniform.day
-                                    : 'Seragam Olah Raga'}
+                                Seragam Olah Raga
                             </CardTitle>
                             <CardDescription>
                                 {uniform.description}
@@ -323,41 +274,10 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            Edit Seragam:{' '}
-                            {selectedUniform?.day || selectedUniform?.type}
+                            Edit Seragam Olahraga
                         </DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleEdit} className="space-y-4">
-                        <div>
-                            <Label htmlFor="type-edit">Jenis Seragam</Label>
-                            <Select
-                                name="type"
-                                defaultValue={selectedUniform?.type}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Pilih jenis seragam" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="daily">
-                                        Harian
-                                    </SelectItem>
-                                    <SelectItem value="sport">
-                                        Olah Raga
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div>
-                            <Label htmlFor="day-edit">
-                                Hari (Opsional untuk Olah Raga)
-                            </Label>
-                            <Input
-                                id="day-edit"
-                                name="day"
-                                defaultValue={selectedUniform?.day || ''}
-                                placeholder="Contoh: Senin"
-                            />
-                        </div>
                         <div>
                             <Label htmlFor="description-edit">Deskripsi</Label>
                             <Input

@@ -264,13 +264,13 @@ export default function StaffAdminPage() {
                             {staff.map((item) => (
                                 <Card key={item.id} className="flex flex-col items-center text-center group">
                                     <CardHeader className="p-0">
-                                        <div className="relative aspect-square w-full max-w-[150px] overflow-hidden rounded-full shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl mt-4">
+                                        <div className="relative aspect-square w-full max-w-[150px] overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl mt-4">
                                             <Image
                                                 src={item.imageUrl || "https://placehold.co/150x150.png"}
                                                 alt={item.name}
                                                 width={150}
                                                 height={150}
-                                                className="rounded-full object-cover"
+                                                className="object-cover"
                                             />
                                         </div>
                                     </CardHeader>

@@ -71,6 +71,13 @@
       "when": 1756482714587,
       "tag": "0009_stormy_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1756556998562,
+      "tag": "0010_tricky_gressill",
+      "breakpoints": true
     }
   ]
 }

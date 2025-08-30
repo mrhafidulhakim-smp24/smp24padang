@@ -76,17 +76,7 @@ export const facilities = pgTable("facilities", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 
-export const academics = pgTable("academics", {
-    id: varchar("id").primaryKey(),
-    curriculumTitle: text("curriculumTitle").notNull(),
-    curriculumDescription: text("curriculumDescription").notNull(),
-    curriculumImageUrl: text("curriculumImageUrl"),
-    structureTitle: text("structureTitle").notNull(),
-    structureDescription: text("structureDescription").notNull(),
-    structureImageUrl: text("structureImageUrl"),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().notNull(),
-});
+
 
 export const achievements = pgTable("achievements", {
     id: varchar("id").primaryKey(),

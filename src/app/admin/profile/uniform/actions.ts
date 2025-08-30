@@ -8,16 +8,12 @@ import { put, del } from '@vercel/blob';
 import { z } from 'zod';
 
 const uniformSchema = z.object({
-  day: z.string().optional(),
-  type: z.enum(['daily', 'sport']),
   description: z.string().min(1, 'Deskripsi tidak boleh kosong'),
   image: z.instanceof(File).optional(),
 });
 
-export async function createUniform(formData: FormData) {
+export async function createSportUniform(formData: FormData) {
   const validatedFields = uniformSchema.safeParse({
-    day: formData.get('day'),
-    type: formData.get('type'),
     description: formData.get('description'),
     image: formData.get('image'),
   });
@@ -30,7 +26,7 @@ export async function createUniform(formData: FormData) {
     };
   }
 
-  const { day, type, description, image } = validatedFields.data;
+  const { description, image } = validatedFields.data;
 
   let imageUrl: string | undefined;
 
@@ -48,25 +44,22 @@ export async function createUniform(formData: FormData) {
 
   try {
     await db.insert(uniforms).values({
-      day,
-      type,
+      type: 'sport',
       description,
       image: imageUrl,
     });
 
     revalidatePath('/admin/profile/uniform');
     revalidatePath('/profile/uniform');
-    return { success: true, message: 'Seragam berhasil ditambahkan.' };
+    return { success: true, message: 'Seragam olah raga berhasil ditambahkan.' };
   } catch (error) {
     console.error("Error creating uniform in DB:", error);
-    return { success: false, message: 'Gagal menambahkan seragam.' };
+    return { success: false, message: 'Gagal menambahkan seragam olah raga.' };
   }
 }
 
 export async function updateUniform(id: number, formData: FormData) {
   const validatedFields = uniformSchema.safeParse({
-    day: formData.get('day'),
-    type: formData.get('type'),
     description: formData.get('description'),
     image: formData.get('image'),
   });
@@ -79,7 +72,7 @@ export async function updateUniform(id: number, formData: FormData) {
     };
   }
 
-  const { day, type, description, image } = validatedFields.data;
+  const { description, image } = validatedFields.data;
 
   let imageUrl: string | undefined;
 
@@ -109,8 +102,6 @@ export async function updateUniform(id: number, formData: FormData) {
   try {
     await db.update(uniforms)
       .set({
-        day,
-        type,
         description,
         image: imageUrl ?? existingUniform.image,
       })
@@ -152,30 +143,5 @@ export async function deleteUniform(id: number) {
   } catch (error) {
     console.error("Error deleting uniform from DB:", error);
     return { success: false, message: 'Gagal menghapus seragam.' };
-  }
-}
-
-export async function seedSportUniform() {
-  try {
-    const existingSportUniform = await db.query.uniforms.findFirst({
-      where: eq(uniforms.type, 'sport'),
-    });
-
-    if (existingSportUniform) {
-      return { success: true, message: 'Seragam olah raga sudah ada.' };
-    }
-
-    await db.insert(uniforms).values({
-      type: 'sport',
-      description: 'Seragam olah raga untuk kegiatan jasmani.',
-      // day is intentionally left null
-    });
-
-    revalidatePath('/admin/profile/uniform');
-    revalidatePath('/profile/uniform');
-    return { success: true, message: 'Contoh seragam olah raga berhasil ditambahkan.' };
-  } catch (error) {
-    console.error("Error seeding sport uniform:", error);
-    return { success: false, message: 'Gagal menambahkan contoh seragam.' };
   }
 }

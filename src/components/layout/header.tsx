@@ -156,7 +156,7 @@ export default function Header() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                        "relative text-sm font-medium text-muted-foreground transition-colors hover:text-primary after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out",
+                        "relative text-base font-semibold text-muted-foreground transition-colors hover:text-primary after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out",
                         isLinkActive ? "text-primary after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
                     )}
                 >
