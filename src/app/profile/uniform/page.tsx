@@ -37,22 +37,7 @@ export default async function UniformPage() {
             </CardContent>
           </Card>
         ))}
-        <Card className="overflow-hidden text-center">
-          <CardHeader className="p-0">
-            <div className="relative aspect-[4/6] w-full">
-              <Image
-                src={'https://placehold.co/400x600.png'}
-                alt={"Pakaian Olahraga"}
-                fill
-                className="object-cover"
-              />
-            </div>
-          </CardHeader>
-          <CardContent className="p-4 md:p-6">
-            <CardTitle className="font-headline text-lg md:text-xl text-primary">Pakaian Olahraga</CardTitle>
-            <p className="mt-1 text-xs md:text-sm text-muted-foreground">Digunakan saat pelajaran olahraga</p>
-          </CardContent>
-        </Card>
+        
       </div>
     </div>
   );
