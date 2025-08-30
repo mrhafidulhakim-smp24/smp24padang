@@ -6,6 +6,7 @@ import {
   integer,
   boolean,
   serial,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 export const banners = pgTable("banners", {
@@ -139,6 +140,10 @@ export const uniforms = pgTable("uniforms", {
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+}, (table) => {
+  return {
+    unq: uniqueIndex("uniforms_type_day_idx").on(table.type, table.day),
+  };
 });
 
 export const organizationStructures = pgTable("organization_structures", {

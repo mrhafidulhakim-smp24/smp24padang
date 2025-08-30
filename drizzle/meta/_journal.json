@@ -92,6 +92,13 @@
       "when": 1756559386510,
       "tag": "0012_vengeful_black_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1756560899011,
+      "tag": "0013_tired_hemingway",
+      "breakpoints": true
     }
   ]
 }

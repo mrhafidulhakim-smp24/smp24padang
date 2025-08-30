@@ -9,52 +9,41 @@ const REQUIRED_UNIFORMS = [
     { day: 'Rabu', type: 'daily', description: 'Pramuka' },
     { day: 'Kamis', type: 'daily', description: 'Batik' },
     { day: 'Jumat', type: 'daily', description: 'Pakaian Muslim' },
-    { day: null, type: 'sport', description: 'Seragam Olahraga' },
+    { day: undefined, type: 'sport', description: 'Seragam Olahraga' },
 ];
 
 export default async function UniformAdminPage() {
-    // 1. Fetch all existing uniforms
-    const existingUniforms = await db.query.uniforms.findMany();
-
-    // 2. Check for and create missing uniforms
     for (const required of REQUIRED_UNIFORMS) {
-        const found = existingUniforms.some(existing => 
-            required.type === 'sport' 
-                ? existing.type === 'sport' 
-                : existing.day === required.day
-        );
-
-        if (!found) {
-            if (required.type === 'sport') {
-                await db.insert(uniformsTable).values({
-                    type: 'sport',
+        await db.insert(uniformsTable)
+            .values({
+                type: required.type,
+                description: required.description,
+                day: required.day,
+            })
+            .onConflictDoUpdate({
+                target: [uniformsTable.type, uniformsTable.day],
+                set: {
                     description: required.description,
-                    day: null, // Explicitly set day to null for sport
-                });
-            } else {
-                await db.insert(uniformsTable).values({
-                    day: required.day,
-                    type: 'daily',
-                    description: required.description,
-                });
-            }
-        }
+                    updatedAt: new Date(),
+                },
+            });
     }
 
-    // 3. Fetch the complete & ordered list to pass to the client
+    // Fetch the complete & ordered list to pass to the client
     const allUniforms = await db.query.uniforms.findMany();
 
     // Create a stable order for the UI
-    const orderedUniforms = REQUIRED_UNIFORMS.map(required => {
-        const uniform = allUniforms.find(u => 
-            required.type === 'sport'
-                ? u.type === 'sport'
-                : u.day === required.day
-        );
+    const orderedUniforms = REQUIRED_UNIFORMS.map((required) => {
+        const uniform = allUniforms.find(u => {
+            if (required.type === 'sport') {
+                return u.type === 'sport';
+            } else {
+                return u.day === required.day;
+            }
+        });
         // We can be sure uniform is not undefined here because we just seeded them
         return uniform!;
     });
-
 
     return (
         <UniformList initialUniformsData={orderedUniforms} />
