@@ -39,6 +39,7 @@
         "@radix-ui/react-toast": "^1.2.6",
         "@radix-ui/react-tooltip": "^1.1.8",
         "@vercel/blob": "^0.23.4",
+        "@vercel/speed-insights": "^1.2.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "date-fns": "^3.6.0",
@@ -69,12 +70,12 @@
         "@types/uuid": "^10.0.0",
         "@types/ws": "^8.5.11",
         "drizzle-kit": "^0.31.4",
+        "eslint": "^8",
+        "eslint-config-next": "14.2.32",
         "postcss": "^8",
         "rimraf": "^5.0.10",
         "tailwindcss": "^3.4.1",
         "tsx": "^4.20.5",
-        "typescript": "^5",
-        "eslint": "^8",
-        "eslint-config-next": "14.2.32"
+        "typescript": "^5"
     }
 }

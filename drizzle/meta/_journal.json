@@ -78,6 +78,20 @@
       "when": 1756556998562,
       "tag": "0010_tricky_gressill",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1756558487167,
+      "tag": "0011_high_patriot",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1756559386510,
+      "tag": "0012_vengeful_black_tarantula",
+      "breakpoints": true
     }
   ]
 }

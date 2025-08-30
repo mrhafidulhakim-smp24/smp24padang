@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import ConditionalLayout from '@/components/layout/conditional-layout';
 import './globals.css';
 import {ThemeProvider} from '@/components/theme-provider';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -60,6 +61,7 @@ export default function RootLayout({
               {children}
             </ConditionalLayout>
             <Toaster />
+            <SpeedInsights />
           </ThemeProvider>
       </body>
     </html>

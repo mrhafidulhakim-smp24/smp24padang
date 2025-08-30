@@ -77,11 +77,6 @@ export default function Header() {
     },
     { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
     { href: "/news", label: "Berita", icon: Newspaper },
-    { 
-      href: "/academics", 
-      label: "Akademik", 
-      icon: GraduationCap
-    },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/gallery", label: "Galeri", icon: Camera },
     { href: "/contact", label: "Kontak", icon: Phone },
@@ -129,7 +124,7 @@ export default function Header() {
               return link.subLinks ? (
                 <DropdownMenu key={link.href}>
                     <DropdownMenuTrigger className={cn(
-                        "relative flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-in-out",
+                        "relative flex items-center text-base font-semibold text-muted-foreground transition-colors hover:text-primary focus:outline-none after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-in-out",
                         isDropdownActive ? "text-primary after:scale-x-100" : "after:scale-x-0"
                     )}>
                     {link.label} <ChevronDown className="ml-1 h-4 w-4" />
@@ -140,10 +135,10 @@ export default function Header() {
                       return (
                         <DropdownMenuItem key={subLink.href} asChild>
                         <Link href={subLink.href} className={cn(
-                            "flex items-center gap-2",
-                            isSubLinkActive && "font-semibold text-primary"
+                            "flex items-center gap-2 text-base font-semibold text-muted-foreground transition-colors hover:text-primary",
+                            isSubLinkActive && "text-primary"
                         )}>
-                            <subLink.icon className="h-4 w-4 text-muted-foreground" />
+                            <subLink.icon className="h-4 w-4" />
                             {subLink.label}
                         </Link>
                         </DropdownMenuItem>

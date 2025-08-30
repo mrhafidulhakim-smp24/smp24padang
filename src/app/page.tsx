@@ -201,62 +201,78 @@ async function LatestNews() {
                         sekolah kami.
                     </p>
                 </div>
-                <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-8">
-                    {latestNews.map((item) => (
-                        <Card
-                            key={item.id}
-                            className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
-                        >
-                            <CardHeader className="p-0">
-                                <Link href={`/articles/${item.id}`}>
-                                    <Image
-                                        src={
-                                            item.imageUrl ||
-                                            'https://placehold.co/600x400.png'
-                                        }
-                                        alt={item.title}
-                                        width={600}
-                                        height={400}
-                                        data-ai-hint="news event"
-                                        className="h-56 w-full object-cover"
-                                    />
-                                </Link>
-                            </CardHeader>
-                            <CardContent className="flex flex-grow flex-col p-6">
-                                <p className="mb-2 text-sm text-muted-foreground">
-                                    {new Date(item.date).toLocaleDateString(
-                                        'id-ID',
-                                        {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                        },
-                                    )}
-                                </p>
-                                <CardTitle className="font-headline text-xl font-bold text-primary">
-                                    <Link
-                                        href={`/articles/${item.id}`}
-                                        className="hover:underline"
-                                    >
-                                        {item.title}
-                                    </Link>
-                                </CardTitle>
-                                <p className="mt-2 flex-grow text-foreground/80 dark:text-foreground/70">
-                                    {item.description.substring(0, 150)}...
-                                </p>
-                                <Button
-                                    variant="link"
-                                    asChild
-                                    className="mt-4 p-0 self-start text-green-600 hover:text-green-700"
-                                >
-                                    <Link href={`/articles/${item.id}`}>
-                                        Baca Lebih Lanjut{' '}
-                                        <ArrowRight className="ml-1 h-4 w-4" />
-                                    </Link>
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    ))}
+                <div className="relative mt-12">
+                    <Carousel 
+                        opts={{ 
+                            align: "start",
+                            loop: true,
+                        }}
+                        className="w-full"
+                    >
+                        <CarouselContent>
+                            {latestNews.map((item) => (
+                                <CarouselItem key={item.id} className="md:basis-1/2 lg:basis-1/2">
+                                    <div className="p-1 h-full">
+                                        <Card className="flex flex-col h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+                                            <div className="flex flex-col sm:flex-row h-full">
+                                                <div className="flex flex-col p-6 justify-between sm:w-2/3">
+                                                    <div>
+                                                        <p className="mb-2 text-sm text-muted-foreground">
+                                                            {new Date(item.date).toLocaleDateString(
+                                                                'id-ID',
+                                                                {
+                                                                    year: 'numeric',
+                                                                    month: 'long',
+                                                                    day: 'numeric',
+                                                                },
+                                                            )}
+                                                        </p>
+                                                        <CardTitle className="font-headline text-xl font-bold text-primary">
+                                                            <Link
+                                                                href={`/articles/${item.id}`}
+                                                                className="hover:underline"
+                                                            >
+                                                                {item.title}
+                                                            </Link>
+                                                        </CardTitle>
+                                                        <p className="mt-2 text-sm text-foreground/80 dark:text-foreground/70">
+                                                            {item.description.substring(0, 100)}...
+                                                        </p>
+                                                    </div>
+                                                    <Button
+                                                        variant="link"
+                                                        asChild
+                                                        className="mt-4 p-0 self-start text-green-600 hover:text-green-700"
+                                                    >
+                                                        <Link href={`/articles/${item.id}`}>
+                                                            Baca Lebih Lanjut{' '}
+                                                            <ArrowRight className="ml-1 h-4 w-4" />
+                                                        </Link>
+                                                    </Button>
+                                                </div>
+                                                <div className="relative sm:w-1/3 h-48 sm:h-auto">
+                                                    <Link href={`/articles/${item.id}`} className="absolute inset-0">
+                                                        <Image
+                                                            src={
+                                                                item.imageUrl ||
+                                                                'https://placehold.co/400x600.png'
+                                                            }
+                                                            alt={item.title}
+                                                            fill
+                                                            data-ai-hint="news event"
+                                                            className="object-cover"
+                                                        />
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious className="absolute left-[-1rem] top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+                        <CarouselNext className="absolute right-[-1rem] top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+                    </Carousel>
                 </div>
             </div>
         </section>
@@ -282,13 +298,13 @@ async function Statistics() {
         {
             id: 'teachers',
             value: stats.teachers,
-            label: 'Pendidik',
+            label: 'Guru',
             icon: UserCheck,
         },
         {
             id: 'staff',
             value: stats.staff,
-            label: 'Tenaga Pendidik',
+            label: 'Staf',
             icon: BookCopy,
         },
     ];

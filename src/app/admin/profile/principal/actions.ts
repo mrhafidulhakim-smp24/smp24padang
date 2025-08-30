@@ -2,63 +2,156 @@
 
 import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
-import { profiles } from '@/lib/db/schema';
+import { profiles, pastPrincipals } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import { put } from '@vercel/blob';
+import { put, del } from '@vercel/blob';
+import { z } from 'zod';
+
+// Schema for principal profile
+const profileSchema = z.object({
+    principalName: z.string().min(1, "Nama tidak boleh kosong"),
+    principalWelcome: z.string().min(1, "Sambutan tidak boleh kosong"),
+    history: z.string().min(1, "Sejarah tidak boleh kosong"),
+    principalImage: z.instanceof(File).optional(),
+});
 
 export async function updatePrincipalProfile(formData: FormData) {
+    const validatedFields = profileSchema.safeParse(Object.fromEntries(formData.entries()));
 
-  const principalName = formData.get('principalName') as string;
-  const principalWelcome = formData.get('principalWelcome') as string;
-  const principalImageFile = formData.get('principalImage') as File;
+    if (!validatedFields.success) {
+        return { success: false, message: 'Validasi gagal' };
+    }
 
-  let principalImageUrl: string | undefined;
+    const { principalName, principalWelcome, history, principalImage } = validatedFields.data;
 
-  // Fetch the existing profile to get its ID (assuming only one principal profile)
-  const existingProfile = await db.query.profiles.findFirst();
-  const profileId = existingProfile?.id || '1'; // Use existing ID or a default if none exists
+    const existingProfile = await db.query.profiles.findFirst();
+    const profileId = existingProfile?.id || '1';
 
-  if (principalImageFile && principalImageFile.size > 0) {
+    let newImageUrl: string | undefined;
+
+    if (principalImage && principalImage.size > 0) {
+        try {
+            if (existingProfile?.principalImageUrl) {
+                await del(existingProfile.principalImageUrl);
+            }
+            const blob = await put(principalImage.name, principalImage, { access: 'public' });
+            newImageUrl = blob.url;
+        } catch (error) {
+            return { success: false, message: 'Gagal unggah gambar' };
+        }
+    }
+
     try {
-      const blob = await put(principalImageFile.name, principalImageFile, {
-        access: 'public',
-      });
-      principalImageUrl = blob.url;
+        if (existingProfile) {
+            await db.update(profiles).set({
+                principalName,
+                principalWelcome,
+                history,
+                principalImageUrl: newImageUrl ?? existingProfile.principalImageUrl,
+                updatedAt: new Date(),
+            }).where(eq(profiles.id, profileId));
+        } else {
+            await db.insert(profiles).values({
+                id: profileId,
+                principalName,
+                principalWelcome,
+                history,
+                principalImageUrl: newImageUrl,
+                vision: '', 
+                mission: '',
+            });
+        }
+        revalidatePath('/admin/profile/principal');
+        revalidatePath('/');
+        revalidatePath('/profile');
+        return { success: true, message: 'Profil berhasil diperbarui.', newImageUrl };
     } catch (error) {
-      console.error("Error uploading principal image to Vercel Blob:", error);
-      throw new Error("Failed to upload principal image.");
+        return { success: false, message: 'Gagal perbarui profil.' };
     }
-  }
+}
 
-  try {
-    if (existingProfile) {
-      // Update existing profile
-      await db.update(profiles)
-        .set({
-          principalName,
-          principalWelcome,
-          ...(principalImageUrl && { principalImageUrl }),
-          updatedAt: new Date(),
-        })
-        .where(eq(profiles.id, profileId));
-    } else {
-      // Insert new profile if none exists
-      await db.insert(profiles).values({
-        id: profileId,
-        principalName,
-        principalWelcome,
-        principalImageUrl: principalImageUrl || '',
-        history: '', // Placeholder, as history is not managed here
-        vision: '', // Placeholder
-        mission: '', // Placeholder
-      });
+// Schema for past principal
+const pastPrincipalSchema = z.object({
+    name: z.string().min(1, "Nama tidak boleh kosong"),
+    period: z.string().min(1, "Periode tidak boleh kosong"),
+    image: z.instanceof(File).optional(),
+});
+
+export async function createPastPrincipal(formData: FormData) {
+    const validatedFields = pastPrincipalSchema.safeParse(Object.fromEntries(formData.entries()));
+
+    if (!validatedFields.success) {
+        return { success: false, message: 'Validasi gagal' };
     }
 
-    revalidatePath('/admin/profile/principal');
-    revalidatePath('/'); // Revalidate homepage as well
-    return { success: true, message: 'Principal profile updated successfully.', newImageUrl: principalImageUrl || undefined };
-  } catch (error) {
-    console.error("Error updating principal profile in DB:", error);
-    return { success: false, message: 'Failed to update principal profile.' };
-  }
+    const { name, period, image } = validatedFields.data;
+    let imageUrl: string | undefined;
+
+    if (image && image.size > 0) {
+        try {
+            const blob = await put(image.name, image, { access: 'public' });
+            imageUrl = blob.url;
+        } catch (error) {
+            return { success: false, message: 'Gagal unggah gambar' };
+        }
+    }
+
+    try {
+        await db.insert(pastPrincipals).values({ name, period, imageUrl });
+        revalidatePath('/admin/profile/principal');
+        revalidatePath('/profile');
+        return { success: true, message: 'Riwayat kepala sekolah ditambahkan.' };
+    } catch (error) {
+        return { success: false, message: 'Gagal menambahkan data.' };
+    }
+}
+
+export async function updatePastPrincipal(id: number, currentImageUrl: string | null, formData: FormData) {
+    const validatedFields = pastPrincipalSchema.safeParse(Object.fromEntries(formData.entries()));
+
+    if (!validatedFields.success) {
+        return { success: false, message: 'Validasi gagal' };
+    }
+
+    const { name, period, image } = validatedFields.data;
+    let newImageUrl: string | undefined;
+
+    if (image && image.size > 0) {
+        try {
+            if (currentImageUrl) {
+                await del(currentImageUrl);
+            }
+            const blob = await put(image.name, image, { access: 'public' });
+            newImageUrl = blob.url;
+        } catch (error) {
+            return { success: false, message: 'Gagal unggah gambar' };
+        }
+    }
+
+    try {
+        await db.update(pastPrincipals).set({
+            name,
+            period,
+            imageUrl: newImageUrl ?? currentImageUrl,
+        }).where(eq(pastPrincipals.id, id));
+        revalidatePath('/admin/profile/principal');
+        revalidatePath('/profile');
+        return { success: true, message: 'Riwayat kepala sekolah diperbarui.' };
+    } catch (error) {
+        return { success: false, message: 'Gagal memperbarui data.' };
+    }
+}
+
+export async function deletePastPrincipal(id: number, imageUrl: string | null) {
+    try {
+        if (imageUrl) {
+            await del(imageUrl);
+        }
+        await db.delete(pastPrincipals).where(eq(pastPrincipals.id, id));
+        revalidatePath('/admin/profile/principal');
+        revalidatePath('/profile');
+        return { success: true, message: 'Data berhasil dihapus.' };
+    } catch (error) {
+        return { success: false, message: 'Gagal menghapus data.' };
+    }
 }

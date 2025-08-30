@@ -1,25 +1,44 @@
-'use client';
+import { db } from '@/lib/db';
+import { organizationStructures } from '@/lib/db/schema';
+import OrganizationStructureList from './_components/organization-list';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+const REQUIRED_STRUCTURES = [
+    {
+        type: 'pimpinan',
+        title: 'Struktur Pimpinan Sekolah',
+        description: 'Bagan kepengurusan pimpinan di SMPN 24 Padang.',
+    },
+    {
+        type: 'osis',
+        title: 'Struktur Organisasi Siswa Intra Sekolah (OSIS)',
+        description: 'Bagan kepengurusan OSIS di SMPN 24 Padang.',
+    },
+    {
+        type: 'tu',
+        title: 'Struktur Tata Usaha',
+        description: 'Bagan kepengurusan tata usaha di SMPN 24 Padang.',
+    },
+];
 
-export default function OrganizationAdminPage() {
-    return (
-        <div>
-            <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">Kelola Struktur Organisasi</h1>
-            <p className="mt-2 text-lg text-muted-foreground">
-                Halaman ini dalam pengembangan.
-            </p>
-            <Card className="mt-8">
-                <CardHeader>
-                    <CardTitle>Struktur Organisasi</CardTitle>
-                    <CardDescription>
-                        Fitur untuk mengelola struktur organisasi akan segera tersedia.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p>Data struktur organisasi akan ditampilkan di sini.</p>
-                </CardContent>
-            </Card>
-        </div>
-    );
+export default async function OrganizationAdminPage() {
+    const existingStructures = await db.query.organizationStructures.findMany();
+
+    for (const required of REQUIRED_STRUCTURES) {
+        const found = existingStructures.some(
+            (existing) => existing.type === required.type,
+        );
+
+        if (!found) {
+            await db.insert(organizationStructures).values(required);
+        }
+    }
+
+    const allStructures = await db.query.organizationStructures.findMany();
+
+    const orderedStructures = REQUIRED_STRUCTURES.map((required) => {
+        const structure = allStructures.find((s) => s.type === required.type);
+        return structure!;
+    });
+
+    return <OrganizationStructureList initialData={orderedStructures} />;
 }

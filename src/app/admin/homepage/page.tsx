@@ -622,7 +622,7 @@ function StatisticsTab({
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="teachers">Jumlah Pendidik</Label>
+                        <Label htmlFor="teachers">Jumlah Guru</Label>
                         <Input
                             id="teachers"
                             name="teachers"
@@ -634,7 +634,7 @@ function StatisticsTab({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="staff">
-                            Jumlah Tenaga Kependidikan
+                            Jumlah Staf
                         </Label>
                         <Input
                             id="staff"

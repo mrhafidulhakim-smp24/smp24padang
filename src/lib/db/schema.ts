@@ -131,8 +131,6 @@ export const accreditations = pgTable("accreditations", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 
-
-
 export const uniforms = pgTable("uniforms", {
   id: serial("id").primaryKey(),
   day: text("day"), // Make day optional as sport uniforms might not have a specific day
@@ -141,4 +139,20 @@ export const uniforms = pgTable("uniforms", {
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export const organizationStructures = pgTable("organization_structures", {
+  type: varchar("type", { length: 50 }).primaryKey(), // pimpinan, osis, tu
+  title: text("title").notNull(),
+  description: text("description"),
+  imageUrl: text("imageUrl"),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export const pastPrincipals = pgTable("past_principals", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  period: text("period").notNull(),
+  imageUrl: text("imageUrl"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });

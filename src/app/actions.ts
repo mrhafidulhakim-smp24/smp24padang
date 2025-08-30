@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from '@/lib/db';
-import { banners, news, announcements, profiles, statistics, facilities, marquee } from '@/lib/db/schema';
+import { banners, news, announcements, profiles, statistics, facilities, marquee, pastPrincipals } from '@/lib/db/schema';
 import { asc, desc, sql } from 'drizzle-orm';
 
 export async function getBanners() {
@@ -10,7 +10,7 @@ export async function getBanners() {
 
 export async function getLatestNews() {
   try {
-    return await db.select().from(news).orderBy(desc(news.date)).limit(3);
+    return await db.select().from(news).orderBy(desc(news.date)).limit(5);
   } catch (error) {
     console.error("Error fetching latest news:", error);
     return [];
@@ -79,6 +79,15 @@ export async function getMarqueeItems() {
     return await db.select().from(marquee).orderBy(desc(marquee.createdAt));
   } catch (error) {
     console.error("Error fetching marquee items:", error);
+    return [];
+  }
+}
+
+export async function getPastPrincipals() {
+  try {
+    return await db.select().from(pastPrincipals).orderBy(desc(pastPrincipals.createdAt));
+  } catch (error) {
+    console.error("Error fetching past principals:", error);
     return [];
   }
 }

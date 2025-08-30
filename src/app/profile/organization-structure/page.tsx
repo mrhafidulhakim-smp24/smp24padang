@@ -1,22 +1,12 @@
+import Image from 'next/image';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getOrganizationStructures } from './actions';
 
-import Image from "next/image";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+export const dynamic = 'force-dynamic';
 
-type OrgChart = {
-  id: string;
-  title: string;
-  image: string;
-};
+export default async function OrganizationStructurePage() {
+  const orgCharts = await getOrganizationStructures();
 
-// Data ini seharusnya diambil dari CMS/database di aplikasi nyata.
-const orgCharts: OrgChart[] = [
-  { id: "1", title: "Struktur Pimpinan Sekolah", image: "https://placehold.co/1200x800.png" },
-  { id: "2", title: "Struktur Organisasi Siswa Intra Sekolah (OSIS)", image: "https://placehold.co/1200x800.png" },
-  { id: "3", title: "Struktur Tata Usaha", image: "https://placehold.co/1200x800.png" },
-];
-
-
-export default function OrganizationStructurePage() {
   return (
     <div className="container mx-auto px-4 py-12 md:py-24">
       <div className="text-center">
@@ -30,7 +20,7 @@ export default function OrganizationStructurePage() {
 
       <div className="mt-16 space-y-16">
         {orgCharts.map((chart) => (
-          <section key={chart.id}>
+          <section key={chart.type}>
             <Card>
               <CardHeader>
                 <CardTitle className="font-headline text-center text-3xl text-primary">
@@ -38,14 +28,19 @@ export default function OrganizationStructurePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-lg border">
-                   <Image
-                      src={chart.image}
-                      alt={chart.title}
-                      width={1200}
-                      height={800}
-                      className="h-auto w-full object-contain"
-                    />
+                <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-lg border aspect-video bg-muted">
+                   {chart.imageUrl ? (
+                      <Image
+                        src={chart.imageUrl}
+                        alt={chart.title}
+                        fill
+                        className="object-contain"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-muted-foreground">
+                        Bagan organisasi belum diunggah.
+                      </div>
+                    )}
                 </div>
               </CardContent>
             </Card>

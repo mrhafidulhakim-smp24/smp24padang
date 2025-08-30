@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
     Book,
     Target,
@@ -10,12 +11,13 @@ import {
     Shirt,
     Swords,
 } from 'lucide-react';
-import { getProfile } from '../actions';
+import { getProfile, getPastPrincipals } from '../actions';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ProfilePage() {
     const profile = await getProfile();
+    const pastPrincipals = await getPastPrincipals();
 
     const welcomeParagraphs = profile?.principalWelcome
         .split('\n')
@@ -81,6 +83,49 @@ export default async function ProfilePage() {
                     </Card>
                 </div>
             </section>
+
+            {pastPrincipals.length > 0 && (
+                <section className="mt-16">
+                    <div className="text-center">
+                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                            Riwayat Kepala Sekolah
+                        </h2>
+                        <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+                            Para pemimpin yang telah mendedikasikan diri untuk kemajuan sekolah.
+                        </p>
+                    </div>
+                    <div className="mt-12">
+                        <Card>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[100px]">Foto</TableHead>
+                                        <TableHead>Nama</TableHead>
+                                        <TableHead>Periode</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {pastPrincipals.map((principal) => (
+                                        <TableRow key={principal.id}>
+                                            <TableCell>
+                                                <Image 
+                                                    src={principal.imageUrl || 'https://placehold.co/100x100.png'}
+                                                    alt={principal.name}
+                                                    width={80}
+                                                    height={80}
+                                                    className="rounded-md object-cover bg-muted"
+                                                />
+                                            </TableCell>
+                                            <TableCell className="font-medium">{principal.name}</TableCell>
+                                            <TableCell>{principal.period}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Card>
+                    </div>
+                </section>
+            )}
         </div>
     );
 }

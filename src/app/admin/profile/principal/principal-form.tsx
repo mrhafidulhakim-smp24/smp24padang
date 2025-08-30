@@ -110,6 +110,17 @@ export default function PrincipalForm({ initialProfileData }: PrincipalFormProps
         </div>
 
         <div>
+          <Label htmlFor="history">Sejarah Sekolah</Label>
+          <Textarea
+            id="history"
+            name="history"
+            defaultValue={profileData?.history || ''}
+            rows={10}
+            required
+          />
+        </div>
+
+        <div>
           <Label htmlFor="principalImage">Foto Kepala Sekolah</Label>
           <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
             <div className="space-y-1 text-center">

@@ -33,6 +33,13 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -148,12 +155,22 @@ function StaffForm({
             </div>
             <div>
                 <Label htmlFor="position">Jabatan</Label>
-                <Input
-                    id="position"
-                    name="position"
-                    defaultValue={initialData?.position}
-                    required
-                />
+                <Select name="position" defaultValue={initialData?.position} required>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Pilih jabatan..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Kepala Sekolah">Kepala Sekolah</SelectItem>
+                        <SelectItem value="Wakil Kurikulum">Wakil Kurikulum</SelectItem>
+                        <SelectItem value="Wakil Kesiswaan">Wakil Kesiswaan</SelectItem>
+                        <SelectItem value="Wakil Humas">Wakil Humas</SelectItem>
+                        <SelectItem value="Wakil Sarana & Prasarana">Wakil Sarana & Prasarana</SelectItem>
+                        <SelectItem value="Guru Mata Pelajaran">Guru Mata Pelajaran</SelectItem>
+                        <SelectItem value="Guru Bimbingan Konseling">Guru Bimbingan Konseling</SelectItem>
+                        <SelectItem value="Staf Tata Usaha">Staf Tata Usaha</SelectItem>
+                        <SelectItem value="Pustakawan">Pustakawan</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
             <div>
                 <Label htmlFor="subject">Mata Pelajaran / Bidang</Label>
