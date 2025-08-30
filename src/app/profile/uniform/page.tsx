@@ -33,7 +33,9 @@ export default async function UniformPage() {
             </CardHeader>
             <CardContent className="p-4 md:p-6">
               <CardTitle className="font-headline text-lg md:text-xl text-primary">{uniform.day}</CardTitle>
-              <p className="mt-1 text-xs md:text-sm text-muted-foreground">{uniform.description}</p>
+              {uniform.description && (
+                <p className="mt-1 text-xs md:text-sm text-muted-foreground">{uniform.description}</p>
+              )}
             </CardContent>
           </Card>
         ))}
