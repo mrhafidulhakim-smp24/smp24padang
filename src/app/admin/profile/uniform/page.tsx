@@ -3,11 +3,6 @@ import { uniforms as uniformsTable } from '@/lib/db/schema';
 import UniformList from './uniform-list';
 import { eq } from 'drizzle-orm';
 
-import { db } from '@/lib/db';
-import { uniforms as uniformsTable } from '@/lib/db/schema';
-import UniformList from './uniform-list';
-import { eq } from 'drizzle-orm';
-
 type RequiredUniform = {
     day: string | null | undefined;
     type: 'daily' | 'sport';
