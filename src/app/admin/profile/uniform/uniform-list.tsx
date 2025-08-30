@@ -104,7 +104,7 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                     return (
                         <Card key={day} className="group relative overflow-hidden">
                             <CardHeader className="p-0">
-                                {uniform?.image ? (
+                                {uniform && uniform.image ? (
                                     <Image
                                         src={uniform.image}
                                         alt={uniform.description || day}
