@@ -3,6 +3,7 @@
 import { db } from '@/lib/db';
 import { announcements } from '@/lib/db/schema';
 import { unstable_cache as cache } from 'next/cache';
+import { desc } from 'drizzle-orm';
 
 export const getAnnouncements = cache(
     async () => {
