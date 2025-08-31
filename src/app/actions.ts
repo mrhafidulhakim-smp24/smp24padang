@@ -25,9 +25,7 @@ export const getLatestNews = cache(
 export const getAnnouncements = cache(
   async () => {
     try {
-      const allAnnouncements = await db.select().from(announcements);
-      allAnnouncements.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      return allAnnouncements.slice(0, 3);
+      return await db.select().from(announcements).orderBy(desc(announcements.date)).limit(3);
     } catch (error) {
       console.error("Error fetching announcements:", error);
       return [];
@@ -87,7 +85,7 @@ export async function getAbout() {
 
 export async function getMarqueeItems() {
   try {
-    const items = [];
+    const items: Array<{type: 'Berita' | 'Pengumuman' | 'Prestasi', text: string}> = [];
 
     // 1. Get latest news
     const latestNews = await db.select({ title: news.title }).from(news).orderBy(desc(news.date)).limit(1);

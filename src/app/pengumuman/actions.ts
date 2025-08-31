@@ -6,11 +6,7 @@ import { unstable_cache as cache } from 'next/cache';
 
 export const getAnnouncements = cache(
     async () => {
-        const allAnnouncements = await db.select().from(announcements);
-        
-        allAnnouncements.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        
-        return allAnnouncements;
+        return await db.select().from(announcements).orderBy(desc(announcements.date));
     },
     ['announcements'],
     {

@@ -37,6 +37,7 @@ export async function createAnnouncement(prevState: any, formData: FormData) {
 
         revalidateTag('announcements-collection');
         revalidatePath('/');
+        revalidatePath('/pengumuman');
         revalidatePath('/admin/announcements');
         return { success: true, message: 'Pengumuman berhasil dibuat.' };
     } catch (error) {
@@ -74,6 +75,7 @@ export async function updateAnnouncement(id: string, prevState: any, formData: F
         revalidateTag('announcements-collection');
         revalidatePath('/');
         revalidatePath(`/announcements/${id}`);
+        revalidatePath('/pengumuman');
         revalidatePath('/admin/announcements');
         return { success: true, message: "Pengumuman berhasil diperbarui." };
     } catch (error) {
@@ -88,6 +90,7 @@ export async function deleteAnnouncement(id: string) {
         
         revalidateTag('announcements-collection');
         revalidatePath('/');
+        revalidatePath('/pengumuman');
         revalidatePath('/admin/announcements');
         return { success: true, message: 'Pengumuman berhasil dihapus.' };
     } catch (error) {
