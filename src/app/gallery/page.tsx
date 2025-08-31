@@ -1,6 +1,13 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { getGalleryItems } from './actions';
+
+export const metadata: Metadata = {
+    title: 'Galeri Foto & Video SMPN 24 Padang | Kegiatan dan Momen Sekolah',
+    description:
+        'Jelajahi koleksi foto dan video kegiatan belajar mengajar, acara sekolah, dan momen berharga lainnya di SMPN 24 Padang. Saksikan langsung suasana sekolah kami.',
+};
 
 export const dynamic = 'force-dynamic';
 

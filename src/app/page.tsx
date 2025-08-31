@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -41,6 +42,11 @@ import {
     getMarqueeItems,
 } from './actions';
 import { Separator } from '@/components/ui/separator';
+
+export const metadata: Metadata = {
+  title: 'SMPN 24 Padang | Sekolah Unggul dengan Visi Misi Kuat dan Fasilitas Lengkap',
+  description: 'Selamat datang di situs resmi SMPN 24 Padang. Jelajahi visi, misi, berita terkini, pengumuman, statistik, dan fasilitas sekolah kami. Wujudkan potensi terbaik bersama kami!',
+};
 
 export const dynamic = 'force-dynamic';
 

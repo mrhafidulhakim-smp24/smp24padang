@@ -50,7 +50,7 @@ export default function AdminLayout({
     const pathname = usePathname();
 
     const menuItems = [
-        { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+        { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { href: '/admin/homepage', label: 'Beranda', icon: Home },
         {
             label: 'Profil',

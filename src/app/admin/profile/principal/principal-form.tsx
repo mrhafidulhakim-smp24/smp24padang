@@ -76,85 +76,79 @@ export default function PrincipalForm({ initialProfileData }: PrincipalFormProps
     }
   };
 
+  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { UserCircle } from 'lucide-react';
+
+// ... (imports and type definitions remain the same)
+
+export default function PrincipalForm({ initialProfileData }: PrincipalFormProps) {
+  // ... (hooks and state definitions remain the same)
+
+  // ... (handleSubmit and handleImageChange functions remain the same)
+
   return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-          Kelola Profil Kepala Sekolah
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Perbarui kata sambutan, foto, dan nama kepala sekolah.
-        </p>
-      </div>
+    <Card>
+        <CardHeader>
+            <CardTitle>Profil Kepala Sekolah & Sejarah</CardTitle>
+            <CardDescription>
+                Perbarui informasi mengenai kepala sekolah saat ini dan sejarah singkat sekolah.
+            </CardDescription>
+        </CardHeader>
+        <CardContent>
+            <form onSubmit={handleSubmit} className="grid md:grid-cols-3 gap-8">
+                {/* Column 1: Image Upload */}
+                <div className="md:col-span-1 space-y-4">
+                    <div>
+                        <Label htmlFor="principalImage" className="text-base font-semibold">Foto Kepala Sekolah</Label>
+                        <div className="mt-2 flex justify-center rounded-lg border border-dashed border-border px-6 py-10">
+                            <div className="text-center">
+                                {previewImageUrl ? (
+                                    <Image
+                                        src={previewImageUrl}
+                                        alt="Preview"
+                                        width={160}
+                                        height={160}
+                                        className="mx-auto h-40 w-40 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <UserCircle className="mx-auto h-24 w-24 text-muted-foreground" />
+                                )}
+                                <div className="mt-4 flex text-sm leading-6 text-muted-foreground">
+                                    <Label htmlFor="principalImage" className="relative cursor-pointer rounded-md font-semibold text-primary focus-within:outline-none hover:text-primary/80">
+                                        <span>Unggah file</span>
+                                        <Input id="principalImage" name="principalImage" type="file" className="sr-only" onChange={handleImageChange} accept="image/*" />
+                                    </Label>
+                                    <p className="pl-1">atau seret dan lepas</p>
+                                </div>
+                                <p className="text-xs leading-5 text-muted-foreground">PNG, JPG, GIF up to 10MB</p>
+                                {principalImageFile && <p className="text-sm text-foreground mt-2">Selected: {principalImageFile.name}</p>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <Label htmlFor="principalName">Nama Kepala Sekolah</Label>
-          <Input
-            id="principalName"
-            name="principalName"
-            defaultValue={profileData?.principalName || ''}
-            required
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="principalWelcome">Kata Sambutan Kepala Sekolah</Label>
-          <Textarea
-            id="principalWelcome"
-            name="principalWelcome"
-            defaultValue={profileData?.principalWelcome || ''}
-            rows={10}
-            required
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="history">Sejarah Sekolah</Label>
-          <Textarea
-            id="history"
-            name="history"
-            defaultValue={profileData?.history || ''}
-            rows={10}
-            required
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="principalImage">Foto Kepala Sekolah</Label>
-          <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
-            <div className="space-y-1 text-center">
-              {previewImageUrl ? (
-                <Image
-                  src={previewImageUrl}
-                  alt="Preview"
-                  width={150}
-                  height={150}
-                  className="mx-auto object-cover"
-                />
-              ) : (
-                <Upload className="mx-auto h-12 w-12 text-gray-400" />
-              )}
-              <Label htmlFor="principalImage" className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none hover:text-primary/80">
-                <span>Unggah file baru</span>
-                <Input
-                  id="principalImage"
-                  name="principalImage"
-                  type="file"
-                  className="sr-only"
-                  onChange={handleImageChange}
-                  accept="image/*"
-                />
-              </Label>
-              {principalImageFile && <p className="text-sm text-gray-500">Selected: {principalImageFile.name}</p>}
-            </div>
-          </div>
-        </div>
-
-        <Button type="submit" disabled={isPending}>
-            {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
-        </Button>
-      </form>
-    </div>
+                {/* Column 2: Form Fields */}
+                <div className="md:col-span-2 space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="principalName" className="text-base font-semibold">Nama Kepala Sekolah</Label>
+                        <Input id="principalName" name="principalName" defaultValue={profileData?.principalName || ''} required className="text-base" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="principalWelcome" className="text-base font-semibold">Kata Sambutan</Label>
+                        <Textarea id="principalWelcome" name="principalWelcome" defaultValue={profileData?.principalWelcome || ''} rows={8} required className="text-base" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="history" className="text-base font-semibold">Sejarah Sekolah</Label>
+                        <Textarea id="history" name="history" defaultValue={profileData?.history || ''} rows={8} required className="text-base" />
+                    </div>
+                </div>
+                 <div className="md:col-span-3 flex justify-end">
+                    <Button type="submit" disabled={isPending} size="lg">
+                        {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
+                    </Button>
+                </div>
+            </form>
+        </CardContent>
+    </Card>
   );
 }

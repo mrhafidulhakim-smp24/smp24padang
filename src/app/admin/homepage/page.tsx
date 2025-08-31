@@ -158,8 +158,8 @@ function BannersTab({
         <Card>
             <CardHeader className="flex-row items-center justify-between">
                 <div>
-                    <CardTitle>Kelola Banner</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-2xl font-bold">Kelola Banner</CardTitle>
+                    <CardDescription className="text-lg text-muted-foreground">
                         Tambah, edit, atau hapus banner di halaman utama.
                     </CardDescription>
                 </div>
@@ -176,27 +176,27 @@ function BannersTab({
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Gambar</TableHead>
-                            <TableHead>Judul</TableHead>
-                            <TableHead className="text-right">Aksi</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Gambar</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Judul</TableHead>
+                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell>
+                                <TableCell className="px-6 py-4 whitespace-nowrap">
                                     <Image
                                         src={item.imageUrl || ''}
                                         alt={item.title}
-                                        width={120}
-                                        height={67}
+                                        width={160}
+                                        height={90}
                                         className="rounded-md bg-muted object-cover"
                                     />
                                 </TableCell>
-                                <TableCell className="font-medium">
+                                <TableCell className="px-6 py-4 whitespace-nowrap font-medium text-base">
                                     {item.title}
                                 </TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="px-6 py-4 whitespace-nowrap text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button
                                             variant="outline"
@@ -398,8 +398,8 @@ function MarqueeTab({
         <Card>
             <CardHeader className="flex-row items-center justify-between">
                 <div>
-                    <CardTitle>Kelola Teks Berjalan</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-2xl font-bold">Kelola Teks Berjalan</CardTitle>
+                    <CardDescription className="text-lg text-muted-foreground">
                         Tambah, edit, atau hapus item teks berjalan.
                     </CardDescription>
                 </div>
@@ -416,19 +416,19 @@ function MarqueeTab({
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Tipe</TableHead>
-                            <TableHead>Teks</TableHead>
-                            <TableHead className="text-right">Aksi</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Tipe</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Teks</TableHead>
+                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell>{item.type}</TableCell>
-                                <TableCell className="font-medium">
+                                <TableCell className="px-6 py-4 whitespace-nowrap text-base">{item.type}</TableCell>
+                                <TableCell className="px-6 py-4 whitespace-nowrap font-medium text-base">
                                     {item.text}
                                 </TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="px-6 py-4 whitespace-nowrap text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button
                                             variant="outline"
@@ -497,7 +497,7 @@ function MarqueeTab({
                         className="grid gap-4 py-4"
                     >
                         <div className="space-y-2">
-                            <Label htmlFor="type">Tipe</Label>
+                            <Label htmlFor="type" className="text-base">Tipe</Label>
                             <Select
                                 name="type"
                                 defaultValue={editingItem?.type}
@@ -520,7 +520,7 @@ function MarqueeTab({
                             </Select>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="text">Teks</Label>
+                            <Label htmlFor="text" className="text-base">Teks</Label>
                             <Textarea
                                 id="text"
                                 name="text"
@@ -592,15 +592,15 @@ function StatisticsTab({
         <form onSubmit={handleSubmit}>
             <Card>
                 <CardHeader>
-                    <CardTitle>Data Statistik Sekolah</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-2xl font-bold">Data Statistik Sekolah</CardTitle>
+                    <CardDescription className="text-lg text-muted-foreground">
                         Perbarui data statistik yang ditampilkan di halaman
                         beranda.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                        <Label htmlFor="classrooms">Jumlah Ruang Kelas</Label>
+                        <Label htmlFor="classrooms" className="text-lg">Jumlah Ruang Kelas</Label>
                         <Input
                             id="classrooms"
                             name="classrooms"
@@ -608,10 +608,11 @@ function StatisticsTab({
                             value={stats.classrooms}
                             onChange={handleChange}
                             required
+                            className="text-base"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="students">Jumlah Siswa</Label>
+                        <Label htmlFor="students" className="text-lg">Jumlah Siswa</Label>
                         <Input
                             id="students"
                             name="students"
@@ -619,10 +620,11 @@ function StatisticsTab({
                             value={stats.students}
                             onChange={handleChange}
                             required
+                            className="text-base"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="teachers">Jumlah Guru</Label>
+                        <Label htmlFor="teachers" className="text-lg">Jumlah Guru</Label>
                         <Input
                             id="teachers"
                             name="teachers"
@@ -630,10 +632,11 @@ function StatisticsTab({
                             value={stats.teachers}
                             onChange={handleChange}
                             required
+                            className="text-base"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="staff">
+                        <Label htmlFor="staff" className="text-lg">
                             Jumlah Staf
                         </Label>
                         <Input
@@ -643,6 +646,7 @@ function StatisticsTab({
                             value={stats.staff}
                             onChange={handleChange}
                             required
+                            className="text-base"
                         />
                     </div>
                 </CardContent>
@@ -742,8 +746,8 @@ function FacilitiesTab({
         <Card>
             <CardHeader className="flex-row items-center justify-between">
                 <div>
-                    <CardTitle>Kelola Fasilitas</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-2xl font-bold">Kelola Fasilitas</CardTitle>
+                    <CardDescription className="text-lg text-muted-foreground">
                         Tambah, edit, atau hapus fasilitas sekolah.
                     </CardDescription>
                 </div>
@@ -760,27 +764,27 @@ function FacilitiesTab({
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Gambar</TableHead>
-                            <TableHead>Nama Fasilitas</TableHead>
-                            <TableHead className="text-right">Aksi</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Gambar</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Nama Fasilitas</TableHead>
+                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell>
+                                <TableCell className="px-6 py-4 whitespace-nowrap">
                                     <Image
                                         src={item.imageUrl}
                                         alt={item.name}
-                                        width={120}
-                                        height={80}
+                                        width={160}
+                                        height={90}
                                         className="rounded-md bg-muted object-cover"
                                     />
                                 </TableCell>
-                                <TableCell className="font-medium">
+                                <TableCell className="px-6 py-4 whitespace-nowrap font-medium text-base">
                                     {item.name}
                                 </TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="px-6 py-4 whitespace-nowrap text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button
                                             variant="outline"
@@ -857,7 +861,7 @@ function FacilitiesTab({
                         className="grid gap-4 py-4"
                     >
                         <div className="space-y-2">
-                            <Label htmlFor="name">Nama Fasilitas</Label>
+                            <Label htmlFor="name" className="text-base">Nama Fasilitas</Label>
                             <Input
                                 id="name"
                                 name="name"
@@ -866,7 +870,7 @@ function FacilitiesTab({
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Gambar</Label>
+                            <Label className="text-base">Gambar</Label>
                             <div className="mt-1 flex items-center gap-4">
                                 {preview ? (
                                     <Image
@@ -928,11 +932,9 @@ export default function HomepageAdminPage() {
 
     if (loading || !homepageData) {
         return (
-            <div className="flex flex-col gap-8">
-                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Kelola Halaman Beranda
-                </h1>
-                <p className="mt-2 text-lg text-muted-foreground">
+            <div className="space-y-8">
+                <h1 className="text-2xl font-bold">Kelola Halaman Beranda</h1>
+                <p className="text-muted-foreground">
                     Memuat data manajemen beranda...
                 </p>
                 {/* TODO: Add skeleton loaders for a better UX */}
@@ -941,42 +943,39 @@ export default function HomepageAdminPage() {
     }
 
     return (
-        <div className="flex flex-col gap-8">
+        <div className="space-y-8">
             <div>
-                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Kelola Halaman Beranda
-                </h1>
-                <p className="mt-2 text-lg text-muted-foreground">
-                    Kelola semua konten yang ada di halaman beranda dari satu
-                    tempat.
+                <h1 className="text-2xl font-bold">Kelola Halaman Beranda</h1>
+                <p className="text-muted-foreground">
+                    Kelola semua konten yang ada di halaman beranda dari satu tempat.
                 </p>
             </div>
             <Tabs defaultValue="banners" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
                     <TabsTrigger value="banners">Banner</TabsTrigger>
                     <TabsTrigger value="marquee">Teks Berjalan</TabsTrigger>
                     <TabsTrigger value="statistics">Statistik</TabsTrigger>
                     <TabsTrigger value="facilities">Fasilitas</TabsTrigger>
                 </TabsList>
-                <TabsContent value="banners" className="mt-4">
+                <TabsContent value="banners" className="mt-6">
                     <BannersTab
                         data={homepageData.banners}
                         refreshData={fetchData}
                     />
                 </TabsContent>
-                <TabsContent value="marquee" className="mt-4">
+                <TabsContent value="marquee" className="mt-6">
                     <MarqueeTab
                         data={homepageData.marquee}
                         refreshData={fetchData}
                     />
                 </TabsContent>
-                <TabsContent value="statistics" className="mt-4">
+                <TabsContent value="statistics" className="mt-6">
                     <StatisticsTab
                         data={homepageData.statistics}
                         refreshData={fetchData}
                     />
                 </TabsContent>
-                <TabsContent value="facilities" className="mt-4">
+                <TabsContent value="facilities" className="mt-6">
                     <FacilitiesTab
                         data={homepageData.facilities}
                         refreshData={fetchData}

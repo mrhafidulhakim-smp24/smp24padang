@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getOrganizationStructures } from './actions';
+
+export const metadata: Metadata = {
+  title: 'Struktur Organisasi SMPN 24 Padang | Bagan Kepengurusan Sekolah',
+  description: 'Lihat bagan struktur organisasi SMPN 24 Padang, termasuk kepengurusan sekolah, unit-unit, dan divisi. Pahami hierarki dan tanggung jawab di sekolah kami.',
+};
 
 export const dynamic = 'force-dynamic';
 

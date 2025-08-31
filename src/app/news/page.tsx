@@ -1,5 +1,12 @@
 
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Berita & Pengumuman Terbaru SMPN 24 Padang | Informasi Sekolah Terkini',
+  description: 'Ikuti perkembangan terkini, berita sekolah, dan pengumuman penting dari SMPN 24 Padang. Dapatkan informasi lengkap seputar kegiatan dan prestasi siswa di sekolah kami.',
+};
+
 export const dynamic = 'force-dynamic';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

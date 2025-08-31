@@ -13,6 +13,7 @@ import { createPastPrincipal, updatePastPrincipal, deletePastPrincipal } from '.
 import { PlusCircle, Pencil, Trash2 } from 'lucide-react';
 import type { pastPrincipals as PastPrincipal } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Principal = InferSelectModel<typeof PastPrincipal>;
 
@@ -79,54 +80,64 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
     };
 
     return (
-        <div>
-            <div className="flex justify-end mb-4">
-                <Button onClick={() => openDialog(null)}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Baru</Button>
-            </div>
-            <div className="border rounded-md">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Foto</TableHead>
-                            <TableHead>Nama</TableHead>
-                            <TableHead>Periode</TableHead>
-                            <TableHead className="text-right">Aksi</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {principals.map((p) => (
-                            <TableRow key={p.id}>
-                                <TableCell>
-                                    <Image src={p.imageUrl || 'https://placehold.co/100x100.png'} alt={p.name} width={60} height={60} className="rounded-md object-cover bg-muted" />
-                                </TableCell>
-                                <TableCell className="font-medium">{p.name}</TableCell>
-                                <TableCell>{p.period}</TableCell>
-                                <TableCell className="text-right">
-                                    <Button variant="outline" size="icon" className="mr-2" onClick={() => openDialog(p)}><Pencil className="h-4 w-4" /></Button>
-                                    <Button variant="destructive" size="icon" onClick={() => openDeleteDialog(p)}><Trash2 className="h-4 w-4" /></Button>
-                                </TableCell>
+        <Card>
+            <CardHeader>
+                <CardTitle>Riwayat Kepala Sekolah</CardTitle>
+                <div className="flex justify-between items-center">
+                    <CardDescription>
+                        Kelola daftar kepala sekolah yang pernah menjabat.
+                    </CardDescription>
+                    <Button onClick={() => openDialog(null)}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Riwayat</Button>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <div className="border rounded-lg overflow-hidden">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">Foto</TableHead>
+                                <TableHead>Nama</TableHead>
+                                <TableHead>Periode</TableHead>
+                                <TableHead className="text-right">Aksi</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
+                        </TableHeader>
+                        <TableBody>
+                            {principals.map((p) => (
+                                <TableRow key={p.id}>
+                                    <TableCell>
+                                        <Image src={p.imageUrl || 'https://placehold.co/100x100.png'} alt={p.name} width={64} height={64} className="rounded-md object-cover bg-muted" />
+                                    </TableCell>
+                                    <TableCell className="font-medium text-base">{p.name}</TableCell>
+                                    <TableCell className="text-base">{p.period}</TableCell>
+                                    <TableCell className="text-right">
+                                        <div className="flex gap-2 justify-end">
+                                            <Button variant="outline" size="icon" className="mr-2" onClick={() => openDialog(p)}><Pencil className="h-4 w-4" /></Button>
+                                            <Button variant="destructive" size="icon" onClick={() => openDeleteDialog(p)}><Trash2 className="h-4 w-4" /></Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </CardContent>
 
             <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>{selectedPrincipal ? 'Edit' : 'Tambah'} Riwayat Kepala Sekolah</DialogTitle>
                     </DialogHeader>
-                    <form onSubmit={handleFormSubmit} className="space-y-4">
+                    <form onSubmit={handleFormSubmit} className="grid gap-6 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="name">Nama</Label>
-                            <Input id="name" name="name" defaultValue={selectedPrincipal?.name} required />
+                            <Label htmlFor="name" className="text-base">Nama</Label>
+                            <Input id="name" name="name" defaultValue={selectedPrincipal?.name} required className="text-base" />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="period">Periode</Label>
-                            <Input id="period" name="period" placeholder="Contoh: 2020 - 2024" defaultValue={selectedPrincipal?.period} required />
+                            <Label htmlFor="period" className="text-base">Periode</Label>
+                            <Input id="period" name="period" placeholder="Contoh: 2020 - 2024" defaultValue={selectedPrincipal?.period} required className="text-base" />
                         </div>
                         <div className="space-y-2">
-                            <Label>Foto</Label>
+                            <Label className="text-base">Foto</Label>
                             {preview && <Image src={preview} alt="Preview" width={100} height={100} className="rounded-md object-cover bg-muted" />}
                             <Input type="file" name="image" accept="image/*" onChange={(e) => {
                                 const file = e.target.files?.[0];
@@ -156,6 +167,6 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </Card>
     );
 }

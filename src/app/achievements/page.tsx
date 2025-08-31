@@ -1,7 +1,14 @@
+import type { Metadata } from 'next';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Award } from 'lucide-react';
 import { getAchievements } from './actions';
+
+export const metadata: Metadata = {
+    title: 'Galeri Prestasi SMPN 24 Padang | Raihan Siswa dan Sekolah Terbaik di Indonesia',
+    description:
+        'Lihat berbagai prestasi membanggakan siswa-siswi dan SMPN 24 Padang dalam bidang akademik, non-akademik, dan kejuaraan. Inspirasi dari sekolah berprestasi di Indonesia.',
+};
 
 export const dynamic = 'force-dynamic';
 

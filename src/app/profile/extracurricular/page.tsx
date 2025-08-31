@@ -1,7 +1,13 @@
 
+import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Award, BrainCircuit, Palette, ShieldCheck, Dumbbell, Paintbrush, FlaskConical, Users } from "lucide-react";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: 'Ekstrakurikuler SMPN 24 Padang | Kembangkan Bakat & Minat Siswa',
+  description: 'Jelajahi beragam kegiatan ekstrakurikuler di SMPN 24 Padang, mulai dari olahraga, seni, sains, hingga pengembangan diri. Temukan wadah untuk mengembangkan bakat dan minat Anda di sekolah kami di Indonesia.',
+};
 
 const extracurriculars = [
   { id: "1", name: "Sepak Bola", category: "Olahraga", description: "Mengembangkan bakat sepak bola dan kerja sama tim.", image: "https://placehold.co/600x400.png" },

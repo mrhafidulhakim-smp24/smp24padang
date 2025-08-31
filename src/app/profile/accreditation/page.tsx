@@ -1,8 +1,14 @@
+import type { Metadata } from 'next';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, FileText } from "lucide-react";
 import Link from "next/link";
 import { getAccreditations } from "@/app/admin/accreditation/actions";
+
+export const metadata: Metadata = {
+  title: 'Akreditasi & Sertifikasi SMPN 24 Padang | Bukti Keunggulan Sekolah',
+  description: 'Lihat daftar akreditasi, sertifikasi, dan penghargaan resmi yang diterima SMPN 24 Padang. Bukti komitmen kami terhadap kualitas pendidikan dan keunggulan di Sumatera Barat.',
+};
 
 function getGoogleDriveEmbedLink(url: string): string {
     if (!url) return "";

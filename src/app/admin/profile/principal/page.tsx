@@ -19,22 +19,22 @@ export default async function PrincipalProfilePage() {
   const pastPrincipalsData = await db.query.pastPrincipals.findMany();
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="space-y-8">
         <div>
-            <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">Kelola Profil Sekolah</h1>
-            <p className="mt-2 text-lg text-muted-foreground">
+            <h1 className="text-2xl font-bold">Kelola Profil Sekolah</h1>
+            <p className="text-muted-foreground">
                 Perbarui profil sekolah, sejarah, dan riwayat kepala sekolah.
             </p>
         </div>
-        <Tabs defaultValue="current">
-            <TabsList>
+        <Tabs defaultValue="current" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="current">Profil Saat Ini</TabsTrigger>
                 <TabsTrigger value="history">Riwayat Kepala Sekolah</TabsTrigger>
             </TabsList>
-            <TabsContent value="current">
+            <TabsContent value="current" className="mt-6">
                 <PrincipalForm initialProfileData={profileData} />
             </TabsContent>
-            <TabsContent value="history">
+            <TabsContent value="history" className="mt-6">
                 <PastPrincipalsList initialData={pastPrincipalsData} />
             </TabsContent>
         </Tabs>

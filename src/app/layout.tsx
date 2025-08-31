@@ -21,7 +21,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: 'SMPN 24 Padang',
-  description: 'Official Website of SMPN 24 Padang School',
+  description: 'Situs resmi SMPN 24 Padang. Temukan informasi lengkap, berita terbaru, dan profil sekolah kami.',
 };
  
 export default function RootLayout({

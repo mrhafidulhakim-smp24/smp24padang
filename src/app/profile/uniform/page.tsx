@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUniforms } from "./actions";
+
+export const metadata: Metadata = {
+  title: 'Seragam Sekolah SMPN 24 Padang | Panduan Lengkap & Aturan',
+  description: 'Temukan panduan lengkap seragam resmi SMPN 24 Padang untuk siswa-siswi. Informasi detail mengenai jenis seragam, jadwal penggunaan, dan aturan yang berlaku di sekolah kami.',
+};
 
 export const dynamic = 'force-dynamic';
 
