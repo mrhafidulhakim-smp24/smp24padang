@@ -222,52 +222,48 @@ export default function AchievementsAdminPage() {
     );
 
     return (
-        <div className="flex flex-col gap-8">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Kelola Prestasi
-                    </h1>
-                    <p className="mt-2 text-lg text-muted-foreground">
-                        Tambah, edit, atau hapus data prestasi siswa dan
-                        sekolah.
-                    </p>
+        <Card>
+            <CardHeader>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <CardTitle className="text-2xl font-bold">Kelola Prestasi</CardTitle>
+                        <CardDescription className="mt-2 text-lg">
+                            Tambah, edit, atau hapus data prestasi siswa dan sekolah.
+                        </CardDescription>
+                    </div>
+                    <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
+                        <DialogTrigger asChild>
+                            <Button>
+                                <PlusCircle className="mr-2 h-4 w-4" />
+                                Tambah Prestasi
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Tambah Prestasi Baru</DialogTitle>
+                            </DialogHeader>
+                            <AchievementForm
+                                action={createAchievement}
+                                onClose={() => {
+                                    setAddOpen(false);
+                                    getAchievements().then((data) =>
+                                        setAchievements(data as Achievement[]),
+                                    );
+                                }}
+                            />
+                        </DialogContent>
+                    </Dialog>
                 </div>
-                <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
-                    <DialogTrigger asChild>
-                        <Button>
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Tambah Prestasi
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Tambah Prestasi Baru</DialogTitle>
-                        </DialogHeader>
-                        <AchievementForm
-                            action={createAchievement}
-                            onClose={() => {
-                                setAddOpen(false);
-                                getAchievements().then((data) =>
-                                    setAchievements(data as Achievement[]),
-                                );
-                            }}
-                        />
-                    </DialogContent>
-                </Dialog>
-            </div>
-
-            <Card>
-                <CardContent className="p-0">
+            </CardHeader>
+            <CardContent>
+                <div className="border rounded-lg overflow-hidden">
                     <Table>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Gambar</TableHead>
                                 <TableHead>Judul</TableHead>
                                 <TableHead>Siswa/Tim</TableHead>
-                                <TableHead className="text-right">
-                                    Aksi
-                                </TableHead>
+                                <TableHead className="text-right">Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -275,36 +271,26 @@ export default function AchievementsAdminPage() {
                                 <TableRow key={item.id}>
                                     <TableCell>
                                         <Image
-                                            src={
-                                                item.imageUrl ||
-                                                'https://placehold.co/80x80.png'
-                                            }
+                                            src={item.imageUrl || 'https://placehold.co/80x80.png'}
                                             alt={item.title}
                                             width={80}
                                             height={80}
                                             className="rounded-md object-cover"
                                         />
                                     </TableCell>
-                                    <TableCell className="font-medium">
-                                        {item.title}
-                                    </TableCell>
-                                    <TableCell>{item.student}</TableCell>
+                                    <TableCell className="font-medium text-base">{item.title}</TableCell>
+                                    <TableCell className="text-base">{item.student}</TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    className="h-8 w-8 p-0"
-                                                >
+                                                <Button variant="ghost" className="h-8 w-8 p-0">
                                                     <MoreHorizontal className="h-4 w-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedAchievement(
-                                                            item,
-                                                        );
+                                                        setSelectedAchievement(item);
                                                         setEditOpen(true);
                                                     }}
                                                 >
@@ -313,9 +299,7 @@ export default function AchievementsAdminPage() {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedAchievement(
-                                                            item,
-                                                        );
+                                                        setSelectedAchievement(item);
                                                         setDeleteOpen(true);
                                                     }}
                                                     className="text-destructive focus:bg-destructive/10 focus:text-destructive"
@@ -330,9 +314,9 @@ export default function AchievementsAdminPage() {
                             ))}
                         </TableBody>
                     </Table>
-                </CardContent>
-            </Card>
-
+                </div>
+            </CardContent>
+            {/* Edit and Delete Dialogs */}
             <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -353,20 +337,16 @@ export default function AchievementsAdminPage() {
                     )}
                 </DialogContent>
             </Dialog>
-
             <AlertDialog open={isDeleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini tidak dapat dibatalkan. Ini akan
-                            menghapus data prestasi secara permanen.
+                            Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data prestasi secara permanen.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel
-                            onClick={() => setSelectedAchievement(null)}
-                        >
+                        <AlertDialogCancel onClick={() => setSelectedAchievement(null)}>
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction
@@ -379,6 +359,6 @@ export default function AchievementsAdminPage() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </Card>
     );
 }

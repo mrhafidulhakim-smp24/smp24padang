@@ -86,60 +86,58 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
     };
 
     return (
-        <div className="flex flex-col gap-8">
-            <div>
-                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Kelola Seragam Sekolah
-                </h1>
-                <p className="mt-2 text-lg text-muted-foreground">
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-2xl font-bold">Kelola Seragam Sekolah</CardTitle>
+                <CardDescription className="mt-2 text-lg">
                     Perbarui gambar dan deskripsi untuk setiap seragam.
-                </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {DAYS.map((day) => {
-                    const uniform = uniforms.find(u => u.day === day) || 
-                                  (day === 'Olahraga' && uniforms.find(u => u.type === 'sport'));
-                    
-                    return (
-                        <Card key={day} className="group relative overflow-hidden">
-                            <CardHeader className="p-0">
-                                {uniform && uniform.image ? (
-                                    <Image
-                                        src={uniform.image}
-                                        alt={uniform.description || day}
-                                        width={400}
-                                        height={600}
-                                        className="aspect-[4/6] w-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="flex aspect-[4/6] w-full items-center justify-center bg-muted text-muted-foreground">
-                                        No Image
-                                    </div>
-                                )}
-                            </CardHeader>
-                            <CardContent className="p-4">
-                                <CardTitle className="font-headline text-xl text-primary">
-                                    {day}
-                                </CardTitle>
-                                <CardDescription>
-                                    {uniform && uniform.description || 'Belum ada deskripsi'}
-                                </CardDescription>
-                            </CardContent>
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => openEditDialog(day)}
-                                >
-                                    <Pencil className="mr-2 h-4 w-4" /> Edit
-                                </Button>
-                            </div>
-                        </Card>
-                    );
-                })}
-            </div>
-
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {DAYS.map((day) => {
+                        const uniform = uniforms.find(u => u.day === day) || 
+                                      (day === 'Olahraga' && uniforms.find(u => u.type === 'sport'));
+                        
+                        return (
+                            <Card key={day} className="group relative overflow-hidden">
+                                <CardHeader className="p-0">
+                                    {uniform && uniform.image ? (
+                                        <Image
+                                            src={uniform.image}
+                                            alt={uniform.description || day}
+                                            width={400}
+                                            height={600}
+                                            className="aspect-[4/6] w-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="flex aspect-[4/6] w-full items-center justify-center bg-muted text-muted-foreground">
+                                            No Image
+                                        </div>
+                                    )}
+                                </CardHeader>
+                                <CardContent className="p-4">
+                                    <CardTitle className="font-headline text-xl text-primary">
+                                        {day}
+                                    </CardTitle>
+                                    <CardDescription>
+                                        {uniform && uniform.description || 'Belum ada deskripsi'}
+                                    </CardDescription>
+                                </CardContent>
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => openEditDialog(day)}
+                                    >
+                                        <Pencil className="mr-2 h-4 w-4" /> Edit
+                                    </Button>
+                                </div>
+                            </Card>
+                        );
+                    })}
+                </div>
+            </CardContent>
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -192,6 +190,6 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                     </form>
                 </DialogContent>
             </Dialog>
-        </div>
+        </Card>
     );
 }

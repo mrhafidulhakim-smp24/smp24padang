@@ -74,44 +74,44 @@ export default function OrganizationStructureList({ initialData }: OrganizationS
     };
 
     return (
-        <div className="flex flex-col gap-8">
-            <div>
-                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">Kelola Struktur Organisasi</h1>
-                <p className="mt-2 text-lg text-muted-foreground">
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-2xl font-bold">Kelola Struktur Organisasi</CardTitle>
+                <CardDescription className="mt-2 text-lg">
                     Perbarui gambar dan detail untuk setiap bagan struktur organisasi.
-                </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                {structures.map((structure) => (
-                    <Card key={structure.type}>
-                        <CardHeader>
-                            <CardTitle>{structure.title}</CardTitle>
-                            <CardDescription>{structure.description}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="relative aspect-video w-full bg-muted rounded-md overflow-hidden">
-                                {structure.imageUrl ? (
-                                    <Image
-                                        src={structure.imageUrl}
-                                        alt={structure.title}
-                                        fill
-                                        className="object-contain"
-                                    />
-                                ) : (
-                                    <div className="flex items-center justify-center h-full text-muted-foreground">
-                                        Tidak ada gambar
-                                    </div>
-                                )}
-                            </div>
-                            <Button onClick={() => openDialog(structure)} className="w-full">
-                                <Pencil className="mr-2 h-4 w-4" /> Edit
-                            </Button>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
-
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                    {structures.map((structure) => (
+                        <Card key={structure.type}>
+                            <CardHeader>
+                                <CardTitle>{structure.title}</CardTitle>
+                                <CardDescription>{structure.description}</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="relative aspect-video w-full bg-muted rounded-md overflow-hidden">
+                                    {structure.imageUrl ? (
+                                        <Image
+                                            src={structure.imageUrl}
+                                            alt={structure.title}
+                                            fill
+                                            className="object-contain"
+                                        />
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full text-muted-foreground">
+                                            Tidak ada gambar
+                                        </div>
+                                    )}
+                                </div>
+                                <Button onClick={() => openDialog(structure)} className="w-full">
+                                    <Pencil className="mr-2 h-4 w-4" /> Edit
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            </CardContent>
             <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -151,6 +151,6 @@ export default function OrganizationStructureList({ initialData }: OrganizationS
                     </form>
                 </DialogContent>
             </Dialog>
-        </div>
+        </Card>
     );
 }

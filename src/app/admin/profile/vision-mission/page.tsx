@@ -62,65 +62,63 @@ export default function VisionMissionAdminPage() {
 
 
     return (
-        <div className="flex flex-col gap-8">
-            <div>
-                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Kelola Visi & Misi
-                </h1>
-                <p className="mt-2 text-lg text-muted-foreground">
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-2xl font-bold">Kelola Visi & Misi</CardTitle>
+                <CardDescription className="mt-2 text-lg">
                     Perbarui pernyataan visi dan misi sekolah Anda.
-                </p>
-            </div>
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Target className="h-6 w-6 text-accent"/>
+                                Visi Sekolah
+                            </CardTitle>
+                            <CardDescription>
+                                Tuliskan pernyataan visi yang menginspirasi.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Textarea
+                                id="vision"
+                                value={vision}
+                                onChange={(e) => setVision(e.target.value)}
+                                className="min-h-[250px] text-base"
+                                placeholder="Tuliskan visi sekolah di sini..."
+                            />
+                        </CardContent>
+                    </Card>
 
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                 <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Target className="h-6 w-6 text-accent"/>
-                            Visi Sekolah
-                        </CardTitle>
-                        <CardDescription>
-                            Tuliskan pernyataan visi yang menginspirasi.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Textarea
-                            id="vision"
-                            value={vision}
-                            onChange={(e) => setVision(e.target.value)}
-                            className="min-h-[250px]"
-                            placeholder="Tuliskan visi sekolah di sini..."
-                        />
-                    </CardContent>
-                </Card>
-
-                 <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Book className="h-6 w-6 text-accent"/>
-                            Misi Sekolah
-                        </CardTitle>
-                        <CardDescription>
-                           Setiap baris akan dianggap sebagai satu poin misi.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                         <Textarea
-                            id="mission"
-                            value={mission}
-                            onChange={(e) => setMission(e.target.value)}
-                            className="min-h-[250px]"
-                            placeholder="Tuliskan poin-poin misi di sini, pisahkan dengan baris baru..."
-                        />
-                    </CardContent>
-                </Card>
-            </div>
-            
-            <div className="flex justify-end pt-4">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Book className="h-6 w-6 text-accent"/>
+                                Misi Sekolah
+                            </CardTitle>
+                            <CardDescription>
+                               Setiap baris akan dianggap sebagai satu poin misi.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                             <Textarea
+                                id="mission"
+                                value={mission}
+                                onChange={(e) => setMission(e.target.value)}
+                                className="min-h-[250px] text-base"
+                                placeholder="Tuliskan poin-poin misi di sini, pisahkan dengan baris baru..."
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
                 <Button onClick={handleSaveChanges} size="lg" disabled={isPending}>
                     {isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                 </Button>
-            </div>
-        </div>
+            </CardFooter>
+        </Card>
     );
 }

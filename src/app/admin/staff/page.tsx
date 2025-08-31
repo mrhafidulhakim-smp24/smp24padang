@@ -242,96 +242,93 @@ export default function StaffAdminPage() {
     );
 
     return (
-        <div className="flex flex-col gap-8">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Kelola Guru & Staf
-                    </h1>
-                    <p className="mt-2 text-lg text-muted-foreground">
-                        Tambah, edit, atau hapus data guru dan staf sekolah.
-                    </p>
+        <Card>
+            <CardHeader>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <CardTitle className="text-2xl font-bold">Kelola Guru & Staf</CardTitle>
+                        <CardDescription className="mt-2 text-lg">
+                            Tambah, edit, atau hapus data guru dan staf sekolah.
+                        </CardDescription>
+                    </div>
+                    <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
+                        <DialogTrigger asChild>
+                            <Button>
+                                <PlusCircle className="mr-2 h-4 w-4" />
+                                Tambah Staf
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Tambah Staf Baru</DialogTitle>
+                            </DialogHeader>
+                            <StaffForm
+                                action={createStaff}
+                                onClose={() => {
+                                    setAddOpen(false);
+                                    getStaff().then(setStaff);
+                                }}
+                            />
+                        </DialogContent>
+                    </Dialog>
                 </div>
-                <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
-                    <DialogTrigger asChild>
-                        <Button>
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Tambah Staf
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Tambah Staf Baru</DialogTitle>
-                        </DialogHeader>
-                        <StaffForm
-                            action={createStaff}
-                            onClose={() => {
-                                setAddOpen(false);
-                                getStaff().then(setStaff);
-                            }}
-                        />
-                    </DialogContent>
-                </Dialog>
-            </div>
-
-            <Card>
-                <CardContent className="p-4">
-                    {staff.length > 0 ? (
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                            {staff.map((item) => (
-                                <Card key={item.id} className="flex flex-col items-center text-center group">
-                                    <CardHeader className="p-0">
-                                        <div className="relative aspect-square w-full max-w-[150px] overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl mt-4">
-                                            <Image
-                                                src={item.imageUrl || "https://placehold.co/150x150.png"}
-                                                alt={item.name}
-                                                width={150}
-                                                height={150}
-                                                className="object-cover"
-                                            />
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent className="flex flex-col items-center p-4">
-                                        <h3 className="mt-2 text-lg font-bold text-primary">{item.name}</h3>
-                                        <p className="font-semibold text-sm text-accent">{item.position}</p>
-                                        <p className="text-xs text-muted-foreground">{item.subject}</p>
-                                        {item.homeroomOf && (
-                                            <Badge variant="secondary" className="mt-2">
-                                                Wali Kelas {item.homeroomOf}
-                                            </Badge>
-                                        )}
-                                        <div className="mt-4 flex gap-2">
-                                            <Button
-                                                variant="outline"
-                                                size="icon"
-                                                onClick={() => {
-                                                    setSelectedStaff(item);
-                                                    setEditOpen(true);
-                                                }}
-                                            >
-                                                <Pencil className="h-4 w-4" />
-                                            </Button>
-                                            <Button
-                                                variant="destructive"
-                                                size="icon"
-                                                onClick={() => {
-                                                    setSelectedStaff(item);
-                                                    setDeleteOpen(true);
-                                                }}
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="text-center text-muted-foreground py-8">Belum ada data staf.</p>
-                    )}
-                </CardContent>
-            </Card>
-
+            </CardHeader>
+            <CardContent>
+                {staff.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                        {staff.map((item) => (
+                            <Card key={item.id} className="flex flex-col items-center text-center group">
+                                <CardHeader className="p-0">
+                                    <div className="relative aspect-square w-full max-w-[150px] overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl mt-4">
+                                        <Image
+                                            src={item.imageUrl || "https://placehold.co/150x150.png"}
+                                            alt={item.name}
+                                            width={150}
+                                            height={150}
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                </CardHeader>
+                                <CardContent className="flex flex-col items-center p-4">
+                                    <h3 className="mt-2 text-lg font-bold text-primary">{item.name}</h3>
+                                    <p className="font-semibold text-sm text-accent">{item.position}</p>
+                                    <p className="text-xs text-muted-foreground">{item.subject}</p>
+                                    {item.homeroomOf && (
+                                        <Badge variant="secondary" className="mt-2">
+                                            Wali Kelas {item.homeroomOf}
+                                        </Badge>
+                                    )}
+                                    <div className="mt-4 flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => {
+                                                setSelectedStaff(item);
+                                                setEditOpen(true);
+                                            }}
+                                        >
+                                            <Pencil className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                            variant="destructive"
+                                            size="icon"
+                                            onClick={() => {
+                                                setSelectedStaff(item);
+                                                setDeleteOpen(true);
+                                            }}
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-center text-muted-foreground py-8">Belum ada data staf.</p>
+                )}
+            </CardContent>
+            {/* Edit and Delete Dialogs */}
             <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -350,20 +347,16 @@ export default function StaffAdminPage() {
                     )}
                 </DialogContent>
             </Dialog>
-
             <AlertDialog open={isDeleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini tidak dapat dibatalkan. Ini akan
-                            menghapus data staf secara permanen.
+                            Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data staf secara permanen.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel
-                            onClick={() => setSelectedStaff(null)}
-                        >
+                        <AlertDialogCancel onClick={() => setSelectedStaff(null)}>
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction
@@ -376,6 +369,6 @@ export default function StaffAdminPage() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </Card>
     );
 }

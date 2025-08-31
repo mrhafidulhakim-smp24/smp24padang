@@ -79,32 +79,43 @@ export default function ContactAdminPage() {
         );
     }
 
-    return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-            <div>
-                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Kelola Informasi Kontak
-                </h1>
-                <p className="mt-2 text-lg text-muted-foreground">
-                    Perbarui alamat, telepon, dan email yang ditampilkan di
-                    seluruh situs.
-                </p>
-            </div>
+    import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    CardFooter,
+} from '@/components/ui/card';
 
+// ... other imports
+
+export default function ContactAdminPage() {
+    // ... state and handlers
+
+    if (isLoading) {
+        return (
             <Card>
                 <CardHeader>
-                    <CardTitle>Detail Kontak</CardTitle>
-                    <CardDescription>
-                        Informasi ini akan muncul di header, footer, dan halaman
-                        kontak.
+                    <CardTitle className="text-2xl font-bold">Kelola Informasi Kontak</CardTitle>
+                    <CardDescription className="mt-2 text-lg">Memuat data...</CardDescription>
+                </CardHeader>
+            </Card>
+        );
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-2xl font-bold">Kelola Informasi Kontak</CardTitle>
+                    <CardDescription className="mt-2 text-lg">
+                        Perbarui alamat, telepon, dan email yang ditampilkan di seluruh situs.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-6 pt-6">
                     <div className="space-y-2">
-                        <Label
-                            htmlFor="address"
-                            className="flex items-center gap-2"
-                        >
+                        <Label htmlFor="address" className="text-base flex items-center gap-2">
                             <MapPin className="h-4 w-4" /> Alamat
                         </Label>
                         <Input
@@ -113,13 +124,11 @@ export default function ContactAdminPage() {
                             value={contactInfo.address}
                             onChange={handleChange}
                             required
+                            className="text-base"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label
-                            htmlFor="phone"
-                            className="flex items-center gap-2"
-                        >
+                        <Label htmlFor="phone" className="text-base flex items-center gap-2">
                             <Phone className="h-4 w-4" /> Nomor Telepon
                         </Label>
                         <Input
@@ -129,13 +138,11 @@ export default function ContactAdminPage() {
                             value={contactInfo.phone}
                             onChange={handleChange}
                             required
+                            className="text-base"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label
-                            htmlFor="email"
-                            className="flex items-center gap-2"
-                        >
+                        <Label htmlFor="email" className="text-base flex items-center gap-2">
                             <Mail className="h-4 w-4" /> Alamat Email
                         </Label>
                         <Input
@@ -145,13 +152,11 @@ export default function ContactAdminPage() {
                             value={contactInfo.email}
                             onChange={handleChange}
                             required
+                            className="text-base"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label
-                            htmlFor="googleMapsUrl"
-                            className="flex items-center gap-2"
-                        >
+                        <Label htmlFor="googleMapsUrl" className="text-base flex items-center gap-2">
                             <MapPin className="h-4 w-4" /> URL Google Maps
                         </Label>
                         <Input
@@ -159,16 +164,17 @@ export default function ContactAdminPage() {
                             name="googleMapsUrl"
                             value={contactInfo.googleMapsUrl || ''}
                             onChange={handleChange}
+                            className="text-base"
                         />
                     </div>
                 </CardContent>
+                <CardFooter className="flex justify-end">
+                    <Button type="submit" size="lg" disabled={isPending}>
+                        {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
+                    </Button>
+                </CardFooter>
             </Card>
-
-            <div className="flex justify-end">
-                <Button type="submit" size="lg" disabled={isPending}>
-                    {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
-                </Button>
-            </div>
         </form>
     );
+}
 }

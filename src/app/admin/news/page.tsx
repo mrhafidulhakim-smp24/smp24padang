@@ -230,49 +230,46 @@ export default function NewsAdminPage() {
     );
 
     return (
-        <div className="flex flex-col gap-8">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Kelola Berita & Pengumuman
-                    </h1>
-                    <p className="mt-2 text-lg text-muted-foreground">
-                        Tambah, edit, atau hapus artikel berita dan pengumuman.
-                    </p>
+        <Card>
+            <CardHeader>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <CardTitle className="text-2xl font-bold">Kelola Berita & Pengumuman</CardTitle>
+                        <CardDescription className="mt-2 text-lg">
+                            Tambah, edit, atau hapus artikel berita dan pengumuman.
+                        </CardDescription>
+                    </div>
+                    <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
+                        <DialogTrigger asChild>
+                            <Button>
+                                <PlusCircle className="mr-2 h-4 w-4" />
+                                Tambah Artikel
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                            <DialogHeader>
+                                <DialogTitle>Tambah Artikel Baru</DialogTitle>
+                            </DialogHeader>
+                            <NewsArticleForm
+                                action={createNewsArticle}
+                                onClose={() => {
+                                    setAddOpen(false);
+                                    handleFetchAndUpdate();
+                                }}
+                            />
+                        </DialogContent>
+                    </Dialog>
                 </div>
-                <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
-                    <DialogTrigger asChild>
-                        <Button>
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Tambah Artikel
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                            <DialogTitle>Tambah Artikel Baru</DialogTitle>
-                        </DialogHeader>
-                        <NewsArticleForm
-                            action={createNewsArticle}
-                            onClose={() => {
-                                setAddOpen(false);
-                                handleFetchAndUpdate();
-                            }}
-                        />
-                    </DialogContent>
-                </Dialog>
-            </div>
-
-            <Card>
-                <CardContent className="p-0">
+            </CardHeader>
+            <CardContent>
+                <div className="border rounded-lg overflow-hidden">
                     <Table>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Gambar</TableHead>
                                 <TableHead>Judul</TableHead>
                                 <TableHead>Tanggal</TableHead>
-                                <TableHead className="text-right">
-                                    Aksi
-                                </TableHead>
+                                <TableHead className="text-right">Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -280,45 +277,32 @@ export default function NewsAdminPage() {
                                 <TableRow key={item.id}>
                                     <TableCell>
                                         <Image
-                                            src={
-                                                item.imageUrl ||
-                                                'https://placehold.co/80x80.png'
-                                            }
+                                            src={item.imageUrl || 'https://placehold.co/80x80.png'}
                                             alt={item.title}
                                             width={80}
                                             height={80}
                                             className="rounded-md object-cover"
                                         />
                                     </TableCell>
-                                    <TableCell className="font-medium">
-                                        {item.title}
-                                    </TableCell>
-                                    <TableCell>
-                                        {new Date(item.date).toLocaleDateString(
-                                            'id-ID',
-                                            {
-                                                day: 'numeric',
-                                                month: 'long',
-                                                year: 'numeric',
-                                            },
-                                        )}
+                                    <TableCell className="font-medium text-base">{item.title}</TableCell>
+                                    <TableCell className="text-base">
+                                        {new Date(item.date).toLocaleDateString('id-ID', {
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric',
+                                        })}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    className="h-8 w-8 p-0"
-                                                >
+                                                <Button variant="ghost" className="h-8 w-8 p-0">
                                                     <MoreHorizontal className="h-4 w-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedArticle(
-                                                            item,
-                                                        );
+                                                        setSelectedArticle(item);
                                                         setEditOpen(true);
                                                     }}
                                                 >
@@ -327,9 +311,7 @@ export default function NewsAdminPage() {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedArticle(
-                                                            item,
-                                                        );
+                                                        setSelectedArticle(item);
                                                         setDeleteOpen(true);
                                                     }}
                                                     className="text-destructive focus:bg-destructive/10 focus:text-destructive"
@@ -344,9 +326,9 @@ export default function NewsAdminPage() {
                             ))}
                         </TableBody>
                     </Table>
-                </CardContent>
-            </Card>
-
+                </div>
+            </CardContent>
+            {/* Edit and Delete Dialogs */}
             <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
@@ -365,20 +347,16 @@ export default function NewsAdminPage() {
                     )}
                 </DialogContent>
             </Dialog>
-
             <AlertDialog open={isDeleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini tidak dapat dibatalkan. Ini akan
-                            menghapus artikel berita secara permanen.
+                            Tindakan ini tidak dapat dibatalkan. Ini akan menghapus artikel berita secara permanen.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel
-                            onClick={() => setSelectedArticle(null)}
-                        >
+                        <AlertDialogCancel onClick={() => setSelectedArticle(null)}>
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction
@@ -391,6 +369,6 @@ export default function NewsAdminPage() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </Card>
     );
 }
