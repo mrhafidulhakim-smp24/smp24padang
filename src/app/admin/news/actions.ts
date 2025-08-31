@@ -1,11 +1,10 @@
-
-"use server";
+'use server';
 
 import { db } from '@/lib/db';
 import { news } from '@/lib/db/schema';
 import { desc, eq } from 'drizzle-orm';
 import { put, del } from '@vercel/blob';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NewsArticleSchema } from './schema';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -43,9 +42,7 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
             imageUrl,
         });
 
-        revalidatePath('/');
-        revalidatePath('/news');
-        revalidatePath('/articles');
+        revalidateTag('news-collection');
         revalidatePath('/admin/news');
         return { success: true, message: 'Artikel berhasil dibuat.' };
     } catch (error) {
@@ -88,9 +85,7 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
 
         await db.update(news).set(updateData).where(eq(news.id, id));
 
-        revalidatePath('/');
-        revalidatePath('/news');
-        revalidatePath('/articles');
+        revalidateTag('news-collection');
         revalidatePath(`/articles/${id}`);
         revalidatePath('/admin/news');
         return { success: true, message: "Artikel berhasil diperbarui." };
@@ -107,9 +102,7 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
         }
         await db.delete(news).where(eq(news.id, id));
         
-        revalidatePath('/');
-        revalidatePath('/news');
-        revalidatePath('/articles');
+        revalidateTag('news-collection');
         revalidatePath('/admin/news');
         return { success: true, message: 'Berita berhasil dihapus.' };
     } catch (error) {

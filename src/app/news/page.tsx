@@ -1,6 +1,5 @@
-
-
 import type { Metadata } from 'next';
+import { unstable_cache as cache } from 'next/cache';
 
 export const metadata: Metadata = {
   title: 'Berita & Pengumuman Terbaru SMPN 24 Padang | Informasi Sekolah Terkini',
@@ -18,11 +17,13 @@ import { db } from '@/lib/db';
 import { news, announcements } from '@/lib/db/schema';
 import { desc } from 'drizzle-orm';
 
-
-
-async function getAllNews() {
-    return await db.select().from(news).orderBy(desc(news.date));
-}
+const getAllNews = cache(
+    async () => {
+        return await db.select().from(news).orderBy(desc(news.date));
+    },
+    ['all-news'],
+    { tags: ['news-collection'] }
+);
 
 async function getLatestAnnouncement() {
     const announcementData = await db

@@ -214,7 +214,7 @@ async function LatestNews() {
                             key={item.id}
                             className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
                         >
-                            <div className="relative aspect-video w-full">
+                            <div className="relative w-full aspect-square sm:aspect-video">
                                 <Link
                                     href={`/articles/${item.id}`}
                                     className="absolute inset-0"

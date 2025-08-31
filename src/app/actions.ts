@@ -1,21 +1,26 @@
-"use server";
+'use server';
 
 import { db } from '@/lib/db';
 import { banners, news, announcements, profiles, statistics, facilities, marquee, pastPrincipals } from '@/lib/db/schema';
 import { asc, desc, sql } from 'drizzle-orm';
+import { unstable_cache as cache } from 'next/cache';
 
 export async function getBanners() {
   return await db.select().from(banners).orderBy(asc(banners.createdAt));
 }
 
-export async function getLatestNews() {
-  try {
-    return await db.select().from(news).orderBy(desc(news.date)).limit(4);
-  } catch (error) {
-    console.error("Error fetching latest news:", error);
-    return [];
-  }
-}
+export const getLatestNews = cache(
+  async () => {
+    try {
+      return await db.select().from(news).orderBy(desc(news.date)).limit(4);
+    } catch (error) {
+      console.error("Error fetching latest news:", error);
+      return [];
+    }
+  },
+  ['latest-news'],
+  { tags: ['news-collection'] }
+);
 
 export async function getAnnouncements() {
   try {
