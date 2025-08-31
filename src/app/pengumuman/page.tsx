@@ -42,7 +42,7 @@ export default async function AnnouncementsPage() {
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="mb-4 text-muted-foreground">{announcement.description}</p>
+                                    <p className="mb-4 text-muted-foreground whitespace-pre-wrap">{announcement.description}</p>
                                     {announcement.pdfUrl && (
                                         <div className="mt-4">
                                             <h3 className="text-lg font-semibold mb-2">Pratinjau Dokumen</h3>
