@@ -168,7 +168,7 @@ function NewsArticleForm({
                     name="description"
                     defaultValue={initialData?.description}
                     required
-                    rows={5}
+                    rows={15}
                 />
             </div>
             <DialogFooter>
