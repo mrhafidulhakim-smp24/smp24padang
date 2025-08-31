@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/lib/db';
-import { banners, news, announcements, profiles, statistics, facilities, marquee, pastPrincipals, achievements } from '@/lib/db/schema';
+import { banners, news, announcements, profiles, statistics, facilities, pastPrincipals, achievements } from '@/lib/db/schema';
 import { asc, desc, sql } from 'drizzle-orm';
 import { unstable_cache as cache } from 'next/cache';
 
