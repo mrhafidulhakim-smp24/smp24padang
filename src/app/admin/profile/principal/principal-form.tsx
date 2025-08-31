@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { updatePrincipalProfile } from './actions';
-import { Upload } from 'lucide-react';
+import { Upload, UserCircle } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Profile = {
   id: string;
@@ -75,16 +76,6 @@ export default function PrincipalForm({ initialProfileData }: PrincipalFormProps
       setPreviewImageUrl(profileData?.principalImageUrl || null);
     }
   };
-
-  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { UserCircle } from 'lucide-react';
-
-// ... (imports and type definitions remain the same)
-
-export default function PrincipalForm({ initialProfileData }: PrincipalFormProps) {
-  // ... (hooks and state definitions remain the same)
-
-  // ... (handleSubmit and handleImageChange functions remain the same)
 
   return (
     <Card>
