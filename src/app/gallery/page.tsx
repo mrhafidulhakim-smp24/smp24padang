@@ -32,6 +32,8 @@ export default async function GalleryPage() {
                         <div
                             key={index}
                             className="group relative mb-4 break-inside-avoid"
+                            data-aos="fade-up"
+                            data-aos-delay={(index % 4) * 100}
                         >
                             <Card className="overflow-hidden">
                                 <Image

@@ -78,12 +78,7 @@ export default function Footer({ showMap = true }: FooterProps) {
                             <Instagram className="h-6 w-6" />
                         </Link>
                     </div>
-                    <div className="pt-4 text-primary-foreground/80">
-                        <p className="font-semibold">
-                            Team Kerja Praktek Teknik Informatika UPI
-                            &quot;YPTK&quot; Padang
-                        </p>
-                    </div>
+                    
                 </div>
 
                 <div className="space-y-4">

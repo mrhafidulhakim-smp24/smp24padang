@@ -155,6 +155,9 @@ async function Announcements() {
                                         >
                                             {item.title}
                                         </Link>
+                                        <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                                            {item.description}
+                                        </p>
                                     </div>
                                     {index < announcements.length - 1 && (
                                         <Separator />

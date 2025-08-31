@@ -49,33 +49,38 @@ export default async function ProfilePage() {
             </div>
 
             <section className="mt-16">
-                <Card className="overflow-hidden md:grid md:grid-cols-3">
-                    <div className="relative h-64 md:h-full">
-                        <Image
-                            src={
-                                profile?.principalImageUrl ||
-                                'https://placehold.co/600x800.png'
-                            }
-                            alt="Principal"
-                            layout="fill"
-                            objectFit="cover"
-                        />
-                    </div>
-                    <div className="p-8 md:col-span-2">
-                        <h2 className="font-headline text-3xl font-bold text-primary">
-                            Sambutan dari Kepala Sekolah
-                        </h2>
-                        <div className="mt-4 space-y-4 text-foreground/80">
-                            {welcomeParagraphs?.map((p, i) => (
-                                <p key={i}>{p}</p>
-                            ))}
+                <Card>
+                    <div className="md:grid md:grid-cols-5 md:gap-8 lg:gap-12 items-center p-4 sm:p-6 md:p-8">
+                        <div className="md:col-span-2">
+                            <div className="relative aspect-[4/5] overflow-hidden rounded-xl shadow-lg">
+                                <Image
+                                    src={
+                                        profile?.principalImageUrl ||
+                                        'https://placehold.co/600x800.png'
+                                    }
+                                    alt="Principal"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className="transition-transform duration-300 hover:scale-105"
+                                />
+                            </div>
                         </div>
-                        <p className="mt-6 font-semibold text-primary">
-                            {profile?.principalName}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                            Kepala SMPN 24 Padang
-                        </p>
+                        <div className="mt-8 md:mt-0 md:col-span-3">
+                            <h2 className="font-headline text-3xl font-bold text-primary">
+                                Sambutan dari Kepala Sekolah
+                            </h2>
+                            <div className="mt-4 space-y-4 text-foreground/80">
+                                {welcomeParagraphs?.map((p, i) => (
+                                    <p key={i}>{p}</p>
+                                ))}
+                            </div>
+                            <p className="mt-6 font-semibold text-primary">
+                                {profile?.principalName}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                Kepala SMPN 24 Padang
+                            </p>
+                        </div>
                     </div>
                 </Card>
             </section>

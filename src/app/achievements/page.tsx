@@ -33,6 +33,8 @@ export default async function AchievementsPage() {
                         <Card
                             key={index}
                             className="group relative w-full overflow-hidden rounded-lg shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
+                            data-aos="fade-up"
+                            data-aos-delay={(index % 3) * 100}
                         >
                             <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
                             <Image

@@ -43,6 +43,7 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
         });
 
         revalidateTag('news-collection');
+        revalidatePath('/');
         revalidatePath('/admin/news');
         return { success: true, message: 'Artikel berhasil dibuat.' };
     } catch (error) {
@@ -86,6 +87,7 @@ export async function updateNewsArticle(id: string, currentImageUrl: string | nu
         await db.update(news).set(updateData).where(eq(news.id, id));
 
         revalidateTag('news-collection');
+        revalidatePath('/');
         revalidatePath(`/articles/${id}`);
         revalidatePath('/admin/news');
         return { success: true, message: "Artikel berhasil diperbarui." };
@@ -103,6 +105,7 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
         await db.delete(news).where(eq(news.id, id));
         
         revalidateTag('news-collection');
+        revalidatePath('/');
         revalidatePath('/admin/news');
         return { success: true, message: 'Berita berhasil dihapus.' };
     } catch (error) {

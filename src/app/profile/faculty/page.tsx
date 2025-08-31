@@ -1,16 +1,11 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getStaff } from './actions';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-
-export const metadata: Metadata = {
-    title: 'Daftar Guru & Staf SMPN 24 Padang | Tenaga Pendidik Berpengalaman',
-    description:
-        'Kenali para guru dan staf profesional SMPN 24 Padang yang berdedikasi dalam membimbing siswa. Temukan informasi lengkap tenaga pendidik dan kependidikan di sekolah kami di Indonesia.',
-};
-
-export const dynamic = 'force-dynamic';
+import { Input } from '@/components/ui/input';
 
 // A reusable component for displaying a staff member's card
 function StaffCard({
@@ -24,7 +19,7 @@ function StaffCard({
     const nameSize = isPrincipal ? 'text-2xl' : 'text-xl';
 
     return (
-        <div className="flex flex-col items-center text-center group">
+        <div className="flex flex-col items-center text-center group" data-aos="fade-up">
             <div
                 className={`relative ${imageSize} max-w-xs overflow-hidden rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl`}
             >
@@ -77,17 +72,30 @@ function StaffSection({
     );
 }
 
-export default async function FacultyPage() {
-    const allStaff = await getStaff();
+export default function FacultyPage() {
+    const [allStaff, setAllStaff] = useState<any[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    // Filter staff into categories
-    const principal = allStaff.find((s) =>
+    useEffect(() => {
+        async function fetchData() {
+            const staffData = await getStaff();
+            setAllStaff(staffData);
+        }
+        fetchData();
+    }, []);
+
+    const filteredStaff = allStaff.filter((person) =>
+        person.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+
+    // Filter staff into categories based on the filtered list
+    const principal = filteredStaff.find((s) =>
         s.position.toLowerCase().includes('kepala sekolah'),
     );
-    const vicePrincipals = allStaff.filter((s) =>
+    const vicePrincipals = filteredStaff.filter((s) =>
         s.position.toLowerCase().includes('wakil'),
     );
-    const teachingStaff = allStaff.filter(
+    const teachingStaff = filteredStaff.filter(
         (s) =>
             !s.position.toLowerCase().includes('kepala sekolah') &&
             !s.position.toLowerCase().includes('wakil'),
@@ -104,6 +112,15 @@ export default async function FacultyPage() {
                         Temui para guru dan staf berpengalaman yang berdedikasi
                         untuk membimbing siswa kami.
                     </p>
+                    <div className="mt-8 mx-auto max-w-xl">
+                        <Input 
+                            type="text"
+                            placeholder="Cari nama guru atau staf..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full text-base p-4 border-2 border-gray-200 rounded-lg focus:ring-primary focus:border-primary"
+                        />
+                    </div>
                 </div>
 
                 <div className="space-y-20">
@@ -142,6 +159,14 @@ export default async function FacultyPage() {
                                 ))}
                             </div>
                         </StaffSection>
+                    )}
+
+                    {/* No Results Message */}
+                    {filteredStaff.length === 0 && searchTerm && (
+                        <div className="text-center py-16">
+                            <p className="text-xl text-muted-foreground">Tidak ada hasil untuk "<b>{searchTerm}</b>".</p>
+                            <p className="mt-2 text-base text-muted-foreground/80">Coba periksa kembali ejaan atau gunakan kata kunci lain.</p>
+                        </div>
                     )}
                 </div>
             </div>
