@@ -57,6 +57,7 @@ export default function RootLayout({
             defaultTheme="light"
             disableTransitionOnChange
           >
+            <AOSInit />
             <ConditionalLayout>
               {children}
             </ConditionalLayout>

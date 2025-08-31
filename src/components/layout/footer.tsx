@@ -124,10 +124,7 @@ export default function Footer({ showMap = true }: FooterProps) {
             <div className="bg-primary py-4">
                 <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-center text-sm text-primary-foreground/70 sm:flex-row">
                     <div className="flex flex-col items-center sm:items-start">
-                        <p>
-                            © {currentYear} SMPN 24 Padang. Hak Cipta Dilindungi
-                            Undang-Undang.
-                        </p>
+                        <p>© {currentYear} SMPN 24 Padang.</p>
                     </div>
                     <Link
                         href="/admin"

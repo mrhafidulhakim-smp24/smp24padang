@@ -40,6 +40,7 @@
         "@radix-ui/react-tooltip": "^1.1.8",
         "@vercel/blob": "^0.23.4",
         "@vercel/speed-insights": "^1.2.0",
+        "aos": "^3.0.0-beta.6",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "date-fns": "^3.6.0",
