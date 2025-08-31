@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import ConditionalLayout from '@/components/layout/conditional-layout';
 import './globals.css';
 import {ThemeProvider} from '@/components/theme-provider';
+import AOSInit from '@/components/aos-init';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const roboto = Roboto({
