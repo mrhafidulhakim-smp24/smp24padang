@@ -164,7 +164,7 @@ export default function FacultyPage() {
                     {/* No Results Message */}
                     {filteredStaff.length === 0 && searchTerm && (
                         <div className="text-center py-16">
-                            <p className="text-xl text-muted-foreground">Tidak ada hasil untuk "<b>{searchTerm}</b>".</p>
+                            <p className="text-xl text-muted-foreground">Tidak ada hasil untuk &quot;<b>{searchTerm}</b>&quot;.</p>
                             <p className="mt-2 text-base text-muted-foreground/80">Coba periksa kembali ejaan atau gunakan kata kunci lain.</p>
                         </div>
                     )}
