@@ -34,6 +34,7 @@ import {
   Swords,
   GraduationCap,
   ShieldCheck,
+  Megaphone,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -76,7 +77,15 @@ export default function Header() {
       ]
     },
     { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
-    { href: "/news", label: "Berita", icon: Newspaper },
+    { 
+      href: "/publications", 
+      label: "Publikasi", 
+      icon: Newspaper,
+      subLinks: [
+        { href: "/news", label: "Berita", icon: Newspaper },
+        { href: "/pengumuman", label: "Pengumuman", icon: Megaphone },
+      ]
+    },
     { href: "/achievements", label: "Prestasi", icon: Trophy },
     { href: "/gallery", label: "Galeri", icon: Camera },
     { href: "/contact", label: "Kontak", icon: Phone },

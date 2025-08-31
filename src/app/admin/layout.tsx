@@ -37,6 +37,7 @@ import {
     Shirt,
     Settings,
     Award,
+    Megaphone,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
@@ -90,6 +91,7 @@ export default function AdminLayout({
         },
         { href: '/admin/staff', label: 'Guru & Staf', icon: Users },
         { href: '/admin/news', label: 'Berita', icon: Newspaper },
+        { href: '/admin/announcements', label: 'Pengumuman', icon: Megaphone },
         
         { href: '/admin/achievements', label: 'Prestasi', icon: Trophy },
         { href: '/admin/gallery', label: 'Galeri', icon: ImageIcon },

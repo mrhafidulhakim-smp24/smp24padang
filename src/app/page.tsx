@@ -208,13 +208,13 @@ async function LatestNews() {
                         sekolah kami.
                     </p>
                 </div>
-                <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8">
                     {latestNews.map((item) => (
                         <Card
                             key={item.id}
                             className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
                         >
-                            <div className="relative w-full aspect-square sm:aspect-video">
+                            <div className="relative w-full aspect-video">
                                 <Link
                                     href={`/articles/${item.id}`}
                                     className="absolute inset-0"
@@ -252,7 +252,7 @@ async function LatestNews() {
                                         </Link>
                                     </CardTitle>
                                     <p className="mt-2 text-sm text-foreground/80 dark:text-foreground/70">
-                                        {item.description.substring(0, 100)}...
+                                        {item.description.substring(0, 80)}...
                                     </p>
                                 </div>
                                 <Button

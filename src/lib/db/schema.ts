@@ -43,6 +43,7 @@ export const announcements = pgTable("announcements", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   date: text("date").notNull(),
+  pdfUrl: text("pdfUrl"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
