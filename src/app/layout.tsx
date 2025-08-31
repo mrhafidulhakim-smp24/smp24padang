@@ -51,7 +51,6 @@ export default function RootLayout({
             }
           }) }}
         />
-        <meta name="google-site-verification" content="ommTp1xpWc0EzW20ZLO8Sxqr6ac_4WKOf8mVbjxT1Os" />
       </head>
       <body className={`${roboto.variable} ${montserrat.variable} font-body antialiased`}>
           <ThemeProvider
