@@ -8,6 +8,7 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
+    CardFooter,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -65,33 +66,6 @@ export default function ContactAdminPage() {
             }
         });
     };
-
-    if (isLoading) {
-        return (
-            <div className="flex flex-col gap-8">
-                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Kelola Informasi Kontak
-                </h1>
-                <p className="mt-2 text-lg text-muted-foreground">
-                    Memuat data...
-                </p>
-            </div>
-        );
-    }
-
-    import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-    CardFooter,
-} from '@/components/ui/card';
-
-// ... other imports
-
-export default function ContactAdminPage() {
-    // ... state and handlers
 
     if (isLoading) {
         return (
@@ -176,5 +150,4 @@ export default function ContactAdminPage() {
             </Card>
         </form>
     );
-}
 }
