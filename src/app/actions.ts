@@ -10,7 +10,7 @@ export async function getBanners() {
 
 export async function getLatestNews() {
   try {
-    return await db.select().from(news).orderBy(desc(news.date)).limit(5);
+    return await db.select().from(news).orderBy(desc(news.date)).limit(4);
   } catch (error) {
     console.error("Error fetching latest news:", error);
     return [];

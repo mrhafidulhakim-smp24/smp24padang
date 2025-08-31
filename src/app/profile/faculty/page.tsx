@@ -119,7 +119,7 @@ export default async function FacultyPage() {
                     {/* Vice Principals Section */}
                     {vicePrincipals.length > 0 && (
                         <StaffSection title="Wakil Kepala Sekolah">
-                            <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center">
+                            <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center">
                                 {vicePrincipals.map((person) => (
                                     <StaffCard
                                         key={person.id}
@@ -133,7 +133,7 @@ export default async function FacultyPage() {
                     {/* Teaching Staff Section */}
                     {teachingStaff.length > 0 && (
                         <StaffSection title="Guru & Staf">
-                            <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                            <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                                 {teachingStaff.map((person) => (
                                     <StaffCard
                                         key={person.id}
