@@ -82,11 +82,7 @@ export default function AdminLayout({
                     label: 'Seragam',
                     icon: Shirt,
                 },
-                {
-                    href: '/admin/profile/extracurricular',
-                    label: 'Ekskul',
-                    icon: Swords,
-                },
+                
             ],
         },
         { href: '/admin/staff', label: 'Guru & Staf', icon: Users },

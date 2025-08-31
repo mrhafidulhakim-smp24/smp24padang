@@ -1,4 +1,3 @@
-
 "use server";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -6,7 +5,6 @@ import { db } from "@/lib/db";
 import {
   banners,
   facilities,
-  marquee,
   statistics,
 } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
@@ -16,21 +14,19 @@ import { put, del } from '@vercel/blob';
 // Unified data fetching
 export async function getHomepageData() {
   try {
-    const [bannersData, marqueeData, statisticsData, facilitiesData] = await Promise.all([
+    const [bannersData, statisticsData, facilitiesData] = await Promise.all([
       db.select().from(banners).orderBy(desc(banners.createdAt)),
-      db.select().from(marquee).orderBy(desc(marquee.createdAt)),
       db.select().from(statistics).limit(1),
       db.select().from(facilities).orderBy(desc(facilities.createdAt)),
     ]);
     return {
       banners: bannersData,
-      marquee: marqueeData,
       statistics: statisticsData[0] || null,
       facilities: facilitiesData,
     };
   } catch (error) {
     console.error("Error fetching homepage data:", error);
-    return { banners: [], marquee: [], statistics: null, facilities: [] };
+    return { banners: [], statistics: null, facilities: [] };
   }
 }
 
@@ -99,37 +95,6 @@ export async function deleteBanner(id: string, imageUrl: string | null) {
     return { success: true };
   } catch (error) {
     return { success: false, error: "Failed to delete banner." };
-  }
-}
-
-// Marquee Actions
-export async function createMarqueeItem(data: { type: 'Berita' | 'Prestasi' | 'Pengumuman'; text: string; }) {
-  try {
-    await db.insert(marquee).values({ id: uuidv4(), ...data });
-    revalidateHomepage();
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: "Failed to create marquee item." };
-  }
-}
-
-export async function updateMarqueeItem(id: string, data: { type: 'Berita' | 'Prestasi' | 'Pengumuman'; text: string; }) {
-  try {
-    await db.update(marquee).set(data).where(eq(marquee.id, id));
-    revalidateHomepage();
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: "Failed to update marquee item." };
-  }
-}
-
-export async function deleteMarqueeItem(id: string) {
-  try {
-    await db.delete(marquee).where(eq(marquee.id, id));
-    revalidateHomepage();
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: "Failed to delete marquee item." };
   }
 }
 

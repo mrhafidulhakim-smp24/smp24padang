@@ -73,7 +73,7 @@ export default function Header() {
         { href: "/profile/organization-structure", label: "Struktur Organisasi", icon: Network },
         { href: "/profile/accreditation", label: "Sertifikasi & Penghargaan", icon: Award },
         { href: "/profile/uniform", label: "Seragam Sekolah", icon: Shirt },
-        { href: "/profile/extracurricular", label: "Ekstrakurikuler", icon: Swords },
+        
       ]
     },
     { href: "/profile/faculty", label: "Guru & Staf", icon: Users },
@@ -138,16 +138,16 @@ export default function Header() {
                     )}>
                     {link.label} <ChevronDown className="ml-1 h-4 w-4" />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                    <DropdownMenuContent className="w-64">
                     {link.subLinks.map(subLink => {
                       const isSubLinkActive = pathname === subLink.href;
                       return (
                         <DropdownMenuItem key={subLink.href} asChild>
                         <Link href={subLink.href} className={cn(
-                            "flex items-center gap-2 text-base font-semibold text-muted-foreground transition-colors hover:text-primary",
+                            "flex items-center gap-3 p-2 text-lg font-semibold text-muted-foreground transition-colors hover:text-primary",
                             isSubLinkActive && "text-primary"
                         )}>
-                            <subLink.icon className="h-4 w-4" />
+                            <subLink.icon className="h-5 w-5" />
                             {subLink.label}
                         </Link>
                         </DropdownMenuItem>
@@ -221,11 +221,11 @@ export default function Header() {
                                                 href={subLink.href}
                                                 onClick={() => setSheetOpen(false)}
                                                 className={cn(
-                                                    "flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
+                                                    "flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground",
                                                     cleanPathname === subLink.href && "bg-accent text-accent-foreground"
                                                 )}
                                             >
-                                                <subLink.icon className="h-4 w-4" />
+                                                <subLink.icon className="h-5 w-5" />
                                                 {subLink.label}
                                             </Link>
                                         ))}

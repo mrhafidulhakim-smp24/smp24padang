@@ -27,7 +27,7 @@ export default async function GalleryPage() {
             </div>
 
             {galleryItems.length > 0 ? (
-                <div className="mt-12 columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4">
+                <div className="mt-12 columns-2 gap-4 sm:columns-2 md:columns-3 lg:columns-4">
                     {galleryItems.map((item, index) => (
                         <div
                             key={index}

@@ -46,12 +46,10 @@ export default async function AnnouncementsPage() {
                                     {announcement.pdfUrl && (
                                         <div className="mt-4">
                                             <h3 className="text-lg font-semibold mb-2">Pratinjau Dokumen</h3>
-                                            <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                                            <div className="w-full h-[800px] overflow-hidden rounded-lg border">
                                                 <iframe
                                                     src={`https://drive.google.com/file/d/${extractGoogleDriveFileId(announcement.pdfUrl)}/preview`}
-                                                    width="100%"
-                                                    height="100%"
-                                                    className="absolute top-0 left-0 w-full h-full border-0"
+                                                    className="w-full h-full border-0"
                                                     allow="autoplay"
                                                     title={announcement.title}
                                                 ></iframe>

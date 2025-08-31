@@ -150,14 +150,11 @@ async function Announcements() {
                                             })}
                                         </p>
                                         <Link
-                                            href={`/articles/${item.id}`}
+                                            href="/pengumuman"
                                             className="font-semibold text-foreground hover:text-primary hover:underline"
                                         >
                                             {item.title}
                                         </Link>
-                                        <p className="text-sm text-muted-foreground">
-                                            {item.description}
-                                        </p>
                                     </div>
                                     {index < announcements.length - 1 && (
                                         <Separator />
@@ -167,7 +164,7 @@ async function Announcements() {
                         </div>
                         <div className="mt-8 text-center">
                             <Button asChild>
-                                <Link href="/news">Lihat Semua Info</Link>
+                                <Link href="/pengumuman">Lihat Semua Pengumuman</Link>
                             </Button>
                         </div>
                     </CardContent>

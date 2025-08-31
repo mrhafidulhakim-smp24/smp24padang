@@ -57,9 +57,6 @@ import {
     createBanner,
     updateBanner,
     deleteBanner,
-    createMarqueeItem,
-    updateMarqueeItem,
-    deleteMarqueeItem,
     updateStatistics,
     createFacility,
     updateFacility,
@@ -67,7 +64,6 @@ import {
 } from './actions';
 
 type Banner = Awaited<ReturnType<typeof getHomepageData>>['banners'][0];
-type MarqueeItem = Awaited<ReturnType<typeof getHomepageData>>['marquee'][0];
 type Statistics = NonNullable<
     Awaited<ReturnType<typeof getHomepageData>>['statistics']
 >;
@@ -318,215 +314,6 @@ function BannersTab({
                                     className="max-w-xs"
                                 />
                             </div>
-                        </div>
-                        <DialogFooter>
-                            <DialogClose asChild>
-                                <Button type="button" variant="secondary">
-                                    Batal
-                                </Button>
-                            </DialogClose>
-                            <Button type="submit" disabled={isPending}>
-                                {isPending ? 'Menyimpan...' : 'Simpan'}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
-        </Card>
-    );
-}
-
-function MarqueeTab({
-    data,
-    refreshData,
-}: {
-    data: MarqueeItem[];
-    refreshData: () => void;
-}) {
-    const { toast } = useToast();
-    const [isPending, startTransition] = useTransition();
-    const [isDialogOpen, setDialogOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<MarqueeItem | null>(null);
-
-    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const itemData = {
-            type: formData.get('type') as MarqueeItem['type'],
-            text: formData.get('text') as string,
-        };
-
-        startTransition(async () => {
-            const result = editingItem
-                ? await updateMarqueeItem(editingItem.id, itemData)
-                : await createMarqueeItem(itemData);
-
-            if (result.success) {
-                toast({
-                    title: `Item ${editingItem ? 'diperbarui' : 'dibuat'}!`,
-                    description: 'Teks berjalan telah diperbarui.',
-                });
-                refreshData();
-                setDialogOpen(false);
-            } else {
-                toast({
-                    title: 'Gagal!',
-                    description: result.error,
-                    variant: 'destructive',
-                });
-            }
-        });
-    };
-
-    const handleDelete = (id: string) => {
-        startTransition(async () => {
-            const result = await deleteMarqueeItem(id);
-            if (result.success) {
-                toast({ title: 'Item dihapus!' });
-                refreshData();
-            } else {
-                toast({
-                    title: 'Gagal!',
-                    description: result.error,
-                    variant: 'destructive',
-                });
-            }
-        });
-    };
-
-    return (
-        <Card>
-            <CardHeader className="flex-row items-center justify-between">
-                <div>
-                    <CardTitle className="text-2xl font-bold">Kelola Teks Berjalan</CardTitle>
-                    <CardDescription className="text-lg text-muted-foreground">
-                        Tambah, edit, atau hapus item teks berjalan.
-                    </CardDescription>
-                </div>
-                <Button
-                    onClick={() => {
-                        setEditingItem(null);
-                        setDialogOpen(true);
-                    }}
-                >
-                    <PlusCircle className="mr-2 h-4 w-4" /> Tambah Item
-                </Button>
-            </CardHeader>
-            <CardContent>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Tipe</TableHead>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Teks</TableHead>
-                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">Aksi</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {data.map((item) => (
-                            <TableRow key={item.id}>
-                                <TableCell className="px-6 py-4 whitespace-nowrap text-base">{item.type}</TableCell>
-                                <TableCell className="px-6 py-4 whitespace-nowrap font-medium text-base">
-                                    {item.text}
-                                </TableCell>
-                                <TableCell className="px-6 py-4 whitespace-nowrap text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            onClick={() => {
-                                                setEditingItem(item);
-                                                setDialogOpen(true);
-                                            }}
-                                        >
-                                            <Pencil className="h-4 w-4" />
-                                        </Button>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    variant="destructive"
-                                                    size="icon"
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>
-                                                        Anda yakin?
-                                                    </AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Tindakan ini akan
-                                                        menghapus item teks
-                                                        berjalan secara
-                                                        permanen.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>
-                                                        Batal
-                                                    </AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                item.id,
-                                                            )
-                                                        }
-                                                        disabled={isPending}
-                                                    >
-                                                        {isPending ? 'Menghapus...' : 'Hapus'}
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </CardContent>
-            <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>
-                            {editingItem ? 'Edit' : 'Tambah'} Item Teks Berjalan
-                        </DialogTitle>
-                    </DialogHeader>
-                    <form
-                        onSubmit={handleFormSubmit}
-                        className="grid gap-4 py-4"
-                    >
-                        <div className="space-y-2">
-                            <Label htmlFor="type" className="text-base">Tipe</Label>
-                            <Select
-                                name="type"
-                                defaultValue={editingItem?.type}
-                                required
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Pilih tipe..." />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="Berita">
-                                        Berita
-                                    </SelectItem>
-                                    <SelectItem value="Prestasi">
-                                        Prestasi
-                                    </SelectItem>
-                                    <SelectItem value="Pengumuman">
-                                        Pengumuman
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="text" className="text-base">Teks</Label>
-                            <Textarea
-                                id="text"
-                                name="text"
-                                defaultValue={editingItem?.text}
-                                required
-                            />
                         </div>
                         <DialogFooter>
                             <DialogClose asChild>
@@ -951,21 +738,14 @@ export default function HomepageAdminPage() {
                 </p>
             </div>
             <Tabs defaultValue="banners" className="w-full">
-                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                     <TabsTrigger value="banners">Banner</TabsTrigger>
-                    <TabsTrigger value="marquee">Teks Berjalan</TabsTrigger>
                     <TabsTrigger value="statistics">Statistik</TabsTrigger>
                     <TabsTrigger value="facilities">Fasilitas</TabsTrigger>
                 </TabsList>
                 <TabsContent value="banners" className="mt-6">
                     <BannersTab
                         data={homepageData.banners}
-                        refreshData={fetchData}
-                    />
-                </TabsContent>
-                <TabsContent value="marquee" className="mt-6">
-                    <MarqueeTab
-                        data={homepageData.marquee}
                         refreshData={fetchData}
                     />
                 </TabsContent>

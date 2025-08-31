@@ -2,12 +2,15 @@
 
 import { db } from '@/lib/db';
 import { announcements } from '@/lib/db/schema';
-import { desc } from 'drizzle-orm';
 import { unstable_cache as cache } from 'next/cache';
 
 export const getAnnouncements = cache(
     async () => {
-        return db.select().from(announcements).orderBy(desc(announcements.date));
+        const allAnnouncements = await db.select().from(announcements);
+        
+        allAnnouncements.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        
+        return allAnnouncements;
     },
     ['announcements'],
     {

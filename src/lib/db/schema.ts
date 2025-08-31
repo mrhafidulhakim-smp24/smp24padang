@@ -18,15 +18,7 @@ export const banners = pgTable('banners', {
     updatedAt: timestamp('updatedAt').defaultNow().notNull(),
 });
 
-export const extracurriculars = pgTable('extracurriculars', {
-    id: varchar('id').primaryKey(),
-    name: text('name').notNull(),
-    category: text('category').notNull(),
-    description: text('description').notNull(),
-    image: text('image'),
-    createdAt: timestamp('createdAt').defaultNow().notNull(),
-    updatedAt: timestamp('updatedAt').defaultNow().notNull(),
-});
+
 
 export const news = pgTable('news', {
     id: varchar('id').primaryKey(),
@@ -105,14 +97,7 @@ export const staff = pgTable('staff', {
     createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
-export const marquee = pgTable('marquee', {
-    id: varchar('id').primaryKey(),
-    type: text('type', {
-        enum: ['Berita', 'Prestasi', 'Pengumuman'],
-    }).notNull(),
-    text: text('text').notNull(),
-    createdAt: timestamp('createdAt').defaultNow().notNull(),
-});
+
 
 export const contact = pgTable('contact', {
     id: varchar('id').primaryKey(),
