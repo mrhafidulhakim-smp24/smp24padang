@@ -44,8 +44,9 @@ import {
 import { Separator } from '@/components/ui/separator';
 
 export const metadata: Metadata = {
-  title: 'SMPN 24 Padang | Sekolah Unggul dengan Visi Misi Kuat dan Fasilitas Lengkap',
-  description: 'Selamat datang di situs resmi SMPN 24 Padang. Jelajahi visi, misi, berita terkini, pengumuman, statistik, dan fasilitas sekolah kami. Wujudkan potensi terbaik bersama kami!',
+    title: 'SMPN 24 Padang | Sekolah Unggul dengan Visi Misi Kuat dan Fasilitas Lengkap',
+    description:
+        'Selamat datang di situs resmi SMPN 24 Padang. Jelajahi visi, misi, berita terkini, pengumuman, statistik, dan fasilitas sekolah kami. Wujudkan potensi terbaik bersama kami!',
 };
 
 export const dynamic = 'force-dynamic';
@@ -209,9 +210,15 @@ async function LatestNews() {
                 </div>
                 <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
                     {latestNews.map((item) => (
-                        <Card key={item.id} className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+                        <Card
+                            key={item.id}
+                            className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
+                        >
                             <div className="relative aspect-square w-full">
-                                <Link href={`/articles/${item.id}`} className="absolute inset-0">
+                                <Link
+                                    href={`/articles/${item.id}`}
+                                    className="absolute inset-0"
+                                >
                                     <Image
                                         src={
                                             item.imageUrl ||
@@ -265,7 +272,6 @@ async function LatestNews() {
             </div>
         </section>
     );
-}
 }
 
 async function Statistics() {
