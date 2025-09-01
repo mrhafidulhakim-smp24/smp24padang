@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import {
     SidebarProvider,
     Sidebar,
@@ -38,6 +39,7 @@ import {
     Settings,
     Award,
     Megaphone,
+    LogOut,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
@@ -174,15 +176,25 @@ export default function AdminLayout({
                         </SidebarMenu>
                     </SidebarContent>
                     <SidebarFooter>
-                        <div className="flex items-center justify-between group-data-[state=collapsed]:justify-center">
+                        <div className="flex flex-col gap-2 w-full">
                             <Button
-                                variant="outline"
-                                asChild
-                                className="group-data-[state=collapsed]:hidden"
+                                variant="ghost"
+                                className="w-full justify-start group-data-[state=collapsed]:justify-center"
+                                onClick={() => signOut({ callbackUrl: '/login' })}
                             >
-                                <Link href="/">Halaman Utama</Link>
+                                <LogOut className="mr-2 h-4 w-4" />
+                                <span className="group-data-[state=collapsed]:hidden">Keluar</span>
                             </Button>
-                            <ThemeToggle />
+                            <div className="flex items-center justify-between group-data-[state=collapsed]:justify-center">
+                                <Button
+                                    variant="outline"
+                                    asChild
+                                    className="group-data-[state=collapsed]:hidden"
+                                >
+                                    <Link href="/">Halaman Utama</Link>
+                                </Button>
+                                <ThemeToggle />
+                            </div>
                         </div>
                     </SidebarFooter>
                 </Sidebar>
