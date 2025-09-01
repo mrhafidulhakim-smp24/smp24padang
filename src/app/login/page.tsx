@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -29,31 +28,29 @@ export default function LoginPage() {
         e.preventDefault();
         setIsLoading(true);
 
-        console.log('Starting sign-in process for:', email);
-
         try {
-            const result = await signIn('credentials', {
-                redirect: false,
-                email,
-                password,
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
             });
 
-            console.log('Sign-in result:', result);
+            const data = await response.json();
 
-            if (result?.error) {
-                console.error('Sign-in error details:', result.error);
-                toast({
-                    variant: 'destructive',
-                    title: 'Login Gagal',
-                    description: 'Email atau password yang Anda masukkan salah.',
-                });
-                setIsLoading(false);
-            } else if (result?.ok) {
+            if (response.ok) {
                 toast({
                     title: 'Login Berhasil',
                     description: 'Mengalihkan Anda ke dashboard admin...',
                 });
-                router.replace('/admin/dashboard');
+                router.push('/admin/dashboard');
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Login Gagal',
+                    description: data.message || 'Email atau password yang Anda masukkan salah.',
+                });
             }
         } catch (error) {
             console.error('An unexpected error occurred during sign-in:', error);
@@ -62,8 +59,9 @@ export default function LoginPage() {
                 title: 'Terjadi Kesalahan',
                 description: 'Tidak dapat terhubung ke server. Coba lagi nanti.',
             });
-            setIsLoading(false);
         }
+
+        setIsLoading(false);
     };
 
     return (
