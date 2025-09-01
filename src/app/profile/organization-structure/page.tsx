@@ -12,7 +12,26 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function OrganizationStructurePage() {
-    const orgCharts = await getOrganizationStructures();
+    const orgChartsData = await getOrganizationStructures();
+
+    // Define the desired order of the organization charts
+    const desiredOrder = [
+        'Struktur Pimpinan Sekolah',
+        'Struktur Tata Usaha',
+        'Struktur Organisasi Siswa Intra Sekolah (OSIS)',
+    ];
+
+    // Sort the charts based on the desired order
+    const sortedOrgCharts = [...orgChartsData].sort((a, b) => {
+        const indexA = desiredOrder.indexOf(a.title);
+        const indexB = desiredOrder.indexOf(b.title);
+
+        // If a title isn't in the desired order, push it to the back
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+
+        return indexA - indexB;
+    });
 
     return (
         <div className="container mx-auto px-4 py-12 md:py-24">
@@ -26,7 +45,7 @@ export default async function OrganizationStructurePage() {
             </div>
 
             <div className="mt-16 space-y-16">
-                {orgCharts.map((chart) => (
+                {sortedOrgCharts.map((chart) => (
                     <section key={chart.type}>
                         <Card>
                             <CardHeader>

@@ -41,7 +41,7 @@ export default async function GalleryPage() {
                                     height={400}
                                     src={item.src}
                                     alt={item.alt}
-                                    className="h-auto w-full transform transition-transform duration-300 group-hover:scale-105"
+                                    className="h-80 w-full object-contain bg-black transform transition-transform duration-300 group-hover:scale-105"
                                 />
                             </Card>
                             <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">

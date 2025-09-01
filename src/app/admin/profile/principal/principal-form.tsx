@@ -122,7 +122,7 @@ export default function PrincipalForm({
                                             alt="Preview"
                                             width={160}
                                             height={160}
-                                            className="mx-auto h-40 w-40 rounded-full object-cover"
+                                            className="mx-auto h-40 w-40 rounded-md object-cover"
                                         />
                                     ) : (
                                         <UserCircle className="mx-auto h-24 w-24 text-muted-foreground" />

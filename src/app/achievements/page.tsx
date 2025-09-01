@@ -45,7 +45,7 @@ export default async function AchievementsPage() {
                                 alt={achievement.title}
                                 width={600}
                                 height={400}
-                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                className="h-full w-full object-contain bg-black transition-transform duration-500 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 z-20 flex flex-col justify-end p-6">
                                 <div className="mb-4 h-12 w-12 rounded-full bg-accent/20 p-3 ring-4 ring-accent/30 transition-all duration-500 group-hover:bg-accent group-hover:ring-accent">

@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -67,7 +68,14 @@ export default function LoginPage() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-center bg-gray-100 dark:bg-gray-900">
             <Card className="w-full max-w-sm">
-                <CardHeader>
+                <CardHeader className="flex flex-col items-center space-y-4">
+                    <Image
+                        src="/logo.png"
+                        alt="Logo Sekolah"
+                        width={80}
+                        height={80}
+                        className="mx-auto"
+                    />
                     <CardTitle className="text-2xl">Admin Login</CardTitle>
                     <CardDescription>
                         Masukkan email dan password untuk mengakses panel admin.
