@@ -10,22 +10,25 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { useToast } from '@/components/ui/use-toast';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
+    const { toast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
         setIsLoading(true);
+
+        console.log('Starting sign-in process for:', email);
 
         try {
             const result = await signIn('credentials', {
@@ -34,14 +37,30 @@ export default function LoginPage() {
                 password,
             });
 
+            console.log('Sign-in result:', result);
+
             if (result?.error) {
-                setError('Email atau password salah. Silakan coba lagi.');
+                console.error('Sign-in error details:', result.error);
+                toast({
+                    variant: 'destructive',
+                    title: 'Login Gagal',
+                    description: 'Email atau password yang Anda masukkan salah.',
+                });
                 setIsLoading(false);
             } else if (result?.ok) {
+                toast({
+                    title: 'Login Berhasil',
+                    description: 'Mengalihkan Anda ke dashboard admin...',
+                });
                 router.replace('/admin/dashboard');
             }
         } catch (error) {
-            setError('Terjadi kesalahan. Silakan coba lagi.');
+            console.error('An unexpected error occurred during sign-in:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Terjadi Kesalahan',
+                description: 'Tidak dapat terhubung ke server. Coba lagi nanti.',
+            });
             setIsLoading(false);
         }
     };
@@ -52,7 +71,7 @@ export default function LoginPage() {
                 <CardHeader>
                     <CardTitle className="text-2xl">Admin Login</CardTitle>
                     <CardDescription>
-                        Masukkan email dan password Anda untuk masuk ke panel admin.
+                        Masukkan email dan password untuk mengakses panel admin.
                     </CardDescription>
                 </CardHeader>
                 <form onSubmit={handleSubmit}>
@@ -71,22 +90,33 @@ export default function LoginPage() {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                disabled={isLoading}
-                            />
+                            <div className="relative">
+                                <Input
+                                    id="password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    disabled={isLoading}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 disabled:opacity-50"
+                                    disabled={isLoading}
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
                         </div>
-                        {error && (
-                            <p className="text-sm text-red-500">{error}</p>
-                        )}
                     </CardContent>
                     <CardFooter>
                         <Button type="submit" className="w-full" disabled={isLoading}>
-                            {isLoading ? 'Loading...' : 'Sign In'}
+                            {isLoading ? (
+                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Mohon tunggu...</>
+                            ) : (
+                                'Login'
+                            )}
                         </Button>
                     </CardFooter>
                 </form>

@@ -15,8 +15,6 @@
 # testing
 /coverage
 
-/src/ai
-
 # next.js
 /.next/
 /out/
@@ -43,6 +41,8 @@ next-env.d.ts
 
 .genkit/*
 .env*
+
+/scripts
 
 # firebase
 firebase-debug.log

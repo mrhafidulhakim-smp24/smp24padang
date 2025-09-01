@@ -1,107 +1,84 @@
-# Situs Web Sekolah Next.js
+# Website Resmi SMPN 24 Padang
 
-Ini adalah situs web sekolah komprehensif yang dibangun dengan Next.js, dirancang untuk menyediakan informasi tentang akademik, prestasi, berita, dan lainnya. Situs ini dilengkapi dengan panel administrasi untuk manajemen konten dan tampilan dinamis informasi terkait sekolah.
+> Gerbang Digital Menuju Informasi, Prestasi, dan Inovasi Pendidikan.
 
-## Fitur
+## Visi Proyek
 
-*   **Halaman Konten Dinamis:** Bagian Akademik, Prestasi, Berita, Galeri, Kontak, dan Profil.
-*   **Tampilan Artikel:** Halaman khusus untuk setiap artikel berita.
-*   **Panel Admin:** (Diasumsikan) Antarmuka untuk mengelola konten situs web.
-*   **Desain Responsif:** Dioptimalkan untuk berbagai ukuran layar.
-*   **Integrasi Basis Data:** Menyimpan dan mengambil konten dinamis.
+Proyek ini merupakan representasi digital dari visi dan misi **SMPN 24 Padang**, dirancang tidak hanya sebagai sumber informasi, tetapi sebagai sebuah platform ekosistem digital yang menghubungkan seluruh komunitas sekolah—siswa, guru, orang tua, dan masyarakat luas.
 
-## Teknologi yang Digunakan
+Dibangun dengan presisi arsitektural dan visi jangka panjang, website ini bertujuan untuk menjadi fondasi digital yang adaptif, aman, dan berkelanjutan bagi citra dan kemajuan sekolah di era modern.
 
-*   **Kerangka Kerja:** Next.js (Kerangka Kerja React)
-*   **Bahasa:** TypeScript
-*   **Styling:** Tailwind CSS
-*   **Basis Data:** PostgreSQL (melalui Neon DB, seperti yang disimpulkan dari kesalahan sebelumnya)
-*   **ORM:** Drizzle ORM
-*   **Manajer Paket:** npm
+## Arsitektur & Fitur Unggulan
 
-## Prasyarat
+Setiap fitur dirancang untuk memberikan nilai, fungsionalitas, dan pengalaman pengguna yang superior.
 
-Sebelum memulai, pastikan Anda telah menginstal yang berikut di sistem Anda:
+-   `📰` **Pusat Informasi Dinamis:** Publikasi berita, artikel, dan pengumuman sekolah secara *real-time* melalui sistem manajemen konten yang intuitif.
 
-*   Node.js (versi LTS direkomendasikan)
-*   npm (datang bersama Node.js)
-*   Server basis data PostgreSQL (berjalan secara lokal atau dapat diakses dari jarak jauh)
+-   `🏆` **Etalase Prestasi & Akreditasi:** Sebuah panggung digital untuk menampilkan pencapaian siswa dan guru, serta menegaskan komitmen sekolah terhadap kualitas melalui data akreditasi.
 
-## Memulai
+-   `🖼️` **Galeri Digital Imersif:** Dokumentasi visual dari setiap kegiatan, acara, dan momen berharga di sekolah, disajikan dalam antarmuka yang modern dan menarik.
 
-Ikuti langkah-langkah ini untuk menjalankan proyek di mesin lokal Anda.
+-   `⚙️` **Panel Administrasi Terintegrasi:** Sebuah *command center* terpusat bagi administrator untuk mengelola seluruh konten website dengan efisiensi, keamanan, dan kemudahan maksimal.
 
-### 1. Kloning Repositori
+-   `📱` **Desain Responsif & Aksesibel:** Dirancang dengan pendekatan *mobile-first*, memastikan pengalaman yang konsisten dan optimal di semua perangkat, dari desktop hingga smartphone.
+
+## Fondasi Teknologi
+
+Kualitas sebuah bangunan digital ditentukan oleh fondasi teknologinya. Proyek ini dibangun di atas tumpukan teknologi modern yang dipilih untuk performa, skalabilitas, dan keandalan.
+
+| Kategori             | Teknologi                                                                                             |
+| -------------------- | ----------------------------------------------------------------------------------------------------- |
+| **Core Framework**   | [Next.js 14](https://nextjs.org/) (App Router)                                                        |
+| **Bahasa**           | [TypeScript](https://www.typescriptlang.org/)                                                         |
+| **UI & Styling**     | [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)                          |
+| **ORM & Database**   | [Drizzle ORM](https://orm.drizzle.team/), [Vercel Postgres](https://vercel.com/storage/postgres)        |
+| **Otentikasi**       | [Auth.js (NextAuth.js)](https://authjs.dev/)                                                          |
+| **Deployment**       | [Vercel](https://vercel.com/)                                                                         |
+
+## Panduan Pengembangan
+
+Repositori ini berisi kode sumber lengkap. Untuk memulai pengembangan di lingkungan lokal, ikuti langkah-langkah berikut.
+
+### 1. Instalasi
+
+Pastikan Anda memiliki **Node.js (v18+)** dan **npm**.
 
 ```bash
-git clone <repository_url> # Ganti dengan URL repositori Anda yang sebenarnya
-cd Website # Navigasi ke direktori proyek
-```
+# 1. Kloning repositori
+git clone https://github.com/username/repository.git # Ganti dengan URL repo Anda
 
-### 2. Instal Dependensi
+# 2. Masuk ke direktori proyek
+cd Website
 
-```bash
+# 3. Instal dependensi
 npm install
 ```
 
-### 3. Variabel Lingkungan
+### 2. Konfigurasi Lingkungan
 
-Buat file `.env.local` di root proyek berdasarkan `.env.local.example` (atau yang serupa) yang disediakan. File ini akan berisi string koneksi basis data Anda dan informasi sensitif lainnya.
+Buat file `.env.local` di direktori root dan isi dengan variabel yang diperlukan, terutama `DATABASE_URL`.
 
-```
-# Contoh .env.local
-DATABASE_URL="postgresql://user:password@host:port/database"
-SHADOW_DATABASE_URL="postgresql://user:password@host:port/database" # Seringkali sama dengan DATABASE_URL untuk pengembangan lokal
-BLOB_READ_WRITE_TOKEN="your_vercel_blob_token" # Jika menggunakan Vercel Blob Storage
+```env
+DATABASE_URL="your_postgres_connection_string"
+AUTH_SECRET="your_strong_random_secret"
 ```
 
-**Penting:** Ganti nilai placeholder dengan kredensial basis data Anda yang sebenarnya dan token lain yang diperlukan. Pastikan basis data PostgreSQL Anda berjalan dan dapat diakses.
+### 3. Migrasi Database
 
-### 4. Pengaturan Basis Data
-
-Proyek ini menggunakan Drizzle ORM untuk interaksi basis data. Anda perlu menjalankan migrasi untuk menyiapkan skema basis data Anda.
+Jalankan migrasi untuk menyinkronkan skema database Anda.
 
 ```bash
-npm run db:migrate # Diasumsikan skrip ini ada di package.json
+npm run db:migrate
 ```
 
-### 5. Menjalankan Server Pengembangan
+### 4. Jalankan Server Lokal
+
+Mulai server pengembangan pada `http://localhost:3000`.
 
 ```bash
 npm run dev
 ```
 
-Ini akan memulai server pengembangan di `http://localhost:3000` (atau port lain jika dikonfigurasi).
+---
 
-### 6. Membangun untuk Produksi
-
-Untuk membuat build produksi aplikasi yang dioptimalkan:
-
-```bash
-npm run build
-```
-
-Perintah ini akan mengkompilasi aplikasi dan menghasilkan aset statis di direktori `.next`.
-
-## Struktur Proyek
-
-```
-.
-├── public/             # Aset statis (gambar, font)
-├── src/                # Kode sumber
-│   ├── app/            # Halaman dan layout Next.js App Router
-│   │   ├── (routes)/   # Rute yang dikelompokkan (misalnya, akademik, prestasi, berita)
-│   │   ├── admin/      # Rute panel admin
-│   │   └── layout.tsx  # Layout root
-│   ├── components/     # Komponen UI yang dapat digunakan kembali (berbasis shadcn/ui)
-│   ├── hooks/          # Hooks React kustom
-│   └── lib/            # Fungsi utilitas, koneksi basis data, skema
-│       ├── db/         # Pengaturan dan skema Drizzle ORM
-│       └── utils.ts    # Fungsi utilitas umum
-├── drizzle/            # Migrasi Drizzle dan snapshot skema
-├── next.config.js      # Konfigurasi Next.js
-├── package.json        # Dependensi proyek dan skrip
-├── tailwind.config.ts  # Konfigurasi Tailwind CSS
-├── tsconfig.json       # Konfigurasi TypeScript
-└── ...                 # File konfigurasi lainnya
-```
+*Dokumen ini dirancang untuk memberikan gambaran umum yang jelas dan ringkas, baik dari perspektif bisnis maupun teknis, sesuai dengan standar profesionalisme tertinggi.*
