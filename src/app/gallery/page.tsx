@@ -38,7 +38,7 @@ export default async function GalleryPage() {
                             <Card className="overflow-hidden">
                                 <Image
                                     width={600}
-                                    height={400} // This is a default, aspect ratio will be maintained
+                                    height={400}
                                     src={item.src}
                                     alt={item.alt}
                                     className="h-auto w-full transform transition-transform duration-300 group-hover:scale-105"

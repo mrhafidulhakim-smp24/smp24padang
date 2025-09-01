@@ -78,7 +78,6 @@ export default function Footer({ showMap = true }: FooterProps) {
                             <Instagram className="h-6 w-6" />
                         </Link>
                     </div>
-                    
                 </div>
 
                 <div className="space-y-4">

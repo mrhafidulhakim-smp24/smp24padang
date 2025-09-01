@@ -71,8 +71,12 @@ export default function ContactAdminPage() {
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Kelola Informasi Kontak</CardTitle>
-                    <CardDescription className="mt-2 text-lg">Memuat data...</CardDescription>
+                    <CardTitle className="text-2xl font-bold">
+                        Kelola Informasi Kontak
+                    </CardTitle>
+                    <CardDescription className="mt-2 text-lg">
+                        Memuat data...
+                    </CardDescription>
                 </CardHeader>
             </Card>
         );
@@ -82,14 +86,20 @@ export default function ContactAdminPage() {
         <form onSubmit={handleSubmit}>
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Kelola Informasi Kontak</CardTitle>
+                    <CardTitle className="text-2xl font-bold">
+                        Kelola Informasi Kontak
+                    </CardTitle>
                     <CardDescription className="mt-2 text-lg">
-                        Perbarui alamat, telepon, dan email yang ditampilkan di seluruh situs.
+                        Perbarui alamat, telepon, dan email yang ditampilkan di
+                        seluruh situs.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
                     <div className="space-y-2">
-                        <Label htmlFor="address" className="text-base flex items-center gap-2">
+                        <Label
+                            htmlFor="address"
+                            className="text-base flex items-center gap-2"
+                        >
                             <MapPin className="h-4 w-4" /> Alamat
                         </Label>
                         <Input
@@ -102,7 +112,10 @@ export default function ContactAdminPage() {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="phone" className="text-base flex items-center gap-2">
+                        <Label
+                            htmlFor="phone"
+                            className="text-base flex items-center gap-2"
+                        >
                             <Phone className="h-4 w-4" /> Nomor Telepon
                         </Label>
                         <Input
@@ -116,7 +129,10 @@ export default function ContactAdminPage() {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-base flex items-center gap-2">
+                        <Label
+                            htmlFor="email"
+                            className="text-base flex items-center gap-2"
+                        >
                             <Mail className="h-4 w-4" /> Alamat Email
                         </Label>
                         <Input
@@ -130,7 +146,10 @@ export default function ContactAdminPage() {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="googleMapsUrl" className="text-base flex items-center gap-2">
+                        <Label
+                            htmlFor="googleMapsUrl"
+                            className="text-base flex items-center gap-2"
+                        >
                             <MapPin className="h-4 w-4" /> URL Google Maps
                         </Label>
                         <Input

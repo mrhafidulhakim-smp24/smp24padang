@@ -2,12 +2,7 @@
 
 import { useState, useEffect, useTransition } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
-import {
-    MoreHorizontal,
-    Pencil,
-    PlusCircle,
-    Trash2,
-} from 'lucide-react';
+import { MoreHorizontal, Pencil, PlusCircle, Trash2 } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -40,7 +35,13 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -155,30 +156,35 @@ export default function AnnouncementsAdminPage() {
     const [isAddOpen, setAddOpen] = useState(false);
     const [isEditOpen, setEditOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
-    const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(
-        null,
-    );
+    const [selectedAnnouncement, setSelectedAnnouncement] =
+        useState<Announcement | null>(null);
     const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
-        getAnnouncementsForAdmin().then((data) => setAnnouncements(data as Announcement[]));
+        getAnnouncementsForAdmin().then((data) =>
+            setAnnouncements(data as Announcement[]),
+        );
     }, []);
 
     const { toast } = useToast();
 
     const handleFetchAndUpdate = () => {
-        getAnnouncementsForAdmin().then((data) => setAnnouncements(data as Announcement[]));
+        getAnnouncementsForAdmin().then((data) =>
+            setAnnouncements(data as Announcement[]),
+        );
     };
 
     const handleDelete = () => {
         if (!selectedAnnouncement) return;
         startTransition(async () => {
-            const result = await deleteAnnouncement(
-                selectedAnnouncement.id,
-            );
+            const result = await deleteAnnouncement(selectedAnnouncement.id);
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
-                setAnnouncements(announcements.filter((a) => a.id !== selectedAnnouncement.id));
+                setAnnouncements(
+                    announcements.filter(
+                        (a) => a.id !== selectedAnnouncement.id,
+                    ),
+                );
                 setDeleteOpen(false);
                 setSelectedAnnouncement(null);
             } else {
@@ -201,7 +207,9 @@ export default function AnnouncementsAdminPage() {
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-2xl font-bold">Kelola Pengumuman</CardTitle>
+                        <CardTitle className="text-2xl font-bold">
+                            Kelola Pengumuman
+                        </CardTitle>
                         <CardDescription className="mt-2 text-lg">
                             Tambah, edit, atau hapus pengumuman.
                         </CardDescription>
@@ -215,7 +223,9 @@ export default function AnnouncementsAdminPage() {
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl">
                             <DialogHeader>
-                                <DialogTitle>Tambah Pengumuman Baru</DialogTitle>
+                                <DialogTitle>
+                                    Tambah Pengumuman Baru
+                                </DialogTitle>
                             </DialogHeader>
                             <AnnouncementForm
                                 action={createAnnouncement}
@@ -235,31 +245,43 @@ export default function AnnouncementsAdminPage() {
                             <TableRow>
                                 <TableHead>Judul</TableHead>
                                 <TableHead>Tanggal</TableHead>
-                                <TableHead className="text-right">Aksi</TableHead>
+                                <TableHead className="text-right">
+                                    Aksi
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {announcements.map((item) => (
                                 <TableRow key={item.id}>
-                                    <TableCell className="font-medium text-base">{item.title}</TableCell>
+                                    <TableCell className="font-medium text-base">
+                                        {item.title}
+                                    </TableCell>
                                     <TableCell className="text-base">
-                                        {new Date(item.date).toLocaleDateString('id-ID', {
-                                            day: 'numeric',
-                                            month: 'long',
-                                            year: 'numeric',
-                                        })}
+                                        {new Date(item.date).toLocaleDateString(
+                                            'id-ID',
+                                            {
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric',
+                                            },
+                                        )}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <Button
+                                                    variant="ghost"
+                                                    className="h-8 w-8 p-0"
+                                                >
                                                     <MoreHorizontal className="h-4 w-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedAnnouncement(item);
+                                                        setSelectedAnnouncement(
+                                                            item,
+                                                        );
                                                         setEditOpen(true);
                                                     }}
                                                 >
@@ -268,7 +290,9 @@ export default function AnnouncementsAdminPage() {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedAnnouncement(item);
+                                                        setSelectedAnnouncement(
+                                                            item,
+                                                        );
                                                         setDeleteOpen(true);
                                                     }}
                                                     className="text-destructive focus:bg-destructive/10 focus:text-destructive"
@@ -309,11 +333,14 @@ export default function AnnouncementsAdminPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini tidak dapat dibatalkan. Ini akan menghapus pengumuman secara permanen.
+                            Tindakan ini tidak dapat dibatalkan. Ini akan
+                            menghapus pengumuman secara permanen.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setSelectedAnnouncement(null)}>
+                        <AlertDialogCancel
+                            onClick={() => setSelectedAnnouncement(null)}
+                        >
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction

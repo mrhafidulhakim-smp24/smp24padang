@@ -42,7 +42,13 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -210,7 +216,9 @@ export default function NewsAdminPage() {
             );
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
-                setArticles(articles.filter((a) => a.id !== selectedArticle.id));
+                setArticles(
+                    articles.filter((a) => a.id !== selectedArticle.id),
+                );
                 setDeleteOpen(false);
                 setSelectedArticle(null);
             } else {
@@ -234,9 +242,12 @@ export default function NewsAdminPage() {
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-2xl font-bold">Kelola Berita & Pengumuman</CardTitle>
+                        <CardTitle className="text-2xl font-bold">
+                            Kelola Berita & Pengumuman
+                        </CardTitle>
                         <CardDescription className="mt-2 text-lg">
-                            Tambah, edit, atau hapus artikel berita dan pengumuman.
+                            Tambah, edit, atau hapus artikel berita dan
+                            pengumuman.
                         </CardDescription>
                     </div>
                     <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
@@ -269,7 +280,9 @@ export default function NewsAdminPage() {
                                 <TableHead>Gambar</TableHead>
                                 <TableHead>Judul</TableHead>
                                 <TableHead>Tanggal</TableHead>
-                                <TableHead className="text-right">Aksi</TableHead>
+                                <TableHead className="text-right">
+                                    Aksi
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -277,32 +290,45 @@ export default function NewsAdminPage() {
                                 <TableRow key={item.id}>
                                     <TableCell>
                                         <Image
-                                            src={item.imageUrl || 'https://placehold.co/80x80.png'}
+                                            src={
+                                                item.imageUrl ||
+                                                'https://placehold.co/80x80.png'
+                                            }
                                             alt={item.title}
                                             width={80}
                                             height={80}
                                             className="rounded-md object-cover"
                                         />
                                     </TableCell>
-                                    <TableCell className="font-medium text-base">{item.title}</TableCell>
+                                    <TableCell className="font-medium text-base">
+                                        {item.title}
+                                    </TableCell>
                                     <TableCell className="text-base">
-                                        {new Date(item.date).toLocaleDateString('id-ID', {
-                                            day: 'numeric',
-                                            month: 'long',
-                                            year: 'numeric',
-                                        })}
+                                        {new Date(item.date).toLocaleDateString(
+                                            'id-ID',
+                                            {
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric',
+                                            },
+                                        )}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <Button
+                                                    variant="ghost"
+                                                    className="h-8 w-8 p-0"
+                                                >
                                                     <MoreHorizontal className="h-4 w-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedArticle(item);
+                                                        setSelectedArticle(
+                                                            item,
+                                                        );
                                                         setEditOpen(true);
                                                     }}
                                                 >
@@ -311,7 +337,9 @@ export default function NewsAdminPage() {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedArticle(item);
+                                                        setSelectedArticle(
+                                                            item,
+                                                        );
                                                         setDeleteOpen(true);
                                                     }}
                                                     className="text-destructive focus:bg-destructive/10 focus:text-destructive"
@@ -352,11 +380,14 @@ export default function NewsAdminPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini tidak dapat dibatalkan. Ini akan menghapus artikel berita secara permanen.
+                            Tindakan ini tidak dapat dibatalkan. Ini akan
+                            menghapus artikel berita secara permanen.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setSelectedArticle(null)}>
+                        <AlertDialogCancel
+                            onClick={() => setSelectedArticle(null)}
+                        >
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction

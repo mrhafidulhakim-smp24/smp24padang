@@ -7,7 +7,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 
-// A reusable component for displaying a staff member's card
 function StaffCard({
     person,
     isPrincipal = false,
@@ -19,7 +18,10 @@ function StaffCard({
     const nameSize = isPrincipal ? 'text-2xl' : 'text-xl';
 
     return (
-        <div className="flex flex-col items-center text-center group" data-aos="fade-up">
+        <div
+            className="flex flex-col items-center text-center group"
+            data-aos="fade-up"
+        >
             <div
                 className={`relative ${imageSize} max-w-xs overflow-hidden rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl`}
             >
@@ -54,7 +56,6 @@ function StaffCard({
     );
 }
 
-// A section component to keep the code DRY
 function StaffSection({
     title,
     children,
@@ -88,7 +89,6 @@ export default function FacultyPage() {
         person.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
-    // Filter staff into categories based on the filtered list
     const principal = filteredStaff.find((s) =>
         s.position.toLowerCase().includes('kepala sekolah'),
     );
@@ -113,7 +113,7 @@ export default function FacultyPage() {
                         untuk membimbing siswa kami.
                     </p>
                     <div className="mt-8 mx-auto max-w-xl">
-                        <Input 
+                        <Input
                             type="text"
                             placeholder="Cari nama guru atau staf..."
                             value={searchTerm}
@@ -164,8 +164,14 @@ export default function FacultyPage() {
                     {/* No Results Message */}
                     {filteredStaff.length === 0 && searchTerm && (
                         <div className="text-center py-16">
-                            <p className="text-xl text-muted-foreground">Tidak ada hasil untuk &quot;<b>{searchTerm}</b>&quot;.</p>
-                            <p className="mt-2 text-base text-muted-foreground/80">Coba periksa kembali ejaan atau gunakan kata kunci lain.</p>
+                            <p className="text-xl text-muted-foreground">
+                                Tidak ada hasil untuk &quot;<b>{searchTerm}</b>
+                                &quot;.
+                            </p>
+                            <p className="mt-2 text-base text-muted-foreground/80">
+                                Coba periksa kembali ejaan atau gunakan kata
+                                kunci lain.
+                            </p>
                         </div>
                     )}
                 </div>

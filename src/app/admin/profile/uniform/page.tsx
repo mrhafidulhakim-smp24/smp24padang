@@ -23,22 +23,27 @@ export default async function UniformAdminPage() {
 
     for (const required of REQUIRED_UNIFORMS) {
         if (required.type === 'sport') {
-            const existingSportUniform = existingUniforms.find(u => u.type === 'sport');
+            const existingSportUniform = existingUniforms.find(
+                (u) => u.type === 'sport',
+            );
             if (existingSportUniform) {
-                await db.update(uniformsTable).set({
-                    description: required.description,
-                    updatedAt: new Date(),
-                }).where(eq(uniformsTable.id, existingSportUniform.id));
+                await db
+                    .update(uniformsTable)
+                    .set({
+                        description: required.description,
+                        updatedAt: new Date(),
+                    })
+                    .where(eq(uniformsTable.id, existingSportUniform.id));
             } else {
                 await db.insert(uniformsTable).values({
                     type: 'sport',
                     description: required.description,
-                    day: null, // Explicitly null
+                    day: null,
                 });
             }
         } else {
-            // For daily uniforms, use onConflictDoUpdate
-            await db.insert(uniformsTable)
+            await db
+                .insert(uniformsTable)
                 .values({
                     type: required.type,
                     description: required.description,
@@ -54,23 +59,19 @@ export default async function UniformAdminPage() {
         }
     }
 
-    // Fetch the complete & ordered list to pass to the client
     const allUniforms = await db.query.uniforms.findMany();
 
-    // Create a stable order for the UI
     const orderedUniforms = REQUIRED_UNIFORMS.map((required) => {
-        const uniform = allUniforms.find(u => {
+        const uniform = allUniforms.find((u) => {
             if (required.type === 'sport') {
                 return u.type === 'sport';
             } else {
                 return u.day === required.day;
             }
         });
-        // We can be sure uniform is not undefined here because we just seeded them
+
         return uniform!;
     });
 
-    return (
-        <UniformList initialUniformsData={orderedUniforms} />
-    );
+    return <UniformList initialUniformsData={orderedUniforms} />;
 }

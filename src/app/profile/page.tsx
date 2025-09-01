@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -10,15 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    Book,
-    Target,
-    Users,
-    Award,
-    Network,
-    Shirt,
-    Swords,
-} from 'lucide-react';
+
 import { getProfile, getPastPrincipals } from '../actions';
 
 export const metadata: Metadata = {

@@ -1,18 +1,24 @@
+'use client';
 
-"use client";
-
-import { useEffect, useState, useTransition } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { Target, Book } from "lucide-react";
-import { getProfile, updateVisionMission } from "./actions";
+import { useEffect, useState, useTransition } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    CardFooter,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { Target, Book } from 'lucide-react';
+import { getProfile, updateVisionMission } from './actions';
 
 export default function VisionMissionAdminPage() {
-    const [vision, setVision] = useState("");
-    const [mission, setMission] = useState("");
+    const [vision, setVision] = useState('');
+    const [mission, setMission] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
@@ -34,14 +40,17 @@ export default function VisionMissionAdminPage() {
             const result = await updateVisionMission(vision, mission);
             if (result.success) {
                 toast({
-                    title: "Perubahan Disimpan!",
-                    description: "Visi & Misi sekolah telah berhasil diperbarui.",
+                    title: 'Perubahan Disimpan!',
+                    description:
+                        'Visi & Misi sekolah telah berhasil diperbarui.',
                 });
             } else {
                 toast({
-                    title: "Gagal Menyimpan!",
-                    description: result.error || "Terjadi kesalahan saat memperbarui Visi & Misi.",
-                    variant: "destructive",
+                    title: 'Gagal Menyimpan!',
+                    description:
+                        result.error ||
+                        'Terjadi kesalahan saat memperbarui Visi & Misi.',
+                    variant: 'destructive',
                 });
             }
         });
@@ -60,11 +69,12 @@ export default function VisionMissionAdminPage() {
         );
     }
 
-
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-2xl font-bold">Kelola Visi & Misi</CardTitle>
+                <CardTitle className="text-2xl font-bold">
+                    Kelola Visi & Misi
+                </CardTitle>
                 <CardDescription className="mt-2 text-lg">
                     Perbarui pernyataan visi dan misi sekolah Anda.
                 </CardDescription>
@@ -74,7 +84,7 @@ export default function VisionMissionAdminPage() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Target className="h-6 w-6 text-accent"/>
+                                <Target className="h-6 w-6 text-accent" />
                                 Visi Sekolah
                             </CardTitle>
                             <CardDescription>
@@ -95,15 +105,16 @@ export default function VisionMissionAdminPage() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Book className="h-6 w-6 text-accent"/>
+                                <Book className="h-6 w-6 text-accent" />
                                 Misi Sekolah
                             </CardTitle>
                             <CardDescription>
-                               Setiap baris akan dianggap sebagai satu poin misi.
+                                Setiap baris akan dianggap sebagai satu poin
+                                misi.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                             <Textarea
+                            <Textarea
                                 id="mission"
                                 value={mission}
                                 onChange={(e) => setMission(e.target.value)}
@@ -115,7 +126,11 @@ export default function VisionMissionAdminPage() {
                 </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-                <Button onClick={handleSaveChanges} size="lg" disabled={isPending}>
+                <Button
+                    onClick={handleSaveChanges}
+                    size="lg"
+                    disabled={isPending}
+                >
                     {isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                 </Button>
             </CardFooter>

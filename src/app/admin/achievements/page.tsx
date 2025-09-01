@@ -43,7 +43,13 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -226,9 +232,12 @@ export default function AchievementsAdminPage() {
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-2xl font-bold">Kelola Prestasi</CardTitle>
+                        <CardTitle className="text-2xl font-bold">
+                            Kelola Prestasi
+                        </CardTitle>
                         <CardDescription className="mt-2 text-lg">
-                            Tambah, edit, atau hapus data prestasi siswa dan sekolah.
+                            Tambah, edit, atau hapus data prestasi siswa dan
+                            sekolah.
                         </CardDescription>
                     </div>
                     <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
@@ -263,7 +272,9 @@ export default function AchievementsAdminPage() {
                                 <TableHead>Gambar</TableHead>
                                 <TableHead>Judul</TableHead>
                                 <TableHead>Siswa/Tim</TableHead>
-                                <TableHead className="text-right">Aksi</TableHead>
+                                <TableHead className="text-right">
+                                    Aksi
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -271,26 +282,38 @@ export default function AchievementsAdminPage() {
                                 <TableRow key={item.id}>
                                     <TableCell>
                                         <Image
-                                            src={item.imageUrl || 'https://placehold.co/80x80.png'}
+                                            src={
+                                                item.imageUrl ||
+                                                'https://placehold.co/80x80.png'
+                                            }
                                             alt={item.title}
                                             width={80}
                                             height={80}
                                             className="rounded-md object-cover"
                                         />
                                     </TableCell>
-                                    <TableCell className="font-medium text-base">{item.title}</TableCell>
-                                    <TableCell className="text-base">{item.student}</TableCell>
+                                    <TableCell className="font-medium text-base">
+                                        {item.title}
+                                    </TableCell>
+                                    <TableCell className="text-base">
+                                        {item.student}
+                                    </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <Button
+                                                    variant="ghost"
+                                                    className="h-8 w-8 p-0"
+                                                >
                                                     <MoreHorizontal className="h-4 w-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedAchievement(item);
+                                                        setSelectedAchievement(
+                                                            item,
+                                                        );
                                                         setEditOpen(true);
                                                     }}
                                                 >
@@ -299,7 +322,9 @@ export default function AchievementsAdminPage() {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onSelect={() => {
-                                                        setSelectedAchievement(item);
+                                                        setSelectedAchievement(
+                                                            item,
+                                                        );
                                                         setDeleteOpen(true);
                                                     }}
                                                     className="text-destructive focus:bg-destructive/10 focus:text-destructive"
@@ -342,11 +367,14 @@ export default function AchievementsAdminPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data prestasi secara permanen.
+                            Tindakan ini tidak dapat dibatalkan. Ini akan
+                            menghapus data prestasi secara permanen.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setSelectedAchievement(null)}>
+                        <AlertDialogCancel
+                            onClick={() => setSelectedAchievement(null)}
+                        >
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction

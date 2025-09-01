@@ -1,10 +1,4 @@
 import type { Metadata } from 'next';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
 import { getProfile } from '@/app/actions';
 import { Book, Target } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

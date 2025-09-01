@@ -1,10 +1,9 @@
 import createNextIntlPlugin from 'next-intl/plugin';
-import type {NextConfig} from 'next';
  
 const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
  
 /** @type {import('next').NextConfig} */
-const nextConfig: NextConfig = {
+const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -19,6 +18,10 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      }
     ],
   },
 };

@@ -7,22 +7,24 @@ import { eq } from 'drizzle-orm';
 import { put, del } from '@vercel/blob';
 import { z } from 'zod';
 
-// Schema for principal profile
 const profileSchema = z.object({
-    principalName: z.string().min(1, "Nama tidak boleh kosong"),
-    principalWelcome: z.string().min(1, "Sambutan tidak boleh kosong"),
-    history: z.string().min(1, "Sejarah tidak boleh kosong"),
+    principalName: z.string().min(1, 'Nama tidak boleh kosong'),
+    principalWelcome: z.string().min(1, 'Sambutan tidak boleh kosong'),
+    history: z.string().min(1, 'Sejarah tidak boleh kosong'),
     principalImage: z.instanceof(File).optional(),
 });
 
 export async function updatePrincipalProfile(formData: FormData) {
-    const validatedFields = profileSchema.safeParse(Object.fromEntries(formData.entries()));
+    const validatedFields = profileSchema.safeParse(
+        Object.fromEntries(formData.entries()),
+    );
 
     if (!validatedFields.success) {
         return { success: false, message: 'Validasi gagal' };
     }
 
-    const { principalName, principalWelcome, history, principalImage } = validatedFields.data;
+    const { principalName, principalWelcome, history, principalImage } =
+        validatedFields.data;
 
     const existingProfile = await db.query.profiles.findFirst();
     const profileId = existingProfile?.id || '1';
@@ -34,7 +36,9 @@ export async function updatePrincipalProfile(formData: FormData) {
             if (existingProfile?.principalImageUrl) {
                 await del(existingProfile.principalImageUrl);
             }
-            const blob = await put(principalImage.name, principalImage, { access: 'public' });
+            const blob = await put(principalImage.name, principalImage, {
+                access: 'public',
+            });
             newImageUrl = blob.url;
         } catch (error) {
             return { success: false, message: 'Gagal unggah gambar' };
@@ -43,13 +47,17 @@ export async function updatePrincipalProfile(formData: FormData) {
 
     try {
         if (existingProfile) {
-            await db.update(profiles).set({
-                principalName,
-                principalWelcome,
-                history,
-                principalImageUrl: newImageUrl ?? existingProfile.principalImageUrl,
-                updatedAt: new Date(),
-            }).where(eq(profiles.id, profileId));
+            await db
+                .update(profiles)
+                .set({
+                    principalName,
+                    principalWelcome,
+                    history,
+                    principalImageUrl:
+                        newImageUrl ?? existingProfile.principalImageUrl,
+                    updatedAt: new Date(),
+                })
+                .where(eq(profiles.id, profileId));
         } else {
             await db.insert(profiles).values({
                 id: profileId,
@@ -57,28 +65,33 @@ export async function updatePrincipalProfile(formData: FormData) {
                 principalWelcome,
                 history,
                 principalImageUrl: newImageUrl,
-                vision: '', 
+                vision: '',
                 mission: '',
             });
         }
         revalidatePath('/admin/profile/principal');
         revalidatePath('/');
         revalidatePath('/profile');
-        return { success: true, message: 'Profil berhasil diperbarui.', newImageUrl };
+        return {
+            success: true,
+            message: 'Profil berhasil diperbarui.',
+            newImageUrl,
+        };
     } catch (error) {
         return { success: false, message: 'Gagal perbarui profil.' };
     }
 }
 
-// Schema for past principal
 const pastPrincipalSchema = z.object({
-    name: z.string().min(1, "Nama tidak boleh kosong"),
-    period: z.string().min(1, "Periode tidak boleh kosong"),
+    name: z.string().min(1, 'Nama tidak boleh kosong'),
+    period: z.string().min(1, 'Periode tidak boleh kosong'),
     image: z.instanceof(File).optional(),
 });
 
 export async function createPastPrincipal(formData: FormData) {
-    const validatedFields = pastPrincipalSchema.safeParse(Object.fromEntries(formData.entries()));
+    const validatedFields = pastPrincipalSchema.safeParse(
+        Object.fromEntries(formData.entries()),
+    );
 
     if (!validatedFields.success) {
         return { success: false, message: 'Validasi gagal' };
@@ -100,14 +113,23 @@ export async function createPastPrincipal(formData: FormData) {
         await db.insert(pastPrincipals).values({ name, period, imageUrl });
         revalidatePath('/admin/profile/principal');
         revalidatePath('/profile');
-        return { success: true, message: 'Riwayat kepala sekolah ditambahkan.' };
+        return {
+            success: true,
+            message: 'Riwayat kepala sekolah ditambahkan.',
+        };
     } catch (error) {
         return { success: false, message: 'Gagal menambahkan data.' };
     }
 }
 
-export async function updatePastPrincipal(id: number, currentImageUrl: string | null, formData: FormData) {
-    const validatedFields = pastPrincipalSchema.safeParse(Object.fromEntries(formData.entries()));
+export async function updatePastPrincipal(
+    id: number,
+    currentImageUrl: string | null,
+    formData: FormData,
+) {
+    const validatedFields = pastPrincipalSchema.safeParse(
+        Object.fromEntries(formData.entries()),
+    );
 
     if (!validatedFields.success) {
         return { success: false, message: 'Validasi gagal' };
@@ -129,11 +151,14 @@ export async function updatePastPrincipal(id: number, currentImageUrl: string | 
     }
 
     try {
-        await db.update(pastPrincipals).set({
-            name,
-            period,
-            imageUrl: newImageUrl ?? currentImageUrl,
-        }).where(eq(pastPrincipals.id, id));
+        await db
+            .update(pastPrincipals)
+            .set({
+                name,
+                period,
+                imageUrl: newImageUrl ?? currentImageUrl,
+            })
+            .where(eq(pastPrincipals.id, id));
         revalidatePath('/admin/profile/principal');
         revalidatePath('/profile');
         return { success: true, message: 'Riwayat kepala sekolah diperbarui.' };

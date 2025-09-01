@@ -7,7 +7,10 @@ import { desc } from 'drizzle-orm';
 
 export const getAnnouncements = cache(
     async () => {
-        return await db.select().from(announcements).orderBy(desc(announcements.date));
+        return await db
+            .select()
+            .from(announcements)
+            .orderBy(desc(announcements.date));
     },
     ['announcements'],
     {

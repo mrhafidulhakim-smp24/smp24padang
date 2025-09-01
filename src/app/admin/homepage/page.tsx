@@ -154,7 +154,9 @@ function BannersTab({
         <Card>
             <CardHeader className="flex-row items-center justify-between">
                 <div>
-                    <CardTitle className="text-2xl font-bold">Kelola Banner</CardTitle>
+                    <CardTitle className="text-2xl font-bold">
+                        Kelola Banner
+                    </CardTitle>
                     <CardDescription className="text-lg text-muted-foreground">
                         Tambah, edit, atau hapus banner di halaman utama.
                     </CardDescription>
@@ -172,9 +174,15 @@ function BannersTab({
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Gambar</TableHead>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Judul</TableHead>
-                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">Aksi</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
+                                Gambar
+                            </TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
+                                Judul
+                            </TableHead>
+                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">
+                                Aksi
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -238,7 +246,9 @@ function BannersTab({
                                                         }
                                                         disabled={isPending}
                                                     >
-                                                        {isPending ? 'Menghapus...' : 'Hapus'}
+                                                        {isPending
+                                                            ? 'Menghapus...'
+                                                            : 'Hapus'}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
@@ -379,7 +389,9 @@ function StatisticsTab({
         <form onSubmit={handleSubmit}>
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Data Statistik Sekolah</CardTitle>
+                    <CardTitle className="text-2xl font-bold">
+                        Data Statistik Sekolah
+                    </CardTitle>
                     <CardDescription className="text-lg text-muted-foreground">
                         Perbarui data statistik yang ditampilkan di halaman
                         beranda.
@@ -387,7 +399,9 @@ function StatisticsTab({
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                        <Label htmlFor="classrooms" className="text-lg">Jumlah Ruang Kelas</Label>
+                        <Label htmlFor="classrooms" className="text-lg">
+                            Jumlah Ruang Kelas
+                        </Label>
                         <Input
                             id="classrooms"
                             name="classrooms"
@@ -399,7 +413,9 @@ function StatisticsTab({
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="students" className="text-lg">Jumlah Siswa</Label>
+                        <Label htmlFor="students" className="text-lg">
+                            Jumlah Siswa
+                        </Label>
                         <Input
                             id="students"
                             name="students"
@@ -411,7 +427,9 @@ function StatisticsTab({
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="teachers" className="text-lg">Jumlah Guru</Label>
+                        <Label htmlFor="teachers" className="text-lg">
+                            Jumlah Guru
+                        </Label>
                         <Input
                             id="teachers"
                             name="teachers"
@@ -533,7 +551,9 @@ function FacilitiesTab({
         <Card>
             <CardHeader className="flex-row items-center justify-between">
                 <div>
-                    <CardTitle className="text-2xl font-bold">Kelola Fasilitas</CardTitle>
+                    <CardTitle className="text-2xl font-bold">
+                        Kelola Fasilitas
+                    </CardTitle>
                     <CardDescription className="text-lg text-muted-foreground">
                         Tambah, edit, atau hapus fasilitas sekolah.
                     </CardDescription>
@@ -551,9 +571,15 @@ function FacilitiesTab({
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Gambar</TableHead>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Nama Fasilitas</TableHead>
-                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">Aksi</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
+                                Gambar
+                            </TableHead>
+                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
+                                Nama Fasilitas
+                            </TableHead>
+                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">
+                                Aksi
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -616,7 +642,9 @@ function FacilitiesTab({
                                                         }
                                                         disabled={isPending}
                                                     >
-                                                        {isPending ? 'Menghapus...' : 'Hapus'}
+                                                        {isPending
+                                                            ? 'Menghapus...'
+                                                            : 'Hapus'}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
@@ -648,7 +676,9 @@ function FacilitiesTab({
                         className="grid gap-4 py-4"
                     >
                         <div className="space-y-2">
-                            <Label htmlFor="name" className="text-base">Nama Fasilitas</Label>
+                            <Label htmlFor="name" className="text-base">
+                                Nama Fasilitas
+                            </Label>
                             <Input
                                 id="name"
                                 name="name"
@@ -734,7 +764,8 @@ export default function HomepageAdminPage() {
             <div>
                 <h1 className="text-2xl font-bold">Kelola Halaman Beranda</h1>
                 <p className="text-muted-foreground">
-                    Kelola semua konten yang ada di halaman beranda dari satu tempat.
+                    Kelola semua konten yang ada di halaman beranda dari satu
+                    tempat.
                 </p>
             </div>
             <Tabs defaultValue="banners" className="w-full">

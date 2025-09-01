@@ -36,7 +36,9 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
     const [isPending, startTransition] = useTransition();
     const [uniforms, setUniforms] = useState<Uniform[]>(initialUniformsData);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(null);
+    const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(
+        null,
+    );
     const [imageFile, setImageFile] = useState<File | null>(null);
 
     useEffect(() => {
@@ -55,40 +57,59 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
         startTransition(async () => {
             const result = await updateUniform(selectedUniform.id, formData);
             if (result.success) {
-                toast({ title: 'Sukses!', description: 'Seragam berhasil diperbarui.' });
-                // Optimistically update the UI
-                const updatedUniforms = uniforms.map(u => 
-                    u.id === selectedUniform.id 
-                        ? { ...u, description: formData.get('description') as string, image: result.updatedImage ?? u.image } 
-                        : u
+                toast({
+                    title: 'Sukses!',
+                    description: 'Seragam berhasil diperbarui.',
+                });
+
+                const updatedUniforms = uniforms.map((u) =>
+                    u.id === selectedUniform.id
+                        ? {
+                              ...u,
+                              description: formData.get(
+                                  'description',
+                              ) as string,
+                              image: result.updatedImage ?? u.image,
+                          }
+                        : u,
                 );
                 setUniforms(updatedUniforms);
                 setIsEditDialogOpen(false);
                 setSelectedUniform(null);
                 setImageFile(null);
             } else {
-                toast({ title: 'Gagal!', description: result.message, variant: 'destructive' });
+                toast({
+                    title: 'Gagal!',
+                    description: result.message,
+                    variant: 'destructive',
+                });
             }
         });
     };
 
     const openEditDialog = (day: string) => {
-        const uniformForDay = uniforms.find(u => u.day === day) || 
-                              (day === 'Olahraga' && uniforms.find(u => u.type === 'sport'));
-        
+        const uniformForDay =
+            uniforms.find((u) => u.day === day) ||
+            (day === 'Olahraga' && uniforms.find((u) => u.type === 'sport'));
+
         if (uniformForDay) {
             setSelectedUniform(uniformForDay);
             setIsEditDialogOpen(true);
         } else {
-            // This case should ideally not happen if the database is seeded correctly.
-            toast({ title: 'Error', description: `Data seragam untuk ${day} tidak ditemukan.`, variant: 'destructive' });
+            toast({
+                title: 'Error',
+                description: `Data seragam untuk ${day} tidak ditemukan.`,
+                variant: 'destructive',
+            });
         }
     };
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-2xl font-bold">Kelola Seragam Sekolah</CardTitle>
+                <CardTitle className="text-2xl font-bold">
+                    Kelola Seragam Sekolah
+                </CardTitle>
                 <CardDescription className="mt-2 text-lg">
                     Perbarui gambar dan deskripsi untuk setiap seragam.
                 </CardDescription>
@@ -96,11 +117,16 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
             <CardContent>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {DAYS.map((day) => {
-                        const uniform = uniforms.find(u => u.day === day) || 
-                                      (day === 'Olahraga' && uniforms.find(u => u.type === 'sport'));
-                        
+                        const uniform =
+                            uniforms.find((u) => u.day === day) ||
+                            (day === 'Olahraga' &&
+                                uniforms.find((u) => u.type === 'sport'));
+
                         return (
-                            <Card key={day} className="group relative overflow-hidden">
+                            <Card
+                                key={day}
+                                className="group relative overflow-hidden"
+                            >
                                 <CardHeader className="p-0">
                                     {uniform && uniform.image ? (
                                         <Image
@@ -121,7 +147,8 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                                         {day}
                                     </CardTitle>
                                     <CardDescription>
-                                        {uniform && uniform.description || 'Belum ada deskripsi'}
+                                        {(uniform && uniform.description) ||
+                                            'Belum ada deskripsi'}
                                     </CardDescription>
                                 </CardContent>
                                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
@@ -141,7 +168,12 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Edit Seragam {selectedUniform?.day || (selectedUniform?.type === 'sport' && 'Olahraga')}</DialogTitle>
+                        <DialogTitle>
+                            Edit Seragam{' '}
+                            {selectedUniform?.day ||
+                                (selectedUniform?.type === 'sport' &&
+                                    'Olahraga')}
+                        </DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleEditSubmit} className="space-y-4">
                         <div>
@@ -149,7 +181,9 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                             <Input
                                 id="description-edit"
                                 name="description"
-                                defaultValue={selectedUniform?.description || ''}
+                                defaultValue={
+                                    selectedUniform?.description || ''
+                                }
                                 required
                             />
                         </div>
@@ -168,7 +202,13 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                                             name="image"
                                             type="file"
                                             className="sr-only"
-                                            onChange={(e) => setImageFile(e.target.files ? e.target.files[0] : null)}
+                                            onChange={(e) =>
+                                                setImageFile(
+                                                    e.target.files
+                                                        ? e.target.files[0]
+                                                        : null,
+                                                )
+                                            }
                                         />
                                     </Label>
                                     {imageFile && (
@@ -180,11 +220,17 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                             </div>
                         </div>
                         <DialogFooter>
-                            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setIsEditDialogOpen(false)}
+                            >
                                 Batal
                             </Button>
                             <Button type="submit" disabled={isPending}>
-                                {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
+                                {isPending
+                                    ? 'Menyimpan...'
+                                    : 'Simpan Perubahan'}
                             </Button>
                         </DialogFooter>
                     </form>

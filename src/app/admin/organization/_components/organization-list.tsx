@@ -12,7 +12,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { updateOrganizationStructure } from '../actions';
 import { Pencil, Upload } from 'lucide-react';
@@ -25,12 +31,15 @@ type OrganizationStructureListProps = {
     initialData: Structure[];
 };
 
-export default function OrganizationStructureList({ initialData }: OrganizationStructureListProps) {
+export default function OrganizationStructureList({
+    initialData,
+}: OrganizationStructureListProps) {
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
     const [structures, setStructures] = useState(initialData);
     const [isDialogOpen, setDialogOpen] = useState(false);
-    const [selectedStructure, setSelectedStructure] = useState<Structure | null>(null);
+    const [selectedStructure, setSelectedStructure] =
+        useState<Structure | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
 
@@ -54,21 +63,32 @@ export default function OrganizationStructureList({ initialData }: OrganizationS
             const result = await updateOrganizationStructure(
                 selectedStructure.type,
                 selectedStructure.imageUrl,
-                formData
+                formData,
             );
 
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
-                // Optimistic update
-                const newStructures = structures.map(s => 
-                    s.type === selectedStructure.type 
-                        ? { ...s, title: formData.get('title') as string, description: formData.get('description') as string, imageUrl: preview } 
-                        : s
+
+                const newStructures = structures.map((s) =>
+                    s.type === selectedStructure.type
+                        ? {
+                              ...s,
+                              title: formData.get('title') as string,
+                              description: formData.get(
+                                  'description',
+                              ) as string,
+                              imageUrl: preview,
+                          }
+                        : s,
                 );
                 setStructures(newStructures);
                 setDialogOpen(false);
             } else {
-                toast({ title: 'Gagal!', description: String(result.error), variant: 'destructive' });
+                toast({
+                    title: 'Gagal!',
+                    description: String(result.error),
+                    variant: 'destructive',
+                });
             }
         });
     };
@@ -76,9 +96,12 @@ export default function OrganizationStructureList({ initialData }: OrganizationS
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-2xl font-bold">Kelola Struktur Organisasi</CardTitle>
+                <CardTitle className="text-2xl font-bold">
+                    Kelola Struktur Organisasi
+                </CardTitle>
                 <CardDescription className="mt-2 text-lg">
-                    Perbarui gambar dan detail untuk setiap bagan struktur organisasi.
+                    Perbarui gambar dan detail untuk setiap bagan struktur
+                    organisasi.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -87,7 +110,9 @@ export default function OrganizationStructureList({ initialData }: OrganizationS
                         <Card key={structure.type}>
                             <CardHeader>
                                 <CardTitle>{structure.title}</CardTitle>
-                                <CardDescription>{structure.description}</CardDescription>
+                                <CardDescription>
+                                    {structure.description}
+                                </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="relative aspect-video w-full bg-muted rounded-md overflow-hidden">
@@ -104,7 +129,10 @@ export default function OrganizationStructureList({ initialData }: OrganizationS
                                         </div>
                                     )}
                                 </div>
-                                <Button onClick={() => openDialog(structure)} className="w-full">
+                                <Button
+                                    onClick={() => openDialog(structure)}
+                                    className="w-full"
+                                >
                                     <Pencil className="mr-2 h-4 w-4" /> Edit
                                 </Button>
                             </CardContent>
@@ -115,22 +143,43 @@ export default function OrganizationStructureList({ initialData }: OrganizationS
             <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Edit {selectedStructure?.title}</DialogTitle>
+                        <DialogTitle>
+                            Edit {selectedStructure?.title}
+                        </DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleFormSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="title">Judul</Label>
-                            <Input id="title" name="title" defaultValue={selectedStructure?.title} required />
+                            <Input
+                                id="title"
+                                name="title"
+                                defaultValue={selectedStructure?.title}
+                                required
+                            />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="description">Deskripsi</Label>
-                            <Textarea id="description" name="description" defaultValue={selectedStructure?.description || ''} />
+                            <Textarea
+                                id="description"
+                                name="description"
+                                defaultValue={
+                                    selectedStructure?.description || ''
+                                }
+                            />
                         </div>
                         <div className="space-y-2">
                             <Label>Gambar Struktur</Label>
-                            {preview && <Image src={preview} alt="Preview" width={200} height={112} className="rounded-md object-contain bg-muted" />}
-                            <Input 
-                                type="file" 
+                            {preview && (
+                                <Image
+                                    src={preview}
+                                    alt="Preview"
+                                    width={200}
+                                    height={112}
+                                    className="rounded-md object-contain bg-muted"
+                                />
+                            )}
+                            <Input
+                                type="file"
                                 name="image"
                                 accept="image/*"
                                 onChange={(e) => {
@@ -143,7 +192,13 @@ export default function OrganizationStructureList({ initialData }: OrganizationS
                             />
                         </div>
                         <div className="flex justify-end gap-2">
-                            <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setDialogOpen(false)}
+                            >
+                                Batal
+                            </Button>
                             <Button type="submit" disabled={isPending}>
                                 {isPending ? 'Menyimpan...' : 'Simpan'}
                             </Button>

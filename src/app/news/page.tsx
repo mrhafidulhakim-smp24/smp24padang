@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { unstable_cache as cache } from 'next/cache';
 
 export const metadata: Metadata = {
-  title: 'Berita & Pengumuman Terbaru SMPN 24 Padang | Informasi Sekolah Terkini',
-  description: 'Ikuti perkembangan terkini, berita sekolah, dan pengumuman penting dari SMPN 24 Padang. Dapatkan informasi lengkap seputar kegiatan dan prestasi siswa di sekolah kami.',
+    title: 'Berita & Pengumuman Terbaru SMPN 24 Padang | Informasi Sekolah Terkini',
+    description:
+        'Ikuti perkembangan terkini, berita sekolah, dan pengumuman penting dari SMPN 24 Padang. Dapatkan informasi lengkap seputar kegiatan dan prestasi siswa di sekolah kami.',
 };
 
 export const dynamic = 'force-dynamic';
@@ -22,7 +23,7 @@ const getAllNews = cache(
         return await db.select().from(news).orderBy(desc(news.date));
     },
     ['all-news'],
-    { tags: ['news-collection'] }
+    { tags: ['news-collection'] },
 );
 
 async function getLatestAnnouncement() {

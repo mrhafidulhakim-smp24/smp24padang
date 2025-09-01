@@ -25,7 +25,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PlusCircle, Trash2, Upload } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -179,7 +185,9 @@ export default function GalleryAdminPage() {
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-2xl font-bold">Kelola Galeri</CardTitle>
+                        <CardTitle className="text-2xl font-bold">
+                            Kelola Galeri
+                        </CardTitle>
                         <CardDescription className="mt-2 text-lg">
                             Tambah atau hapus gambar dari galeri sekolah.
                         </CardDescription>
@@ -195,7 +203,8 @@ export default function GalleryAdminPage() {
                             <DialogHeader>
                                 <DialogTitle>Tambah Gambar Baru</DialogTitle>
                                 <DialogDescription>
-                                    Isi detail di bawah ini untuk menambahkan gambar baru.
+                                    Isi detail di bawah ini untuk menambahkan
+                                    gambar baru.
                                 </DialogDescription>
                             </DialogHeader>
                             <GalleryForm
@@ -213,7 +222,10 @@ export default function GalleryAdminPage() {
                 {isLoading ? (
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                         {[...Array(10)].map((_, i) => (
-                            <Skeleton key={i} className="aspect-square w-full rounded-lg" />
+                            <Skeleton
+                                key={i}
+                                className="aspect-square w-full rounded-lg"
+                            />
                         ))}
                     </div>
                 ) : (
@@ -237,7 +249,9 @@ export default function GalleryAdminPage() {
                                         }}
                                     >
                                         <Trash2 className="h-5 w-5" />
-                                        <span className="sr-only">Hapus Gambar</span>
+                                        <span className="sr-only">
+                                            Hapus Gambar
+                                        </span>
                                     </Button>
                                 </div>
                             </div>
@@ -251,11 +265,14 @@ export default function GalleryAdminPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini tidak dapat dibatalkan. Ini akan menghapus gambar dari galeri secara permanen.
+                            Tindakan ini tidak dapat dibatalkan. Ini akan
+                            menghapus gambar dari galeri secara permanen.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setSelectedItem(null)}>
+                        <AlertDialogCancel
+                            onClick={() => setSelectedItem(null)}
+                        >
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction

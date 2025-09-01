@@ -9,14 +9,46 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { createPastPrincipal, updatePastPrincipal, deletePastPrincipal } from '../actions';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from '@/components/ui/dialog';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
+    createPastPrincipal,
+    updatePastPrincipal,
+    deletePastPrincipal,
+} from '../actions';
 import { PlusCircle, Pencil, Trash2 } from 'lucide-react';
 import type { pastPrincipals as PastPrincipal } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 
 type Principal = InferSelectModel<typeof PastPrincipal>;
 
@@ -24,14 +56,17 @@ type PastPrincipalsListProps = {
     initialData: Principal[];
 };
 
-export default function PastPrincipalsList({ initialData }: PastPrincipalsListProps) {
+export default function PastPrincipalsList({
+    initialData,
+}: PastPrincipalsListProps) {
     const { toast } = useToast();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [principals, setPrincipals] = useState(initialData);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
-    const [selectedPrincipal, setSelectedPrincipal] = useState<Principal | null>(null);
+    const [selectedPrincipal, setSelectedPrincipal] =
+        useState<Principal | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
 
@@ -56,7 +91,11 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
 
         startTransition(async () => {
             const result = selectedPrincipal
-                ? await updatePastPrincipal(selectedPrincipal.id, selectedPrincipal.imageUrl, formData)
+                ? await updatePastPrincipal(
+                      selectedPrincipal.id,
+                      selectedPrincipal.imageUrl,
+                      formData,
+                  )
                 : await createPastPrincipal(formData);
 
             if (result.success) {
@@ -64,7 +103,11 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
                 setDialogOpen(false);
                 router.refresh();
             } else {
-                toast({ title: 'Gagal!', description: result.message, variant: 'destructive' });
+                toast({
+                    title: 'Gagal!',
+                    description: result.message,
+                    variant: 'destructive',
+                });
             }
         });
     };
@@ -72,13 +115,22 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
     const handleDelete = () => {
         if (!selectedPrincipal) return;
         startTransition(async () => {
-            const result = await deletePastPrincipal(selectedPrincipal.id, selectedPrincipal.imageUrl);
+            const result = await deletePastPrincipal(
+                selectedPrincipal.id,
+                selectedPrincipal.imageUrl,
+            );
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
-                setPrincipals(principals.filter(p => p.id !== selectedPrincipal.id));
+                setPrincipals(
+                    principals.filter((p) => p.id !== selectedPrincipal.id),
+                );
                 setDeleteOpen(false);
             } else {
-                toast({ title: 'Gagal!', description: result.message, variant: 'destructive' });
+                toast({
+                    title: 'Gagal!',
+                    description: result.message,
+                    variant: 'destructive',
+                });
             }
         });
     };
@@ -91,7 +143,9 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
                     <CardDescription>
                         Kelola daftar kepala sekolah yang pernah menjabat.
                     </CardDescription>
-                    <Button onClick={() => openDialog(null)}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Riwayat</Button>
+                    <Button onClick={() => openDialog(null)}>
+                        <PlusCircle className="mr-2 h-4 w-4" /> Tambah Riwayat
+                    </Button>
                 </div>
             </CardHeader>
             <CardContent>
@@ -99,24 +153,56 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">Foto</TableHead>
+                                <TableHead className="w-[100px]">
+                                    Foto
+                                </TableHead>
                                 <TableHead>Nama</TableHead>
                                 <TableHead>Periode</TableHead>
-                                <TableHead className="text-right">Aksi</TableHead>
+                                <TableHead className="text-right">
+                                    Aksi
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {principals.map((p) => (
                                 <TableRow key={p.id}>
                                     <TableCell>
-                                        <Image src={p.imageUrl || 'https://placehold.co/100x100.png'} alt={p.name} width={64} height={64} className="rounded-md object-cover bg-muted" />
+                                        <Image
+                                            src={
+                                                p.imageUrl ||
+                                                'https://placehold.co/100x100.png'
+                                            }
+                                            alt={p.name}
+                                            width={64}
+                                            height={64}
+                                            className="rounded-md object-cover bg-muted"
+                                        />
                                     </TableCell>
-                                    <TableCell className="font-medium text-base">{p.name}</TableCell>
-                                    <TableCell className="text-base">{p.period}</TableCell>
+                                    <TableCell className="font-medium text-base">
+                                        {p.name}
+                                    </TableCell>
+                                    <TableCell className="text-base">
+                                        {p.period}
+                                    </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex gap-2 justify-end">
-                                            <Button variant="outline" size="icon" className="mr-2" onClick={() => openDialog(p)}><Pencil className="h-4 w-4" /></Button>
-                                            <Button variant="destructive" size="icon" onClick={() => openDeleteDialog(p)}><Trash2 className="h-4 w-4" /></Button>
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="mr-2"
+                                                onClick={() => openDialog(p)}
+                                            >
+                                                <Pencil className="h-4 w-4" />
+                                            </Button>
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                onClick={() =>
+                                                    openDeleteDialog(p)
+                                                }
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -129,31 +215,75 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
             <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>{selectedPrincipal ? 'Edit' : 'Tambah'} Riwayat Kepala Sekolah</DialogTitle>
+                        <DialogTitle>
+                            {selectedPrincipal ? 'Edit' : 'Tambah'} Riwayat
+                            Kepala Sekolah
+                        </DialogTitle>
                     </DialogHeader>
-                    <form onSubmit={handleFormSubmit} className="grid gap-6 py-4">
+                    <form
+                        onSubmit={handleFormSubmit}
+                        className="grid gap-6 py-4"
+                    >
                         <div className="space-y-2">
-                            <Label htmlFor="name" className="text-base">Nama</Label>
-                            <Input id="name" name="name" defaultValue={selectedPrincipal?.name} required className="text-base" />
+                            <Label htmlFor="name" className="text-base">
+                                Nama
+                            </Label>
+                            <Input
+                                id="name"
+                                name="name"
+                                defaultValue={selectedPrincipal?.name}
+                                required
+                                className="text-base"
+                            />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="period" className="text-base">Periode</Label>
-                            <Input id="period" name="period" placeholder="Contoh: 2020 - 2024" defaultValue={selectedPrincipal?.period} required className="text-base" />
+                            <Label htmlFor="period" className="text-base">
+                                Periode
+                            </Label>
+                            <Input
+                                id="period"
+                                name="period"
+                                placeholder="Contoh: 2020 - 2024"
+                                defaultValue={selectedPrincipal?.period}
+                                required
+                                className="text-base"
+                            />
                         </div>
                         <div className="space-y-2">
                             <Label className="text-base">Foto</Label>
-                            {preview && <Image src={preview} alt="Preview" width={100} height={100} className="rounded-md object-cover bg-muted" />}
-                            <Input type="file" name="image" accept="image/*" onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    setImageFile(file);
-                                    setPreview(URL.createObjectURL(file));
-                                }
-                            }} />
+                            {preview && (
+                                <Image
+                                    src={preview}
+                                    alt="Preview"
+                                    width={100}
+                                    height={100}
+                                    className="rounded-md object-cover bg-muted"
+                                />
+                            )}
+                            <Input
+                                type="file"
+                                name="image"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        setImageFile(file);
+                                        setPreview(URL.createObjectURL(file));
+                                    }
+                                }}
+                            />
                         </div>
                         <DialogFooter>
-                            <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-                            <Button type="submit" disabled={isPending}>{isPending ? 'Menyimpan...' : 'Simpan'}</Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setDialogOpen(false)}
+                            >
+                                Batal
+                            </Button>
+                            <Button type="submit" disabled={isPending}>
+                                {isPending ? 'Menyimpan...' : 'Simpan'}
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
@@ -163,11 +293,18 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-                        <AlertDialogDescription>Tindakan ini akan menghapus data secara permanen.</AlertDialogDescription>
+                        <AlertDialogDescription>
+                            Tindakan ini akan menghapus data secara permanen.
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Batal</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDelete} disabled={isPending}>{isPending ? 'Menghapus...' : 'Hapus'}</AlertDialogAction>
+                        <AlertDialogAction
+                            onClick={handleDelete}
+                            disabled={isPending}
+                        >
+                            {isPending ? 'Menghapus...' : 'Hapus'}
+                        </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

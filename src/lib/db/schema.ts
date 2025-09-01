@@ -18,8 +18,6 @@ export const banners = pgTable('banners', {
     updatedAt: timestamp('updatedAt').defaultNow().notNull(),
 });
 
-
-
 export const news = pgTable('news', {
     id: varchar('id').primaryKey(),
     title: text('title').notNull(),
@@ -96,8 +94,6 @@ export const staff = pgTable('staff', {
     imageUrl: text('imageUrl'),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
-
-
 
 export const contact = pgTable('contact', {
     id: varchar('id').primaryKey(),
