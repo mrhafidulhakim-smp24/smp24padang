@@ -121,10 +121,8 @@ export default function PastPrincipalsList({
             );
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
-                setPrincipals(
-                    principals.filter((p) => p.id !== selectedPrincipal.id),
-                );
                 setDeleteOpen(false);
+                router.refresh();
             } else {
                 toast({
                     title: 'Gagal!',

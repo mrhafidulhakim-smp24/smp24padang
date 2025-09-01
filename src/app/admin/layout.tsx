@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import {
     SidebarProvider,
@@ -51,6 +51,12 @@ export default function AdminLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        await signOut({ redirect: false });
+        router.push('/login');
+    };
 
     const menuItems = [
         { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -178,9 +184,9 @@ export default function AdminLayout({
                     <SidebarFooter>
                         <div className="flex flex-col gap-2 w-full">
                             <Button
-                                variant="ghost"
+                                variant="destructive"
                                 className="w-full justify-start group-data-[state=collapsed]:justify-center"
-                                onClick={() => signOut({ callbackUrl: '/login' })}
+                                onClick={handleLogout}
                             >
                                 <LogOut className="mr-2 h-4 w-4" />
                                 <span className="group-data-[state=collapsed]:hidden">Keluar</span>
