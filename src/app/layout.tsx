@@ -6,6 +6,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import AOSInit from '@/components/aos-init';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import NextAuthSessionProvider from '@/components/session-provider';
 
 const roboto = Roboto({
     subsets: ['latin'],
@@ -60,16 +61,18 @@ export default function RootLayout({
             <body
                 className={`${roboto.variable} ${montserrat.variable} font-body antialiased`}
             >
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="light"
-                    disableTransitionOnChange
-                >
-                    <AOSInit />
-                    <ConditionalLayout>{children}</ConditionalLayout>
-                    <Toaster />
-                    <SpeedInsights />
-                </ThemeProvider>
+                <NextAuthSessionProvider>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="light"
+                        disableTransitionOnChange
+                    >
+                        <AOSInit />
+                        <ConditionalLayout>{children}</ConditionalLayout>
+                        <Toaster />
+                        <SpeedInsights />
+                    </ThemeProvider>
+                </NextAuthSessionProvider>
             </body>
         </html>
     );

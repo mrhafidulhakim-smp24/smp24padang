@@ -11,6 +11,13 @@ declare module 'next-auth' {
       id: string;
     } & DefaultSession['user'];
   }
+
+  interface JWT {
+    id: string;
+    name: string | null;
+    email: string;
+    picture: string | null;
+  }
 }
 
 export const {
@@ -70,9 +77,9 @@ export const {
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.image = token.picture as string;
       }
       return session;
     },

@@ -1,5 +1,6 @@
 'use client';
 
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -56,20 +57,14 @@ export default function AdminLayout({
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('/api/logout', { method: 'POST' });
-            const data = await response.json();
-
-            if (response.ok) {
-                toast({ title: 'Sukses', description: 'Anda telah keluar.' });
-                window.location.href = '/login'; // Force a full page reload to clear all state
-            } else {
-                throw new Error(data.message || 'Gagal untuk keluar.');
-            }
+            await signOut({ redirect: false });
+            toast({ title: 'Sukses', description: 'Anda telah keluar.' });
+            window.location.href = '/login';
         } catch (error) {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: 'Tidak dapat menghubungi server.',
+                description: 'Gagal untuk keluar.',
             });
         }
     };
