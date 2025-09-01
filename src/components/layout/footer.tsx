@@ -116,15 +116,12 @@ export default function Footer({ showMap = true }: FooterProps) {
                 )}
             </div>
             <div className="bg-primary py-4">
-                <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-center text-sm text-primary-foreground/70 sm:flex-row">
-                    <div className="flex flex-col items-center sm:items-start">
-                        <p>© {currentYear} SMPN 24 Padang.</p>
-                    </div>
+                <div className="container mx-auto flex items-center justify-center px-4 text-center text-sm text-primary-foreground/70">
                     <Link
-                        href="/admin"
+                        href="/login"
                         className="transition-colors hover:text-white"
                     >
-                        Login Admin
+                        <p>© {currentYear} SMPN 24 Padang.</p>
                     </Link>
                 </div>
             </div>
