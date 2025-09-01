@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
 import {
     SidebarProvider,
     Sidebar,
@@ -44,6 +43,7 @@ import {
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import * as Collapsible from '@radix-ui/react-collapsible';
+import { useToast } from '@/hooks/use-toast';
 
 export default function AdminLayout({
     children,
@@ -51,6 +51,28 @@ export default function AdminLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
+    const { toast } = useToast();
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/api/logout', { method: 'POST' });
+            const data = await response.json();
+
+            if (response.ok) {
+                toast({ title: 'Sukses', description: 'Anda telah keluar.' });
+                window.location.href = '/login'; // Force a full page reload to clear all state
+            } else {
+                throw new Error(data.message || 'Gagal untuk keluar.');
+            }
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: 'Tidak dapat menghubungi server.',
+            });
+        }
+    };
 
     const menuItems = [
         { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -180,7 +202,7 @@ export default function AdminLayout({
                             <Button
                                 variant="destructive"
                                 className="w-full justify-start group-data-[state=collapsed]:justify-center"
-                                onClick={() => signOut({ callbackUrl: '/login' })}
+                                onClick={handleLogout}
                             >
                                 <LogOut className="mr-2 h-4 w-4" />
                                 <span className="group-data-[state=collapsed]:hidden">Keluar</span>

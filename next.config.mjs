@@ -22,4 +22,5 @@ const nextConfig = {
   },
 };
  
+// Force rebuild on Vercel
 export default nextConfig;
