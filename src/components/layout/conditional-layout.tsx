@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import BackToTopButton from '@/components/ui/back-to-top-button';
 
 export default function ConditionalLayout({
     children,
@@ -11,13 +12,15 @@ export default function ConditionalLayout({
 }) {
     const pathname = usePathname();
     const isAdminPage = pathname.startsWith('/admin');
+    const isLoginPage = pathname === '/login';
     const isContactPage = pathname === '/contact';
 
     return (
         <div className="flex min-h-screen flex-col">
-            {!isAdminPage && <Header />}
+            {!isAdminPage && !isLoginPage && <Header />}
             <main className="flex-grow">{children}</main>
-            {!isAdminPage && <Footer showMap={!isContactPage} />}
+            {!isAdminPage && !isLoginPage && <Footer showMap={!isContactPage} />}
+            {!isAdminPage && !isLoginPage && <BackToTopButton />}
         </div>
     );
 }
