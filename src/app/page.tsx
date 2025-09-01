@@ -44,7 +44,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 
 export const metadata: Metadata = {
-    title: 'SMPN 24 Padang | Sekolah Unggul dengan Visi Misi Kuat dan Fasilitas Lengkap',
+    title: 'SMPN 24 Padang | Cerdas, Terampil & Bebudidaya Lingkungan',
     description:
         'Selamat datang di situs resmi SMPN 24 Padang. Jelajahi visi, misi, berita terkini, pengumuman, statistik, dan fasilitas sekolah kami. Wujudkan potensi terbaik bersama kami!',
 };
@@ -167,7 +167,9 @@ async function Announcements() {
                         </div>
                         <div className="mt-8 text-center">
                             <Button asChild>
-                                <Link href="/pengumuman">Lihat Semua Pengumuman</Link>
+                                <Link href="/pengumuman">
+                                    Lihat Semua Pengumuman
+                                </Link>
                             </Button>
                         </div>
                     </CardContent>

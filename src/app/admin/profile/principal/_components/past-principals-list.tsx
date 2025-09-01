@@ -1,7 +1,10 @@
 'use client';
 
+'use client';
+
 import { useState, useTransition } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,6 +26,7 @@ type PastPrincipalsListProps = {
 
 export default function PastPrincipalsList({ initialData }: PastPrincipalsListProps) {
     const { toast } = useToast();
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [principals, setPrincipals] = useState(initialData);
     const [isDialogOpen, setDialogOpen] = useState(false);
@@ -57,8 +61,8 @@ export default function PastPrincipalsList({ initialData }: PastPrincipalsListPr
 
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
-                // This is a simple way to refresh data. For a better UX, you might want to optimistically update the state.
-                window.location.reload(); 
+                setDialogOpen(false);
+                router.refresh();
             } else {
                 toast({ title: 'Gagal!', description: result.message, variant: 'destructive' });
             }
