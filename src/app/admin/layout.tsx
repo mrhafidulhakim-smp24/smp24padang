@@ -190,19 +190,21 @@ export default function AdminLayout({
                     <div className="container mx-auto">
                         <div className="mb-4 flex items-center gap-4">
                             <SidebarTrigger className="md:hidden" />
-                            <h1 className="text-2xl font-bold">
-                                {menuItems
-                                    .flatMap((i) =>
-                                        i.subItems
-                                            ? i.subItems.map((s) => ({
-                                                  ...s,
-                                                  icon: i.icon,
-                                              }))
-                                            : i,
-                                    )
-                                    .find((i) => i.href === pathname)?.label ||
-                                    'Dashboard'}
-                            </h1>
+                            {pathname !== '/admin/dashboard' && (
+                                <h1 className="text-2xl font-bold">
+                                    {menuItems
+                                        .flatMap((i) =>
+                                            i.subItems
+                                                ? i.subItems.map((s) => ({
+                                                      ...s,
+                                                      icon: i.icon,
+                                                  }))
+                                                : i,
+                                        )
+                                        .find((i) => i.href === pathname)?.label ||
+                                        'Dashboard'}
+                                </h1>
+                            )}
                         </div>
                         {children}
                     </div>

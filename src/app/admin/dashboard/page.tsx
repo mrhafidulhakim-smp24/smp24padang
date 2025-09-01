@@ -8,85 +8,133 @@ import {
     CardDescription,
     CardContent,
 } from '@/components/ui/card';
-import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import {
+    LayoutDashboard,
+    Newspaper,
+    Trophy,
+    Image as ImageIcon,
+    Users,
+    Home,
+    Phone,
+    UserCircle,
+    Target,
+    Network,
+    Award,
+    Shirt,
+    Megaphone,
+} from 'lucide-react';
 
-const dashboardItems = [
+const menuItems = [
     {
-        title: 'Kelola Halaman Beranda',
-        description:
-            'Ubah banner, teks berjalan, statistik, dan fasilitas yang tampil di halaman utama website.',
-        link: '/admin/homepage',
+        href: '/admin/homepage',
+        label: 'Halaman Beranda',
+        icon: Home,
+        description: 'Atur konten yang tampil di halaman depan website Anda.',
     },
     {
-        title: 'Kelola Profil Sekolah',
-        description:
-            'Perbarui informasi kepala sekolah, sejarah, visi & misi, dan detail profil lainnya.',
-        link: '/admin/profile/principal',
+        href: '/admin/profile/principal',
+        label: 'Profil Sekolah',
+        icon: UserCircle,
+        description: 'Perbarui informasi sambutan kepala sekolah dan sejarah.',
     },
     {
-        title: 'Kelola Guru & Staf',
-        description:
-            'Tambah, ubah, atau hapus data guru dan staf yang mengajar di sekolah.',
-        link: '/admin/staff',
+        href: '/admin/profile/vision-mission',
+        label: 'Visi & Misi',
+        icon: Target,
+        description: 'Ubah pernyataan visi dan poin-poin misi sekolah.',
     },
     {
-        title: 'Kelola Berita',
-        description:
-            'Publikasikan berita dan pengumuman terbaru untuk ditampilkan di halaman berita.',
-        link: '/admin/news',
+        href: '/admin/organization',
+        label: 'Struktur Organisasi',
+        icon: Network,
+        description: 'Kelola bagan dan daftar struktur organisasi sekolah.',
     },
     {
-        title: 'Kelola Prestasi',
-        description:
-            'Catat dan tampilkan prestasi yang telah diraih oleh siswa atau sekolah.',
-        link: '/admin/achievements',
+        href: '/admin/accreditation',
+        label: 'Sertifikasi & Penghargaan',
+        icon: Award,
+        description: 'Tampilkan semua sertifikasi dan penghargaan.',
     },
     {
-        title: 'Kelola Galeri',
-        description:
-            'Unggah dan atur foto-foto kegiatan sekolah untuk ditampilkan di galeri.',
-        link: '/admin/gallery',
+        href: '/admin/profile/uniform',
+        label: 'Seragam',
+        icon: Shirt,
+        description: 'Informasikan jenis-jenis seragam yang digunakan.',
+    },
+    { 
+        href: '/admin/staff', 
+        label: 'Guru & Staf', 
+        icon: Users, 
+        description: 'Tambah, ubah, atau hapus data pengajar dan staf.'
+    },
+    { 
+        href: '/admin/news', 
+        label: 'Berita', 
+        icon: Newspaper, 
+        description: 'Publikasikan artikel berita terbaru untuk pengunjung.'
     },
     {
-        title: 'Kelola Kontak',
-        description:
-            'Perbarui informasi kontak sekolah seperti alamat, nomor telepon, dan email.',
-        link: '/admin/contact',
+        href: '/admin/announcements',
+        label: 'Pengumuman',
+        icon: Megaphone,
+        description: 'Buat pengumuman penting untuk seluruh warga sekolah.',
+    },
+    {
+        href: '/admin/achievements',
+        label: 'Prestasi',
+        icon: Trophy,
+        description: 'Catat dan pamerkan prestasi yang telah diraih.',
+    },
+    {
+        href: '/admin/gallery',
+        label: 'Galeri',
+        icon: ImageIcon,
+        description: 'Unggah dan kelola foto-foto kegiatan sekolah.',
+    },
+    {
+        href: '/admin/contact',
+        label: 'Kontak',
+        icon: Phone,
+        description: 'Perbarui alamat, email, dan nomor telepon sekolah.',
     },
 ];
 
 export default function AdminDashboardPage() {
     return (
-        <div className="space-y-8">
-            <div>
-                <h1 className="text-2xl font-bold">Dashboard</h1>
-                <p className="text-muted-foreground">
-                    Selamat datang di CMS. Pilih salah satu menu di bawah untuk
-                    mengelola konten website.
+        <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-2">
+                <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                    Selamat Datang di Panel Admin
+                </h1>
+                <p className="mt-2 text-lg text-muted-foreground">
+                    Pilih salah satu menu di bawah ini untuk mulai mengelola
+                    konten website Anda. Setiap kartu mewakili satu bagian dari
+                    website yang bisa Anda ubah.
                 </p>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {dashboardItems.map((item) => (
-                    <Card key={item.title} className="flex flex-col">
-                        <CardHeader>
-                            <CardTitle className="text-xl">
-                                {item.title}
-                            </CardTitle>
-                            <CardDescription>
-                                {item.description}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-grow flex items-end">
-                            <Link href={item.link} className="w-full">
-                                <Button className="w-full justify-between">
-                                    Kelola Sekarang{' '}
-                                    <ArrowRight className="h-4 w-4" />
-                                </Button>
-                            </Link>
-                        </CardContent>
-                    </Card>
-                ))}
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {menuItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                        <Link href={item.href} key={item.href}>
+                            <Card className="flex h-full transform flex-col transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
+                                <CardHeader className="flex flex-row items-center gap-4">
+                                    <div className="rounded-lg bg-primary/10 p-3">
+                                        <Icon className="h-6 w-6 text-primary" />
+                                    </div>
+                                    <CardTitle className="text-xl font-semibold">
+                                        {item.label}
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex-grow">
+                                    <p className="text-base text-muted-foreground">
+                                        {item.description}
+                                    </p>
+                                </CardContent>
+                            </Card>
+                        </Link>
+                    );
+                })}
             </div>
         </div>
     );

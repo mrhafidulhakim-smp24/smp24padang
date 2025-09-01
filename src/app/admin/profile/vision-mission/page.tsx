@@ -118,7 +118,7 @@ export default function VisionMissionAdminPage() {
                                 id="mission"
                                 value={mission}
                                 onChange={(e) => setMission(e.target.value)}
-                                className="min-h-[250px] text-base"
+                                className="min-h-[400px] text-base"
                                 placeholder="Tuliskan poin-poin misi di sini, pisahkan dengan baris baru..."
                             />
                         </CardContent>
