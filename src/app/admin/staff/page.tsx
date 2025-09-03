@@ -243,10 +243,10 @@ export default function StaffAdminPage() {
         selectedStaff?.imageUrl || null,
     );
 
-    const positions = [...new Set(staff.map((s) => s.position))];
+    const positions = [...new Set(staff.map((s) => s.position).filter(Boolean))];
 
     const filteredStaff = staff.filter(s => {
-        const nameMatch = s.name.toLowerCase().includes(search.toLowerCase());
+        const nameMatch = (s.name || '').toLowerCase().includes(search.toLowerCase());
         const positionMatch = positionFilter ? s.position === positionFilter : true;
         return nameMatch && positionMatch;
     });
@@ -329,7 +329,7 @@ export default function StaffAdminPage() {
                                     </TableCell>
                                     <TableCell className="font-medium">{item.name}</TableCell>
                                     <TableCell>{item.position}</TableCell>
-                                    <TableCell>{item.subject}</TableCell>
+                                    <TableCell>{item.subject || '-'}</TableCell>
                                     <TableCell>
                                         {item.homeroomOf ? (
                                             <Badge variant="secondary">Wali Kelas {item.homeroomOf}</Badge>
