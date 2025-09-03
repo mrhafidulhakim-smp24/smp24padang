@@ -1,192 +1,171 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getStaff } from './actions';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getFaculty } from './actions';
 import type { staff as StaffSchema } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 
 type Staff = InferSelectModel<typeof StaffSchema>;
 
+// Sub-komponen untuk menampilkan kartu staf, agar tidak ada duplikasi kode
 function StaffCard({ person }: { person: Staff }) {
     return (
-        <div
-            className="flex flex-col items-center text-center group"
-            data-aos="fade-up"
-        >
-            <div
-                className={`relative w-full h-64 max-w-xs overflow-hidden rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl`}
-            >
-                <Image
-                    src={person.imageUrl || 'https://placehold.co/400x500.png'}
-                    alt={`Foto ${person.name || ''}`}
-                    fill
-                    className="object-cover"
-                />
-            </div>
-            <div className="mt-4">
-                <h3
-                    className={`font-headline text-xl font-bold text-primary`}
-                >
-                    {person.name}
-                </h3>
-                <p className="font-semibold text-base text-muted-foreground">
-                    {person.position}
-                </p>
+        <Card key={person.id} className="text-center overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl h-full flex flex-col">
+            <CardContent className="p-6 flex flex-col items-center flex-grow">
+                <Avatar className="w-24 h-24 border-4 border-background shadow-lg mb-4">
+                    <AvatarImage src={person.imageUrl || undefined} alt={person.name} />
+                    <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <h3 className="text-lg font-semibold text-card-foreground">{person.name}</h3>
+                <p className="text-sm text-foreground/80">{person.position}</p>
                 {person.subject && (
-                    <p className="text-sm text-green-600 dark:text-green-400">
-                        {person.subject}
-                    </p>
+                    <p className="text-sm text-foreground/70 mt-1">{person.subject}</p>
                 )}
+                <div className="flex-grow"></div>
                 {person.homeroomOf && (
-                    <Badge variant="secondary" className="mt-2">
-                        Wali Kelas {person.homeroomOf}
-                    </Badge>
+                    <Badge variant="secondary" className="mt-2">Wali Kelas {person.homeroomOf}</Badge>
                 )}
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 }
 
 export default function FacultyPage() {
-    const [allStaff, setAllStaff] = useState<Staff[]>([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [positionFilter, setPositionFilter] = useState('');
-    const [subjectFilter, setSubjectFilter] = useState('');
+    const [staff, setStaff] = useState<Staff[]>([]);
+    const [search, setSearch] = useState('');
+    const [positionFilter, setPositionFilter] = useState('all');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchData() {
-            const staffData = await getStaff();
-            setAllStaff(staffData);
+        async function loadData() {
+            setLoading(true);
+            const facultyData = await getFaculty();
+            setStaff(facultyData);
+            setLoading(false);
         }
-        fetchData();
+        loadData();
     }, []);
 
-    const { positions, subjects } = useMemo(() => {
-        const staffPositions = [
-            ...new Set(allStaff.map(s => s.position).filter(p => p && p.trim() !== '')),
-        ];
-        const staffSubjects = [
-            ...new Set(allStaff.map(s => s.subject).filter(s => s && s.trim() !== '')),
-        ];
-        return { positions: staffPositions, subjects: staffSubjects };
-    }, [allStaff]);
-
-    const principal = allStaff.find((s) =>
-        (s.position || '').toLowerCase().includes('kepala sekolah'),
+    // Logika untuk memisahkan staf berdasarkan jabatan
+    const principal = staff.find(s => s.position === 'Kepala Sekolah');
+    const leadershipOrder = [
+        'Wakil Kurikulum',
+        'Wakil Kesiswaan',
+        'Wakil Sarana & Prasarana',
+        'Koordinator Tata Usaha',
+    ];
+    const leadership = staff
+        .filter(s => leadershipOrder.includes(s.position || ''))
+        .sort((a, b) => leadershipOrder.indexOf(a.position || '') - leadershipOrder.indexOf(b.position || ''));
+    const otherStaff = staff.filter(
+        s => s.position !== 'Kepala Sekolah' && !leadershipOrder.includes(s.position || '')
     );
 
-    const otherStaff = allStaff.filter(s => s.id !== principal?.id);
+    const positions = [
+        'all',
+        ...new Set(
+            staff
+                .map((s) => s.position)
+                .filter((p): p is string => typeof p === 'string' && p.trim() !== '')
+        ),
+    ];
 
-    const filteredStaff = otherStaff.filter((person) => {
-        const nameMatch = (person.name || '').toLowerCase().includes(searchTerm.toLowerCase());
-        const positionMatch = positionFilter ? person.position === positionFilter : true;
-        const subjectMatch = subjectFilter ? person.subject === subjectFilter : true;
-        return nameMatch && positionMatch && subjectMatch;
+    const filteredStaff = staff.filter((person) => {
+        const nameMatch = person.name.toLowerCase().includes(search.toLowerCase());
+        const positionMatch = positionFilter === 'all' || person.position === positionFilter;
+        return nameMatch && positionMatch;
     });
 
+    const showHierarchicalView = positionFilter === 'all' && search === '';
+
     return (
-        <div className="bg-background">
-            <div className="container mx-auto px-4 py-16 md:py-24">
-                <div className="mb-12 text-center">
-                    <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
-                        Guru & Staf
-                    </h1>
-                    <p className="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
-                        Temui para guru dan staf berpengalaman yang berdedikasi
-                        untuk membimbing siswa kami.
-                    </p>
-                </div>
+        <div className="container mx-auto py-8 px-4 md:px-6">
+            <header className="mb-8 text-center">
+                <h1 className="text-4xl font-bold tracking-tight">Guru & Staf</h1>
+                <p className="mt-2 text-lg text-muted-foreground">
+                    Kenali para pendidik dan staf yang berdedikasi di sekolah kami.
+                </p>
+            </header>
 
-                {/* Principal Section */}
-                {principal && (
-                    <section className="mb-20">
-                        <h2 className="mb-12 text-center font-headline text-3xl font-bold text-primary md:text-4xl">
-                            Kepala Sekolah
-                        </h2>
-                        <div className="flex justify-center" data-aos="fade-up">
-                             <div className="flex flex-col items-center text-center group">
-                                <div className="relative w-64 h-80 max-w-xs overflow-hidden rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
-                                    <Image
-                                        src={principal.imageUrl || 'https://placehold.co/400x500.png'}
-                                        alt={`Foto ${principal.name || ''}`}
-                                        fill
-                                        className="object-cover"
-                                    />
-                                </div>
-                                <div className="mt-4">
-                                    <h3 className="font-headline text-2xl font-bold text-primary">
-                                        {principal.name}
-                                    </h3>
-                                    <p className="font-semibold text-base text-muted-foreground">
-                                        {principal.position}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                )}
-
-                {/* Staff List Section */}
-                <section>
-                     <h2 className="mb-12 text-center font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Daftar Guru & Staf
-                    </h2>
-                    <Card className="p-4 md:p-6 mb-8 shadow-lg">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <Input
-                                type="text"
-                                placeholder="Cari nama guru atau staf..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full text-base"
-                            />
-                            <Select value={positionFilter} onValueChange={setPositionFilter}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Filter berdasarkan jabatan" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="">Semua Jabatan</SelectItem>
-                                    {positions.map(pos => <SelectItem key={pos} value={pos}>{pos}</SelectItem>)}
-                                </SelectContent>
-                            </Select>
-                            <Select value={subjectFilter} onValueChange={setSubjectFilter}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Filter berdasarkan mata pelajaran" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="">Semua Mata Pelajaran</SelectItem>
-                                    {subjects.map(sub => <SelectItem key={sub} value={sub}>{sub}</SelectItem>)}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </Card>
-
-                    {filteredStaff.length > 0 ? (
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                            {filteredStaff.map((person) => (
-                                <StaffCard
-                                    key={person.id}
-                                    person={person}
-                                />
+            <Card className="mb-8 p-4 md:p-6 sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="flex flex-col md:flex-row gap-4">
+                    <Input
+                        placeholder="Cari nama..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="flex-grow"
+                    />
+                    <Select value={positionFilter} onValueChange={setPositionFilter}>
+                        <SelectTrigger className="w-full md:w-[240px]">
+                            <SelectValue placeholder="Filter berdasarkan jabatan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {positions.map((position) => (
+                                <SelectItem key={position} value={position}>
+                                    {position === 'all' ? 'Semua Jabatan' : position}
+                                </SelectItem>
                             ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-16">
-                            <p className="text-xl text-muted-foreground">
-                                Tidak ada guru atau staf yang cocok dengan kriteria pencarian.
-                            </p>
-                            <p className="mt-2 text-base text-muted-foreground/80">
-                                Coba periksa kembali ejaan atau ubah pilihan filter Anda.
-                            </p>
-                        </div>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </Card>
+
+            {loading ? (
+                <div className="text-center py-16"><p className="text-xl text-muted-foreground">Memuat data...</p></div>
+            ) : showHierarchicalView ? (
+                <div className="space-y-12">
+                    {/* Principal Section */}
+                    {principal && (
+                        <section className="py-12 rounded-lg bg-gradient-to-b from-primary/5 to-background dark:from-slate-800/50">
+                            <h2 className="text-3xl font-bold text-center mb-8">Kepala Sekolah</h2>
+                            <div className="flex justify-center">
+                                <div className="w-full max-w-xs"><StaffCard person={principal} /></div>
+                            </div>
+                        </section>
                     )}
-                </section>
-            </div>
+
+                    {/* Leadership Section */}
+                    {leadership.length > 0 && (
+                        <section className="py-12 rounded-lg bg-gradient-to-b from-primary/5 to-background dark:from-slate-800/50">
+                            <h2 className="text-3xl font-bold text-center mb-8">Pimpinan Sekolah</h2>
+                            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                                {leadership.map(p => <StaffCard key={p.id} person={p} />)}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Other Staff Section */}
+                    {otherStaff.length > 0 && (
+                        <section className="py-12 rounded-lg bg-gradient-to-b from-primary/5 to-background dark:from-slate-800/50">
+                            <h2 className="text-3xl font-bold text-center mb-8">Guru & Tenaga Pendidik</h2>
+                            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {otherStaff.map(p => <StaffCard key={p.id} person={p} />)}
+                            </div>
+                        </section>
+                    )}
+                </div>
+            ) : filteredStaff.length > 0 ? (
+                // Filtered View
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {filteredStaff.map((person) => <StaffCard key={person.id} person={person} />)}
+                </div>
+            ) : (
+                <div className="text-center py-16">
+                    <p className="text-xl text-muted-foreground">Tidak ada data staf yang cocok dengan pencarian Anda.</p>
+                </div>
+            )}
         </div>
     );
 }
