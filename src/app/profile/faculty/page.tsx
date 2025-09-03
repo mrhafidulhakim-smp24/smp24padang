@@ -67,9 +67,13 @@ export default function FacultyPage() {
     }, []);
 
     const { positions, subjects } = useMemo(() => {
-        const positions = [...new Set(allStaff.map(s => s.position).filter(Boolean))];
-        const subjects = [...new Set(allStaff.map(s => s.subject).filter(Boolean))];
-        return { positions, subjects };
+        const staffPositions = [
+            ...new Set(allStaff.map(s => s.position).filter(p => p && p.trim() !== '')),
+        ];
+        const staffSubjects = [
+            ...new Set(allStaff.map(s => s.subject).filter(s => s && s.trim() !== '')),
+        ];
+        return { positions: staffPositions, subjects: staffSubjects };
     }, [allStaff]);
 
     const principal = allStaff.find((s) =>

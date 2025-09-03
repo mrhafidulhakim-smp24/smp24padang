@@ -243,7 +243,7 @@ export default function StaffAdminPage() {
         selectedStaff?.imageUrl || null,
     );
 
-    const positions = [...new Set(staff.map((s) => s.position).filter(Boolean))];
+    const positions = [...new Set(staff.map((s) => s.position).filter(p => p && p.trim() !== ''))];
 
     const filteredStaff = staff.filter(s => {
         const nameMatch = (s.name || '').toLowerCase().includes(search.toLowerCase());
