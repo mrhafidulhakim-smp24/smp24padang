@@ -321,7 +321,7 @@ export default function StaffAdminPage() {
                                     <TableCell>
                                         <Image
                                             src={item.imageUrl || "https://placehold.co/64x64.png"}
-                                            alt={item.name}
+                                            alt={item.name || ''}
                                             width={64}
                                             height={64}
                                             className="rounded-md object-cover"

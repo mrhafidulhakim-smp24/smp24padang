@@ -23,7 +23,7 @@ function StaffCard({ person }: { person: Staff }) {
             >
                 <Image
                     src={person.imageUrl || 'https://placehold.co/400x500.png'}
-                    alt={`Foto ${person.name}`}
+                    alt={`Foto ${person.name || ''}`}
                     fill
                     className="object-cover"
                 />
@@ -73,13 +73,13 @@ export default function FacultyPage() {
     }, [allStaff]);
 
     const principal = allStaff.find((s) =>
-        s.position.toLowerCase().includes('kepala sekolah'),
+        (s.position || '').toLowerCase().includes('kepala sekolah'),
     );
 
     const otherStaff = allStaff.filter(s => s.id !== principal?.id);
 
     const filteredStaff = otherStaff.filter((person) => {
-        const nameMatch = person.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const nameMatch = (person.name || '').toLowerCase().includes(searchTerm.toLowerCase());
         const positionMatch = positionFilter ? person.position === positionFilter : true;
         const subjectMatch = subjectFilter ? person.subject === subjectFilter : true;
         return nameMatch && positionMatch && subjectMatch;
@@ -109,7 +109,7 @@ export default function FacultyPage() {
                                 <div className="relative w-64 h-80 max-w-xs overflow-hidden rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
                                     <Image
                                         src={principal.imageUrl || 'https://placehold.co/400x500.png'}
-                                        alt={`Foto ${principal.name}`}
+                                        alt={`Foto ${principal.name || ''}`}
                                         fill
                                         className="object-cover"
                                     />
