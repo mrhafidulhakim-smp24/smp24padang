@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
     Card,
     CardContent,
+    CardFooter,
     CardHeader,
     CardTitle,
     CardDescription,
@@ -96,19 +97,19 @@ async function AboutUs() {
                                 </ul>
                             </div>
                         </CardContent>
+                        <CardFooter className="justify-center">
+                            <Button
+                                asChild
+                                variant="link"
+                                className="p-0 text-green-600 hover:text-green-700"
+                            >
+                                <Link href="/profile/vision-mission">
+                                    Baca Selengkapnya{' '}
+                                    <ArrowRight className="ml-1 h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </CardFooter>
                     </Card>
-                    <div className="mt-6 text-center">
-                        <Button
-                            asChild
-                            variant="link"
-                            className="p-0 text-green-600 hover:text-green-700"
-                        >
-                            <Link href="/profile/vision-mission">
-                                Baca Selengkapnya{' '}
-                                <ArrowRight className="ml-1 h-4 w-4" />
-                            </Link>
-                        </Button>
-                    </div>
                 </div>
             </div>
         </section>
