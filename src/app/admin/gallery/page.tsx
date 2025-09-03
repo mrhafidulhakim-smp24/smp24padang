@@ -22,6 +22,13 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PlusCircle, Trash2, Upload } from 'lucide-react';
@@ -128,6 +135,18 @@ function GalleryForm({
             <div>
                 <Label htmlFor="category">Kategori</Label>
                 <Input id="category" name="category" required />
+            </div>
+            <div>
+                <Label htmlFor="orientation">Orientasi Gambar</Label>
+                <Select name="orientation" defaultValue="landscape" required>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Pilih orientasi..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="landscape">Landscape</SelectItem>
+                        <SelectItem value="portrait">Portrait</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
             <DialogFooter>
                 <SubmitButton />

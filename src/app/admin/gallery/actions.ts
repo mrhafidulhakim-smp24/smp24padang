@@ -18,8 +18,9 @@ export async function createGalleryItem(prevState: any, formData: FormData) {
     const alt = formData.get('alt') as string;
     const category = formData.get('category') as string;
     const imageFile = formData.get('image') as File;
+    const orientation = formData.get('orientation') as 'landscape' | 'portrait';
 
-    if (!alt || !category || !imageFile || imageFile.size === 0) {
+    if (!alt || !category || !imageFile || imageFile.size === 0 || !orientation) {
         return { success: false, message: 'Data tidak lengkap.' };
     }
 
@@ -31,6 +32,7 @@ export async function createGalleryItem(prevState: any, formData: FormData) {
             src: blob.url,
             alt,
             category,
+            orientation,
         });
 
         revalidatePath('/gallery');

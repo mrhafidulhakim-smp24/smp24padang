@@ -215,29 +215,38 @@ export default function AdminLayout({
                         </div>
                     </SidebarFooter>
                 </Sidebar>
-                <main className="flex-1 p-4 md:p-8">
-                    <div className="container mx-auto">
-                        <div className="mb-4 flex items-center gap-4">
-                            <SidebarTrigger className="md:hidden" />
-                            {pathname !== '/admin/dashboard' && (
-                                <h1 className="text-2xl font-bold">
-                                    {menuItems
-                                        .flatMap((i) =>
-                                            i.subItems
-                                                ? i.subItems.map((s) => ({
-                                                      ...s,
-                                                      icon: i.icon,
-                                                  }))
-                                                : i,
-                                        )
-                                        .find((i) => i.href === pathname)?.label ||
-                                        'Dashboard'}
-                                </h1>
-                            )}
+                <div className="flex flex-1 flex-col">
+                    <header className="md:hidden sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4">
+                        <SidebarTrigger />
+                        <h1 className="text-lg font-semibold">
+                            {menuItems
+                                .flatMap((i) => (i.subItems ? i.subItems : i))
+                                .find((i) => i.href === pathname)?.label || 'Dashboard'}
+                        </h1>
+                    </header>
+                    <main className="flex-1 p-4 md:p-8">
+                        <div className="container mx-auto">
+                            <div className="mb-4 hidden items-center gap-4 md:flex">
+                                {pathname !== '/admin/dashboard' && (
+                                    <h1 className="text-2xl font-bold">
+                                        {menuItems
+                                            .flatMap((i) =>
+                                                i.subItems
+                                                    ? i.subItems.map((s) => ({
+                                                          ...s,
+                                                          icon: i.icon,
+                                                      }))
+                                                    : i,
+                                            )
+                                            .find((i) => i.href === pathname)?.label ||
+                                            'Dashboard'}
+                                    </h1>
+                                )}
+                            </div>
+                            {children}
                         </div>
-                        {children}
-                    </div>
-                </main>
+                    </main>
+                </div>
             </div>
         </SidebarProvider>
     );

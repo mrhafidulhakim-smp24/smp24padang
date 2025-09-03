@@ -1,1 +1,0 @@
-ALTER TABLE "organization_structures" RENAME COLUMN "imageUrl" TO "pdfUrl";

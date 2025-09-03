@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { getGalleryItems } from './actions';
 
 export const metadata: Metadata = {
@@ -41,7 +42,10 @@ export default async function GalleryPage() {
                                     height={400}
                                     src={item.src}
                                     alt={item.alt}
-                                    className="h-80 w-full object-contain bg-black transform transition-transform duration-300 group-hover:scale-105"
+                                    className={cn(
+                                        "w-full object-cover transform transition-transform duration-300 group-hover:scale-105",
+                                        item.orientation === 'landscape' ? 'aspect-video' : 'aspect-[3/4]'
+                                    )}
                                 />
                             </Card>
                             <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">

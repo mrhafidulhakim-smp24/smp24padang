@@ -84,6 +84,7 @@ export const galleryItems = pgTable('galleryItems', {
     src: text('src').notNull(),
     alt: text('alt').notNull(),
     category: text('category').notNull(),
+    orientation: text('orientation', { enum: ['landscape', 'portrait'] }).default('landscape').notNull(),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
