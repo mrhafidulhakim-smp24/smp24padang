@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getOrganizationStructures } from './actions';
 
@@ -11,12 +10,22 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
+function getGoogleDriveEmbedLink(url: string | null): string {
+    if (!url) return '';
+    const fileIdRegex = /\/d\/([a-zA-Z0-9_-]+)/;
+    const match = url.match(fileIdRegex);
+    if (match && match[1]) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`;
+    }
+    return '';
+}
+
 export default async function OrganizationStructurePage() {
     const orgChartsData = await getOrganizationStructures();
 
     // Define the desired order of the organization charts
     const desiredOrder = [
-        'Struktur Pimpinan Sekolah',
+        'Struktur Organisasi Tenaga Pendidik',
         'Struktur Tata Usaha',
         'Struktur Organisasi Siswa Intra Sekolah (OSIS)',
     ];
@@ -54,14 +63,15 @@ export default async function OrganizationStructurePage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-lg border aspect-video bg-muted">
-                                    {chart.imageUrl ? (
-                                        <Image
-                                            src={chart.imageUrl}
-                                            alt={chart.title}
-                                            fill
-                                            className="object-contain"
-                                        />
+                                <div className="aspect-video w-full max-w-5xl mx-auto rounded-md border bg-muted">
+                                    {chart.pdfUrl ? (
+                                        <iframe
+                                            src={getGoogleDriveEmbedLink(chart.pdfUrl)}
+                                            className="h-full w-full"
+                                            style={{ border: 0 }}
+                                            allow="fullscreen"
+                                            title={`Pratinjau ${chart.title}`}
+                                        ></iframe>
                                     ) : (
                                         <div className="flex items-center justify-center h-full text-muted-foreground">
                                             Bagan organisasi belum diunggah.

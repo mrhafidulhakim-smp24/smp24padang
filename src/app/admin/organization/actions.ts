@@ -10,7 +10,7 @@ import { z } from 'zod';
 const structureSchema = z.object({
     title: z.string().min(1, 'Judul tidak boleh kosong'),
     description: z.string().optional(),
-    image: z.instanceof(File).optional(),
+    pdfUrl: z.string().optional(),
 });
 
 export async function getOrganizationStructures() {
@@ -24,13 +24,13 @@ export async function getOrganizationStructures() {
 
 export async function updateOrganizationStructure(
     type: string,
-    currentImageUrl: string | null,
+    currentImageUrl: string | null, // This is now the old blob url to be deleted
     formData: FormData,
 ) {
     const validatedFields = structureSchema.safeParse({
         title: formData.get('title'),
         description: formData.get('description'),
-        image: formData.get('image'),
+        pdfUrl: formData.get('pdfUrl'),
     });
 
     if (!validatedFields.success) {
@@ -40,20 +40,16 @@ export async function updateOrganizationStructure(
         };
     }
 
-    const { title, description, image } = validatedFields.data;
+    const { title, description, pdfUrl } = validatedFields.data;
 
-    let newImageUrl: string | undefined;
-
-    if (image && image.size > 0) {
+    // On update, delete the old image from blob storage if it exists.
+    if (currentImageUrl) {
         try {
-            if (currentImageUrl) {
-                await del(currentImageUrl);
-            }
-            const blob = await put(image.name, image, { access: 'public' });
-            newImageUrl = blob.url;
+            await del(currentImageUrl);
         } catch (error) {
-            console.error('Error uploading image:', error);
-            return { success: false, error: 'Gagal mengunggah gambar.' };
+            console.error('Error deleting old image from blob storage:', error);
+            // We can choose to continue even if deletion fails,
+            // as the main goal is to update the DB.
         }
     }
 
@@ -63,7 +59,7 @@ export async function updateOrganizationStructure(
             .set({
                 title,
                 description,
-                imageUrl: newImageUrl ?? currentImageUrl,
+                pdfUrl: pdfUrl,
                 updatedAt: new Date(),
             })
             .where(eq(organizationStructures.type, type));

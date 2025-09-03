@@ -163,7 +163,7 @@ function StaffForm({
                         <SelectItem value="Kepala Sekolah">Kepala Sekolah</SelectItem>
                         <SelectItem value="Wakil Kurikulum">Wakil Kurikulum</SelectItem>
                         <SelectItem value="Wakil Kesiswaan">Wakil Kesiswaan</SelectItem>
-                        <SelectItem value="Wakil Humas">Wakil Humas</SelectItem>
+                        <SelectItem value="Koordinator Tata Usaha">Koordinator Tata Usaha</SelectItem>
                         <SelectItem value="Wakil Sarana & Prasarana">Wakil Sarana & Prasarana</SelectItem>
                         <SelectItem value="Guru Mata Pelajaran">Guru Mata Pelajaran</SelectItem>
                         <SelectItem value="Guru Bimbingan Konseling">Guru Bimbingan Konseling</SelectItem>
@@ -201,6 +201,8 @@ function StaffForm({
 
 export default function StaffAdminPage() {
     const [staff, setStaff] = useState<Staff[]>([]);
+    const [search, setSearch] = useState('');
+    const [positionFilter, setPositionFilter] = useState('');
     const [isAddOpen, setAddOpen] = useState(false);
     const [isEditOpen, setEditOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
@@ -241,6 +243,14 @@ export default function StaffAdminPage() {
         selectedStaff?.imageUrl || null,
     );
 
+    const positions = [...new Set(staff.map((s) => s.position))];
+
+    const filteredStaff = staff.filter(s => {
+        const nameMatch = s.name.toLowerCase().includes(search.toLowerCase());
+        const positionMatch = positionFilter ? s.position === positionFilter : true;
+        return nameMatch && positionMatch;
+    });
+
     return (
         <Card>
             <CardHeader>
@@ -272,11 +282,30 @@ export default function StaffAdminPage() {
                         </DialogContent>
                     </Dialog>
                 </div>
+                <div className="mt-4 flex items-center gap-4">
+    <Input 
+        placeholder="Cari nama..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="max-w-sm"
+    />
+    <Select value={positionFilter} onValueChange={setPositionFilter}>
+        <SelectTrigger className="max-w-sm">
+            <SelectValue placeholder="Filter berdasarkan jabatan" />
+        </SelectTrigger>
+        <SelectContent>
+            <SelectItem value="">Semua Jabatan</SelectItem>
+            {positions.map(position => (
+                <SelectItem key={position} value={position}>{position}</SelectItem>
+            ))}
+        </SelectContent>
+    </Select>
+</div>
             </CardHeader>
             <CardContent>
-                {staff.length > 0 ? (
+                {filteredStaff.length > 0 ? (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                        {staff.map((item) => (
+                        {filteredStaff.map((item) => (
                             <Card key={item.id} className="flex flex-col items-center text-center group">
                                 <CardHeader className="p-0">
                                     <div className="relative aspect-square w-full max-w-[150px] overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl mt-4">

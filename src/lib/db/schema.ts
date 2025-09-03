@@ -140,7 +140,7 @@ export const organizationStructures = pgTable('organization_structures', {
     type: varchar('type', { length: 50 }).primaryKey(),
     title: text('title').notNull(),
     description: text('description'),
-    imageUrl: text('imageUrl'),
+    pdfUrl: text('pdfUrl'),
     updatedAt: timestamp('updatedAt').defaultNow().notNull(),
 });
 

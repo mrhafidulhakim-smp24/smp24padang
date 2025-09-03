@@ -61,7 +61,7 @@ export default async function AnnouncementsPage() {
                                             <h3 className="text-lg font-semibold mb-2">
                                                 Pratinjau Dokumen
                                             </h3>
-                                            <div className="w-full h-[800px] overflow-hidden rounded-lg border">
+                                            <div className="w-full aspect-video overflow-hidden rounded-lg border">
                                                 <iframe
                                                     src={`https://drive.google.com/file/d/${extractGoogleDriveFileId(
                                                         announcement.pdfUrl,

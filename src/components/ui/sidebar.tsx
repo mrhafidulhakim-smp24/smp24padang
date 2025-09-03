@@ -234,7 +234,7 @@ const Sidebar = React.forwardRef<
             <div
                 ref={ref}
                 className={cn(
-                    'group peer hidden md:flex flex-col h-full',
+                    'group peer hidden md:flex flex-col h-screen sticky top-0',
                     'text-sidebar-foreground',
                     state === 'expanded'
                         ? 'w-[--sidebar-width]'

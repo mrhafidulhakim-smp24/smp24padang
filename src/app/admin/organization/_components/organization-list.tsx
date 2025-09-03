@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -21,7 +20,7 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { updateOrganizationStructure } from '../actions';
-import { Pencil, Upload } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import type { organizationStructures as OrganizationStructure } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';
 
@@ -40,13 +39,9 @@ export default function OrganizationStructureList({
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [selectedStructure, setSelectedStructure] =
         useState<Structure | null>(null);
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
 
     const openDialog = (structure: Structure) => {
         setSelectedStructure(structure);
-        setPreview(structure.imageUrl);
-        setImageFile(null);
         setDialogOpen(true);
     };
 
@@ -55,20 +50,21 @@ export default function OrganizationStructureList({
         if (!selectedStructure) return;
 
         const formData = new FormData(e.currentTarget);
-        if (imageFile) {
-            formData.append('image', imageFile);
-        }
 
         startTransition(async () => {
+            // The old imageUrl is in selectedStructure.pdfUrl (due to schema rename)
+            const oldImageUrl = selectedStructure.pdfUrl;
+
             const result = await updateOrganizationStructure(
                 selectedStructure.type,
-                selectedStructure.imageUrl,
+                oldImageUrl,
                 formData,
             );
 
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
 
+                // Update the state with the new data from the form
                 const newStructures = structures.map((s) =>
                     s.type === selectedStructure.type
                         ? {
@@ -77,7 +73,7 @@ export default function OrganizationStructureList({
                               description: formData.get(
                                   'description',
                               ) as string,
-                              imageUrl: preview,
+                              pdfUrl: formData.get('pdfUrl') as string,
                           }
                         : s,
                 );
@@ -100,8 +96,7 @@ export default function OrganizationStructureList({
                     Kelola Struktur Organisasi
                 </CardTitle>
                 <CardDescription className="mt-2 text-lg">
-                    Perbarui gambar dan detail untuk setiap bagan struktur
-                    organisasi.
+                    Perbarui link Google Drive PDF untuk setiap bagan struktur organisasi.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -115,18 +110,13 @@ export default function OrganizationStructureList({
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                <div className="relative aspect-video w-full bg-muted rounded-md overflow-hidden">
-                                    {structure.imageUrl ? (
-                                        <Image
-                                            src={structure.imageUrl}
-                                            alt={structure.title}
-                                            fill
-                                            className="object-contain"
-                                        />
+                                <div className="p-4 text-sm border rounded-md bg-muted truncate">
+                                    {structure.pdfUrl ? (
+                                        <a href={structure.pdfUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                                            {structure.pdfUrl}
+                                        </a>
                                     ) : (
-                                        <div className="flex items-center justify-center h-full text-muted-foreground">
-                                            Tidak ada gambar
-                                        </div>
+                                        <span className="text-muted-foreground">Belum ada link PDF.</span>
                                     )}
                                 </div>
                                 <Button
@@ -168,27 +158,13 @@ export default function OrganizationStructureList({
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Gambar Struktur</Label>
-                            {preview && (
-                                <Image
-                                    src={preview}
-                                    alt="Preview"
-                                    width={200}
-                                    height={112}
-                                    className="rounded-md object-contain bg-muted"
-                                />
-                            )}
+                            <Label htmlFor="pdfUrl">Link Google Drive PDF</Label>
                             <Input
-                                type="file"
-                                name="image"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) {
-                                        setImageFile(file);
-                                        setPreview(URL.createObjectURL(file));
-                                    }
-                                }}
+                                id="pdfUrl"
+                                name="pdfUrl"
+                                type="url"
+                                placeholder="https://..."
+                                defaultValue={selectedStructure?.pdfUrl || ''}
                             />
                         </div>
                         <div className="flex justify-end gap-2">

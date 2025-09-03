@@ -12,6 +12,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Image from 'next/image';
+import * as Collapsible from '@radix-ui/react-collapsible';
 
 import {
     Home,
@@ -242,117 +243,103 @@ export default function Header() {
                                     </span>
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="right">
-                                <div className="flex flex-col gap-4 py-6">
-                                    <Link
-                                        href="/"
-                                        className="mb-4 flex items-center gap-2"
-                                    >
-                                        <Image
-                                            src="/logo.png"
-                                            alt="SMPN 24 Padang Logo"
-                                            width={40}
-                                            height={40}
-                                            className="h-8 w-auto"
-                                        />
-                                        <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
-                                            SMPN 24 Padang
-                                        </span>
-                                    </Link>
-                                    {navLinks.map((link) =>
-                                        !link.subLinks ? (
-                                            <Link
-                                                key={link.href}
-                                                href={link.href}
-                                                onClick={() =>
-                                                    setSheetOpen(false)
-                                                }
-                                                className={cn(
-                                                    'flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground',
-                                                    (cleanPathname.startsWith(
-                                                        link.href,
-                                                    ) ||
-                                                        (link.href ===
-                                                            '/news' &&
-                                                            cleanPathname.startsWith(
-                                                                '/articles',
-                                                            ))) &&
-                                                        'bg-accent text-accent-foreground',
-                                                )}
-                                            >
-                                                <link.icon className="h-5 w-5" />
-                                                {link.label}
-                                            </Link>
-                                        ) : (
-                                            <div
-                                                key={link.href}
-                                                className="flex flex-col"
-                                            >
-                                                <p
-                                                    className={cn(
-                                                        'flex items-center gap-3 p-2 text-lg font-medium text-muted-foreground',
-                                                        cleanPathname.startsWith(
-                                                            link.href,
-                                                        ) &&
-                                                            'text-accent-foreground',
-                                                    )}
-                                                >
-                                                    <link.icon className="h-5 w-5" />
-                                                    {link.label}
-                                                </p>
-                                                <div className="flex flex-col pl-8">
-                                                    {link.subLinks.map(
-                                                        (subLink) => (
-                                                            <Link
-                                                                key={
-                                                                    subLink.href
-                                                                }
-                                                                href={
-                                                                    subLink.href
-                                                                }
-                                                                onClick={() =>
-                                                                    setSheetOpen(
-                                                                        false,
-                                                                    )
-                                                                }
-                                                                className={cn(
-                                                                    'flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground',
-                                                                    cleanPathname ===
-                                                                        subLink.href &&
-                                                                        'bg-accent text-accent-foreground',
-                                                                )}
-                                                            >
-                                                                <subLink.icon className="h-5 w-5" />
-                                                                {subLink.label}
-                                                            </Link>
-                                                        ),
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ),
-                                    )}
-                                    <div className="mt-4 flex flex-col gap-4 border-t pt-4">
-                                        <div className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground">
-                                            <MapPin className="h-5 w-5" />
-                                            <span>{contactInfo?.address}</span>
-                                        </div>
-                                        <a
-                                            href={`tel:${contactInfo?.phone}`}
-                                            className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-                                        >
-                                            <Phone className="h-5 w-5" />
-                                            <span>{contactInfo?.phone}</span>
-                                        </a>
-                                        <a
-                                            href={`mailto:${contactInfo?.email}`}
-                                            className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-                                        >
-                                            <Mail className="h-5 w-5" />
-                                            <span>{contactInfo?.email}</span>
-                                        </a>
-                                    </div>
+                            <SheetContent side="right" className="flex flex-col p-0">
+    <div className="border-b p-6">
+        <Link
+            href="/"
+            className="flex items-center gap-2"
+            onClick={() => setSheetOpen(false)}
+        >
+            <Image
+                src="/logo.png"
+                alt="SMPN 24 Padang Logo"
+                width={40}
+                height={40}
+                className="h-8 w-auto"
+            />
+            <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
+                SMPN 24 Padang
+            </span>
+        </Link>
+    </div>
+
+    <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex flex-col gap-4">
+            {navLinks.map((link) =>
+                !link.subLinks ? (
+                    <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setSheetOpen(false)}
+                        className={cn(
+                            'flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground',
+                            (cleanPathname.startsWith(link.href) ||
+                                (link.href === '/news' &&
+                                    cleanPathname.startsWith('/articles'))) &&
+                                'bg-accent text-accent-foreground',
+                        )}
+                    >
+                        <link.icon className="h-5 w-5" />
+                        {link.label}
+                    </Link>
+                ) : (
+                    <Collapsible.Root key={link.href} asChild>
+                        <div className="flex flex-col group">
+                            <Collapsible.Trigger className="flex w-full items-center justify-between rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground">
+                                <div className="flex items-center gap-3">
+                                    <link.icon className="h-5 w-5" />
+                                    {link.label}
                                 </div>
-                            </SheetContent>
+                                <ChevronDown className="h-5 w-5 transition-transform duration-200 ease-in-out group-data-[state=open]:-rotate-180" />
+                            </Collapsible.Trigger>
+                            <Collapsible.Content className="overflow-hidden transition-all duration-300 ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+                                <div className="flex flex-col py-2 pl-10">
+                                    {link.subLinks.map((subLink) => (
+                                        <Link
+                                            key={subLink.href}
+                                            href={subLink.href}
+                                            onClick={() => setSheetOpen(false)}
+                                            className={cn(
+                                                'flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground',
+                                                cleanPathname === subLink.href && 'bg-accent text-accent-foreground'
+                                            )}
+                                        >
+                                            <subLink.icon className="h-5 w-5" />
+                                            {subLink.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </Collapsible.Content>
+                        </div>
+                    </Collapsible.Root>
+                ),
+            )}
+        </div>
+    </div>
+
+    <div className="border-t p-6">
+        <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground">
+                <MapPin className="h-5 w-5" />
+                <span>{contactInfo?.address}</span>
+            </div>
+            <a
+                href={`tel:${contactInfo?.phone}`}
+                className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+            >
+                <Phone className="h-5 w-5" />
+                <span>{contactInfo?.phone}</span>
+            </a>
+            <a
+                href={`mailto:${contactInfo?.email}`}
+                className="flex items-center gap-3 rounded-md p-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+            >
+                <Mail className="h-5 w-5" />
+                <span>{contactInfo?.email}</span>
+            </a>
+        </div>
+    </div>
+</SheetContent>
                         </Sheet>
                     </div>
                 </div>
