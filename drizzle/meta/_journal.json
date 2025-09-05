@@ -134,6 +134,13 @@
       "when": 1756723871480,
       "tag": "0018_combined_changes",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1756724000000,
+      "tag": "0019_create_videos_table",
+      "breakpoints": true
     }
   ]
 }
