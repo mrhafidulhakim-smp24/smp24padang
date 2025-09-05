@@ -233,7 +233,7 @@ export default function AdminLayout({
                         </h1>
                     </header>
                     <main className="flex-1 p-4 md:p-8">
-                        <div className="container mx-auto">
+                        <div className={pathname === '/admin/staff' ? "" : "container mx-auto"}>
                             <div className="mb-4 hidden items-center gap-4 md:flex">
                                 {pathname !== '/admin/dashboard' && (
                                     <h1 className="text-2xl font-bold">

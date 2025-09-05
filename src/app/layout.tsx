@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import AOSInit from '@/components/aos-init';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import NextAuthSessionProvider from '@/components/session-provider';
+import BackToTopButton from '@/components/ui/back-to-top-button';
 
 const roboto = Roboto({
     subsets: ['latin'],
@@ -70,6 +71,7 @@ export default function RootLayout({
                         <AOSInit />
                         <ConditionalLayout>{children}</ConditionalLayout>
                         <Toaster />
+                        <BackToTopButton />
                         <SpeedInsights />
                     </ThemeProvider>
                 </NextAuthSessionProvider>
