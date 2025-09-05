@@ -47,18 +47,20 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
 
         const finalVideoId = videoId && videoId !== 'null' ? parseInt(videoId, 10) : null;
 
-        await db.insert(news).values({
+        const [newArticle] = await db.insert(news).values({
             id: uuidv4(),
             title,
             description,
             date: date.toISOString(),
             imageUrl,
             videoId: finalVideoId,
-        });
+        }).returning({ id: news.id });
 
         revalidateTag('news-collection');
         revalidatePath('/');
         revalidatePath('/admin/news');
+        revalidatePath('/news');
+        revalidatePath(`/news/${newArticle.id}`);
         return { success: true, message: 'Artikel berhasil dibuat.' };
     } catch (error) {
         console.error(error);
@@ -123,6 +125,8 @@ export async function updateNewsArticle(
         revalidatePath('/');
         revalidatePath(`/articles/${id}`);
         revalidatePath('/admin/news');
+        revalidatePath('/news');
+        revalidatePath(`/news/${id}`);
         return { success: true, message: 'Artikel berhasil diperbarui.' };
     } catch (error) {
         console.error(error);
@@ -140,6 +144,8 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
         revalidateTag('news-collection');
         revalidatePath('/');
         revalidatePath('/admin/news');
+        revalidatePath('/news');
+        revalidatePath(`/news/${id}`);
         return { success: true, message: 'Berita berhasil dihapus.' };
     } catch (error) {
         console.error(error);

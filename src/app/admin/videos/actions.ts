@@ -20,6 +20,9 @@ export async function createVideo(prevState: any, formData: FormData) {
     try {
         await db.insert(videos).values(validatedFields.data);
         revalidatePath("/admin/videos");
+        revalidatePath("/");
+        revalidatePath("/videos");
+        revalidatePath("/news");
         return { message: "Video created successfully", error: undefined };
     } catch (error) {
         return { error: "Failed to create video", message: "" };
@@ -40,6 +43,9 @@ export async function updateVideo(id: number, prevState: any, formData: FormData
     try {
         await db.update(videos).set(validatedFields.data).where(eq(videos.id, id));
         revalidatePath("/admin/videos");
+        revalidatePath("/");
+        revalidatePath("/videos");
+        revalidatePath("/news");
         return { message: "Video updated successfully", error: undefined };
     } catch (error) {
         return { error: "Failed to update video", message: "" };
@@ -50,6 +56,9 @@ export async function deleteVideo(id: number) {
   try {
     await db.delete(videos).where(eq(videos.id, id));
     revalidatePath("/admin/videos");
+    revalidatePath("/");
+    revalidatePath("/videos");
+    revalidatePath("/news");
     return { message: "Video deleted successfully" };
   } catch (error) {
     return { error: "Failed to delete video" };

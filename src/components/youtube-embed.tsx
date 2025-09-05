@@ -25,6 +25,8 @@ const getEmbedUrl = (url: string) => {
 
 export function YouTubeEmbed({ url, title }: YouTubeEmbedProps) {
   const embedUrl = getEmbedUrl(url);
+  console.log('YouTubeEmbed - Original URL:', url);
+  console.log('YouTubeEmbed - Generated Embed URL:', embedUrl);
 
   if (!embedUrl) {
     return <p className="text-red-500">Link YouTube tidak valid.</p>;
