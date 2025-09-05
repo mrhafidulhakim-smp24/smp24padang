@@ -21,8 +21,13 @@ const getThumbnailUrl = (youtubeUrl: string) => {
     if (url.hostname === 'youtu.be') {
       videoId = url.pathname.substring(1);
     }
-    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-  } catch {
+    console.log('getThumbnailUrl - Original URL:', youtubeUrl);
+    console.log('getThumbnailUrl - Extracted Video ID:', videoId);
+    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    console.log('getThumbnailUrl - Generated Thumbnail URL:', thumbnailUrl);
+    return thumbnailUrl;
+  } catch (error) {
+    console.error('getThumbnailUrl - Error:', error);
     return '/placeholder.svg'; // Fallback image
   }
 };
@@ -66,7 +71,7 @@ export function VideoCard({ video }: VideoCardProps) {
           </div>
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-5xl">
         <DialogHeader>
           <DialogTitle>{video.title}</DialogTitle>
         </DialogHeader>

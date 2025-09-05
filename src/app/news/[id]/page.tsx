@@ -19,6 +19,8 @@ export default async function NewsArticlePage({ params }: { params: { id: string
     notFound();
   }
 
+  console.log('NewsArticlePage - articleData.video:', articleData.video);
+
   return (
     <main className="container mx-auto max-w-4xl px-4 py-8">
       <article>
