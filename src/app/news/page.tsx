@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { ArrowRight, Megaphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
-import { news, announcements } from '@/lib/db/schema';
+import { news } from '@/lib/db/schema';
 import { desc } from 'drizzle-orm';
 
 const getAllNews = cache(
@@ -26,18 +26,11 @@ const getAllNews = cache(
     { tags: ['news-collection'] },
 );
 
-async function getLatestAnnouncement() {
-    const announcementData = await db
-        .select()
-        .from(announcements)
-        .orderBy(desc(announcements.date))
-        .limit(1);
-    return announcementData[0] || null;
-}
+
 
 export default async function NewsPage() {
     const newsItems = await getAllNews();
-    const announcement = await getLatestAnnouncement();
+    
 
     return (
         <div className="container mx-auto px-4 py-12 md:py-24">
@@ -51,30 +44,7 @@ export default async function NewsPage() {
                 </p>
             </div>
 
-            {announcement && (
-                <section className="mt-16">
-                    <Card className="w-full bg-primary/5 border-primary/20">
-                        <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <Megaphone className="h-8 w-8 text-accent" />
-                                <div>
-                                    <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                                        Pengumuman Penting
-                                    </p>
-                                    <CardTitle className="font-headline text-2xl text-primary">
-                                        {announcement.title}
-                                    </CardTitle>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground">
-                                {announcement.description}
-                            </p>
-                        </CardContent>
-                    </Card>
-                </section>
-            )}
+            
 
             <section className="mt-12">
                 <h2 className="font-headline text-3xl font-bold text-primary mb-8">

@@ -397,7 +397,7 @@ export default async function Home() {
         <div className="flex flex-col">
             {/* Hero Section */}
             <section className="relative w-full">
-                <Carousel opts={{ loop: true }} className="w-full">
+                <Carousel opts={{ loop: true }} plugins={[Autoplay({ delay: 2000 })]} className="w-full">
                     <CarouselContent>
                         {banners.map((banner, index) => (
                             <CarouselItem key={index}>
