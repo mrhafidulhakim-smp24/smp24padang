@@ -8,6 +8,7 @@ export const NewsArticleSchema = z.object({
     date: z.coerce.date({
         errorMap: () => ({ message: 'Format tanggal tidak valid' }),
     }),
+    videoId: z.string().optional(),
 });
 
 export type NewsArticleFormData = z.infer<typeof NewsArticleSchema>;

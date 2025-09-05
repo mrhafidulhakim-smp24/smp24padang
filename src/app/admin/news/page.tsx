@@ -53,14 +53,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import {
     createNewsArticle,
     updateNewsArticle,
     deleteNewsArticle,
     getNewsForAdmin,
+    getVideosForSelect,
 } from './actions';
 import { type NewsArticle } from './schema';
+
+type VideoSelectItem = {
+    id: number;
+    title: string;
+};
 
 function SubmitButton() {
     const { pending } = useFormStatus();
@@ -74,6 +87,7 @@ function SubmitButton() {
 function NewsArticleForm({
     action,
     initialData,
+    videos,
     onClose,
 }: {
     action: (
@@ -81,6 +95,7 @@ function NewsArticleForm({
         formData: FormData,
     ) => Promise<{ success: boolean; message: string }>;
     initialData?: NewsArticle | null;
+    videos: VideoSelectItem[];
     onClose: () => void;
 }) {
     const [state, formAction] = useFormState(action, {
@@ -168,6 +183,22 @@ function NewsArticleForm({
                 />
             </div>
             <div>
+                <Label htmlFor="videoId">Lampirkan Video (Opsional)</Label>
+                <Select name="videoId" defaultValue={initialData?.videoId?.toString()}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Pilih video dari galeri..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="">Tidak ada</SelectItem>
+                        {videos.map((video) => (
+                            <SelectItem key={video.id} value={video.id.toString()}>
+                                {video.title}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+            <div>
                 <Label htmlFor="description">Isi Berita/Pengumuman</Label>
                 <Textarea
                     id="description"
@@ -189,6 +220,7 @@ function NewsArticleForm({
 
 export default function NewsAdminPage() {
     const [articles, setArticles] = useState<NewsArticle[]>([]);
+    const [videos, setVideos] = useState<VideoSelectItem[]>([]);
     const [isAddOpen, setAddOpen] = useState(false);
     const [isEditOpen, setEditOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
@@ -199,6 +231,7 @@ export default function NewsAdminPage() {
 
     useEffect(() => {
         getNewsForAdmin().then((data) => setArticles(data as NewsArticle[]));
+        getVideosForSelect().then((data) => setVideos(data));
     }, []);
 
     const { toast } = useToast();
@@ -263,6 +296,7 @@ export default function NewsAdminPage() {
                             </DialogHeader>
                             <NewsArticleForm
                                 action={createNewsArticle}
+                                videos={videos}
                                 onClose={() => {
                                     setAddOpen(false);
                                     handleFetchAndUpdate();
@@ -366,6 +400,7 @@ export default function NewsAdminPage() {
                         <NewsArticleForm
                             action={boundUpdateArticle}
                             initialData={selectedArticle}
+                            videos={videos}
                             onClose={() => {
                                 setEditOpen(false);
                                 setSelectedArticle(null);

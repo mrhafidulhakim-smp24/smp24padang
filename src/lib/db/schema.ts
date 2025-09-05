@@ -26,6 +26,7 @@ export const news = pgTable('news', {
     description: text('description').notNull(),
     date: text('date').notNull(),
     imageUrl: text('imageUrl'),
+    videoId: integer('video_id').references(() => videos.id),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
     updatedAt: timestamp('updatedAt').defaultNow().notNull(),
 });
@@ -150,6 +151,14 @@ export const pastPrincipals = pgTable('past_principals', {
     name: text('name').notNull(),
     period: text('period').notNull(),
     imageUrl: text('imageUrl'),
+    createdAt: timestamp('createdAt').defaultNow().notNull(),
+});
+
+export const videos = pgTable('videos', {
+    id: serial('id').primaryKey(),
+    title: text('title').notNull(),
+    description: text('description'),
+    youtubeUrl: text('youtube_url').notNull(),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
