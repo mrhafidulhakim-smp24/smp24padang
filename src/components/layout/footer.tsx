@@ -115,6 +115,16 @@ export default function Footer({ showMap = true }: FooterProps) {
                     </div>
                 )}
             </div>
+            <div className="container mx-auto flex flex-col items-start px-4 text-sm text-primary-foreground/70">
+                <Link
+                    href="https://github.com/Informatics-2025"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-white text-xs font-light mt-2 text-left"
+                >
+                    Dikembangkan oleh Mahasiswa PKL IF UPI YPTK Padang (2025)
+                </Link>
+            </div>
             <div className="bg-primary py-4">
                 <div className="container mx-auto flex items-center justify-center px-4 text-center text-sm text-primary-foreground/70">
                     <Link

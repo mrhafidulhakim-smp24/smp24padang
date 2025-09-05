@@ -3,7 +3,7 @@ import { news, videos } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { YouTubeEmbed } from '@/components/youtube-embed';
+
 
 export default async function NewsArticlePage({ params }: { params: { id: string } }) {
   const articleId = params.id;
@@ -11,15 +11,13 @@ export default async function NewsArticlePage({ params }: { params: { id: string
   const articleData = await db.query.news.findFirst({
     where: eq(news.id, articleId),
     with: {
-      video: true,
+      
     },
   });
 
   if (!articleData) {
     notFound();
   }
-
-  console.log('NewsArticlePage - articleData.video:', articleData.video);
 
   return (
     <main className="container mx-auto max-w-4xl px-4 py-8">
@@ -49,11 +47,7 @@ export default async function NewsArticlePage({ params }: { params: { id: string
           </div>
         )}
 
-        {articleData.video && (
-          <div className="mb-8">
-            <YouTubeEmbed url={articleData.video.youtubeUrl} title={articleData.video.title} />
-          </div>
-        )}
+        
 
         <div
           className="prose prose-lg max-w-none dark:prose-invert"
