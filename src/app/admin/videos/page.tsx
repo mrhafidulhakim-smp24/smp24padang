@@ -91,6 +91,11 @@ export default function VideosPage() {
         });
     };
 
+    const boundUpdateVideo = selectedVideo
+        ? updateVideo.bind(null, selectedVideo.id)
+        : (prevState: any, formData: FormData): Promise<{ message: string; error?: string }> =>
+              Promise.resolve({ message: "", error: "No video selected" });
+
     return (
         <div className="container mx-auto py-10">
             <div className="flex justify-between items-center mb-6">
@@ -141,7 +146,7 @@ export default function VideosPage() {
                         <DialogTitle>{dialog === 'add' ? 'Add New Video' : 'Edit Video'}</DialogTitle>
                     </DialogHeader>
                     <VideoForm
-                        action={dialog === 'add' ? createVideo : updateVideo.bind(null, selectedVideo!.id)}
+                        action={dialog === 'add' ? createVideo : boundUpdateVideo}
                         initialData={dialog === 'edit' ? selectedVideo : null}
                         onClose={() => handleCloseDialog(true)}
                     />
