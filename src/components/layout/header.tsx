@@ -36,6 +36,7 @@ import {
     GraduationCap,
     ShieldCheck,
     Megaphone,
+    Video,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
@@ -103,7 +104,15 @@ export default function Header() {
             ],
         },
         { href: '/achievements', label: 'Prestasi', icon: Trophy },
-        { href: '/gallery', label: 'Galeri', icon: Camera },
+        {
+            href: '/gallery',
+            label: 'Galeri',
+            icon: Camera,
+            subLinks: [
+                { href: '/gallery', label: 'Galeri Foto', icon: Camera },
+                { href: '/videos', label: 'Galeri Video', icon: Video },
+            ],
+        },
         { href: '/contact', label: 'Kontak', icon: Phone },
     ];
 

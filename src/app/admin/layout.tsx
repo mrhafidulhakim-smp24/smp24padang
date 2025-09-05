@@ -109,8 +109,14 @@ export default function AdminLayout({
         { href: '/admin/announcements', label: 'Pengumuman', icon: Megaphone },
 
         { href: '/admin/achievements', label: 'Prestasi', icon: Trophy },
-        { href: '/admin/gallery', label: 'Galeri', icon: ImageIcon },
-        { href: '/admin/videos', label: 'Galeri Video', icon: Youtube },
+        {
+            label: 'Galeri',
+            icon: GalleryHorizontal,
+            subItems: [
+                { href: '/admin/gallery', label: 'Galeri Foto', icon: ImageIcon },
+                { href: '/admin/videos', label: 'Galeri Video', icon: Youtube },
+            ]
+        },
         { href: '/admin/contact', label: 'Kontak', icon: Phone },
     ];
 
