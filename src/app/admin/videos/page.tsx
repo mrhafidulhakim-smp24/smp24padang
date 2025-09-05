@@ -52,9 +52,9 @@ export default async function VideosPage() {
                 <TableCell>{video.createdAt.toDateString()}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-2 justify-end">
-                    {/* <Button variant="outline" size="sm" asChild>
+                    <Button variant="outline" size="sm" asChild>
                       <Link href={`/admin/videos/${video.id}/edit`}>Edit</Link>
-                    </Button> */}
+                    </Button>
                     <DeleteVideoButton id={video.id} />
                   </div>
                 </TableCell>
