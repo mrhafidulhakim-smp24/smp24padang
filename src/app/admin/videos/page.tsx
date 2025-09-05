@@ -28,22 +28,13 @@ import {
 } from '@/components/ui/alert-dialog';
 import { MoreHorizontal, Pencil, PlusCircle, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/db';
 import { videos } from '@/lib/db/schema';
-import { createVideo, updateVideo, deleteVideo } from './actions';
+import { createVideo, updateVideo, deleteVideo, getVideos } from './actions';
 import { VideoForm } from './video-form';
 import type { InferSelectModel } from 'drizzle-orm';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 type Video = InferSelectModel<typeof videos>;
-
-// This is a new function to fetch videos on the client side
-async function getVideos(): Promise<Video[]> {
-    // This is a workaround to fetch data in a client component.
-    // Ideally, you would pass server-fetched data as a prop.
-    const allVideos = await db.select().from(videos);
-    return allVideos;
-}
 
 export default function VideosPage() {
     const [allVideos, setAllVideos] = useState<Video[]>([]);
@@ -55,13 +46,11 @@ export default function VideosPage() {
 
     const fetchData = async () => {
         setLoading(true);
-        // In a real app, you'd fetch this from your API
-        // For this example, we simulate a fetch.
-        try {
-            const data = await getVideos();
-            setAllVideos(data);
-        } catch (error) {
-            toast({ title: 'Error', description: 'Failed to fetch videos', variant: 'destructive' });
+        const result = await getVideos();
+        if (result.videos) {
+            setAllVideos(result.videos);
+        } else if (result.error) {
+            toast({ title: 'Error', description: result.error, variant: 'destructive' });
         }
         setLoading(false);
     };

@@ -199,7 +199,7 @@ export default function PrincipalForm({
                                 htmlFor="history"
                                 className="text-base font-semibold"
                             >
-                                Sejarah Sekolah
+                                Tentang Sekolah
                             </Label>
                             <Textarea
                                 id="history"

@@ -45,13 +45,15 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
             imageUrl = blob.url;
         }
 
+        const finalVideoId = videoId && videoId !== 'null' ? parseInt(videoId, 10) : null;
+
         await db.insert(news).values({
             id: uuidv4(),
             title,
             description,
             date: date.toISOString(),
             imageUrl,
-            videoId: videoId ? parseInt(videoId, 10) : null,
+            videoId: finalVideoId,
         });
 
         revalidateTag('news-collection');
@@ -89,6 +91,8 @@ export async function updateNewsArticle(
     const { title, description, date, videoId } = validatedFields.data;
     const imageFile = formData.get('image') as File | null;
 
+    const finalVideoId = videoId && videoId !== 'null' ? parseInt(videoId, 10) : null;
+
     const updateData: {
         title: string;
         description: string;
@@ -99,7 +103,7 @@ export async function updateNewsArticle(
         title,
         description,
         date: date.toISOString(),
-        videoId: videoId ? parseInt(videoId, 10) : null,
+        videoId: finalVideoId,
     };
 
     try {

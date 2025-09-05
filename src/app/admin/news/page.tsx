@@ -184,12 +184,12 @@ function NewsArticleForm({
             </div>
             <div>
                 <Label htmlFor="videoId">Lampirkan Video (Opsional)</Label>
-                <Select name="videoId" defaultValue={initialData?.videoId?.toString()}>
+                <Select name="videoId" defaultValue={initialData?.videoId?.toString() || 'null'}>
                     <SelectTrigger>
                         <SelectValue placeholder="Pilih video dari galeri..." />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">Tidak ada</SelectItem>
+                        <SelectItem value="null">Tidak ada</SelectItem>
                         {videos.map((video) => (
                             <SelectItem key={video.id} value={video.id.toString()}>
                                 {video.title}

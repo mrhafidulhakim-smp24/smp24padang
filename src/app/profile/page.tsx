@@ -15,7 +15,7 @@ import { getProfile, getPastPrincipals } from '../actions';
 export const metadata: Metadata = {
     title: 'Profil Lengkap SMPN 24 Padang | Sejarah, Visi, Misi, dan Kepala Sekolah',
     description:
-        'Temukan informasi mendalam tentang SMPN 24 Padang, termasuk sejarah sekolah, sambutan kepala sekolah, visi, misi, dan daftar kepala sekolah terdahulu. Kenali lebih dekat sekolah unggulan di Indonesia.',
+        'Temukan informasi mendalam tentang SMPN 24 Padang, termasuk tentang sekolah, sambutan kepala sekolah, visi, misi, dan daftar kepala sekolah terdahulu. Kenali lebih dekat sekolah unggulan di Indonesia.',
 };
 
 export const dynamic = 'force-dynamic';

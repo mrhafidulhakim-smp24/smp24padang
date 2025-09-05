@@ -55,3 +55,12 @@ export async function deleteVideo(id: number) {
     return { error: "Failed to delete video" };
   }
 }
+
+export async function getVideos() {
+    try {
+        const allVideos = await db.select().from(videos);
+        return { videos: allVideos };
+    } catch (error) {
+        return { error: "Failed to fetch videos" };
+    }
+}

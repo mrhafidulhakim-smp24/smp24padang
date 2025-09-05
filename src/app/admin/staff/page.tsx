@@ -110,10 +110,13 @@ function StaffForm({
             <div>
                 <Label>Foto</Label>
                 <div className="mt-1 flex items-center gap-4">
-                    <Avatar className="h-20 w-20">
-                        <AvatarImage src={preview || undefined} />
-                        <AvatarFallback><Upload /></AvatarFallback>
-                    </Avatar>
+                    <div className="w-20 h-20 rounded-md border flex items-center justify-center bg-muted">
+                        {preview ? (
+                            <Image src={preview} alt="Preview" width={80} height={80} className="h-full w-full rounded-md object-cover" />
+                        ) : (
+                            <Upload className="h-8 w-8 text-muted-foreground" />
+                        )}
+                    </div>
                     <Input id="image" name="image" type="file" accept="image/*" onChange={handleImageChange} className="max-w-xs" />
                 </div>
             </div>
@@ -245,7 +248,15 @@ export default function StaffAdminPage() {
                         ) : filteredStaff.length > 0 ? (
                             filteredStaff.map((item) => (
                                 <TableRow key={item.id}>
-                                    <TableCell><Avatar><AvatarImage src={item.imageUrl || undefined} /><AvatarFallback>{item.name.charAt(0)}</AvatarFallback></Avatar></TableCell>
+                                    <TableCell>
+                                        <div className="w-10 h-10 rounded-md border bg-muted flex items-center justify-center">
+                                            {item.imageUrl ? (
+                                                <Image src={item.imageUrl} alt={item.name} width={40} height={40} className="h-full w-full rounded-md object-cover" />
+                                            ) : (
+                                                <span className="text-muted-foreground">{item.name.charAt(0)}</span>
+                                            )}
+                                        </div>
+                                    </TableCell>
                                     <TableCell className="font-medium">{item.name}</TableCell>
                                     <TableCell>{item.position}</TableCell>
                                     <TableCell>{item.homeroomOf ? <Badge variant="secondary">{item.homeroomOf}</Badge> : '-'}</TableCell>

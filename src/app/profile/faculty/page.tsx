@@ -14,7 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
 import { Badge } from '@/components/ui/badge';
 
 type Staff = InferSelectModel<typeof StaffSchema>;
@@ -24,10 +24,19 @@ function StaffCard({ person }: { person: Staff }) {
     return (
         <Card key={person.id} className="text-center overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl h-full flex flex-col">
             <CardContent className="p-6 flex flex-col items-center flex-grow">
-                <Avatar className="w-24 h-24 border-4 border-background shadow-lg mb-4">
-                    <AvatarImage src={person.imageUrl || undefined} alt={person.name} />
-                    <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
-                </Avatar>
+                <div className="w-24 h-24 mb-4 rounded-md shadow-lg flex items-center justify-center bg-muted">
+                    {person.imageUrl ? (
+                        <Image
+                            src={person.imageUrl}
+                            alt={person.name}
+                            width={96}
+                            height={96}
+                            className="rounded-md object-cover h-full w-full"
+                        />
+                    ) : (
+                        <span className="text-3xl text-muted-foreground">{person.name.charAt(0)}</span>
+                    )}
+                </div>
                 <h3 className="text-lg font-semibold text-card-foreground">{person.name}</h3>
                 <p className="text-sm text-foreground/80">{person.position}</p>
                 {person.subject && (
