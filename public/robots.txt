@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://www.smpn24padang.sch.id/sitemap.xml

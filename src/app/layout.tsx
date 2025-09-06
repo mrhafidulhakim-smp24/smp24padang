@@ -23,7 +23,10 @@ const montserrat = Montserrat({
     display: 'swap',
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://smpn24padang.vercel.app';
+
 export const metadata: Metadata = {
+    metadataBase: new URL(siteUrl),
     title: 'SMPN 24 Padang',
     description:
         'Situs resmi SMPN 24 Padang. Temukan informasi lengkap, berita terbaru, dan profil sekolah kami.',
@@ -45,13 +48,12 @@ export default function RootLayout({
                             '@context': 'https://schema.org',
                             '@type': 'WebSite',
                             name: 'SMPN 24 Padang',
-                            url: 'https://www.smpn24padang.sch.id',
+                            url: siteUrl,
                             potentialAction: {
                                 '@type': 'SearchAction',
                                 target: {
                                     '@type': 'EntryPoint',
-                                    urlTemplate:
-                                        'https://www.smpn24padang.sch.id/search?q={search_term_string}',
+                                    urlTemplate: `${siteUrl}/search?q={search_term_string}`,
                                 },
                                 'query-input':
                                     'required name=search_term_string',
