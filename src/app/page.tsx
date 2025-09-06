@@ -434,7 +434,7 @@ export default async function Home() {
                             <ShieldCheck className="h-6 w-6 flex-shrink-0 text-green-600 dark:text-green-400" />
                             <p className="font-semibold text-green-800 dark:text-green-200">
                                 Terakreditasi A - Sekolah Adiwiyata Mandiri
-                                Nasional & Sekolah Ramah Anak
+                                Nasional, Sekolah Ramah Anak & Sekolah Siaga Kependudukan
                             </p>
                         </div>
                         <p className="mt-4 text-lg text-muted-foreground whitespace-pre-wrap">

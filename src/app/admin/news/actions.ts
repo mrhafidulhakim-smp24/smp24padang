@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/lib/db';
-import { news, videos } from '@/lib/db/schema';
+import { news } from '@/lib/db/schema';
 import { desc, eq } from 'drizzle-orm';
 import { put, del } from '@vercel/blob';
 import { revalidatePath, revalidateTag } from 'next/cache';
@@ -12,16 +12,11 @@ export async function getNewsForAdmin() {
     return await db.select().from(news).orderBy(desc(news.date));
 }
 
-export async function getVideosForSelect() {
-    return await db.select({ id: videos.id, title: videos.title }).from(videos).orderBy(desc(videos.createdAt));
-}
-
 export async function createNewsArticle(prevState: any, formData: FormData) {
     const validatedFields = NewsArticleSchema.safeParse({
         title: formData.get('title'),
         description: formData.get('description'),
         date: formData.get('date'),
-        videoId: formData.get('videoId'),
     });
 
     if (!validatedFields.success) {
@@ -33,7 +28,7 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
         return { success: false, message: `Validasi gagal: ${errorMessages}` };
     }
 
-    const { title, description, date, videoId } = validatedFields.data;
+    const { title, description, date } = validatedFields.data;
     const imageFile = formData.get('image') as File | null;
     let imageUrl: string | null = null;
 
@@ -45,15 +40,12 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
             imageUrl = blob.url;
         }
 
-        const finalVideoId = videoId && videoId !== 'null' ? parseInt(videoId, 10) : null;
-
         const [newArticle] = await db.insert(news).values({
             id: uuidv4(),
             title,
             description,
             date: date.toISOString(),
             imageUrl,
-            videoId: finalVideoId,
         }).returning({ id: news.id });
 
         revalidateTag('news-collection');
@@ -78,7 +70,6 @@ export async function updateNewsArticle(
         title: formData.get('title'),
         description: formData.get('description'),
         date: formData.get('date'),
-        videoId: formData.get('videoId'),
     });
 
     if (!validatedFields.success) {
@@ -90,22 +81,18 @@ export async function updateNewsArticle(
         return { success: false, message: `Validasi gagal: ${errorMessages}` };
     }
 
-    const { title, description, date, videoId } = validatedFields.data;
+    const { title, description, date } = validatedFields.data;
     const imageFile = formData.get('image') as File | null;
-
-    const finalVideoId = videoId && videoId !== 'null' ? parseInt(videoId, 10) : null;
 
     const updateData: {
         title: string;
         description: string;
         date: string;
         imageUrl?: string;
-        videoId?: number | null;
     } = {
         title,
         description,
         date: date.toISOString(),
-        videoId: finalVideoId,
     };
 
     try {

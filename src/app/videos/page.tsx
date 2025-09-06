@@ -7,9 +7,12 @@ export default async function GalleryPage() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <h1 className="mb-8 text-center text-3xl font-bold tracking-tight md:text-4xl">
+      <h1 className="mb-2 text-center text-3xl font-bold tracking-tight md:text-4xl">
         Galeri Video
       </h1>
+      <p className="mb-8 text-center text-lg text-muted-foreground">
+        Kumpulan video dokumentasi kegiatan, prestasi, dan acara sekolah.
+      </p>
       {allVideos.length > 0 ? (
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {allVideos.map((video) => (

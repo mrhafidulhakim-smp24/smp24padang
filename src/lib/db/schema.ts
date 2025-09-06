@@ -26,7 +26,6 @@ export const news = pgTable('news', {
     description: text('description').notNull(),
     date: text('date').notNull(),
     imageUrl: text('imageUrl'),
-    videoId: integer('video_id').references(() => videos.id),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
     updatedAt: timestamp('updatedAt').defaultNow().notNull(),
 });
