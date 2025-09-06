@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import Image from 'next/image';
 import {
@@ -53,7 +53,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { createStaff, updateStaff, deleteStaff, getStaff } from './actions';
+import { createStaff, updateStaff, deleteStaff, getStaff } from '@/app/admin/staff/actions';
 import type { staff as StaffSchema } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';
 import { Badge } from '@/components/ui/badge';
@@ -208,7 +208,7 @@ export default function StaffClientPage({ initialStaff }: { initialStaff: Staff[
                     <Button onClick={() => setDialog('add')}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Staf</Button>
                 </div>
                 <div className="mt-4 flex items-center gap-4">
-                    <Input placeholder="Cari nama..." value={search} onChange={(e) => setSearch(e.startTransition(e.target.value))} className="max-w-sm" />
+                    <Input placeholder="Cari nama..." value={search} onChange={(e) => startTransition(() => setSearch(e.target.value))} className="max-w-sm" />
                     <Select value={positionFilter} onValueChange={setPositionFilter}>
                         <SelectTrigger className="max-w-sm"><SelectValue placeholder="Filter jabatan" /></SelectTrigger>
                         <SelectContent>

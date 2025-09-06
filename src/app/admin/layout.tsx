@@ -105,9 +105,14 @@ export default function AdminLayout({
             ],
         },
         { href: '/admin/staff', label: 'Guru & Staf', icon: Users },
-        { href: '/admin/news', label: 'Berita', icon: Newspaper },
-        { href: '/admin/announcements', label: 'Pengumuman', icon: Megaphone },
-
+        {
+            label: 'Publikasi',
+            icon: Newspaper,
+            subItems: [
+                { href: '/admin/news', label: 'Berita' },
+                { href: '/admin/announcements', label: 'Pengumuman' },
+            ],
+        },
         { href: '/admin/achievements', label: 'Prestasi', icon: Trophy },
         {
             label: 'Galeri',

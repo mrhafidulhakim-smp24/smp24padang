@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { videos } from '@/lib/db/schema';
-import { VideoCard } from './_components/video-card';
+import { VideoCard } from '@/components/videos/video-card';
 
 export default async function GalleryPage() {
   const allVideos = await db.select().from(videos).orderBy(videos.createdAt);

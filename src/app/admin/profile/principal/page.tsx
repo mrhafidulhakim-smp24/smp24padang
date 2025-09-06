@@ -1,7 +1,7 @@
 import { db } from '@/lib/db';
 import { profiles, pastPrincipals } from '@/lib/db/schema';
 import PrincipalForm from './principal-form';
-import PastPrincipalsList from './_components/past-principals-list';
+import PastPrincipalsList from '@/components/admin/profile/past-principals-list';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type Profile = {

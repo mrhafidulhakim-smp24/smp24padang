@@ -122,7 +122,7 @@ export default function Footer({ showMap = true }: FooterProps) {
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-white text-xs font-light mt-2 text-left"
                 >
-                    Dikembangkan oleh Mahasiswa PKL IF UPI "YPTK" Padang (2025)
+                    Dikembangkan oleh Mahasiswa PKL IF UPI &quot;YPTK&quot; Padang (2025)
                 </Link>
             </div>
             <div className="bg-primary py-4">

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getAchievements } from './actions';
-import AchievementList from './_components/achievement-list';
+import AchievementList from '@/components/achievements/achievement-list';
 
 export const metadata: Metadata = {
     title: 'Galeri Prestasi SMPN 24 Padang | Raihan Siswa dan Sekolah Terbaik di Indonesia',

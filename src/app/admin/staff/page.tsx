@@ -1,5 +1,5 @@
 import { getStaff } from './actions';
-import StaffClientPage from './staff-client';
+import StaffClientPage from '@/components/admin/staff/staff-client';
 
 export default async function StaffPage() {
     const staff = await getStaff();

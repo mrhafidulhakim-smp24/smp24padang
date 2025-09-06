@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { organizationStructures } from '@/lib/db/schema';
-import OrganizationStructureList from './_components/organization-list';
+import OrganizationStructureList from '@/components/admin/organization/organization-structure-list';
 
 const REQUIRED_STRUCTURES = [
     {
