@@ -155,13 +155,13 @@ export default function Header() {
                 >
                     <Image
                         src="/logo.png"
-                        alt="SMPN 24 Padang Logo"
+                        alt="SMP Negeri 24 Padang Logo"
                         width={40}
                         height={40}
                         className="h-8 w-auto"
                     />
                     <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
-                        SMPN 24 Padang
+                        SMP Negeri 24 Padang
                     </span>
                 </Link>
 
@@ -261,13 +261,13 @@ export default function Header() {
         >
             <Image
                 src="/logo.png"
-                alt="SMPN 24 Padang Logo"
+                alt="SMP Negeri 24 Padang Logo"
                 width={40}
                 height={40}
                 className="h-8 w-auto"
             />
             <span className="font-headline text-xl font-bold text-primary whitespace-nowrap">
-                SMPN 24 Padang
+                SMP Negeri 24 Padang
             </span>
         </Link>
     </div>

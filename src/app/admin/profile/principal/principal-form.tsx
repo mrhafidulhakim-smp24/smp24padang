@@ -94,10 +94,10 @@ export default function PrincipalForm({
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Profil Kepala Sekolah & Sejarah</CardTitle>
+                <CardTitle>Profil Kepala Sekolah & Tentang Sekolah</CardTitle>
                 <CardDescription>
                     Perbarui informasi mengenai kepala sekolah saat ini dan
-                    sejarah singkat sekolah.
+                    informasi umum sekolah.
                 </CardDescription>
             </CardHeader>
             <CardContent>

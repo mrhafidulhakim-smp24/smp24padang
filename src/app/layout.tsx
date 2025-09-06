@@ -37,6 +37,7 @@ export default function RootLayout({
     return (
         <html lang="id" className="!scroll-smooth" suppressHydrationWarning>
             <head>
+                <meta name="google-site-verification" content="Vt6vpu5L1mLSG2YNct6fLIHbFueG3nhiF-dP4la96vE" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{

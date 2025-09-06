@@ -79,7 +79,7 @@ export default async function ProfilePage() {
             <section className="mt-16">
                 <div className="text-center">
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Sejarah Sekolah
+                        Tentang Sekolah
                     </h2>
                     <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
                         Perjalanan SMPN 24 Padang dari masa ke masa.

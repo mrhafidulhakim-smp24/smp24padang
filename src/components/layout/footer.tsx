@@ -45,13 +45,13 @@ export default function Footer({ showMap = true }: FooterProps) {
                     <Link href="/" className="flex items-center gap-2">
                         <Image
                             src="/logo.png"
-                            alt="SMPN 24 Padang Logo"
+                            alt="SMP Negeri 24 Padang Logo"
                             width={40}
                             height={40}
                             className="h-8 w-auto"
                         />
                         <span className="font-headline text-xl font-bold text-white">
-                            SMPN 24 Padang
+                            SMP Negeri 24 Padang
                         </span>
                     </Link>
                     <p className="text-primary-foreground/80">
@@ -122,7 +122,7 @@ export default function Footer({ showMap = true }: FooterProps) {
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-white text-xs font-light mt-2 text-left"
                 >
-                    Dikembangkan oleh Mahasiswa PKL IF UPI YPTK Padang (2025)
+                    Dikembangkan oleh Mahasiswa PKL IF UPI "YPTK" Padang (2025)
                 </Link>
             </div>
             <div className="bg-primary py-4">
@@ -131,7 +131,7 @@ export default function Footer({ showMap = true }: FooterProps) {
                         href="/login"
                         className="transition-colors hover:text-white"
                     >
-                        <p>© {currentYear} SMPN 24 Padang.</p>
+                        <p>© {currentYear} SMP Negeri 24 Padang.</p>
                     </Link>
                 </div>
             </div>
