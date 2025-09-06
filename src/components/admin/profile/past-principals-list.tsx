@@ -36,7 +36,7 @@ import {
     createPastPrincipal,
     updatePastPrincipal,
     deletePastPrincipal,
-} from '../actions';
+} from '@/app/admin/profile/principal/actions';
 import { PlusCircle, Pencil, Trash2 } from 'lucide-react';
 import type { pastPrincipals as PastPrincipal } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';

@@ -81,6 +81,7 @@ function BannersTab({
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     useEffect(() => {
         if (editingBanner) {
@@ -88,11 +89,13 @@ function BannersTab({
         } else {
             setPreview(null);
         }
-    }, [editingBanner]);
+        setImageFile(null);
+    }, [editingBanner, isDialogOpen]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setImageFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result as string);
@@ -103,7 +106,14 @@ function BannersTab({
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = new FormData(e.currentTarget);
+        const form = e.currentTarget;
+        const formData = new FormData();
+        formData.append('title', form.title.value);
+        formData.append('description', form.description.value);
+
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
 
         startTransition(async () => {
             const result = editingBanner
@@ -479,6 +489,7 @@ function FacilitiesTab({
         null,
     );
     const [preview, setPreview] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     useEffect(() => {
         if (editingFacility) {
@@ -486,11 +497,13 @@ function FacilitiesTab({
         } else {
             setPreview(null);
         }
-    }, [editingFacility]);
+        setImageFile(null);
+    }, [editingFacility, isDialogOpen]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setImageFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result as string);
@@ -501,7 +514,13 @@ function FacilitiesTab({
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = new FormData(e.currentTarget);
+        const form = e.currentTarget;
+        const formData = new FormData();
+        formData.append('name', form.name.value);
+
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
 
         startTransition(async () => {
             const result = editingFacility

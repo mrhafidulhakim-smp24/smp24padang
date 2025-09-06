@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import ContactView from './contact-view';
+import ContactView from '@/components/contact/contact-view';
 
 export const metadata: Metadata = {
     title: 'Hubungi SMPN 24 Padang | Alamat, Telepon, Email & Peta Lokasi',

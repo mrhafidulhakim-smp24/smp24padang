@@ -29,7 +29,7 @@ import {
 import { MoreHorizontal, Pencil, PlusCircle, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { videos } from '@/lib/db/schema';
-import { createVideo, updateVideo, deleteVideo, getVideos } from './actions';
+import { createVideo, updateVideo, deleteVideo, getVideos } from '@/app/admin/videos/actions';
 import { VideoForm } from './video-form';
 import type { InferSelectModel } from 'drizzle-orm';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';

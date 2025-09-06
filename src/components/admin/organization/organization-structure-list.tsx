@@ -19,7 +19,7 @@ import {
     CardDescription,
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { updateOrganizationStructure } from '../actions';
+import { updateOrganizationStructure } from '@/app/admin/organization/actions';
 import { Pencil } from 'lucide-react';
 import type { organizationStructures as OrganizationStructure } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';

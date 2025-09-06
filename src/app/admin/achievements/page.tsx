@@ -90,6 +90,7 @@ function AchievementForm({
     });
     const { toast } = useToast();
     const [preview, setPreview] = useState(initialData?.imageUrl || null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     useEffect(() => {
         if (state.success) {
@@ -107,6 +108,7 @@ function AchievementForm({
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setImageFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result as string);
@@ -115,8 +117,15 @@ function AchievementForm({
         }
     };
 
+    const customAction = (formData: FormData) => {
+        if (imageFile) {
+            formData.set('image', imageFile);
+        }
+        formAction(formData);
+    };
+
     return (
-        <form action={formAction} className="space-y-4">
+        <form action={customAction} className="space-y-4">
             <div>
                 <Label>Gambar</Label>
                 <div className="mt-1 flex items-center gap-4">

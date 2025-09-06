@@ -55,7 +55,7 @@ export async function createBanner(formData: FormData) {
         revalidateHomepage();
         return { success: true };
     } catch (error) {
-        return { success: false, error: 'Failed to create banner.' };
+        return { success: false, error: 'Gagal membuat spanduk.' };
     }
 }
 
@@ -94,7 +94,7 @@ export async function updateBanner(
         revalidateHomepage();
         return { success: true };
     } catch (error) {
-        return { success: false, error: 'Failed to update banner.' };
+        return { success: false, error: 'Gagal memperbarui spanduk.' };
     }
 }
 
@@ -107,7 +107,7 @@ export async function deleteBanner(id: string, imageUrl: string | null) {
         revalidateHomepage();
         return { success: true };
     } catch (error) {
-        return { success: false, error: 'Failed to delete banner.' };
+        return { success: false, error: 'Gagal menghapus spanduk.' };
     }
 }
 
@@ -130,7 +130,7 @@ export async function updateStatistics(data: {
         revalidateHomepage();
         return { success: true };
     } catch (error) {
-        return { success: false, error: 'Failed to update statistics.' };
+        return { success: false, error: 'Gagal memperbarui statistik.' };
     }
 }
 
@@ -148,14 +148,14 @@ export async function createFacility(formData: FormData) {
         }
 
         if (!imageUrl) {
-            return { success: false, error: 'Image is required.' };
+            return { success: false, error: 'Gambar wajib diisi.' };
         }
 
         await db.insert(facilities).values({ id: uuidv4(), name, imageUrl });
         revalidateHomepage();
         return { success: true };
     } catch (error) {
-        return { success: false, error: 'Failed to create facility.' };
+        return { success: false, error: 'Gagal membuat fasilitas.' };
     }
 }
 
@@ -191,7 +191,7 @@ export async function updateFacility(
         revalidateHomepage();
         return { success: true };
     } catch (error) {
-        return { success: false, error: 'Failed to update facility.' };
+        return { success: false, error: 'Gagal memperbarui fasilitas.' };
     }
 }
 
@@ -204,6 +204,6 @@ export async function deleteFacility(id: string, imageUrl: string | null) {
         revalidateHomepage();
         return { success: true };
     } catch (error) {
-        return { success: false, error: 'Failed to delete facility.' };
+        return { success: false, error: 'Gagal menghapus fasilitas.' };
     }
 }

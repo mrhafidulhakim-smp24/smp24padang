@@ -1,5 +1,5 @@
 import { getVideos } from './actions';
-import VideosClient from './videos-client';
+import VideosClient from '@/components/admin/videos/videos-client';
 
 export default async function VideosPage() {
     const result = await getVideos();
