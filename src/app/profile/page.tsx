@@ -110,7 +110,7 @@ export default async function ProfilePage() {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="w-[100px]">
+                                        <TableHead className="w-[140px]">
                                             Foto
                                         </TableHead>
                                         <TableHead>Nama</TableHead>
@@ -124,11 +124,11 @@ export default async function ProfilePage() {
                                                 <Image
                                                     src={
                                                         principal.imageUrl ||
-                                                        'https://placehold.co/100x100.png'
+                                                        'https://placehold.co/120x120.png'
                                                     }
                                                     alt={principal.name}
-                                                    width={80}
-                                                    height={80}
+                                                    width={120}
+                                                    height={120}
                                                     className="rounded-md object-cover bg-muted"
                                                 />
                                             </TableCell>
