@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from '@/lib/db';
 import { banners, facilities, statistics } from '@/lib/db/schema';
 import { eq, desc } from 'drizzle-orm';
-import { revalidateTag } from 'next/cache';
+import { revalidateTag, revalidatePath } from 'next/cache';
 import { put, del } from '@vercel/blob';
 
 export async function getHomepageData() {

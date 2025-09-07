@@ -554,7 +554,7 @@ function FacilitiesTab({
         startTransition(async () => {
             const result = await deleteFacility(id, imageUrl);
             if (result.success) {
-                toast({ title: 'Fasilitas dihapus!' });
+                toast({ title: 'Fasilitas dihapus!', description: 'Data fasilitas telah dihapus.' });
                 refreshData();
             } else {
                 toast({
