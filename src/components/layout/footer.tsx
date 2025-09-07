@@ -10,7 +10,6 @@ import {
     Phone,
     MapPin,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import { getContactInfo } from '@/app/admin/contact/actions';
 
 type ContactInfo = {
@@ -22,21 +21,11 @@ type ContactInfo = {
 
 type FooterProps = {
     showMap?: boolean;
+    contactInfo: ContactInfo | null;
 };
 
-export default function Footer({ showMap = true }: FooterProps) {
+export default function Footer({ showMap = true, contactInfo }: FooterProps) {
     const currentYear = new Date().getFullYear();
-    const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
-
-    useEffect(() => {
-        async function fetchContactInfo() {
-            const data = await getContactInfo();
-            if (data) {
-                setContactInfo(data);
-            }
-        }
-        fetchContactInfo();
-    }, []);
 
     return (
         <footer className="bg-primary/90 text-primary-foreground">
@@ -122,7 +111,8 @@ export default function Footer({ showMap = true }: FooterProps) {
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-white text-xs font-light mt-2 text-left"
                 >
-                    Dikembangkan oleh Mahasiswa PKL IF UPI &quot;YPTK&quot; Padang (2025)
+                    Dikembangkan oleh Mahasiswa PKL Teknik informatika UPI
+                    &quot;YPTK&quot; Padang (2025)
                 </Link>
             </div>
             <div className="bg-primary py-4">

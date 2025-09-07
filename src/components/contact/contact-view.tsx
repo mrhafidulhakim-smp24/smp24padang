@@ -1,8 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { getContactInfo } from '@/app/admin/contact/actions';
 
 type ContactInfo = {
     address: string;
@@ -11,36 +9,11 @@ type ContactInfo = {
     googleMapsUrl: string | null;
 };
 
-export default function ContactView() {
-    const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
-    const [loading, setLoading] = useState(true);
+type ContactViewProps = {
+    contactInfo: ContactInfo | null;
+};
 
-    useEffect(() => {
-        async function fetchContactInfo() {
-            const data = await getContactInfo();
-            if (data) {
-                setContactInfo(data);
-            }
-            setLoading(false);
-        }
-        fetchContactInfo();
-    }, []);
-
-    if (loading) {
-        return (
-            <div className="container mx-auto px-4 py-12 md:py-24">
-                <div className="text-center">
-                    <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
-                        Hubungi Kami
-                    </h1>
-                    <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                        Memuat data...
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
+export default function ContactView({ contactInfo }: ContactViewProps) {
     return (
         <div className="container mx-auto px-4 py-12 md:py-24">
             <div className="text-center">

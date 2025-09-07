@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -40,7 +40,6 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
-import { getContactInfo } from '@/app/admin/contact/actions';
 
 type ContactInfo = {
     address: string;
@@ -48,20 +47,13 @@ type ContactInfo = {
     email: string;
 };
 
-export default function Header() {
-    const [isSheetOpen, setSheetOpen] = useState(false);
-    const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
-    const pathname = usePathname();
+type HeaderProps = {
+    contactInfo: ContactInfo | null;
+};
 
-    useEffect(() => {
-        async function fetchContactInfo() {
-            const data = await getContactInfo();
-            if (data) {
-                setContactInfo(data);
-            }
-        }
-        fetchContactInfo();
-    }, []);
+export default function Header({ contactInfo }: HeaderProps) {
+    const [isSheetOpen, setSheetOpen] = useState(false);
+    const pathname = usePathname();
 
     const navLinks = [
         { href: '/', label: 'Beranda', icon: Home },

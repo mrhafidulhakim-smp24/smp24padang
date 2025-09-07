@@ -65,7 +65,9 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RootLayout({
+import { getContactInfo } from '@/app/admin/contact/actions';
+
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -99,6 +101,8 @@ export default function RootLayout({
         },
     };
 
+    const contactInfo = await getContactInfo();
+
     return (
         <html lang="id" className="!scroll-smooth" suppressHydrationWarning>
             <body
@@ -115,7 +119,7 @@ export default function RootLayout({
                         disableTransitionOnChange
                     >
                         <AOSInit />
-                        <ConditionalLayout>{children}</ConditionalLayout>
+                        <ConditionalLayout contactInfo={contactInfo}>{children}</ConditionalLayout>
                         <Toaster />
                         <BackToTopButton />
                         <SpeedInsights />

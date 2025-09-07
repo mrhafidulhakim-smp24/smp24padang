@@ -193,3 +193,17 @@ export const getPastPrincipals = cache(
     { tags: ['past-principals-collection'] },
 );
 
+export const getAllNewsIds = cache(
+    async () => {
+        try {
+            const ids = await db.select({ id: news.id }).from(news);
+            return ids.map((item) => ({ id: item.id }));
+        } catch (error) {
+            console.error('Error fetching all news IDs:', error);
+            return [];
+        }
+    },
+    ['all-news-ids'],
+    { tags: ['news-collection'] },
+);
+
