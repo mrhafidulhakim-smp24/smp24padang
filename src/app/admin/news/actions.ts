@@ -49,7 +49,6 @@ export async function createNewsArticle(prevState: any, formData: FormData) {
         }).returning({ id: news.id });
 
         revalidateTag('news-collection');
-        revalidatePath('/');
         revalidatePath('/admin/news');
         revalidatePath('/news');
         revalidatePath(`/news/${newArticle.id}`);
@@ -109,7 +108,6 @@ export async function updateNewsArticle(
         await db.update(news).set(updateData).where(eq(news.id, id));
 
         revalidateTag('news-collection');
-        revalidatePath('/');
         revalidatePath(`/articles/${id}`);
         revalidatePath('/admin/news');
         revalidatePath('/news');
@@ -129,7 +127,6 @@ export async function deleteNewsArticle(id: string, imageUrl: string | null) {
         await db.delete(news).where(eq(news.id, id));
 
         revalidateTag('news-collection');
-        revalidatePath('/');
         revalidatePath('/admin/news');
         revalidatePath('/news');
         revalidatePath(`/news/${id}`);

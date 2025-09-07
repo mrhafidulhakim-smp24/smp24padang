@@ -14,9 +14,13 @@ import {
 import { asc, desc, sql } from 'drizzle-orm';
 import { unstable_cache as cache } from 'next/cache';
 
-export async function getBanners() {
-    return await db.select().from(banners).orderBy(asc(banners.createdAt));
-}
+export const getBanners = cache(
+    async () => {
+        return await db.select().from(banners).orderBy(asc(banners.createdAt));
+    },
+    ['banners'],
+    { tags: ['banners-collection'] },
+);
 
 export const getLatestNews = cache(
     async () => {
@@ -52,109 +56,140 @@ export const getAnnouncements = cache(
     { tags: ['announcements-collection'] },
 );
 
-export async function getProfile() {
-    try {
-        const profileData = await db.select().from(profiles).limit(1);
-        return profileData[0] || null;
-    } catch (error) {
-        console.error('Error fetching profile:', error);
-        return null;
-    }
-}
-
-export async function getStatistics() {
-    try {
-        const statsData = await db.select().from(statistics).limit(1);
-        return statsData[0] || null;
-    } catch (error) {
-        console.error('Error fetching statistics:', error);
-        return null;
-    }
-}
-
-export async function getFacilities() {
-    try {
-        return await db
-            .select()
-            .from(facilities)
-            .orderBy(asc(facilities.createdAt));
-    } catch (error) {
-        console.error('Error fetching facilities:', error);
-        return [];
-    }
-}
-
-export async function getAbout() {
-    try {
-        const profileData = await db.select().from(profiles).limit(1);
-        const profile = profileData[0] || {};
-        return {
-            history: profile?.history || '',
-            vision: profile?.vision || '',
-            mission: profile?.mission ? profile.mission.split('\n') : [],
-        };
-    } catch (error) {
-        console.error('Error fetching about data:', error);
-        return {
-            history: '',
-            vision: '',
-            mission: [],
-        };
-    }
-}
-
-export async function getMarqueeItems() {
-    try {
-        const items: Array<{
-            type: 'Berita' | 'Pengumuman' | 'Prestasi';
-            text: string;
-        }> = [];
-
-        const latestNews = await db
-            .select({ title: news.title })
-            .from(news)
-            .orderBy(desc(news.date))
-            .limit(1);
-        if (latestNews.length > 0) {
-            items.push({ type: 'Berita', text: latestNews[0].title });
+export const getProfile = cache(
+    async () => {
+        try {
+            const profileData = await db.select().from(profiles).limit(1);
+            return profileData[0] || null;
+        } catch (error) {
+            console.error('Error fetching profile:', error);
+            return null;
         }
+    },
+    ['profile'],
+    { tags: ['profile-collection'] },
+);
 
-        const latestAnnouncement = await db
-            .select({ title: announcements.title })
-            .from(announcements)
-            .orderBy(desc(announcements.date))
-            .limit(1);
-        if (latestAnnouncement.length > 0) {
-            items.push({
-                type: 'Pengumuman',
-                text: latestAnnouncement[0].title,
-            });
+export const getStatistics = cache(
+    async () => {
+        try {
+            const statsData = await db.select().from(statistics).limit(1);
+            return statsData[0] || null;
+        } catch (error) {
+            console.error('Error fetching statistics:', error);
+            return null;
         }
+    },
+    ['statistics'],
+    { tags: ['statistics-collection'] },
+);
 
-        const latestAchievement = await db
-            .select({ title: achievements.title })
-            .from(achievements)
-            .orderBy(desc(achievements.createdAt))
-            .limit(1);
-        if (latestAchievement.length > 0) {
-            items.push({ type: 'Prestasi', text: latestAchievement[0].title });
+export const getFacilities = cache(
+    async () => {
+        try {
+            return await db
+                .select()
+                .from(facilities)
+                .orderBy(asc(facilities.createdAt));
+        } catch (error) {
+            console.error('Error fetching facilities:', error);
+            return [];
         }
+    },
+    ['facilities'],
+    { tags: ['facilities-collection'] },
+);
 
-        return items;
-    } catch (error) {
-        console.error('Error fetching dynamic marquee items:', error);
-        return [];
-    }
-}
+export const getAbout = cache(
+    async () => {
+        try {
+            const profileData = await db.select().from(profiles).limit(1);
+            const profile = profileData[0] || {};
+            return {
+                history: profile?.history || '',
+                vision: profile?.vision || '',
+                mission: profile?.mission ? profile.mission.split('\n') : [],
+            };
+        } catch (error) {
+            console.error('Error fetching about data:', error);
+            return {
+                history: '',
+                vision: '',
+                mission: [],
+            };
+        }
+    },
+    ['about'],
+    { tags: ['profile-collection'] },
+);
 
-export async function getPastPrincipals() {
-    try {
-        return await db
-            .select()
-            .from(pastPrincipals)
-            .orderBy(desc(pastPrincipals.createdAt));
-    } catch (error) {
-        console.error('Error fetching past principals:', error);
-        return [];
-    }
-}
+export const getMarqueeItems = cache(
+    async () => {
+        try {
+            const items: Array<{
+                type: 'Berita' | 'Pengumuman' | 'Prestasi';
+                text: string;
+            }> = [];
+
+            const latestNews = await db
+                .select({ title: news.title })
+                .from(news)
+                .orderBy(desc(news.date))
+                .limit(1);
+            if (latestNews.length > 0) {
+                items.push({ type: 'Berita', text: latestNews[0].title });
+            }
+
+            const latestAnnouncement = await db
+                .select({ title: announcements.title })
+                .from(announcements)
+                .orderBy(desc(announcements.date))
+                .limit(1);
+            if (latestAnnouncement.length > 0) {
+                items.push({
+                    type: 'Pengumuman',
+                    text: latestAnnouncement[0].title,
+                });
+            }
+
+            const latestAchievement = await db
+                .select({ title: achievements.title })
+                .from(achievements)
+                .orderBy(desc(achievements.createdAt))
+                .limit(1);
+            if (latestAchievement.length > 0) {
+                items.push({ type: 'Prestasi', text: latestAchievement[0].title });
+            }
+
+            return items;
+        } catch (error) {
+            console.error('Error fetching dynamic marquee items:', error);
+            return [];
+        }
+    },
+    ['marquee-items'],
+    {
+        tags: [
+            'news-collection',
+            'announcements-collection',
+            'achievements-collection',
+        ],
+    },
+);
+
+export const getPastPrincipals = cache(
+    async () => {
+        try {
+            return await db
+                .select()
+                .from(pastPrincipals)
+                .orderBy(desc(pastPrincipals.createdAt));
+        } catch (error) {
+            console.error('Error fetching past principals:', error);
+            return [];
+        }
+    },
+    ['past-principals'],
+    { tags: ['past-principals-collection'] },
+);
+

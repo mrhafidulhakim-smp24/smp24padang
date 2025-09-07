@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 import { achievements } from '@/lib/db/schema';
 import { desc, eq } from 'drizzle-orm';
 import { put, del } from '@vercel/blob';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { AchievementSchema } from './schema';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -51,6 +51,7 @@ export async function createAchievement(prevState: any, formData: FormData) {
             imageUrl,
         });
 
+        revalidateTag('achievements-collection');
         revalidatePath('/achievements');
         revalidatePath('/admin/achievements');
         return { success: true, message: 'Prestasi berhasil ditambahkan.' };
@@ -111,6 +112,7 @@ export async function updateAchievement(
             .set(updateData)
             .where(eq(achievements.id, id));
 
+        revalidateTag('achievements-collection');
         revalidatePath('/achievements');
         revalidatePath('/admin/achievements');
         return { success: true, message: 'Prestasi berhasil diperbarui.' };
@@ -127,6 +129,7 @@ export async function deleteAchievement(id: string, imageUrl: string | null) {
         }
         await db.delete(achievements).where(eq(achievements.id, id));
 
+        revalidateTag('achievements-collection');
         revalidatePath('/achievements');
         revalidatePath('/admin/achievements');
         return { success: true, message: 'Prestasi berhasil dihapus.' };

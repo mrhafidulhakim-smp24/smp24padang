@@ -43,7 +43,6 @@ export async function createAnnouncement(prevState: any, formData: FormData) {
         });
 
         revalidateTag('announcements-collection');
-        revalidatePath('/');
         revalidatePath('/pengumuman');
         revalidatePath('/admin/announcements');
         return { success: true, message: 'Pengumuman berhasil dibuat.' };
@@ -95,7 +94,6 @@ export async function updateAnnouncement(
             .where(eq(announcements.id, id));
 
         revalidateTag('announcements-collection');
-        revalidatePath('/');
         revalidatePath(`/announcements/${id}`);
         revalidatePath('/pengumuman');
         revalidatePath('/admin/announcements');
@@ -111,7 +109,6 @@ export async function deleteAnnouncement(id: string) {
         await db.delete(announcements).where(eq(announcements.id, id));
 
         revalidateTag('announcements-collection');
-        revalidatePath('/');
         revalidatePath('/pengumuman');
         revalidatePath('/admin/announcements');
         return { success: true, message: 'Pengumuman berhasil dihapus.' };

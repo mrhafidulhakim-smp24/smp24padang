@@ -52,7 +52,7 @@ export const metadata: Metadata = {
         'Selamat datang di situs resmi SMPN 24 Padang. Jelajahi visi, misi, berita terkini, pengumuman, statistik, dan fasilitas sekolah kami. Wujudkan potensi terbaik bersama kami!',
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // Revalidate at most every 60 seconds
 
 async function AboutUs() {
     const about = await getAbout();
