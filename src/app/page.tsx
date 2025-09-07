@@ -128,7 +128,7 @@ async function Announcements() {
     return (
         <section className="bg-primary/5 py-16 md:py-24" data-aos="fade-up">
             <div className="container mx-auto px-4">
-                <Card className="mx-auto max-w-4xl">
+                <Card className="mx-auto max-w-6xl">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-3 font-headline text-3xl text-primary">
                             <Megaphone className="h-8 w-8 text-green-600" />
