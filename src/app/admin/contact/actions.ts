@@ -33,7 +33,13 @@ export async function updateContactInfo(data: {
         if (existingContact.length > 0) {
             await db
                 .update(contact)
-                .set({ ...data, updatedAt: new Date() })
+                .set({
+                    address: data.address,
+                    phone: data.phone,
+                    email: data.email,
+                    googleMapsUrl: data.googleMapsUrl,
+                    updatedAt: new Date(),
+                })
                 .where(eq(contact.id, existingContact[0].id));
         } else {
             await db.insert(contact).values({
