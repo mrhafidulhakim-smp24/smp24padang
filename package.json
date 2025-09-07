@@ -12,6 +12,7 @@
         "drizzle:generate": "drizzle-kit generate",
         "drizzle:push": "drizzle-kit push",
         "drizzle:migrate": "drizzle-kit migrate",
+        "db:studio": "drizzle-kit studio",
         "clean-install": "rimraf node_modules package-lock.json && npm install"
     },
     "dependencies": {

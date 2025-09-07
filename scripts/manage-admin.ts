@@ -1,52 +1,59 @@
-import { db } from '../src/lib/db';
-import { users } from '../src/lib/db/schema';
+
+import { db } from '@/lib/db';
+import { users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
+import { randomUUID } from 'crypto';
+
+const [action, email, password] = process.argv.slice(2);
 
 async function main() {
-    const email = process.argv[2];
-    const password = process.argv[3];
-
+  if (action === 'create') {
     if (!email || !password) {
-        console.error('Error: Please provide an email and a password.');
-        console.log('Usage: npx tsx scripts/manage-admin.ts <email> <password>');
-        process.exit(1);
+      console.error('Usage: tsx scripts/manage-admin.ts create <email> <password>');
+      process.exit(1);
     }
 
-    console.log(`Processing admin account for: ${email}`)
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userId = randomUUID();
 
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        console.log('Password hashed successfully.');
+    await db.insert(users).values({
+      id: userId,
+      email: email,
+      password: hashedPassword,
+      name: 'Admin',
+    });
 
-        const existingUser = await db.query.users.findFirst({
-            where: eq(users.email, email),
-        });
-
-        if (existingUser) {
-            console.log('User with this email already exists. Updating password...');
-            await db
-                .update(users)
-                .set({ password: hashedPassword })
-                .where(eq(users.id, existingUser.id));
-            console.log(`✅ Password for ${email} has been updated successfully.`)
-        } else {
-            console.log('Creating new user...');
-            await db.insert(users).values({
-                id: `user_${Date.now()}`,
-                email: email,
-                password: hashedPassword,
-                name: email.split('@')[0], // Use part of email as name
-            });
-            console.log(`✅ Admin user ${email} created successfully.`);
-        }
-
-    } catch (error) {
-        console.error('An error occurred:', error);
-        process.exit(1);
+    console.log(`Admin user ${email} created successfully.`);
+  } else if (action === 'update-password') {
+    if (!email || !password) {
+      console.error('Usage: tsx scripts/manage-admin.ts update-password <email> <new_password>');
+      process.exit(1);
     }
 
-    process.exit(0);
+    const user = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+
+    if (!user) {
+      console.error(`User with email ${email} not found.`);
+      process.exit(1);
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await db.update(users).set({ password: hashedPassword }).where(eq(users.id, user.id));
+
+    console.log(`Password for user ${email} updated successfully.`);
+  } else {
+    console.error('Invalid action. Use "create" or "update-password".');
+    console.log('To create a new admin: tsx scripts/manage-admin.ts create <email> <password>');
+    console.log('To update a password: tsx scripts/manage-admin.ts update-password <email> <new_password>');
+    process.exit(1);
+  }
 }
 
-main();
+main().catch((error) => {
+  console.error('An error occurred:', error);
+  process.exit(1);
+});
