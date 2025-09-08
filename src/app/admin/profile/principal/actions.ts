@@ -20,7 +20,7 @@ export async function updatePrincipalProfile(formData: FormData) {
     );
 
     if (!validatedFields.success) {
-        return { success: false, message: 'Validasi gagal' };
+        return { success: false, errors: validatedFields.error.flatten().fieldErrors };
     }
 
     const { principalName, principalWelcome, history, principalImage } =
@@ -41,7 +41,7 @@ export async function updatePrincipalProfile(formData: FormData) {
             });
             newImageUrl = blob.url;
         } catch (error) {
-            return { success: false, message: 'Gagal unggah gambar' };
+            return { success: false, message: `Gagal unggah gambar: ${error instanceof Error ? error.message : String(error)}` };
         }
     }
 
@@ -71,14 +71,14 @@ export async function updatePrincipalProfile(formData: FormData) {
         }
         revalidatePath('/admin/profile/principal');
         revalidatePath('/');
-        revalidatePath('/profile');
+        revalidatePath('past-principals-collection');
         return {
             success: true,
             message: 'Profil berhasil diperbarui.',
             newImageUrl,
         };
     } catch (error) {
-        return { success: false, message: 'Gagal perbarui profil.' };
+        return { success: false, message: `Gagal perbarui profil: ${error instanceof Error ? error.message : String(error)}` };
     }
 }
 
@@ -94,7 +94,7 @@ export async function createPastPrincipal(formData: FormData) {
     );
 
     if (!validatedFields.success) {
-        return { success: false, message: 'Validasi gagal' };
+        return { success: false, errors: validatedFields.error.flatten().fieldErrors };
     }
 
     const { name, period, image } = validatedFields.data;
@@ -105,20 +105,20 @@ export async function createPastPrincipal(formData: FormData) {
             const blob = await put(image.name, image, { access: 'public' });
             imageUrl = blob.url;
         } catch (error) {
-            return { success: false, message: 'Gagal unggah gambar' };
+            return { success: false, message: `Gagal unggah gambar: ${error instanceof Error ? error.message : String(error)}` };
         }
     }
 
     try {
         await db.insert(pastPrincipals).values({ name, period, imageUrl });
         revalidatePath('/admin/profile/principal');
-        revalidatePath('/profile');
+        revalidatePath('past-principals-collection');
         return {
             success: true,
             message: 'Riwayat kepala sekolah ditambahkan.',
         };
     } catch (error) {
-        return { success: false, message: 'Gagal menambahkan data.' };
+        return { success: false, message: `Gagal menambahkan data: ${error instanceof Error ? error.message : String(error)}` };
     }
 }
 
@@ -132,7 +132,7 @@ export async function updatePastPrincipal(
     );
 
     if (!validatedFields.success) {
-        return { success: false, message: 'Validasi gagal' };
+        return { success: false, errors: validatedFields.error.flatten().fieldErrors };
     }
 
     const { name, period, image } = validatedFields.data;
@@ -146,7 +146,7 @@ export async function updatePastPrincipal(
             const blob = await put(image.name, image, { access: 'public' });
             newImageUrl = blob.url;
         } catch (error) {
-            return { success: false, message: 'Gagal unggah gambar' };
+            return { success: false, message: `Gagal unggah gambar: ${error instanceof Error ? error.message : String(error)}` };
         }
     }
 
@@ -160,10 +160,10 @@ export async function updatePastPrincipal(
             })
             .where(eq(pastPrincipals.id, id));
         revalidatePath('/admin/profile/principal');
-        revalidatePath('/profile');
+        revalidatePath('past-principals-collection');
         return { success: true, message: 'Riwayat kepala sekolah diperbarui.' };
     } catch (error) {
-        return { success: false, message: 'Gagal memperbarui data.' };
+        return { success: false, message: `Gagal memperbarui data: ${error instanceof Error ? error.message : String(error)}` };
     }
 }
 
@@ -174,9 +174,18 @@ export async function deletePastPrincipal(id: number, imageUrl: string | null) {
         }
         await db.delete(pastPrincipals).where(eq(pastPrincipals.id, id));
         revalidatePath('/admin/profile/principal');
-        revalidatePath('/profile');
+        revalidatePath('past-principals-collection');
         return { success: true, message: 'Data berhasil dihapus.' };
     } catch (error) {
-        return { success: false, message: 'Gagal menghapus data.' };
+        return { success: false, message: `Gagal menghapus data: ${error instanceof Error ? error.message : String(error)}` };
+    }
+}
+
+export async function getPastPrincipals() {
+    try {
+        const data = await db.query.pastPrincipals.findMany();
+        return { success: true, data };
+    } catch (error) {
+        return { success: false, message: `Failed to fetch past principals: ${error instanceof Error ? error.message : String(error)}` };
     }
 }

@@ -47,15 +47,20 @@ export async function createGalleryItem(prevState: any, formData: FormData) {
 export async function deleteGalleryItem(id: string, src: string) {
     try {
         if (src && !src.includes('placehold.co')) {
-            await del(src);
+            try {
+                await del(src);
+            } catch (blobError) {
+                console.error('Failed to delete image from Vercel Blob:', blobError);
+                // Continue with database deletion even if blob deletion fails
+            }
         }
         await db.delete(galleryItems).where(eq(galleryItems.id, id));
 
         revalidatePath('/gallery');
         revalidatePath('/admin/gallery');
         return { success: true, message: 'Gambar berhasil dihapus.' };
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: 'Gagal menghapus gambar.' };
+    } catch (error: any) {
+        console.error('Database deletion failed:', error);
+        return { success: false, message: `Gagal menghapus gambar: ${error.message || error.toString()}` };
     }
 }

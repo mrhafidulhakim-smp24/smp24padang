@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react'; // Added React import
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -22,30 +23,26 @@ import {
     LayoutDashboard,
     Newspaper,
     Trophy,
-    Landmark,
     Image as ImageIcon,
-    ChevronDown,
-    GraduationCap,
     Users,
     GalleryHorizontal,
-    FileBadge,
     Network,
     Home,
     Phone,
     UserCircle,
     Target,
-    Swords,
     Shirt,
     Settings,
     Award,
-    Megaphone,
     LogOut,
     Youtube,
+    ChevronRight,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { useToast } from '@/hooks/use-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminLayout({
     children,
@@ -56,20 +53,7 @@ export default function AdminLayout({
     const router = useRouter();
     const { toast } = useToast();
 
-    const handleLogout = async () => {
-        try {
-            await signOut({ redirect: false });
-            toast({ title: 'Sukses', description: 'Anda telah keluar.' });
-            window.location.href = '/login';
-        } catch (error) {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: 'Gagal untuk keluar.',
-            });
-        }
-    };
-
+    // Moved menuItems declaration before its usage
     const menuItems = [
         { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { href: '/admin/homepage', label: 'Beranda', icon: Home },
@@ -118,12 +102,34 @@ export default function AdminLayout({
             label: 'Galeri',
             icon: GalleryHorizontal,
             subItems: [
-                { href: '/admin/gallery', label: 'Galeri Foto', icon: ImageIcon },
+                {
+                    href: '/admin/gallery',
+                    label: 'Galeri Foto',
+                    icon: ImageIcon,
+                },
                 { href: '/admin/videos', label: 'Galeri Video', icon: Youtube },
-            ]
+            ],
         },
         { href: '/admin/contact', label: 'Kontak', icon: Phone },
     ];
+
+    const [collapsibleOpenStates, setCollapsibleOpenStates] = React.useState<boolean[]>(
+        menuItems.map(() => false)
+    );
+
+    const handleLogout = async () => {
+        try {
+            await signOut({ redirect: false });
+            toast({ title: 'Sukses', description: 'Anda telah keluar.' });
+            window.location.href = '/login';
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: 'Gagal untuk keluar.',
+            });
+        }
+    };
 
     return (
         <SidebarProvider>
@@ -141,61 +147,88 @@ export default function AdminLayout({
                             <span className="text-lg font-semibold text-primary group-data-[state=collapsed]:hidden">
                                 Admin CMS
                             </span>
+                            <Link
+                                href="/admin/profile"
+                                className="ml-auto group-data-[state=collapsed]:hidden"
+                            >
+                                <Settings className="h-5 w-5 text-muted-foreground hover:text-primary" />
+                            </Link>
                         </div>
                     </SidebarHeader>
                     <SidebarContent>
                         <SidebarMenu>
                             {menuItems.map((item, index) =>
                                 item.subItems ? (
-                                    <Collapsible.Root asChild key={index}>
+                                    <Collapsible.Root
+                                        key={index}
+                                        open={collapsibleOpenStates[index]}
+                                        onOpenChange={(open) => {
+                                            setCollapsibleOpenStates((prev: boolean[]) => { // Added type annotation
+                                                const newState = [...prev];
+                                                newState[index] = open;
+                                                return newState;
+                                            });
+                                        }}
+                                        asChild
+                                    >
                                         <SidebarMenuItem>
                                             <Collapsible.Trigger asChild>
                                                 <SidebarMenuButton
-                                                    icon={
-                                                        item.icon && (
-                                                            <item.icon />
-                                                        )
-                                                    }
+                                                    icon={item.icon}
                                                     isActive={item.subItems.some(
                                                         (sub) =>
                                                             pathname.startsWith(
                                                                 sub.href,
                                                             ),
                                                     )}
-                                                    className="group/sub-trigger"
+                                                    isCollapsibleTrigger={true}
+                                                    isMenuOpen={collapsibleOpenStates[index]}
                                                 >
                                                     {item.label}
-                                                    <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform ease-in-out group-data-[state=open]:rotate-180 group-data-[state=collapsed]:hidden" />
                                                 </SidebarMenuButton>
                                             </Collapsible.Trigger>
-                                            <SidebarMenuSub>
-                                                {item.subItems.map(
-                                                    (subItem) => (
-                                                        <SidebarMenuSubItem
-                                                            key={subItem.href}
+                                            <AnimatePresence>
+                                                {collapsibleOpenStates[index] && (
+                                                    <Collapsible.Content asChild forceMount>
+                                                        <motion.ul
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: "auto" }}
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                            className="pl-4 mt-1 overflow-hidden"
                                                         >
-                                                            <SidebarMenuSubButton
-                                                                href={
-                                                                    subItem.href
-                                                                }
-                                                                isActive={
-                                                                    pathname ===
-                                                                    subItem.href
-                                                                }
-                                                            >
-                                                                {subItem.label}
-                                                            </SidebarMenuSubButton>
-                                                        </SidebarMenuSubItem>
-                                                    ),
+                                                            <SidebarMenuSub>
+                                                                {item.subItems.map(
+                                                                    (subItem) => (
+                                                                        <SidebarMenuSubItem
+                                                                            key={subItem.href}
+                                                                        >
+                                                                            <SidebarMenuSubButton
+                                                                                href={
+                                                                                    subItem.href
+                                                                                }
+                                                                                isActive={
+                                                                                    pathname ===
+                                                                                    subItem.href
+                                                                                }
+                                                                            >
+                                                                                {subItem.label}
+                                                                            </SidebarMenuSubButton>
+                                                                        </SidebarMenuSubItem>
+                                                                    ),
+                                                                )}
+                                                            </SidebarMenuSub>
+                                                        </motion.ul>
+                                                    </Collapsible.Content>
                                                 )}
-                                            </SidebarMenuSub>
+                                            </AnimatePresence>
                                         </SidebarMenuItem>
                                     </Collapsible.Root>
                                 ) : (
                                     <SidebarMenuItem key={item.href}>
                                         <SidebarMenuButton
                                             href={item.href}
-                                            icon={item.icon && <item.icon />}
+                                            icon={item.icon}
                                             isActive={pathname === item.href}
                                         >
                                             {item.label}
@@ -213,7 +246,9 @@ export default function AdminLayout({
                                 onClick={handleLogout}
                             >
                                 <LogOut className="mr-2 h-4 w-4" />
-                                <span className="group-data-[state=collapsed]:hidden">Keluar</span>
+                                <span className="group-data-[state=collapsed]:hidden">
+                                    Keluar
+                                </span>
                             </Button>
                             <div className="flex items-center justify-between group-data-[state=collapsed]:justify-center">
                                 <Button
@@ -234,11 +269,12 @@ export default function AdminLayout({
                         <h1 className="text-lg font-semibold">
                             {menuItems
                                 .flatMap((i) => (i.subItems ? i.subItems : i))
-                                .find((i) => i.href === pathname)?.label || 'Dashboard'}
+                                .find((i) => i.href === pathname)?.label ||
+                                'Dashboard'}
                         </h1>
                     </header>
                     <main className="flex-1 p-4 md:p-8">
-                        <div className="">
+                        <div className="max-w-screen-xl mx-auto">
                             <div className="mb-4 hidden items-center gap-4 md:flex">
                                 {pathname !== '/admin/dashboard' && (
                                     <h1 className="text-2xl font-bold">
@@ -251,8 +287,8 @@ export default function AdminLayout({
                                                       }))
                                                     : i,
                                             )
-                                            .find((i) => i.href === pathname)?.label ||
-                                            'Dashboard'}
+                                            .find((i) => i.href === pathname)
+                                            ?.label || 'Dashboard'}
                                     </h1>
                                 )}
                             </div>

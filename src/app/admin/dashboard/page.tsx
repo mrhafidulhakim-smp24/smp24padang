@@ -1,15 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardContent,
-} from '@/components/ui/card';
-import {
-    LayoutDashboard,
     Newspaper,
     Trophy,
     Image as ImageIcon,
@@ -61,17 +54,17 @@ const menuItems = [
         icon: Shirt,
         description: 'Informasikan jenis-jenis seragam yang digunakan.',
     },
-    { 
-        href: '/admin/staff', 
-        label: 'Guru & Staf', 
-        icon: Users, 
-        description: 'Tambah, ubah, atau hapus data pengajar dan staf.'
+    {
+        href: '/admin/staff',
+        label: 'Guru & Staf',
+        icon: Users,
+        description: 'Tambah, ubah, atau hapus data pengajar dan staf.',
     },
-    { 
-        href: '/admin/news', 
-        label: 'Berita', 
-        icon: Newspaper, 
-        description: 'Publikasikan artikel berita terbaru untuk pengunjung.'
+    {
+        href: '/admin/news',
+        label: 'Berita',
+        icon: Newspaper,
+        description: 'Publikasikan artikel berita terbaru untuk pengunjung.',
     },
     {
         href: '/admin/announcements',

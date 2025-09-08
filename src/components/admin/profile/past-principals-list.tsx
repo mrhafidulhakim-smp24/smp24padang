@@ -36,6 +36,7 @@ import {
     createPastPrincipal,
     updatePastPrincipal,
     deletePastPrincipal,
+    getPastPrincipals,
 } from '@/app/admin/profile/principal/actions';
 import { PlusCircle, Pencil, Trash2 } from 'lucide-react';
 import type { pastPrincipals as PastPrincipal } from '@/lib/db/schema';
@@ -47,31 +48,37 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import useSWR from 'swr';
 
 type Principal = InferSelectModel<typeof PastPrincipal>;
 
-type PastPrincipalsListProps = {
-    initialData: Principal[];
-};
+type PastPrincipalsListProps = {};
 
-export default function PastPrincipalsList({
-    initialData,
-}: PastPrincipalsListProps) {
+export default function PastPrincipalsList() {
     const { toast } = useToast();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
-    const [principals, setPrincipals] = useState(initialData);
+    const { data, error, isLoading, mutate } = useSWR(
+        'pastPrincipals',
+        getPastPrincipals,
+    );
+    const principals: Principal[] = data?.success ? data.data : [];
+
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
     const [selectedPrincipal, setSelectedPrincipal] =
         useState<Principal | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+    const [dialogErrors, setDialogErrors] = useState<
+        Record<string, string[] | undefined>
+    >({});
 
     const openDialog = (principal: Principal | null) => {
         setSelectedPrincipal(principal);
         setPreview(principal?.imageUrl || null);
         setImageFile(null);
+        setDialogErrors({}); // Clear errors when opening dialog
         setDialogOpen(true);
     };
 
@@ -82,6 +89,7 @@ export default function PastPrincipalsList({
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setDialogErrors({}); // Clear previous errors
         const formData = new FormData(e.currentTarget);
         if (imageFile) {
             formData.append('image', imageFile);
@@ -99,13 +107,29 @@ export default function PastPrincipalsList({
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
                 setDialogOpen(false);
-                router.refresh();
+                mutate();
+                setDialogErrors({}); // Clear errors on success
             } else {
-                toast({
-                    title: 'Gagal!',
-                    description: result.message,
-                    variant: 'destructive',
-                });
+                if (result.errors) {
+                    setDialogErrors(result.errors);
+                    toast({
+                        title: 'Validasi Gagal',
+                        description: 'Mohon periksa kembali isian form.',
+                        variant: 'destructive',
+                    });
+                } else if (result.message) {
+                    toast({
+                        title: 'Gagal!',
+                        description: result.message,
+                        variant: 'destructive',
+                    });
+                } else {
+                    toast({
+                        title: 'Gagal!',
+                        description: 'Terjadi kesalahan tak terduga.',
+                        variant: 'destructive',
+                    });
+                }
             }
         });
     };
@@ -120,7 +144,7 @@ export default function PastPrincipalsList({
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
                 setDeleteOpen(false);
-                router.refresh();
+                mutate();
             } else {
                 toast({
                     title: 'Gagal!',
@@ -130,6 +154,10 @@ export default function PastPrincipalsList({
             }
         });
     };
+
+    if (isLoading) return <div>Loading past principals...</div>;
+    if (error || !data?.success)
+        return <div>Failed to load past principals.</div>;
 
     return (
         <Card>
@@ -231,6 +259,11 @@ export default function PastPrincipalsList({
                                 required
                                 className="text-base"
                             />
+                            {dialogErrors.name && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {dialogErrors.name[0]}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="period" className="text-base">
@@ -244,6 +277,11 @@ export default function PastPrincipalsList({
                                 required
                                 className="text-base"
                             />
+                            {dialogErrors.period && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {dialogErrors.period[0]}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label className="text-base">Foto</Label>

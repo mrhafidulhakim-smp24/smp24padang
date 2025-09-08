@@ -45,6 +45,7 @@ export default function PrincipalForm({
     const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(
         initialProfileData?.principalImageUrl || null,
     );
+    const [errors, setErrors] = useState<Record<string, string[] | undefined>>({});
 
     useEffect(() => {
         setProfileData(initialProfileData);
@@ -53,6 +54,7 @@ export default function PrincipalForm({
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setErrors({}); // Clear previous errors
         const formData = new FormData(event.currentTarget);
 
         if (principalImageFile) {
@@ -70,12 +72,28 @@ export default function PrincipalForm({
                 if (result.newImageUrl) {
                     setPreviewImageUrl(result.newImageUrl);
                 }
+                setErrors({}); // Clear errors on success
             } else {
-                toast({
-                    title: 'Error',
-                    description: result.message,
-                    variant: 'destructive',
-                });
+                if (result.errors) {
+                    setErrors(result.errors);
+                    toast({
+                        title: 'Validation Error',
+                        description: 'Please check the form for errors.',
+                        variant: 'destructive',
+                    });
+                } else if (result.message) {
+                    toast({
+                        title: 'Error',
+                        description: result.message,
+                        variant: 'destructive',
+                    });
+                } else {
+                    toast({
+                        title: 'Error',
+                        description: 'An unexpected error occurred.',
+                        variant: 'destructive',
+                    });
+                }
             }
         });
     };
@@ -156,6 +174,11 @@ export default function PrincipalForm({
                                     )}
                                 </div>
                             </div>
+                            {errors.principalImage && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.principalImage[0]}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -175,6 +198,11 @@ export default function PrincipalForm({
                                 required
                                 className="text-base"
                             />
+                            {errors.principalName && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.principalName[0]}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label
@@ -193,6 +221,11 @@ export default function PrincipalForm({
                                 required
                                 className="text-base"
                             />
+                            {errors.principalWelcome && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.principalWelcome[0]}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label
@@ -209,6 +242,11 @@ export default function PrincipalForm({
                                 required
                                 className="text-base"
                             />
+                            {errors.history && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.history[0]}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <div className="md:col-span-3 flex justify-end">

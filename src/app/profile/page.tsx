@@ -43,7 +43,7 @@ export default async function ProfilePage() {
                 <Card>
                     <div className="md:grid md:grid-cols-5 md:gap-8 lg:gap-12 items-center p-4 sm:p-6 md:p-8">
                         <div className="md:col-span-2">
-                            <div className="relative aspect-[4/5] overflow-hidden rounded-xl shadow-lg">
+                            <div className="relative aspect-[4/5] overflow-hidden shadow-lg">
                                 <Image
                                     src={
                                         profile?.principalImageUrl ||

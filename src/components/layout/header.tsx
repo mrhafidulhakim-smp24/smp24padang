@@ -159,7 +159,7 @@ export default function Header({ contactInfo }: HeaderProps) {
 
                 <div className="flex w-full items-center justify-end">
                     {/* Desktop Navigation */}
-                    <nav className="items-center justify-end gap-8 hidden md:flex">
+                    <nav className="items-center justify-end gap-12 hidden md:flex">
                         {navLinks.map((link) => {
                             const isDropdownActive =
                                 link.subLinks &&
@@ -187,7 +187,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                         {link.label}{' '}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-64">
+                                    <DropdownMenuContent className="w-64 bg-white rounded-xl shadow-md">
                                         {link.subLinks.map((subLink) => {
                                             const isSubLinkActive =
                                                 pathname === subLink.href;
@@ -199,7 +199,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                                     <Link
                                                         href={subLink.href}
                                                         className={cn(
-                                                            'flex items-center gap-3 p-2 text-lg font-semibold text-muted-foreground transition-colors hover:text-primary',
+                                                            'flex items-center gap-3 p-2 text-lg font-semibold text-muted-foreground transition-colors hover:bg-[#e6f4ea] hover:text-primary border-b border-gray-100 last:border-b-0',
                                                             isSubLinkActive &&
                                                                 'text-primary',
                                                         )}
@@ -217,10 +217,10 @@ export default function Header({ contactInfo }: HeaderProps) {
                                     key={link.href}
                                     href={link.href}
                                     className={cn(
-                                        'relative text-base font-semibold text-muted-foreground transition-colors hover:text-primary after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
+                                        'relative text-base font-semibold text-muted-foreground transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[4px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
                                         isLinkActive
-                                            ? 'text-primary after:scale-x-100'
-                                            : 'after:scale-x-0 hover:after:scale-x-100',
+                                            ? 'text-primary after:scale-x-100 bg-[#e6f4ea] rounded-md'
+                                            : 'after:scale-x-0 hover:after:scale-x-100 hover:text-green-700',
                                     )}
                                 >
                                     {link.label}

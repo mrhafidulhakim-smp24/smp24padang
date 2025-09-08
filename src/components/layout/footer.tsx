@@ -29,8 +29,8 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
 
     return (
         <footer className="bg-primary/90 text-primary-foreground">
-            <div className="container mx-auto grid grid-cols-1 gap-12 px-4 py-12 md:grid-cols-3">
-                <div className="space-y-4">
+            <div className="container mx-auto grid grid-cols-1 gap-6 px-2 py-12 md:grid-cols-4">
+                <div className="space-y-4 md:col-span-1">
                     <Link href="/" className="flex items-center gap-2">
                         <Image
                             src="/logo.png"
@@ -69,14 +69,16 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                     </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 md:col-span-1">
                     <h3 className="font-headline text-lg font-semibold text-white">
                         Hubungi Kami
                     </h3>
                     <ul className="space-y-2 text-primary-foreground/80">
                         <li className="flex items-start gap-3">
                             <MapPin className="mt-1 h-5 w-5 flex-shrink-0 text-accent" />
-                            <span>{contactInfo?.address}</span>
+                            <span className="flex-grow">
+                                {contactInfo?.address}
+                            </span>
                         </li>
                         <li className="flex items-center gap-3">
                             <Phone className="h-5 w-5 flex-shrink-0 text-accent" />
@@ -90,30 +92,30 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                 </div>
 
                 {showMap && contactInfo?.googleMapsUrl && (
-                    <div className="overflow-hidden rounded-lg">
+                    <div className="overflow-hidden rounded-lg md:col-span-2">
                         <iframe
                             src={contactInfo.googleMapsUrl}
                             width="100%"
-                            height="200"
+                            height="300"
                             style={{ border: 0 }}
                             allowFullScreen={true}
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
                             title="Peta Lokasi Sekolah"
                         ></iframe>
+                        <div className="flex flex-col items-start text-sm text-primary-foreground/70 mt-2">
+                            <Link
+                                href="https://github.com/Informatics-2025"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-gray-400 hover:text-white text-xs font-light text-left"
+                            >
+                                Dikembangkan oleh Mahasiswa Kerja Praktek Teknik
+                                Informatika UPI &quot;YPTK&quot; Padang (2025)
+                            </Link>
+                        </div>
                     </div>
                 )}
-            </div>
-            <div className="container mx-auto flex flex-col items-start px-4 text-sm text-primary-foreground/70">
-                <Link
-                    href="https://github.com/Informatics-2025"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white text-xs font-light mt-2 text-left"
-                >
-                    Dikembangkan oleh Mahasiswa PKL Teknik informatika UPI
-                    &quot;YPTK&quot; Padang (2025)
-                </Link>
             </div>
             <div className="bg-primary py-4">
                 <div className="container mx-auto flex items-center justify-center px-4 text-center text-sm text-primary-foreground/70">

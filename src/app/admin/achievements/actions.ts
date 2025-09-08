@@ -125,7 +125,12 @@ export async function updateAchievement(
 export async function deleteAchievement(id: string, imageUrl: string | null) {
     try {
         if (imageUrl && !imageUrl.includes('placehold.co')) {
-            await del(imageUrl);
+            try {
+                await del(imageUrl);
+            } catch (blobError) {
+                console.error('Failed to delete image from Vercel Blob:', blobError);
+                // Continue with database deletion even if blob deletion fails
+            }
         }
         await db.delete(achievements).where(eq(achievements.id, id));
 
@@ -133,8 +138,8 @@ export async function deleteAchievement(id: string, imageUrl: string | null) {
         revalidatePath('/achievements');
         revalidatePath('/admin/achievements');
         return { success: true, message: 'Prestasi berhasil dihapus.' };
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: 'Gagal menghapus prestasi.' };
+    } catch (error: any) {
+        console.error('Database deletion failed:', error);
+        return { success: false, message: `Gagal menghapus prestasi: ${error.message || error.toString()}` };
     }
 }
