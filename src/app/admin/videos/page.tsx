@@ -1,17 +1,13 @@
-import { getVideos } from './actions';
-import VideosClient from '@/components/admin/videos/videos-client';
+import { db } from '@/lib/db';
+import { videos } from '@/lib/db/schema';
+import { Videos } from '@/components/admin/videos';
+
+async function getVideos() {
+    return db.select().from(videos);
+}
 
 export default async function VideosPage() {
-    const result = await getVideos();
+    const videoData = await getVideos();
 
-    // Handle potential error during server-side fetch
-    if (result.error) {
-        return (
-            <div className="text-center text-red-500">
-                <p>Error fetching videos: {result.error}</p>
-            </div>
-        );
-    }
-
-    return <VideosClient initialVideos={result.videos || []} />;
+    return <Videos data={videoData} />;
 }

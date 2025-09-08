@@ -2,28 +2,21 @@ import { db } from '@/lib/db';
 import { videos } from '@/lib/db/schema';
 import { VideoCard } from '@/components/videos/video-card';
 
-export default async function GalleryPage() {
-  const allVideos = await db.select().from(videos).orderBy(videos.createdAt);
+async function getVideos() {
+    return db.select().from(videos);
+}
 
-  return (
-    <main className="container mx-auto px-4 py-8">
-      <h1 className="mb-2 text-center text-3xl font-bold tracking-tight md:text-4xl">
-        Galeri Video
-      </h1>
-      <p className="mb-8 text-center text-lg text-muted-foreground">
-        Kumpulan video dokumentasi kegiatan, prestasi, dan acara sekolah.
-      </p>
-      {allVideos.length > 0 ? (
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {allVideos.map((video) => (
-            <VideoCard key={video.id} video={video} />
-          ))}
+export default async function VideosPage() {
+    const videoData = await getVideos();
+
+    return (
+        <div className="container mx-auto px-4 py-8">
+            <h1 className="text-3xl font-bold mb-8">Videos</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {videoData.map((video) => (
+                    <VideoCard key={video.id} video={video} />
+                ))}
+            </div>
         </div>
-      ) : (
-        <div className="text-center text-gray-500">
-          <p>Belum ada video yang ditambahkan.</p>
-        </div>
-      )}
-    </main>
-  );
+    );
 }

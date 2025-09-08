@@ -1,75 +1,21 @@
-"use server";
+'use server';
 
-import { db } from "@/lib/db";
-import { videos } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { videoSchema } from "./schema";
+import { revalidatePath } from 'next/cache';
+import { db } from '@/lib/db';
+import { videos } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
 
-export async function createVideo(prevState: any, formData: FormData) {
-    const validatedFields = videoSchema.safeParse({
-        title: formData.get("title"),
-        description: formData.get("description"),
-        youtubeUrl: formData.get("youtubeUrl"),
-    });
-
-    if (!validatedFields.success) {
-        return { error: "Invalid fields", message: "" };
-    }
-
-    try {
-        await db.insert(videos).values(validatedFields.data);
-        revalidatePath("/admin/videos");
-        revalidatePath("/");
-        revalidatePath("/videos");
-        revalidatePath("/news");
-        return { message: "Video created successfully", error: undefined };
-    } catch (error) {
-        return { error: "Failed to create video", message: "" };
-    }
+export async function createVideo(data: typeof videos.$inferInsert) {
+    await db.insert(videos).values(data);
+    revalidatePath('/admin/videos');
 }
 
-export async function updateVideo(id: number, prevState: any, formData: FormData) {
-    const validatedFields = videoSchema.safeParse({
-        title: formData.get("title"),
-        description: formData.get("description"),
-        youtubeUrl: formData.get("youtubeUrl"),
-    });
-
-    if (!validatedFields.success) {
-        return { error: "Invalid fields", message: "" };
-    }
-
-    try {
-        await db.update(videos).set(validatedFields.data).where(eq(videos.id, id));
-        revalidatePath("/admin/videos");
-        revalidatePath("/");
-        revalidatePath("/videos");
-        revalidatePath("/news");
-        return { message: "Video updated successfully", error: undefined };
-    } catch (error) {
-        return { error: "Failed to update video", message: "" };
-    }
+export async function updateVideo(id: number, data: Partial<typeof videos.$inferInsert>) {
+    await db.update(videos).set(data).where(eq(videos.id, id));
+    revalidatePath('/admin/videos');
 }
 
 export async function deleteVideo(id: number) {
-  try {
     await db.delete(videos).where(eq(videos.id, id));
-    revalidatePath("/admin/videos");
-    revalidatePath("/");
-    revalidatePath("/videos");
-    revalidatePath("/news");
-    return { message: "Video deleted successfully" };
-  } catch (error) {
-    return { error: "Failed to delete video" };
-  }
-}
-
-export async function getVideos() {
-    try {
-        const allVideos = await db.select().from(videos);
-        return { videos: allVideos };
-    } catch (error) {
-        return { error: "Failed to fetch videos" };
-    }
+    revalidatePath('/admin/videos');
 }
