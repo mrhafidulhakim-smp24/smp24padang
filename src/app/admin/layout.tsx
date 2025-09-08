@@ -282,7 +282,7 @@ export default function AdminLayout({
                                 <Button
                                     variant="outline"
                                     asChild
-                                    className="group-data-[state=collapsed]:hidden"
+                                    className="w-full justify-start group-data-[state=collapsed]:justify-center"
                                 >
                                     <Link href="/">Halaman Utama</Link>
                                 </Button>

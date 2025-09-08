@@ -5,12 +5,12 @@ import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import { randomUUID } from 'crypto';
 
-const [action, email, password] = process.argv.slice(2);
+const [action, name, email, password] = process.argv.slice(2);
 
 async function main() {
   if (action === 'create') {
-    if (!email || !password) {
-      console.error('Usage: tsx scripts/manage-admin.ts create <email> <password>');
+    if (!name || !email || !password) {
+      console.error('Usage: tsx scripts/manage-admin.ts create <name> <email> <password>');
       process.exit(1);
     }
 
@@ -19,12 +19,12 @@ async function main() {
 
     await db.insert(users).values({
       id: userId,
+      name: name,
       email: email,
       password: hashedPassword,
-      name: 'Admin',
     });
 
-    console.log(`Admin user ${email} created successfully.`);
+    console.log(`Admin user ${name} (${email}) created successfully.`);
   } else if (action === 'update-password') {
     if (!email || !password) {
       console.error('Usage: tsx scripts/manage-admin.ts update-password <email> <new_password>');
@@ -47,7 +47,7 @@ async function main() {
     console.log(`Password for user ${email} updated successfully.`);
   } else {
     console.error('Invalid action. Use "create" or "update-password".');
-    console.log('To create a new admin: tsx scripts/manage-admin.ts create <email> <password>');
+    console.log('To create a new admin: tsx scripts/manage-admin.ts create <name> <email> <password>');
     console.log('To update a password: tsx scripts/manage-admin.ts update-password <email> <new_password>');
     process.exit(1);
   }
