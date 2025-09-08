@@ -26,7 +26,11 @@ interface ClientCarouselProps {
 
 export function ClientCarousel({ banners }: ClientCarouselProps) {
     return (
-        <Carousel opts={{ loop: true }} plugins={[Autoplay({ delay: 2000 })]} className="w-full">
+        <Carousel
+            opts={{ loop: true }}
+            plugins={[Autoplay({ delay: 2000 })]}
+            className="w-full"
+        >
             <CarouselContent>
                 {banners.map((banner, index) => (
                     <CarouselItem key={index}>
