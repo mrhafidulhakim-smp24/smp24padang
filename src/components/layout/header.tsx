@@ -219,7 +219,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                     className={cn(
                                         'relative text-base font-semibold text-muted-foreground transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[4px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
                                         isLinkActive
-                                            ? 'text-primary after:scale-x-100 bg-[#e6f4ea] rounded-md'
+                                            ? 'text-primary after:scale-x-100'
                                             : 'after:scale-x-0 hover:after:scale-x-100 hover:text-green-700',
                                     )}
                                 >
@@ -277,7 +277,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                             (cleanPathname.startsWith(link.href) ||
                                 (link.href === '/news' &&
                                     cleanPathname.startsWith('/articles'))) &&
-                                'bg-accent text-accent-foreground',
+                                '',
                         )}
                     >
                         <link.icon className="h-5 w-5" />
@@ -302,7 +302,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                             onClick={() => setSheetOpen(false)}
                                             className={cn(
                                                 'flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground',
-                                                cleanPathname === subLink.href && 'bg-accent text-accent-foreground'
+                                                cleanPathname === subLink.href && ''
                                             )}
                                         >
                                             <subLink.icon className="h-5 w-5" />
