@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react'; // Added React import
+import React, { useState, useEffect } from 'react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -10,7 +10,6 @@ import {
     SidebarHeader,
     SidebarContent,
     SidebarFooter,
-    SidebarTrigger,
     SidebarMenu,
     SidebarMenuItem,
     SidebarMenuButton,
@@ -36,13 +35,14 @@ import {
     Award,
     LogOut,
     Youtube,
-    ChevronRight,
+    Menu, // Added Menu icon for hamburger
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import AdminHeader from '@/components/admin-header'; // Import AdminHeader
 
 export default function AdminLayout({
     children,
@@ -52,6 +52,29 @@ export default function AdminLayout({
     const pathname = usePathname();
     const router = useRouter();
     const { toast } = useToast();
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Default to open for desktop
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768; // Check for mobile on client side
+
+    useEffect(() => {
+        // Set initial state based on screen size
+        if (isMobile) {
+            setIsSidebarOpen(false); // Hidden by default on mobile
+        } else {
+            setIsSidebarOpen(true); // Open by default on desktop
+        }
+
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setIsSidebarOpen(false);
+            } else {
+                setIsSidebarOpen(true);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [isMobile]);
 
     // Moved menuItems declaration before its usage
     const menuItems = [
@@ -134,7 +157,19 @@ export default function AdminLayout({
     return (
         <SidebarProvider>
             <div className="flex min-h-screen">
-                <Sidebar>
+                {/* Overlay for mobile */}
+                {isSidebarOpen && isMobile && (
+                    <div
+                        className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ease-in-out opacity-100"
+                        onClick={() => setIsSidebarOpen(false)}
+                    ></div>
+                )}
+
+                <Sidebar
+                    className={`h-screen fixed top-0 left-0 w-64 z-50 transition-transform duration-300 ease-in-out ${
+                        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    } md:translate-x-0`} // Always open on desktop
+                >
                     <SidebarHeader>
                         <div className="flex items-center gap-2">
                             <Image
@@ -153,9 +188,10 @@ export default function AdminLayout({
                             >
                                 <Settings className="h-5 w-5 text-muted-foreground hover:text-primary" />
                             </Link>
+                            <ThemeToggle />
                         </div>
                     </SidebarHeader>
-                    <SidebarContent>
+                    <SidebarContent className="overflow-y-auto flex-grow">
                         <SidebarMenu>
                             {menuItems.map((item, index) =>
                                 item.subItems ? (
@@ -163,7 +199,7 @@ export default function AdminLayout({
                                         key={index}
                                         open={collapsibleOpenStates[index]}
                                         onOpenChange={(open) => {
-                                            setCollapsibleOpenStates((prev: boolean[]) => { // Added type annotation
+                                            setCollapsibleOpenStates((prev: boolean[]) => {
                                                 const newState = [...prev];
                                                 newState[index] = open;
                                                 return newState;
@@ -176,10 +212,7 @@ export default function AdminLayout({
                                                 <SidebarMenuButton
                                                     icon={item.icon}
                                                     isActive={item.subItems.some(
-                                                        (sub) =>
-                                                            pathname.startsWith(
-                                                                sub.href,
-                                                            ),
+                                                        (sub) => pathname.startsWith(sub.href),
                                                     )}
                                                     isCollapsibleTrigger={true}
                                                     isMenuOpen={collapsibleOpenStates[index]}
@@ -198,25 +231,20 @@ export default function AdminLayout({
                                                             className="pl-4 mt-1 overflow-hidden"
                                                         >
                                                             <SidebarMenuSub>
-                                                                {item.subItems.map(
-                                                                    (subItem) => (
-                                                                        <SidebarMenuSubItem
-                                                                            key={subItem.href}
+                                                                {item.subItems.map((subItem) => (
+                                                                    <SidebarMenuSubItem
+                                                                        key={subItem.href}
+                                                                    >
+                                                                        <SidebarMenuSubButton
+                                                                            href={subItem.href}
+                                                                            isActive={
+                                                                                pathname === subItem.href
+                                                                            }
                                                                         >
-                                                                            <SidebarMenuSubButton
-                                                                                href={
-                                                                                    subItem.href
-                                                                                }
-                                                                                isActive={
-                                                                                    pathname ===
-                                                                                    subItem.href
-                                                                                }
-                                                                            >
-                                                                                {subItem.label}
-                                                                            </SidebarMenuSubButton>
-                                                                        </SidebarMenuSubItem>
-                                                                    ),
-                                                                )}
+                                                                            {subItem.label}
+                                                                        </SidebarMenuSubButton>
+                                                                    </SidebarMenuSubItem>
+                                                                ))}
                                                             </SidebarMenuSub>
                                                         </motion.ul>
                                                     </Collapsible.Content>
@@ -258,25 +286,25 @@ export default function AdminLayout({
                                 >
                                     <Link href="/">Halaman Utama</Link>
                                 </Button>
-                                <ThemeToggle />
                             </div>
                         </div>
                     </SidebarFooter>
                 </Sidebar>
-                <div className="flex flex-1 flex-col">
-                    <header className="md:hidden sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4">
-                        <SidebarTrigger />
-                        <h1 className="text-lg font-semibold">
-                            {menuItems
-                                .flatMap((i) => (i.subItems ? i.subItems : i))
-                                .find((i) => i.href === pathname)?.label ||
-                                'Dashboard'}
-                        </h1>
-                    </header>
+                <div
+                    className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
+                        isSidebarOpen ? "md:ml-64" : "md:ml-0"
+                    }`}
+                >
+                    <AdminHeader
+                        isSidebarOpen={isSidebarOpen}
+                        setIsSidebarOpen={setIsSidebarOpen}
+                        menuItems={menuItems}
+                        pathname={pathname}
+                    />
                     <main className="flex-1 p-4 md:p-8">
                         <div className="max-w-screen-xl mx-auto">
                             <div className="mb-4 hidden items-center gap-4 md:flex">
-                                {pathname !== '/admin/dashboard' && (
+                                {pathname !== "/admin/dashboard" && (
                                     <h1 className="text-2xl font-bold">
                                         {menuItems
                                             .flatMap((i) =>
@@ -287,8 +315,8 @@ export default function AdminLayout({
                                                       }))
                                                     : i,
                                             )
-                                            .find((i) => i.href === pathname)
-                                            ?.label || 'Dashboard'}
+                                            .find((i) => i.href === pathname)?.label ||
+                                            "Dashboard"}
                                     </h1>
                                 )}
                             </div>

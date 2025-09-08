@@ -116,40 +116,42 @@ export default function AdminProfilePage() {
             {/* Informasi Akun Section */}
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-4">Informasi Akun</h2>
-              {/* Username Field */}
-              <div>
-                <Label htmlFor="username" className="text-base font-medium mb-2 flex items-center">
-                  <User className="mr-2 h-5 w-5 text-gray-500" />
-                  Username
-                </Label>
-                <Input
-                  id="username"
-                  name="username"
-                  type="text"
-                  placeholder="Masukkan username Anda"
-                  className="h-12 text-base rounded-lg"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-                <p className="text-sm text-gray-500 mt-1">Nama pengguna yang akan ditampilkan.</p>
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Username Field */}
+                <div>
+                  <Label htmlFor="username" className="text-base font-medium mb-2 flex items-center">
+                    <User className="mr-2 h-5 w-5 text-gray-500" />
+                    Username
+                  </Label>
+                  <Input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="Masukkan username Anda"
+                    className="h-12 text-base rounded-lg"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                  <p className="text-sm text-gray-500 mt-1">Nama pengguna yang akan ditampilkan.</p>
+                </div>
 
-              {/* Email Field */}
-              <div>
-                <Label htmlFor="email" className="text-base font-medium mb-2 flex items-center">
-                  <Mail className="mr-2 h-5 w-5 text-gray-500" />
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Masukkan email Anda"
-                  className="h-12 text-base rounded-lg"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <p className="text-sm text-gray-500 mt-1">Alamat email untuk notifikasi dan reset password.</p>
+                {/* Email Field */}
+                <div>
+                  <Label htmlFor="email" className="text-base font-medium mb-2 flex items-center">
+                    <Mail className="mr-2 h-5 w-5 text-gray-500" />
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Masukkan email Anda"
+                    className="h-12 text-base rounded-lg"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <p className="text-sm text-gray-500 mt-1">Alamat email untuk notifikasi dan reset password.</p>
+                </div>
               </div>
             </div>
 
