@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { profiles, pastPrincipals, type PastPrincipal } from '@/lib/db/schema';
+import { profiles, pastPrincipals } from '@/lib/db/schema';
 import PrincipalForm from './principal-form';
 import PastPrincipalsList from '@/components/admin/profile/past-principals-list';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,7 +17,6 @@ type Profile = {
 export default async function PrincipalProfilePage() {
     const profileData: Profile | null =
         (await db.query.profiles.findFirst()) || null;
-    const pastPrincipalsData = (await db.query.pastPrincipals.findMany()) as PastPrincipal[];
     return (
         <div className="space-y-8">
             <div>
@@ -38,7 +37,7 @@ export default async function PrincipalProfilePage() {
                     <PrincipalForm initialProfileData={profileData} />
                 </TabsContent>
                 <TabsContent value="history" className="mt-6">
-                    <PastPrincipalsList principals={pastPrincipalsData} />
+                    <PastPrincipalsList />
                 </TabsContent>
             </Tabs>
         </div>

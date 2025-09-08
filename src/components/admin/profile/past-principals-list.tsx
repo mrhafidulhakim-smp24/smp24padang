@@ -62,7 +62,7 @@ export default function PastPrincipalsList() {
         'pastPrincipals',
         getPastPrincipals,
     );
-    const principals: Principal[] = data?.success ? data.data : [];
+    const principals: Principal[] = data?.success && data.data ? data.data : [];
 
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
