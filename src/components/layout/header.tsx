@@ -199,7 +199,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                                     <Link
                                                         href={subLink.href}
                                                         className={cn(
-                                                            'flex items-center gap-3 p-2 text-xl font-semibold text-muted-foreground transition-colors hover:bg-[#e6f4ea] hover:text-primary border-b border-gray-100 last:border-b-0',
+                                                            'flex items-center gap-3 p-2 text-xl font-semibold text-muted-foreground transition-colors hover:bg-[#e6f4ea] hover:text-primary border-b border-gray-100 last:border-b-0 whitespace-nowrap',
                                                             isSubLinkActive &&
                                                                 'text-primary',
                                                         )}
@@ -301,7 +301,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                             href={subLink.href}
                                             onClick={() => setSheetOpen(false)}
                                             className={cn(
-                                                'flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground',
+                                                'flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground whitespace-nowrap',
                                                 cleanPathname === subLink.href && ''
                                             )}
                                         >
