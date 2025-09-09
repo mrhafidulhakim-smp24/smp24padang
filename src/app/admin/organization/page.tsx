@@ -18,6 +18,21 @@ const REQUIRED_STRUCTURES = [
         title: 'Struktur Tata Usaha',
         description: 'Bagan kepengurusan tata usaha di SMPN 24 Padang.',
     },
+    {
+        type: 'pustaka',
+        title: 'Struktur Pustaka',
+        description: 'Bagan kepengurusan pustaka di SMPN 24 Padang.',
+    },
+    {
+        type: 'galeri',
+        title: 'Struktur Galeri',
+        description: 'Bagan kepengurusan galeri di SMPN 24 Padang.',
+    },
+    {
+        type: 'mushola',
+        title: 'Struktur Mushola',
+        description: 'Bagan kepengurusan mushola di SMPN 24 Padang.',
+    },
 ];
 
 export default async function OrganizationAdminPage() {

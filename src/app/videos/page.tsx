@@ -3,7 +3,12 @@ import { videos } from '@/lib/db/schema';
 import { VideoGrid } from './video-grid';
 
 async function getVideos() {
-    return db.select().from(videos);
+    try {
+        return db.select().from(videos);
+    } catch (error) {
+        console.error('Error fetching videos:', error);
+        throw new Error('Failed to fetch videos.');
+    }
 }
 
 export default async function VideosPage() {

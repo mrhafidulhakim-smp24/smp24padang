@@ -141,6 +141,27 @@
       "when": 1756724000000,
       "tag": "0019_create_videos_table",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1757422041062,
+      "tag": "0020_lonely_korvac",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1757422151552,
+      "tag": "0021_gifted_warlock",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1757423079172,
+      "tag": "0022_ambitious_wallflower",
+      "breakpoints": true
     }
   ]
 }

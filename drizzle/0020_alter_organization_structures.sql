@@ -1,1 +1,0 @@
-ALTER TABLE "organization_structures" ADD COLUMN "pdfUrl" text;

@@ -1,1 +1,0 @@
-CREATE UNIQUE INDEX "uniforms_type_day_idx" ON "uniforms" USING btree ("type","day");

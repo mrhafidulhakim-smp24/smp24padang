@@ -1,1 +1,0 @@
-ALTER TABLE "announcements" ADD COLUMN "pdfUrl" text;

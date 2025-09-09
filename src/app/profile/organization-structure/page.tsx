@@ -25,9 +25,12 @@ export default async function OrganizationStructurePage() {
 
     // Define the desired order of the organization charts
     const desiredOrder = [
-        'Struktur Organisasi Tenaga Pendidik',
-        'Struktur Tata Usaha',
+        'Struktur Pimpinan Sekolah',
         'Struktur Organisasi Siswa Intra Sekolah (OSIS)',
+        'Struktur Tata Usaha',
+        'Struktur Pustaka',
+        'Struktur Galeri',
+        'Struktur Mushola',
     ];
 
     // Sort the charts based on the desired order

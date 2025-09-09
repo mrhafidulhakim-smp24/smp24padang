@@ -42,22 +42,22 @@ export default async function ProfilePage() {
             <section className="mt-16">
                 <Card>
                     <div className="p-4 sm:p-6 md:p-8">
-                        <div className="float-left mr-6 w-full md:w-auto max-w-[300px]">
+                        <h2 className="font-headline text-3xl font-bold text-primary mb-4">
+                            Sambutan dari Kepala Sekolah
+                        </h2>
+                        <div className="float-left mr-6 w-full md:w-auto max-w-[350px]">
                             <Image
                                 src={
                                     profile?.principalImageUrl ||
-                                    'https://placehold.co/300x400.png'
+                                    'https://placehold.co/350x466.png'
                                 }
                                 alt="Principal"
-                                width={300}
-                                height={400}
+                                width={350}
+                                height={466}
                                 className="transition-transform duration-300 hover:scale-105 shadow-md"
                             />
                         </div>
-                        <h2 className="font-headline text-3xl font-bold text-primary">
-                            Sambutan dari Kepala Sekolah
-                        </h2>
-                        <div className="mt-4 space-y-4 text-foreground/80 text-justify leading-relaxed">
+                        <div className="space-y-4 text-foreground/80 text-justify leading-relaxed">
                             {welcomeParagraphs?.map((p, i) => (
                                 <p key={i}>{p}</p>
                             ))}

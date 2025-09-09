@@ -157,7 +157,7 @@ export const videos = pgTable('videos', {
     id: serial('id').primaryKey(),
     title: text('title').notNull(),
     description: text('description'),
-    youtubeUrl: text('youtube_url').notNull(),
+    youtubeUrl: text('youtubeUrl').notNull(),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
