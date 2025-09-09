@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { db } from '@/lib/db';
 import { profiles, pastPrincipals } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
@@ -71,7 +71,7 @@ export async function updatePrincipalProfile(formData: FormData) {
         }
         revalidatePath('/admin/profile/principal');
         revalidatePath('/');
-        revalidatePath('past-principals-collection');
+        revalidateTag('profile-collection');
         return {
             success: true,
             message: 'Profil berhasil diperbarui.',

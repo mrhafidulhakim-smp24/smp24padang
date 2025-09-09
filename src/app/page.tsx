@@ -46,7 +46,6 @@ import {
 import { Separator } from '@/components/ui/separator';
 import FaqAccordion from '@/components/faq/faq-accordion';
 
-
 export const metadata: Metadata = {
     title: 'SMPN 24 Padang | Cerdas, Terampil & Bebudidaya Lingkungan',
     description:
@@ -397,7 +396,7 @@ async function FaqSection() {
             <div className="container mx-auto px-4">
                 <div className="text-center">
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Pertanyaan Umum (FAQ)
+                        Pertanyaan Umum
                     </h2>
                     <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
                         Temukan jawaban atas pertanyaan yang sering diajukan.
@@ -408,9 +407,7 @@ async function FaqSection() {
                 </div>
                 <div className="mt-8 text-center">
                     <Button asChild>
-                        <Link href="/contact">
-                            Selengkapnya
-                        </Link>
+                        <Link href="/contact">Selengkapnya</Link>
                     </Button>
                 </div>
             </div>
@@ -462,7 +459,8 @@ export default async function Home() {
                             <ShieldCheck className="h-6 w-6 flex-shrink-0 text-green-600 dark:text-green-400" />
                             <p className="font-semibold text-green-800 dark:text-green-200">
                                 Terakreditasi A - Sekolah Adiwiyata Mandiri
-                                Nasional, Sekolah Ramah Anak & Sekolah Siaga Kependudukan
+                                Nasional, Sekolah Ramah Anak & Sekolah Siaga
+                                Kependudukan
                             </p>
                         </div>
                         <p className="mt-4 text-lg text-muted-foreground whitespace-pre-wrap">
