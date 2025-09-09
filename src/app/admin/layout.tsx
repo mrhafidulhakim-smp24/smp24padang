@@ -138,9 +138,9 @@ export default function AdminLayout({
         { href: '/admin/faq', label: 'FAQ', icon: MessageCircleQuestion },
     ];
 
-    const [collapsibleOpenStates, setCollapsibleOpenStates] = React.useState<boolean[]>(
-        menuItems.map(() => false)
-    );
+    const [collapsibleOpenStates, setCollapsibleOpenStates] = React.useState<
+        boolean[]
+    >(menuItems.map(() => false));
 
     const handleLogout = async () => {
         try {
@@ -169,7 +169,7 @@ export default function AdminLayout({
 
                 <Sidebar
                     className={`h-screen fixed top-0 left-0 w-64 z-50 transition-transform duration-300 ease-in-out ${
-                        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
                     } md:translate-x-0`} // Always open on desktop
                 >
                     <SidebarHeader>
@@ -182,7 +182,7 @@ export default function AdminLayout({
                                 className=""
                             />
                             <span className="text-lg font-semibold text-primary group-data-[state=collapsed]:hidden">
-                                Admin CMS
+                                Admin
                             </span>
                             <Link
                                 href="/admin/profile"
@@ -201,11 +201,13 @@ export default function AdminLayout({
                                         key={index}
                                         open={collapsibleOpenStates[index]}
                                         onOpenChange={(open) => {
-                                            setCollapsibleOpenStates((prev: boolean[]) => {
-                                                const newState = [...prev];
-                                                newState[index] = open;
-                                                return newState;
-                                            });
+                                            setCollapsibleOpenStates(
+                                                (prev: boolean[]) => {
+                                                    const newState = [...prev];
+                                                    newState[index] = open;
+                                                    return newState;
+                                                },
+                                            );
                                         }}
                                         asChild
                                     >
@@ -214,39 +216,74 @@ export default function AdminLayout({
                                                 <SidebarMenuButton
                                                     icon={item.icon}
                                                     isActive={item.subItems.some(
-                                                        (sub) => pathname.startsWith(sub.href),
+                                                        (sub) =>
+                                                            pathname.startsWith(
+                                                                sub.href,
+                                                            ),
                                                     )}
                                                     isCollapsibleTrigger={true}
-                                                    isMenuOpen={collapsibleOpenStates[index]}
+                                                    isMenuOpen={
+                                                        collapsibleOpenStates[
+                                                            index
+                                                        ]
+                                                    }
                                                 >
                                                     {item.label}
                                                 </SidebarMenuButton>
                                             </Collapsible.Trigger>
                                             <AnimatePresence>
-                                                {collapsibleOpenStates[index] && (
-                                                    <Collapsible.Content asChild forceMount>
+                                                {collapsibleOpenStates[
+                                                    index
+                                                ] && (
+                                                    <Collapsible.Content
+                                                        asChild
+                                                        forceMount
+                                                    >
                                                         <motion.ul
-                                                            initial={{ opacity: 0, height: 0 }}
-                                                            animate={{ opacity: 1, height: "auto" }}
-                                                            exit={{ opacity: 0, height: 0 }}
-                                                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                            initial={{
+                                                                opacity: 0,
+                                                                height: 0,
+                                                            }}
+                                                            animate={{
+                                                                opacity: 1,
+                                                                height: 'auto',
+                                                            }}
+                                                            exit={{
+                                                                opacity: 0,
+                                                                height: 0,
+                                                            }}
+                                                            transition={{
+                                                                duration: 0.3,
+                                                                ease: 'easeInOut',
+                                                            }}
                                                             className="pl-4 mt-1 overflow-hidden"
                                                         >
                                                             <SidebarMenuSub>
-                                                                {item.subItems.map((subItem) => (
-                                                                    <SidebarMenuSubItem
-                                                                        key={subItem.href}
-                                                                    >
-                                                                        <SidebarMenuSubButton
-                                                                            href={subItem.href}
-                                                                            isActive={
-                                                                                pathname === subItem.href
+                                                                {item.subItems.map(
+                                                                    (
+                                                                        subItem,
+                                                                    ) => (
+                                                                        <SidebarMenuSubItem
+                                                                            key={
+                                                                                subItem.href
                                                                             }
                                                                         >
-                                                                            {subItem.label}
-                                                                        </SidebarMenuSubButton>
-                                                                    </SidebarMenuSubItem>
-                                                                ))}
+                                                                            <SidebarMenuSubButton
+                                                                                href={
+                                                                                    subItem.href
+                                                                                }
+                                                                                isActive={
+                                                                                    pathname ===
+                                                                                    subItem.href
+                                                                                }
+                                                                            >
+                                                                                {
+                                                                                    subItem.label
+                                                                                }
+                                                                            </SidebarMenuSubButton>
+                                                                        </SidebarMenuSubItem>
+                                                                    ),
+                                                                )}
                                                             </SidebarMenuSub>
                                                         </motion.ul>
                                                     </Collapsible.Content>
@@ -294,7 +331,7 @@ export default function AdminLayout({
                 </Sidebar>
                 <div
                     className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
-                        isSidebarOpen ? "md:ml-64" : "md:ml-0"
+                        isSidebarOpen ? 'md:ml-64' : 'md:ml-0'
                     }`}
                 >
                     <AdminHeader
@@ -306,7 +343,7 @@ export default function AdminLayout({
                     <main className="flex-1 p-4 md:p-8">
                         <div className="max-w-screen-xl mx-auto">
                             <div className="mb-4 hidden items-center gap-4 md:flex">
-                                {pathname !== "/admin/dashboard" && (
+                                {pathname !== '/admin/dashboard' && (
                                     <h1 className="text-2xl font-bold">
                                         {menuItems
                                             .flatMap((i) =>
@@ -317,8 +354,8 @@ export default function AdminLayout({
                                                       }))
                                                     : i,
                                             )
-                                            .find((i) => i.href === pathname)?.label ||
-                                            "Dashboard"}
+                                            .find((i) => i.href === pathname)
+                                            ?.label || 'Dashboard'}
                                     </h1>
                                 )}
                             </div>

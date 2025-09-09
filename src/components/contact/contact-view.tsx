@@ -20,20 +20,9 @@ export default function ContactView({ contactInfo, faqSection }: ContactViewProp
         <div className="container mx-auto px-4 py-12 md:py-24">
             <div className="text-center mb-16">
                 <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
-                    Hubungi Kami
+                    Pertanyaan Umum (FAQ)
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                    Kami siap membantu. Hubungi kami jika ada pertanyaan atau
-                    keperluan lainnya.
-                </p>
-            </div>
-
-            {/* FAQ Section moved up */}
-            <div className="text-center">
-                <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Pertanyaan Umum (FAQ)
-                </h2>
-                <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
                     Temukan jawaban atas pertanyaan yang sering diajukan.
                 </p>
                 <div className="mt-8 max-w-3xl mx-auto">
@@ -41,8 +30,17 @@ export default function ContactView({ contactInfo, faqSection }: ContactViewProp
                 </div>
             </div>
 
-            {/* Contact Info Section moved down */}
-            <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-2">
+            <div className="mt-16 text-center">
+                <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                    Hubungi Kami
+                </h2>
+                <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
+                    Kami siap membantu. Hubungi kami jika ada pertanyaan atau
+                    keperluan lainnya.
+                </p>
+            </div>
+
+            <div className="mt-8 grid grid-cols-1 gap-12 md:grid-cols-2">
                 <div className="space-y-6">
                     <h2 className="font-headline text-2xl font-bold text-primary">
                         Informasi Kontak

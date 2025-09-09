@@ -406,6 +406,13 @@ async function FaqSection() {
                 <div className="mt-12 max-w-3xl mx-auto">
                     <FaqAccordion />
                 </div>
+                <div className="mt-8 text-center">
+                    <Button asChild>
+                        <Link href="/contact">
+                            Selengkapnya
+                        </Link>
+                    </Button>
+                </div>
             </div>
         </section>
     );

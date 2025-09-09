@@ -15,10 +15,10 @@ export default async function FaqAccordion() {
 
     return (
         <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq) => (
+            {faqs.map((faq, index) => (
                 <AccordionItem key={faq.id} value={faq.id}>
                     <AccordionTrigger className="text-left text-lg font-semibold">
-                        {faq.question}
+                        {`${index + 1}. ${faq.question}`}
                     </AccordionTrigger>
                     <AccordionContent className="text-base text-muted-foreground">
                         {faq.answer}
