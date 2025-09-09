@@ -63,12 +63,16 @@ export default async function ProfilePage() {
                                     ) || '',
                             }}
                         ></div>
-                        <p className="mt-6 font-semibold text-primary">
-                            {profile?.principalName}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                            Kepala SMPN 24 Padang
-                        </p>
+                        <div className="flex justify-end mt-6"> 
+                            <div className="text-right"> 
+                                <p className="font-semibold text-primary">
+                                    {profile?.principalName}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    Kepala SMPN 24 Padang
+                                </p>
+                            </div>
+                        </div>
                         <div className="clear-both"></div>
                     </div>
                 </Card>

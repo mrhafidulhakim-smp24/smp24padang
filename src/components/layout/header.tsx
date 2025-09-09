@@ -105,6 +105,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                 { href: '/videos', label: 'Galeri Video', icon: Video },
             ],
         },
+        { href: '/faq', label: 'Pertanyaan Umum', icon: BookOpen },
         { href: '/contact', label: 'Kontak', icon: Phone },
     ];
 
@@ -187,7 +188,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                         {link.label}{' '}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-64 bg-white rounded-xl shadow-md">
+                                    <DropdownMenuContent className="w-80 bg-white rounded-xl shadow-lg p-2">
                                         {link.subLinks.map((subLink) => {
                                             const isSubLinkActive =
                                                 pathname === subLink.href;
@@ -199,7 +200,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                                     <Link
                                                         href={subLink.href}
                                                         className={cn(
-                                                            'flex items-center gap-3 p-2 text-xl font-semibold text-muted-foreground transition-colors hover:bg-[#e6f4ea] hover:text-primary border-b border-gray-100 last:border-b-0 whitespace-nowrap',
+                                                            'flex items-center gap-3 p-3 text-lg font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 rounded-md whitespace-nowrap',
                                                             isSubLinkActive &&
                                                                 'text-primary',
                                                         )}
