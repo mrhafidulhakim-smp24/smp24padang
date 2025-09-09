@@ -62,15 +62,17 @@ export default async function UniformAdminPage() {
     const allUniforms = await db.query.uniforms.findMany();
 
     const orderedUniforms = REQUIRED_UNIFORMS.map((required) => {
-        const uniform = allUniforms.find((u) => {
+        const uniformFromDb = allUniforms.find((u) => {
             if (required.type === 'sport') {
                 return u.type === 'sport';
-            } else {
-                return u.day === required.day;
             }
+            return u.day === required.day;
         });
 
-        return uniform!;
+        return {
+            ...required,
+            ...(uniformFromDb || {}),
+        };
     });
 
     return <UniformList initialUniformsData={orderedUniforms} />;
