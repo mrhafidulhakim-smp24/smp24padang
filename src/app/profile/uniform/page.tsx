@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getUniforms } from './actions';
-import { getUniformPageDescription } from '@/app/admin/profile/uniform/actions';
 
 export const metadata: Metadata = {
     title: 'Seragam Sekolah SMPN 24 Padang | Panduan Lengkap & Aturan',
@@ -14,7 +13,6 @@ export const dynamic = 'force-dynamic';
 
 export default async function UniformPage() {
     const uniforms = await getUniforms();
-    const uniformPageDescription = await getUniformPageDescription();
 
     const dayOrder = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
 
@@ -31,7 +29,7 @@ export default async function UniformPage() {
                     Seragam Sekolah
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                    {uniformPageDescription || 'Panduan seragam resmi untuk siswa-siswi SMPN 24 Padang.'}
+                    Panduan seragam resmi untuk siswa-siswi SMPN 24 Padang.
                 </p>
             </div>
 

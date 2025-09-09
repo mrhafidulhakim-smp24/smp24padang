@@ -31,7 +31,7 @@ type UniformListProps = {
     initialUniformsData: Uniform[];
 };
 
-export default function UniformList({ initialUniformsData }: UniformListProps) {
+export default function UniformList({ initialUniformsData = [] }: UniformListProps) {
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
     const [uniforms, setUniforms] = useState<Uniform[]>(initialUniformsData);
@@ -50,12 +50,15 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
         if (!selectedUniform) return;
 
         const formData = new FormData(event.currentTarget);
-        if (imageFile) {
-            formData.append('image', imageFile);
-        }
+        const description = formData.get('description') as string;
 
         startTransition(async () => {
-            const result = await updateUniform(selectedUniform.id, formData);
+            const result = await updateUniform(
+                selectedUniform.id,
+                selectedUniform.day,
+                selectedUniform.type,
+                description,
+            );
             if (result.success) {
                 toast({
                     title: 'Sukses!',
@@ -66,10 +69,7 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                     u.id === selectedUniform.id
                         ? {
                               ...u,
-                              description: formData.get(
-                                  'description',
-                              ) as string,
-                              image: result.updatedImage ?? u.image,
+                              description: description,
                           }
                         : u,
                 );
@@ -119,8 +119,9 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                     {DAYS.map((day) => {
                         const uniform =
                             uniforms.find((u) => u.day === day) ||
-                            (day === 'Olahraga' &&
-                                uniforms.find((u) => u.type === 'sport'));
+                            (day === 'Olahraga'
+                                ? uniforms.find((u) => u.type === 'sport')
+                                : undefined);
 
                         return (
                             <Card
@@ -128,19 +129,16 @@ export default function UniformList({ initialUniformsData }: UniformListProps) {
                                 className="group relative overflow-hidden"
                             >
                                 <CardHeader className="p-0">
-                                    {uniform && uniform.image ? (
-                                        <Image
-                                            src={uniform.image}
-                                            alt={uniform.description || day}
-                                            width={400}
-                                            height={600}
-                                            className="aspect-[4/6] w-full object-cover"
-                                        />
-                                    ) : (
-                                        <div className="flex aspect-[4/6] w-full items-center justify-center bg-muted text-muted-foreground">
-                                            No Image
-                                        </div>
-                                    )}
+                                    <Image
+                                        src={
+                                            uniform?.image ||
+                                            'https://placehold.co/400x600.png'
+                                        }
+                                        alt={uniform?.description || day}
+                                        width={400}
+                                        height={600}
+                                        className="aspect-[4/6] w-full object-cover"
+                                    />
                                 </CardHeader>
                                 <CardContent className="p-4">
                                     <CardTitle className="font-headline text-xl text-primary">

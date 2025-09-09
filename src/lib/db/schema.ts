@@ -50,6 +50,7 @@ export const profiles = pgTable('profiles', {
     mission: text('mission').notNull(),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
     updatedAt: timestamp('updatedAt').defaultNow().notNull(),
+    uniformPageDescription: text('uniformPageDescription'),
 });
 
 export const statistics = pgTable('statistics', {
