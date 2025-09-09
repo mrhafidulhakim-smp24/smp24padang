@@ -24,7 +24,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${siteUrl}${route}`,
         lastModified: new Date(),
         changeFrequency: 'monthly' as const,
-        priority: route === '/' ? 1 : 0.8,
+        priority:
+            route === '/'
+                ? 1
+                : route === '/news' ||
+                  route === '/pengumuman' ||
+                  route === '/gallery' ||
+                  route === '/videos'
+                ? 0.9
+                : 0.8,
     }));
 
     return [...staticUrls];
