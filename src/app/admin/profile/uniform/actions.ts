@@ -49,6 +49,7 @@ export async function updateUniform(formData: FormData) {
         }).where(eq(uniforms.id, id));
 
         revalidatePath('/admin/profile/uniform');
+        revalidatePath('/profile/uniform');
         return { success: true, message: 'Seragam berhasil diperbarui.' };
     } catch (error) {
         console.error('Error updating uniform:', error);
@@ -78,6 +79,7 @@ export async function createUniform(formData: FormData) {
         });
 
         revalidatePath('/admin/profile/uniform');
+        revalidatePath('/profile/uniform');
         return { success: true, message: 'Seragam berhasil ditambahkan.' };
     } catch (error) {
         console.error('Error creating uniform:', error);
