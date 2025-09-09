@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { profiles, uniforms } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { put } from '@vercel/blob'; // Import put from vercel/blob
 
 export async function getUniformPageDescription() {
     try {
@@ -26,9 +27,28 @@ export async function updateUniformPageDescription(description: string) {
     }
 }
 
-export async function updateUniform(id: number, day: string | null, type: 'daily' | 'sport', description: string) {
+export async function updateUniform(
+    id: number,
+    day: string | null,
+    type: 'daily' | 'sport',
+    description: string,
+    imageFile: File | null // New parameter for image file
+) {
     try {
-        await db.update(uniforms).set({ day, type, description, updatedAt: new Date() }).where(eq(uniforms.id, id));
+        let imageUrl: string | undefined;
+        if (imageFile) {
+            const { url } = await put(imageFile.name, imageFile, { access: 'public' }); // Upload to Vercel Blob
+            imageUrl = url;
+        }
+
+        await db.update(uniforms).set({
+            day,
+            type,
+            description,
+            image: imageUrl, // Update the image column with Vercel Blob URL
+            updatedAt: new Date()
+        }).where(eq(uniforms.id, id));
+
         revalidatePath('/admin/profile/uniform');
         return { success: true, message: 'Seragam berhasil diperbarui.' };
     } catch (error) {

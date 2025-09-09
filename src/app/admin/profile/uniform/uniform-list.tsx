@@ -51,13 +51,21 @@ export default function UniformList({ initialUniformsData = [] }: UniformListPro
 
         const formData = new FormData(event.currentTarget);
         const description = formData.get('description') as string;
+        // Get the image file from the state
+        const imageToUpload = imageFile; // Use the state variable
+
+        // Extract primitive values directly
+        const uniformId = selectedUniform.id;
+        const uniformDay = selectedUniform.day;
+        const uniformType = selectedUniform.type;
 
         startTransition(async () => {
             const result = await updateUniform(
-                selectedUniform.id,
-                selectedUniform.day,
-                selectedUniform.type,
+                uniformId,
+                uniformDay,
+                uniformType,
                 description,
+                imageToUpload,
             );
             if (result.success) {
                 toast({
@@ -70,13 +78,15 @@ export default function UniformList({ initialUniformsData = [] }: UniformListPro
                         ? {
                               ...u,
                               description: description,
+                              // Update image URL if a new image was uploaded
+                              image: imageToUpload ? URL.createObjectURL(imageToUpload) : u.image,
                           }
                         : u,
                 );
                 setUniforms(updatedUniforms);
                 setIsEditDialogOpen(false);
                 setSelectedUniform(null);
-                setImageFile(null);
+                setImageFile(null); // Clear the selected image file
             } else {
                 toast({
                     title: 'Gagal!',
@@ -163,7 +173,13 @@ export default function UniformList({ initialUniformsData = [] }: UniformListPro
                     })}
                 </div>
             </CardContent>
-            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <Dialog open={isEditDialogOpen} onOpenChange={(open) => {
+                setIsEditDialogOpen(open);
+                if (!open) {
+                    setImageFile(null); // Clear selected image when dialog closes
+                    setSelectedUniform(null); // Clear selected uniform
+                }
+            }}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
@@ -186,6 +202,28 @@ export default function UniformList({ initialUniformsData = [] }: UniformListPro
                             />
                         </div>
                         <div>
+                            <Label>Gambar Saat Ini</Label>
+                            <div className="mt-2 mb-4">
+                                {selectedUniform?.image && !imageFile ? (
+                                    <Image
+                                        src={selectedUniform.image}
+                                        alt="Current Uniform Image"
+                                        width={200}
+                                        height={300}
+                                        className="object-cover rounded-md"
+                                    />
+                                ) : imageFile ? (
+                                    <Image
+                                        src={URL.createObjectURL(imageFile)}
+                                        alt="New Uniform Image Preview"
+                                        width={200}
+                                        height={300}
+                                        className="object-cover rounded-md"
+                                    />
+                                ) : (
+                                    <p className="text-sm text-muted-foreground">Tidak ada gambar saat ini.</p>
+                                )}
+                            </div>
                             <Label>Ganti Gambar</Label>
                             <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5">
                                 <div className="space-y-1 text-center">
