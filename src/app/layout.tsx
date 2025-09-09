@@ -23,7 +23,8 @@ const montserrat = Montserrat({
     display: 'swap',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://smpn24padang.vercel.app';
+const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://smpn24padang.sch.id';
 
 export const metadata: Metadata = {
     metadataBase: new URL(siteUrl),
@@ -33,7 +34,12 @@ export const metadata: Metadata = {
     },
     description:
         'Situs resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
-    keywords: ['SMPN 24 Padang', 'Sekolah Menengah Pertama', 'Padang', 'Pendidikan'],
+    keywords: [
+        'SMPN 24 Padang',
+        'Sekolah Menengah Pertama',
+        'Padang',
+        'Pendidikan',
+    ],
     authors: [{ name: 'SMPN 24 Padang', url: siteUrl }],
     creator: 'SMPN 24 Padang',
     openGraph: {
@@ -61,7 +67,7 @@ export const metadata: Metadata = {
         creator: '@smpn24padang', // Ganti dengan handle Twitter jika ada
     },
     verification: {
-        google: ['8_L5etzjXCER5UwPiTRLuqTchwoHMb3zj_Bt6e6e0DE', 'IC4fbcspLvv_VgDWKukeriJmjSSYmUO246NoRlUXDAw'],
+        google: ['IC4fbcspLvv_VgDWKukeriJmjSSYmUO246NoRlUXDAw'],
     },
 };
 
@@ -119,7 +125,9 @@ export default async function RootLayout({
                         disableTransitionOnChange
                     >
                         <AOSInit />
-                        <ConditionalLayout contactInfo={contactInfo}>{children}</ConditionalLayout>
+                        <ConditionalLayout contactInfo={contactInfo}>
+                            {children}
+                        </ConditionalLayout>
                         <Toaster />
                         <BackToTopButton />
                         <SpeedInsights />

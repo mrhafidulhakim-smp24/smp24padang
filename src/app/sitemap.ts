@@ -1,7 +1,10 @@
 import { MetadataRoute } from 'next';
 
+const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://smpn24padang.sch.id';
+
 export default function sitemap(): MetadataRoute.Sitemap {
-    // List of static pages. The `metadataBase` in layout.tsx will prefix these.
+    // List of static pages
     const staticRoutes = [
         '/',
         '/achievements',
@@ -18,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ];
 
     const staticUrls = staticRoutes.map((route) => ({
-        url: route, // Use relative paths
+        url: `${siteUrl}${route}`,
         lastModified: new Date(),
         changeFrequency: 'monthly' as const,
         priority: route === '/' ? 1 : 0.8,
