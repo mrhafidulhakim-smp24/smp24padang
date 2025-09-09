@@ -132,7 +132,7 @@ export default function PrincipalForm({
                             >
                                 Foto Kepala Sekolah
                             </Label>
-                            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-border px-6 py-10">
+                            <div className="mt-2 flex justify-center border border-dashed border-border px-6 py-10">
                                 <div className="text-center">
                                     {previewImageUrl ? (
                                         <Image
@@ -140,7 +140,7 @@ export default function PrincipalForm({
                                             alt="Preview"
                                             width={160}
                                             height={160}
-                                            className="mx-auto h-40 w-40 rounded-md object-cover"
+                                            className="mx-auto h-40 w-40 object-cover"
                                         />
                                     ) : (
                                         <UserCircle className="mx-auto h-24 w-24 text-muted-foreground" />

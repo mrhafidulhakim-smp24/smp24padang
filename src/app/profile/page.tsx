@@ -41,9 +41,9 @@ export default async function ProfilePage() {
 
             <section className="mt-16">
                 <Card>
-                    <div className="md:grid md:grid-cols-5 md:gap-8 lg:gap-12 items-center p-4 sm:p-6 md:p-8">
-                        <div className="md:col-span-2">
-                            <div className="relative aspect-[4/5] overflow-hidden shadow-lg">
+                    <div className="flex flex-col md:flex-row gap-6 items-center p-4 sm:p-6 md:p-8">
+                        <div className="w-full md:w-auto max-w-[300px]">
+                            <div className="relative aspect-[4/5] overflow-hidden">
                                 <Image
                                     src={
                                         profile?.principalImageUrl ||
@@ -52,15 +52,15 @@ export default async function ProfilePage() {
                                     alt="Principal"
                                     layout="fill"
                                     objectFit="cover"
-                                    className="transition-transform duration-300 hover:scale-105"
+                                    className="transition-transform duration-300 hover:scale-105 shadow-md"
                                 />
                             </div>
                         </div>
-                        <div className="mt-8 md:mt-0 md:col-span-3">
+                        <div className="flex-1 mt-8 md:mt-0">
                             <h2 className="font-headline text-3xl font-bold text-primary">
                                 Sambutan dari Kepala Sekolah
                             </h2>
-                            <div className="mt-4 space-y-4 text-foreground/80">
+                            <div className="mt-4 space-y-4 text-foreground/80 text-justify leading-relaxed">
                                 {welcomeParagraphs?.map((p, i) => (
                                     <p key={i}>{p}</p>
                                 ))}
