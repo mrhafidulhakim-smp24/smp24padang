@@ -188,7 +188,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                         {link.label}{' '}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-80 bg-white rounded-xl shadow-lg p-2">
+                                    <DropdownMenuContent className="w-[280px] bg-white rounded-xl shadow-lg p-4">
                                         {link.subLinks.map((subLink) => {
                                             const isSubLinkActive =
                                                 pathname === subLink.href;
@@ -196,11 +196,14 @@ export default function Header({ contactInfo }: HeaderProps) {
                                                 <DropdownMenuItem
                                                     key={subLink.href}
                                                     asChild
+                                                    className={cn(
+                                                        'py-3 border-b border-gray-200 last:border-b-0',
+                                                    )}
                                                 >
                                                     <Link
                                                         href={subLink.href}
                                                         className={cn(
-                                                            'flex items-center gap-3 p-3 text-lg font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 rounded-md whitespace-nowrap',
+                                                            'flex items-center gap-3 text-lg font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 rounded-md whitespace-nowrap',
                                                             isSubLinkActive &&
                                                                 'text-primary',
                                                         )}
@@ -295,14 +298,14 @@ export default function Header({ contactInfo }: HeaderProps) {
                                 <ChevronDown className="h-5 w-5 transition-transform duration-200 ease-in-out group-data-[state=open]:-rotate-180" />
                             </Collapsible.Trigger>
                             <Collapsible.Content className="overflow-hidden transition-all duration-300 ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-                                <div className="flex flex-col py-2 pl-10">
+                                <div className="flex flex-col py-3 pl-10">
                                     {link.subLinks.map((subLink) => (
                                         <Link
                                             key={subLink.href}
                                             href={subLink.href}
                                             onClick={() => setSheetOpen(false)}
                                             className={cn(
-                                                'flex items-center gap-3 rounded-md p-2 text-lg font-medium text-foreground hover:bg-accent hover:text-accent-foreground whitespace-nowrap',
+                                                'flex items-center gap-3 rounded-md p-3 text-lg font-semibold text-foreground hover:bg-accent hover:text-accent-foreground whitespace-nowrap border-b border-gray-200 last:border-b-0',
                                                 cleanPathname === subLink.href && ''
                                             )}
                                         >

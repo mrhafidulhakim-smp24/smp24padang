@@ -4,10 +4,10 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion';
-import { getFaqsForPublic } from '@/app/faq/actions';
+import { getFaqs } from '@/app/admin/faq/actions';
 
 export default async function FaqAccordion() {
-    const faqs = await getFaqsForPublic();
+    const faqs = await getFaqs();
 
     if (!faqs || faqs.length === 0) {
         return null; // Or a message indicating no FAQs
@@ -15,7 +15,7 @@ export default async function FaqAccordion() {
 
     return (
         <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
+            {faqs.map((faq: { id: string; question: string; answer: string }, index: number) => (
                 <AccordionItem key={faq.id} value={faq.id}>
                     <AccordionTrigger className="text-left text-lg font-semibold">
                         {`${index + 1}. ${faq.question}`}

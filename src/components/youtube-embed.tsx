@@ -5,7 +5,7 @@ interface YouTubeEmbedProps {
   title: string;
 }
 
-const getYouTubeVideoId = (url: string): string | null => {
+export const getYouTubeVideoId = (url: string): string | null => {
   if (!url) return null;
   try {
     const urlObj = new URL(url);
