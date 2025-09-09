@@ -7,7 +7,7 @@ export async function getVideos() {
         return db.select().from(videos);
     } catch (error) {
         console.error('Error fetching videos:', error);
-        throw new Error('Failed to fetch videos.');
+        return [];
     }
 }
 
