@@ -5,42 +5,41 @@ import { users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   const session = await auth();
+
   if (!session?.user?.id) {
-    return NextResponse.json({ success: false, message: 'User not authenticated.' }, { status: 401 });
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const userId = session.user.id;
-  const { oldPassword, newPassword } = await request.json();
+  try {
+    const { oldPassword, newPassword } = await req.json();
 
-  const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    if (!oldPassword || !newPassword) {
+      return NextResponse.json({ message: 'Old and new passwords are required' }, { status: 400 });
+    }
 
-  if (!user || user.length === 0) {
-    return NextResponse.json({ success: false, message: 'User profile not found.' }, { status: 404 });
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+    });
+
+    if (!user || !user.password) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    }
+
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isPasswordValid) {
+      return NextResponse.json({ message: 'Invalid old password' }, { status: 400 });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    await db.update(users).set({ password: hashedNewPassword }).where(eq(users.id, session.user.id));
+
+    return NextResponse.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
-
-  const userProfile = user[0];
-
-  // Compare old password with hashed password in the database
-  const isPasswordValid = await bcrypt.compare(oldPassword, userProfile.password);
-
-  if (!isPasswordValid) {
-    return NextResponse.json({ success: false, message: 'Password lama salah.' }, { status: 400 });
-  }
-
-  if (newPassword.length < 8) {
-    return NextResponse.json({ success: false, message: 'Password baru minimal 8 karakter.' }, { status: 400 });
-  }
-  if (newPassword === oldPassword) {
-    return NextResponse.json({ success: false, message: 'Password baru tidak boleh sama dengan password lama.' }, { status: 400 });
-  }
-
-  // Hash the new password
-  const hashedPassword = await bcrypt.hash(newPassword, 10); // Salt rounds: 10
-
-  // Update the user's password in the database
-  await db.update(users).set({ password: hashedPassword }).where(eq(users.id, userId));
-
-  return NextResponse.json({ success: true, message: 'Password berhasil diubah!' });
 }

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Download, FileText } from 'lucide-react';
 import Link from 'next/link';
-import { getAccreditations } from '@/app/admin/accreditation/actions';
+import { getAccreditations } from '@/lib/data/accreditation';
 
 export const metadata: Metadata = {
     title: 'Akreditasi & Sertifikasi SMPN 24 Padang | Bukti Keunggulan Sekolah',

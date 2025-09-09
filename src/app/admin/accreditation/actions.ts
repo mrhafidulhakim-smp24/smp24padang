@@ -2,28 +2,21 @@
 
 import { db } from '@/lib/db';
 import { accreditations } from '@/lib/db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
-
-export async function getAccreditations() {
-    try {
-        const result = await db
-            .select()
-            .from(accreditations)
-            .orderBy(desc(accreditations.createdAt));
-        return result;
-    } catch (error) {
-        console.error('Error fetching accreditations:', error);
-        return [];
-    }
-}
+import { auth } from '@/lib/auth';
 
 export async function createAccreditation(data: {
     title: string;
     description: string;
     link: string;
 }) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     try {
         await db.insert(accreditations).values({
             id: uuidv4(),
@@ -44,6 +37,11 @@ export async function updateAccreditation(
     id: string,
     data: { title: string; description: string; link: string },
 ) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     try {
         await db
             .update(accreditations)
@@ -61,6 +59,11 @@ export async function updateAccreditation(
 }
 
 export async function deleteAccreditation(id: string) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     try {
         await db.delete(accreditations).where(eq(accreditations.id, id));
 

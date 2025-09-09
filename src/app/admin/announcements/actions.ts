@@ -6,15 +6,26 @@ import { desc, eq } from 'drizzle-orm';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { AnnouncementSchema } from './schema';
 import { v4 as uuidv4 } from 'uuid';
+import { auth } from '@/lib/auth';
 
 export async function getAnnouncementsForAdmin() {
-    return await db
-        .select()
-        .from(announcements)
-        .orderBy(desc(announcements.date));
+    try {
+        return await db
+            .select()
+            .from(announcements)
+            .orderBy(desc(announcements.date));
+    } catch (error) {
+        console.error('Error fetching announcements:', error);
+        return [];
+    }
 }
 
 export async function createAnnouncement(prevState: any, formData: FormData) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     const validatedFields = AnnouncementSchema.safeParse({
         title: formData.get('title'),
         description: formData.get('description'),
@@ -57,6 +68,11 @@ export async function updateAnnouncement(
     prevState: any,
     formData: FormData,
 ) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     const validatedFields = AnnouncementSchema.safeParse({
         title: formData.get('title'),
         description: formData.get('description'),
@@ -105,6 +121,11 @@ export async function updateAnnouncement(
 }
 
 export async function deleteAnnouncement(id: string) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     try {
         await db.delete(announcements).where(eq(announcements.id, id));
 

@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     },
 };
 
-import { getContactInfo } from '@/app/admin/contact/actions';
+import { getContactInfo } from '@/lib/data/contact';
 
 export default async function RootLayout({
     children,

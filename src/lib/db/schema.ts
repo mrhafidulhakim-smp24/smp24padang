@@ -161,6 +161,14 @@ export const videos = pgTable('videos', {
     createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
+export const faqs = pgTable('faqs', {
+    id: varchar('id').primaryKey(),
+    question: text('question').notNull(),
+    answer: text('answer').notNull(),
+    createdAt: timestamp('createdAt').defaultNow().notNull(),
+    updatedAt: timestamp('updatedAt').defaultNow().notNull(),
+});
+
 export const users = pgTable('user', {
     id: text('id')
         .notNull()

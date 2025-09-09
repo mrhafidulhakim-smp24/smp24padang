@@ -7,15 +7,26 @@ import { put, del } from '@vercel/blob';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { AchievementSchema } from './schema';
 import { v4 as uuidv4 } from 'uuid';
+import { auth } from '@/lib/auth';
 
 export async function getAchievements() {
-    return await db
-        .select()
-        .from(achievements)
-        .orderBy(desc(achievements.createdAt));
+    try {
+        return await db
+            .select()
+            .from(achievements)
+            .orderBy(desc(achievements.createdAt));
+    } catch (error) {
+        console.error('Error fetching achievements:', error);
+        return [];
+    }
 }
 
 export async function createAchievement(prevState: any, formData: FormData) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     const validatedFields = AchievementSchema.safeParse({
         title: formData.get('title'),
         student: formData.get('student'),
@@ -67,6 +78,11 @@ export async function updateAchievement(
     prevState: any,
     formData: FormData,
 ) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     const validatedFields = AchievementSchema.safeParse({
         title: formData.get('title'),
         student: formData.get('student'),
@@ -123,6 +139,11 @@ export async function updateAchievement(
 }
 
 export async function deleteAchievement(id: string, imageUrl: string | null) {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, message: 'Tidak terautentikasi.' };
+    }
+
     try {
         if (imageUrl && !imageUrl.includes('placehold.co')) {
             try {

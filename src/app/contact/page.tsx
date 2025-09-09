@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import ContactView from '@/components/contact/contact-view';
-import { getContactInfo } from '@/app/admin/contact/actions';
+import { getContactInfo } from '@/lib/data/contact';
+
+import FaqAccordion from '@/components/faq/faq-accordion';
 
 export const metadata: Metadata = {
     title: 'Hubungi SMPN 24 Padang | Alamat, Telepon, Email & Peta Lokasi',
@@ -10,5 +12,7 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
     const contactInfo = await getContactInfo();
-    return <ContactView contactInfo={contactInfo} />;
+    return (
+        <ContactView contactInfo={contactInfo} faqSection={<FaqAccordion />} />
+    );
 }

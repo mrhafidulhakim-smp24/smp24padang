@@ -14,7 +14,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { getContactInfo, updateContactInfo } from './actions';
+import { getContactInfo } from '@/lib/data/contact';
+import { updateContactInfo } from './actions';
 
 export default function ContactAdminPage() {
     const [contactInfo, setContactInfo] = useState<{

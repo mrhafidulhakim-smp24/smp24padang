@@ -13,7 +13,6 @@ import {
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -55,11 +54,11 @@ import {
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import {
-    getAccreditations,
     createAccreditation,
     updateAccreditation,
     deleteAccreditation,
 } from './actions';
+import { getAccreditations } from '@/lib/data/accreditation';
 import { type accreditations as AccreditationDoc } from '@/lib/db/schema';
 
 export default function AccreditationAdminPage() {

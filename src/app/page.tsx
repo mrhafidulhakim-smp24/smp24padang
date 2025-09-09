@@ -44,6 +44,7 @@ import {
     getMarqueeItems,
 } from './actions';
 import { Separator } from '@/components/ui/separator';
+import FaqAccordion from '@/components/faq/faq-accordion';
 
 
 export const metadata: Metadata = {
@@ -390,6 +391,26 @@ async function Facilities() {
     );
 }
 
+async function FaqSection() {
+    return (
+        <section className="bg-primary/5 py-16 md:py-24" data-aos="fade-up">
+            <div className="container mx-auto px-4">
+                <div className="text-center">
+                    <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                        Pertanyaan Umum (FAQ)
+                    </h2>
+                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+                        Temukan jawaban atas pertanyaan yang sering diajukan.
+                    </p>
+                </div>
+                <div className="mt-12 max-w-3xl mx-auto">
+                    <FaqAccordion />
+                </div>
+            </div>
+        </section>
+    );
+}
+
 export default async function Home() {
     const banners = await getBanners();
     const profile = await getProfile();
@@ -474,6 +495,9 @@ export default async function Home() {
 
             {/* Facilities Section */}
             <Facilities />
+
+            {/* FAQ Section */}
+            <FaqSection />
         </div>
     );
 }

@@ -3,23 +3,8 @@
 import { db } from '@/lib/db';
 import { contact } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { unstable_cache as cache } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
-
-export const getContactInfo = cache(
-    async () => {
-        try {
-            const contactData = await db.select().from(contact).limit(1);
-            return contactData[0] || null;
-        } catch (error) {
-            console.error('Error fetching contact info:', error);
-            return null;
-        }
-    },
-    ['contact-info'],
-    { tags: ['contact-info-collection'] },
-);
 
 export async function updateContactInfo(data: {
     address: string;
