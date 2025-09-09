@@ -1,4 +1,6 @@
 
+'use client';
+
 import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
@@ -55,7 +57,7 @@ export function Videos({ data: initialData }: { data: (typeof videos.$inferSelec
     };
 
     const refreshVideos = () => {
-        getVideos().then((data) => setVideosData(data));
+        getVideos().then((data: (typeof videos.$inferSelect)[]) => setVideosData(data));
     };
 
     return (
