@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { createVideo, updateVideo } from '@/app/admin/videos/actions';
 import type { videos } from '@/lib/db/schema';
 import { useEffect, useState } from 'react';
+import { getYouTubeVideoId } from '@/components/youtube-embed';
 
 export function VideoDialog({ open, onOpenChange, video }: { open: boolean, onOpenChange: (open: boolean) => void, video: (typeof videos.$inferSelect) | null }) {
     const [formData, setFormData] = useState({ title: '', description: '', youtubeUrl: '' });
@@ -25,10 +26,17 @@ export function VideoDialog({ open, onOpenChange, video }: { open: boolean, onOp
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const videoId = getYouTubeVideoId(formData.youtubeUrl);
+        if (!videoId) {
+            alert('Invalid YouTube URL. Please enter a valid YouTube video URL.');
+            return;
+        }
+
         if (video) {
-            await updateVideo(video.id, formData);
+            await updateVideo(video.id, { ...formData, youtubeUrl: `https://www.youtube.com/watch?v=${videoId}` });
         } else {
-            await createVideo(formData as any);
+            await createVideo({ ...formData, youtubeUrl: `https://www.youtube.com/watch?v=${videoId}` } as any);
         }
         onOpenChange(false);
     };
