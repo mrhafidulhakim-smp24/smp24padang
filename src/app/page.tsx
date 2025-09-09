@@ -72,32 +72,32 @@ async function AboutUs() {
                 </div>
                 <div className="mt-12">
                     <Card className="h-full bg-primary/5">
-                        <CardContent className="grid grid-cols-1 gap-8 p-6 md:grid-cols-2 md:p-8">
+                        <CardContent className="flex flex-col gap-8 p-6 md:p-8">
                             <div>
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center justify-center gap-4">
                                     <Target className="h-8 w-8 text-green-600" />
-                                    <h4 className="font-headline text-xl font-bold text-primary">
+                                    <h4 className="font-headline text-3xl font-bold text-primary">
                                         Visi
                                     </h4>
                                 </div>
-                                <p className="mt-2 text-muted-foreground">
+                                <p className="mt-2 text-center text-2xl font-bold text-muted-foreground">
                                     {about.vision}
                                 </p>
                             </div>
                             <div>
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center justify-center gap-4">
                                     <Book className="h-8 w-8 text-green-600" />
-                                    <h4 className="font-headline text-xl font-bold text-primary">
+                                    <h4 className="font-headline text-3xl font-bold text-primary">
                                         Misi
                                     </h4>
                                 </div>
-                                <ul className="mt-2 list-disc space-y-2 pl-5 text-muted-foreground">
+                                <div className="mt-2 space-y-2 font-bold text-muted-foreground">
                                     {about.mission
-                                        .slice(0, 3)
+                                        .slice(0, 10)
                                         .map((item, index) => (
-                                            <li key={index}>{item}</li>
+                                            <p key={index}>{item}</p>
                                         ))}
-                                </ul>
+                                </div>
                             </div>
                         </CardContent>
                         <CardFooter className="justify-center">

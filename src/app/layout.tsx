@@ -61,7 +61,7 @@ export const metadata: Metadata = {
         creator: '@smpn24padang', // Ganti dengan handle Twitter jika ada
     },
     verification: {
-        google: '8_L5etzjXCER5UwPiTRLuqTchwoHMb3zj_Bt6e6e0DE',
+        google: ['8_L5etzjXCER5UwPiTRLuqTchwoHMb3zj_Bt6e6e0DE', 'IC4fbcspLvv_VgDWKukeriJmjSSYmUO246NoRlUXDAw'],
     },
 };
 

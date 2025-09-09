@@ -14,14 +14,12 @@ export const revalidate = 0;
 export default async function VisionMissionPage() {
     const data = await getProfile();
     const vision = data?.vision || 'Visi belum tersedia.';
-    const mission = data?.mission
-        ? data.mission.split('\n')
-        : ['Misi belum tersedia.'];
+    const mission = data?.mission || 'Misi belum tersedia.';
 
     return (
         <div className="container mx-auto max-w-6xl px-4 py-12 md:py-24">
             <div className="text-center">
-                <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
+                <h1 className="font-headline text-5xl font-bold text-primary md:text-6xl">
                     Visi & Misi
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -30,29 +28,25 @@ export default async function VisionMissionPage() {
                 </p>
             </div>
 
-            <section className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
+            <section className="mt-16 flex flex-col gap-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Target className="h-6 w-6 text-accent" /> Visi Kami
+                        <CardTitle className="flex items-center justify-center gap-2">
+                            <Target className="h-6 w-6 text-accent" /> <span className="text-2xl">Visi Kami</span>
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="py-4 text-base text-foreground/80">
+                    <CardContent className="py-4 text-center text-2xl font-bold text-foreground/80">
                         {vision}
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Book className="h-6 w-6 text-accent" /> Misi Kami
+                        <CardTitle className="flex items-center justify-center gap-2">
+                            <Book className="h-6 w-6 text-accent" /> <span className="text-2xl">Misi Kami</span>
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="py-4 text-base text-foreground/80">
-                        <ul className="list-disc space-y-3 pl-6">
-                            {mission.map((item, index) => (
-                                <li key={index}>{item}</li>
-                            ))}
-                        </ul>
+                    <CardContent className="whitespace-pre-line py-4 text-base font-bold text-foreground/80">
+                        {mission}
                     </CardContent>
                 </Card>
             </section>
