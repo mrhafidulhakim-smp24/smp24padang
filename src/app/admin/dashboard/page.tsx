@@ -1,5 +1,6 @@
-'use client';
-
+import { db } from '@/lib/db';
+import { announcements, news, galleryItems, statistics, staff, videos, achievements } from '@/lib/db/schema';
+import { count } from 'drizzle-orm';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
@@ -15,7 +16,11 @@ import {
     Award,
     Shirt,
     Megaphone,
+    UserCheck,
+    UserCog,
+    Video,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 const menuItems = [
     {
@@ -85,6 +90,12 @@ const menuItems = [
         description: 'Unggah dan kelola foto-foto kegiatan sekolah.',
     },
     {
+        href: '/admin/videos',
+        label: 'Video',
+        icon: Video,
+        description: 'Unggah dan kelola video kegiatan sekolah.',
+    },
+    {
         href: '/admin/contact',
         label: 'Kontak',
         icon: Phone,
@@ -92,19 +103,91 @@ const menuItems = [
     },
 ];
 
-export default function AdminDashboardPage() {
+async function getDashboardStats() {
+  const [
+    statsData,
+    newsCount,
+    announcementsCount,
+    galleryCount,
+    achievementsCount,
+    videosCount,
+  ] = await Promise.all([
+    db.select().from(statistics).limit(1),
+    db.select({ value: count() }).from(news),
+    db.select({ value: count() }).from(announcements),
+    db.select({ value: count() }).from(galleryItems),
+    db.select({ value: count() }).from(achievements),
+    db.select({ value: count() }).from(videos),
+  ]);
+
+  const stats = statsData[0];
+
+  return {
+    students: stats?.students ?? 0,
+    teachers: stats?.teachers ?? 0,
+    staff: stats?.staff ?? 0,
+    news: newsCount[0].value,
+    announcements: announcementsCount[0].value,
+    gallery: galleryCount[0].value,
+    achievements: achievementsCount[0].value,
+    videos: videosCount[0].value,
+  };
+}
+
+function StatCard({ title, value, icon: Icon }: { title: string, value: string | number, icon: LucideIcon }) {
+    return (
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{title}</CardTitle>
+                <Icon className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">{value}</div>
+            </CardContent>
+        </Card>
+    )
+}
+
+export default async function AdminDashboardPage() {
+    const stats = await getDashboardStats();
+
+    const statItems = [
+        { title: "Siswa", value: stats.students, icon: Users },
+        { title: "Guru", value: stats.teachers, icon: UserCheck },
+        { title: "Staf", value: stats.staff, icon: UserCog },
+        { title: "Berita", value: stats.news, icon: Newspaper },
+        { title: "Pengumuman", value: stats.announcements, icon: Megaphone },
+        { title: "Galeri", value: stats.gallery, icon: ImageIcon },
+        { title: "Prestasi", value: stats.achievements, icon: Trophy },
+        { title: "Video", value: stats.videos, icon: Video },
+    ];
+
     return (
         <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-2">
                 <h1 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                    Selamat Datang di Panel Admin
+                    Dashboard
                 </h1>
                 <p className="mt-2 text-lg text-muted-foreground">
-                    Pilih salah satu menu di bawah ini untuk mulai mengelola
-                    konten website Anda. Setiap kartu mewakili satu bagian dari
-                    website yang bisa Anda ubah.
+                    Ringkasan konten dan data website Anda.
                 </p>
             </div>
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {statItems.map(item => (
+                    <StatCard key={item.title} {...item} />
+                ))}
+            </div>
+
+            <div className="flex flex-col gap-2 mt-8">
+                <h2 className="font-headline text-2xl font-bold text-primary md:text-3xl">
+                    Kelola Konten
+                </h2>
+                <p className="mt-2 text-lg text-muted-foreground">
+                    Pilih salah satu menu di bawah ini untuk mengubah konten website.
+                </p>
+            </div>
+
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {menuItems.map((item) => {
                     const Icon = item.icon;
