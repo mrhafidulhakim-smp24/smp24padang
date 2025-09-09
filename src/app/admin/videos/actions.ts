@@ -5,6 +5,16 @@ import { db } from '@/lib/db';
 import { videos } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
+export async function getVideos() {
+    try {
+        const data = await db.query.videos.findMany();
+        return { success: true, data: data, message: 'Videos fetched successfully.' };
+    } catch (error: any) {
+        console.error('Error fetching videos:', error);
+        return { success: false, data: [], message: `Failed to fetch videos: ${error.message || error.toString()}` };
+    }
+}
+
 export async function createVideo(data: typeof videos.$inferInsert) {
     try {
         await db.insert(videos).values(data);

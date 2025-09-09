@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
-import { uniforms } from '@/lib/db/schema';
+import { uniforms, organizationStructures } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { put, del } from '@vercel/blob';
 import { z } from 'zod';
@@ -11,6 +11,49 @@ const uniformUpdateSchema = z.object({
     description: z.string().min(1, 'Deskripsi tidak boleh kosong'),
     image: z.instanceof(File).optional(),
 });
+
+const UNIFORM_PAGE_DESCRIPTION_TYPE = 'uniform_page_description';
+
+export async function getUniformPageDescription() {
+    try {
+        const result = await db.query.organizationStructures.findFirst({
+            where: eq(organizationStructures.type, UNIFORM_PAGE_DESCRIPTION_TYPE),
+        });
+        return result ? result.description : '';
+    } catch (error: any) {
+        console.error('Error fetching uniform page description:', error);
+        return '';
+    }
+}
+
+export async function updateUniformPageDescription(description: string) {
+    try {
+        const existing = await db.query.organizationStructures.findFirst({
+            where: eq(organizationStructures.type, UNIFORM_PAGE_DESCRIPTION_TYPE),
+        });
+
+        if (existing) {
+            await db.update(organizationStructures)
+                .set({ description, updatedAt: new Date() })
+                .where(eq(organizationStructures.type, UNIFORM_PAGE_DESCRIPTION_TYPE));
+        } else {
+            await db.insert(organizationStructures).values({
+                type: UNIFORM_PAGE_DESCRIPTION_TYPE,
+                title: 'Uniform Page Description', // A default title for this entry
+                description,
+                updatedAt: new Date(),
+            });
+        }
+
+        revalidatePath('/admin/profile/uniform');
+        revalidatePath('/profile/uniform');
+
+        return { success: true, message: 'Deskripsi halaman seragam berhasil diperbarui.' };
+    } catch (error: any) {
+        console.error('Error updating uniform page description:', error);
+        return { success: false, message: `Gagal memperbarui deskripsi halaman seragam: ${error.message || error.toString()}` };
+    }
+}
 
 export async function updateUniform(id: number, formData: FormData) {
     const validatedFields = uniformUpdateSchema.safeParse({

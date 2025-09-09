@@ -20,8 +20,7 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { deleteVideo } from '@/app/admin/videos/actions';
-import { getVideos } from '@/app/admin/videos/page';
+import { deleteVideo, getVideos } from '@/app/admin/videos/actions';
 
 export function Videos({ data: initialData }: { data: (typeof videos.$inferSelect)[] }) {
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -56,8 +55,17 @@ export function Videos({ data: initialData }: { data: (typeof videos.$inferSelec
         });
     };
 
-    const refreshVideos = () => {
-        getVideos().then((data: (typeof videos.$inferSelect)[]) => setVideosData(data));
+    const refreshVideos = async () => {
+        const result = await getVideos();
+        if (result.success) {
+            setVideosData(result.data);
+        } else {
+            toast({
+                title: 'Error',
+                description: result.message,
+                variant: 'destructive',
+            });
+        }
     };
 
     return (
