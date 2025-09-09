@@ -21,7 +21,7 @@ import {
     CardDescription,
 } from '@/components/ui/card';
 import Image from 'next/image';
-import { updateUniform } from './actions';
+import { updateUniform, createUniform } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import { Uniform } from './types';
 
@@ -49,41 +49,39 @@ export default function UniformList({ initialUniformsData = [] }: UniformListPro
         event.preventDefault();
         if (!selectedUniform) return;
 
-        const formData = new FormData(event.currentTarget);
-        const description = formData.get('description') as string;
-        // Get the image file from the state
-        const imageToUpload = imageFile; // Use the state variable
+        const formData = new FormData();
+        formData.append('description', selectedUniform.description || ''); // Use selectedUniform.description
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+        formData.append('uniformId', String(selectedUniform.id));
+        formData.append('uniformDay', selectedUniform.day || '');
+        formData.append('uniformType', selectedUniform.type);
 
-        // Extract primitive values directly
-        const uniformId = selectedUniform.id;
-        const uniformDay = selectedUniform.day;
-        const uniformType = selectedUniform.type;
+        const isCreating = String(selectedUniform.id).startsWith('new-');
 
         startTransition(async () => {
-            const result = await updateUniform(
-                uniformId,
-                uniformDay,
-                uniformType,
-                description,
-                imageToUpload,
-            );
+            let result;
+            if (isCreating) {
+                result = await createUniform(
+                    formData,
+                );
+            } else {
+                result = await updateUniform(
+                    formData,
+                );
+            }
+
             if (result.success) {
                 toast({
                     title: 'Sukses!',
-                    description: 'Seragam berhasil diperbarui.',
+                    description: isCreating ? 'Seragam berhasil ditambahkan.' : 'Seragam berhasil diperbarui.',
                 });
 
-                const updatedUniforms = uniforms.map((u) =>
-                    u.id === selectedUniform.id
-                        ? {
-                              ...u,
-                              description: description,
-                              // Update image URL if a new image was uploaded
-                              image: imageToUpload ? URL.createObjectURL(imageToUpload) : u.image,
-                          }
-                        : u,
-                );
-                setUniforms(updatedUniforms);
+                // Re-fetch uniforms to get the latest data including new/updated items
+                // This is a simpler approach than manually updating the state for both create/update
+                // For now, we'll rely on the revalidatePath in the action.
+                // The page will re-render with fresh data.
                 setIsEditDialogOpen(false);
                 setSelectedUniform(null);
                 setImageFile(null); // Clear the selected image file
@@ -104,14 +102,20 @@ export default function UniformList({ initialUniformsData = [] }: UniformListPro
 
         if (uniformForDay) {
             setSelectedUniform(uniformForDay);
-            setIsEditDialogOpen(true);
         } else {
-            toast({
-                title: 'Error',
-                description: `Data seragam untuk ${day} tidak ditemukan.`,
-                variant: 'destructive',
-            });
+            // Prepare a new uniform object for creation
+            const newUniform: Uniform = {
+                id: `new-${day}`, // Temporary ID for new uniforms
+                day: day === 'Olahraga' ? null : day,
+                type: day === 'Olahraga' ? 'sport' : 'daily',
+                description: '',
+                image: null,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+            setSelectedUniform(newUniform);
         }
+        setIsEditDialogOpen(true); // Always open the dialog
     };
 
     return (

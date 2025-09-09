@@ -27,13 +27,12 @@ export async function updateUniformPageDescription(description: string) {
     }
 }
 
-export async function updateUniform(
-    id: number,
-    day: string | null,
-    type: 'daily' | 'sport',
-    description: string,
-    imageFile: File | null // New parameter for image file
-) {
+export async function updateUniform(formData: FormData) {
+    const id = formData.get('uniformId') as string | number | bigint;
+    const day = formData.get('uniformDay') as string | null;
+    const type = formData.get('uniformType') as 'daily' | 'sport';
+    const description = formData.get('description') as string;
+    const imageFile = formData.get('image') as File | null;
     try {
         let imageUrl: string | undefined;
         if (imageFile) {
@@ -54,5 +53,34 @@ export async function updateUniform(
     } catch (error) {
         console.error('Error updating uniform:', error);
         return { success: false, message: 'Gagal memperbarui seragam.' };
+    }
+}
+
+export async function createUniform(formData: FormData) {
+    const day = formData.get('uniformDay') as string | null;
+    const type = formData.get('uniformType') as 'daily' | 'sport';
+    const description = formData.get('description') as string;
+    const imageFile = formData.get('image') as File | null;
+    try {
+        let imageUrl: string | undefined;
+        if (imageFile) {
+            const { url } = await put(imageFile.name, imageFile, { access: 'public' }); // Upload to Vercel Blob
+            imageUrl = url;
+        }
+
+        await db.insert(uniforms).values({
+            day,
+            type,
+            description,
+            image: imageUrl,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
+
+        revalidatePath('/admin/profile/uniform');
+        return { success: true, message: 'Seragam berhasil ditambahkan.' };
+    } catch (error) {
+        console.error('Error creating uniform:', error);
+        return { success: false, message: 'Gagal menambahkan seragam.' };
     }
 }
