@@ -5,16 +5,17 @@ interface YouTubeEmbedProps {
   title: string;
 }
 
-const getEmbedUrl = (url: string) => {
+const getYouTubeVideoId = (url: string): string | null => {
+  if (!url) return null;
   try {
     const urlObj = new URL(url);
     let videoId = urlObj.searchParams.get('v');
     if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}`;
+      return videoId;
     }
     if (urlObj.hostname === 'youtu.be') {
       videoId = urlObj.pathname.slice(1);
-      return `https://www.youtube.com/embed/${videoId}`;
+      return videoId;
     }
   } catch (error) {
     console.error('Invalid YouTube URL', error);
@@ -23,10 +24,24 @@ const getEmbedUrl = (url: string) => {
   return null;
 };
 
+export const getYouTubeThumbnailUrl = (url: string) => {
+  const videoId = getYouTubeVideoId(url);
+  if (videoId) {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+  return null;
+};
+
+const getEmbedUrl = (url: string) => {
+  const videoId = getYouTubeVideoId(url);
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  return null;
+};
+
 export function YouTubeEmbed({ url, title }: YouTubeEmbedProps) {
   const embedUrl = getEmbedUrl(url);
-  console.log('YouTubeEmbed - Original URL:', url);
-  console.log('YouTubeEmbed - Generated Embed URL:', embedUrl);
 
   if (!embedUrl) {
     return <p className="text-red-500">Link YouTube tidak valid.</p>;
