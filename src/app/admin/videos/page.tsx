@@ -1,6 +1,9 @@
 import { db } from '@/lib/db';
 import { videos } from '@/lib/db/schema';
-import { Videos } from '@/components/admin/videos';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Videos component with SSR disabled
+const Videos = dynamic(() => import('@/components/admin/videos').then(mod => mod.Videos), { ssr: false });
 
 export async function getVideos() {
     try {
