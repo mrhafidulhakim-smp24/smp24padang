@@ -58,10 +58,12 @@ import {
     updateAccreditation,
     deleteAccreditation,
 } from './actions';
-import { getAccreditations } from '@/lib/data/accreditation';
+import { getAccreditationsAction } from './actions';
 import { type accreditations as AccreditationDoc } from '@/lib/db/schema';
 
 export default function AccreditationAdminPage() {
+    console.log('AccreditationAdminPage rendered'); // Log 1
+
     const [documents, setDocuments] = useState<
         (typeof AccreditationDoc.$inferSelect)[]
     >([]);
@@ -75,12 +77,20 @@ export default function AccreditationAdminPage() {
     const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
+        console.log('useEffect in AccreditationAdminPage triggered'); // Log 2
         fetchAccreditations();
     }, []);
 
     const fetchAccreditations = async () => {
-        const data = await getAccreditations();
-        setDocuments(data);
+        console.log('Fetching accreditations...'); // Log 3
+        try {
+            const data = await getAccreditationsAction();
+            console.log('Accreditations fetched:', data); // Log 4
+            setDocuments(data);
+            console.log('Documents state updated.'); // Log 5
+        } catch (error) {
+            console.error('Error during fetchAccreditations:', error); // Log 6
+        }
     };
 
     const handleAddDoc = (event: React.FormEvent<HTMLFormElement>) => {

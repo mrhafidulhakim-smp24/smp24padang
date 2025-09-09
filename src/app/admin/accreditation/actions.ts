@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db';
 import { accreditations } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm'; // Add desc import
 import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
 import { auth } from '@/lib/auth';
@@ -74,5 +74,20 @@ export async function deleteAccreditation(id: string) {
     } catch (error) {
         console.error('Error deleting accreditation:', error);
         return { success: false, message: 'Gagal menghapus akreditasi.' };
+    }
+}
+
+// New server action for fetching accreditations
+export async function getAccreditationsAction() {
+    try {
+        const result = await db
+            .select()
+            .from(accreditations)
+            .orderBy(desc(accreditations.createdAt));
+        return result;
+    } catch (error) {
+        console.error('Error fetching accreditations:', error);
+        // Return an empty array or throw an error, depending on desired error handling
+        return [];
     }
 }

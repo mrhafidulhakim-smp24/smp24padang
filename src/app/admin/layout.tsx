@@ -44,6 +44,7 @@ import * as Collapsible from '@radix-ui/react-collapsible';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import AdminHeader from '@/components/admin-header'; // Import AdminHeader
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function AdminLayout({
     children,
@@ -53,28 +54,15 @@ export default function AdminLayout({
     const pathname = usePathname();
     const router = useRouter();
     const { toast } = useToast();
-
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Default to open for desktop
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768; // Check for mobile on client side
+    const isMobile = useIsMobile();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     useEffect(() => {
-        // Set initial state based on screen size
         if (isMobile) {
-            setIsSidebarOpen(false); // Hidden by default on mobile
+            setIsSidebarOpen(false);
         } else {
-            setIsSidebarOpen(true); // Open by default on desktop
+            setIsSidebarOpen(true);
         }
-
-        const handleResize = () => {
-            if (window.innerWidth < 768) {
-                setIsSidebarOpen(false);
-            } else {
-                setIsSidebarOpen(true);
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
     }, [isMobile]);
 
     // Moved menuItems declaration before its usage
@@ -126,11 +114,7 @@ export default function AdminLayout({
             label: 'Galeri',
             icon: GalleryHorizontal,
             subItems: [
-                {
-                    href: '/admin/gallery',
-                    label: 'Galeri Foto',
-                    icon: ImageIcon,
-                },
+                { href: '/admin/gallery', label: 'Galeri Foto', icon: ImageIcon, },
                 { href: '/admin/videos', label: 'Galeri Video', icon: Youtube },
             ],
         },
@@ -173,24 +157,27 @@ export default function AdminLayout({
                     } md:translate-x-0`} // Always open on desktop
                 >
                     <SidebarHeader>
-                        <div className="flex items-center gap-2">
-                            <Image
-                                src="/logo.png"
-                                alt="Logo"
-                                width={32}
-                                height={32}
-                                className=""
-                            />
-                            <span className="text-lg font-semibold text-primary group-data-[state=collapsed]:hidden">
-                                Admin
-                            </span>
-                            <Link
-                                href="/admin/profile"
-                                className="ml-auto group-data-[state=collapsed]:hidden"
-                            >
-                                <Settings className="h-5 w-5 text-muted-foreground hover:text-primary" />
-                            </Link>
-                            <ThemeToggle />
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                                <Image
+                                    src="/logo.png"
+                                    alt="Logo"
+                                    width={32}
+                                    height={32}
+                                />
+                                <span className="text-lg font-semibold text-primary ml-2 group-data-[state=collapsed]:hidden">
+                                    Admin
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Link
+                                    href="/admin/profile"
+                                    className="group-data-[state=collapsed]:hidden"
+                                >
+                                    <Settings className="h-5 w-5 text-muted-foreground hover:text-primary" />
+                                </Link>
+                                <ThemeToggle />
+                            </div>
                         </div>
                     </SidebarHeader>
                     <SidebarContent className="overflow-y-auto flex-grow">
