@@ -1,44 +1,67 @@
 
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Pencil, Trash2 } from 'lucide-react';
-import { deleteVideo } from '@/app/admin/videos/actions';
-import type { videos } from '@/lib/db/schema';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
-export function VideosTable({ data, onEdit }: { data: (typeof videos.$inferSelect)[], onEdit: (video: typeof videos.$inferSelect) => void }) {
-    const handleDelete = async (id: number) => {
-        if (confirm('Are you sure you want to delete this video?')) {
-            await deleteVideo(id);
-        }
-    };
-
+export function VideosTable({
+    data,
+    onEdit,
+    onDelete,
+}: {
+    data: (typeof videos.$inferSelect)[];
+    onEdit: (video: typeof videos.$inferSelect) => void;
+    onDelete: (id: number) => void;
+}) {
     return (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Actions</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {data.map((video) => (
-                    <TableRow key={video.id}>
-                        <TableCell>{video.title}</TableCell>
-                        <TableCell>{video.description}</TableCell>
-                        <TableCell>
-                            <Button variant="ghost" size="icon" onClick={() => onEdit(video)}>
-                                <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" onClick={() => handleDelete(video.id)}>
-                                <Trash2 className="h-4 w-4" />
-                            </Button>
-                        </TableCell>
+        <div className="border rounded-lg overflow-hidden">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+                </TableHeader>
+                <TableBody>
+                    {data.map((video) => (
+                        <TableRow key={video.id}>
+                            <TableCell className="font-medium text-base">
+                                {video.title}
+                            </TableCell>
+                            <TableCell className="text-base">
+                                {video.description}
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuItem
+                                            onSelect={() => onEdit(video)}
+                                        >
+                                            <Pencil className="mr-2 h-4 w-4" />
+                                            <span>Edit</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onSelect={() => onDelete(video.id)}
+                                            className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                                        >
+                                            <Trash2 className="mr-2 h-4 w-4" />
+                                            <span>Hapus</span>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
     );
 }

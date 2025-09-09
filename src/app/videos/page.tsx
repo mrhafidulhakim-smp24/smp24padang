@@ -16,7 +16,7 @@ export default async function VideosPage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-8 text-center">
+            <h1 className="font-headline text-5xl font-bold text-primary md:text-6xl border-t border-b border-primary py-4 text-center">
                 Galeri Video
             </h1>
             <VideoGrid videos={videoData} />

@@ -50,7 +50,8 @@ export async function createFaq(prevState: any, formData: FormData) {
         });
 
         revalidateTag('faqs-collection');
-        revalidatePath('/faq'); // Assuming a public FAQ page at /faq
+        revalidatePath('/contact'); // Revalidate contact page
+        revalidatePath('/'); // Revalidate homepage (assuming it has FAQ)
         revalidatePath('/admin/faq');
         return { success: true, message: 'FAQ berhasil ditambahkan.' };
     } catch (error) {
@@ -92,7 +93,8 @@ export async function updateFaq(
             .where(eq(faqs.id, id));
 
         revalidateTag('faqs-collection');
-        revalidatePath('/faq'); // Assuming a public FAQ page at /faq
+        revalidatePath('/contact'); // Revalidate contact page
+        revalidatePath('/'); // Revalidate homepage (assuming it has FAQ)
         revalidatePath('/admin/faq');
         return { success: true, message: 'FAQ berhasil diperbarui.' };
     } catch (error) {
@@ -111,7 +113,8 @@ export async function deleteFaq(id: string) {
         await db.delete(faqs).where(eq(faqs.id, id));
 
         revalidateTag('faqs-collection');
-        revalidatePath('/faq'); // Assuming a public FAQ page at /faq
+        revalidatePath('/contact'); // Revalidate contact page
+        revalidatePath('/'); // Revalidate homepage (assuming it has FAQ)
         revalidatePath('/admin/faq');
         return { success: true, message: 'FAQ berhasil dihapus.' };
     } catch (error: any) {
