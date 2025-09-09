@@ -35,7 +35,7 @@ export default async function NewsPage() {
     return (
         <div className="container mx-auto px-4 py-12 md:py-24">
             <div className="text-center">
-                <h1 className="font-headline text-5xl font-bold text-primary md:text-6xl border-t border-b border-primary py-4 text-center">
+                <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
                     Berita & Pengumuman
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -47,7 +47,7 @@ export default async function NewsPage() {
             
 
             <section className="mt-12">
-                <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl border-t border-b border-primary py-4 text-center">
+                <h2 className="font-headline text-3xl font-bold text-primary mb-8">
                     Berita Lainnya
                 </h2>
                 {newsItems.length > 0 ? (

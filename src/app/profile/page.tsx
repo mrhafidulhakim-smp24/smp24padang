@@ -27,7 +27,7 @@ export default async function ProfilePage() {
     return (
         <div className="container mx-auto px-4 py-12 md:py-24">
             <div className="text-center">
-                <h1 className="font-headline text-5xl font-bold text-primary md:text-6xl border-t border-b border-primary py-4 text-center">
+                <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
                     Profil Sekolah
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -38,7 +38,7 @@ export default async function ProfilePage() {
             <section className="mt-16">
                 <Card>
                     <div className="p-4 sm:p-6 md:p-8">
-                        <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl border-t border-b border-primary py-4 text-center">
+                        <h2 className="font-headline text-3xl font-bold text-primary mb-4 text-center">
                             Sambutan dari Kepala Sekolah
                         </h2>
                         <div className="float-left mr-6 w-full md:w-auto max-w-[350px]">
@@ -80,7 +80,7 @@ export default async function ProfilePage() {
 
             <section className="mt-16">
                 <div className="text-center">
-                    <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl border-t border-b border-primary py-4 text-center">
+                    <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Tentang Sekolah
                     </h2>
                     <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
@@ -99,7 +99,7 @@ export default async function ProfilePage() {
             {pastPrincipals.length > 0 && (
                 <section className="mt-16">
                     <div className="text-center">
-                        <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl border-t border-b border-primary py-4 text-center">
+                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                             Riwayat Kepala Sekolah
                         </h2>
                         <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">

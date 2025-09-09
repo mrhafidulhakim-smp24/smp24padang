@@ -22,7 +22,7 @@ export default function ContactView({
     return (
         <div className="container mx-auto px-4 py-12 md:py-24">
             <div className="text-center mb-16">
-                <h1 className="font-headline text-5xl font-bold text-primary md:text-6xl border-t border-b border-primary py-4 text-center">
+                <h1 className="font-headline text-4xl font-bold text-primary md:text-5xl">
                     Pertanyaan Umum
                 </h1>
                 <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -32,7 +32,7 @@ export default function ContactView({
             </div>
 
             <div className="mt-16 text-center">
-                <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl border-t border-b border-primary py-4 text-center">
+                <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                     Hubungi Kami
                 </h2>
                 <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
