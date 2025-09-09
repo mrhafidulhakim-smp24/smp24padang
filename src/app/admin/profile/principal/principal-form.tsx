@@ -217,7 +217,7 @@ export default function PrincipalForm({
                                 defaultValue={
                                     profileData?.principalWelcome || ''
                                 }
-                                rows={8}
+                                rows={15}
                                 required
                                 className="text-base"
                             />

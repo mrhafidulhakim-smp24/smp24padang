@@ -10,7 +10,7 @@ import {
     Phone,
     MapPin,
 } from 'lucide-react';
-import { getContactInfo } from '@/app/admin/contact/actions';
+import { getContactInfo } from '@/lib/data/contact';
 
 type ContactInfo = {
     address: string;
@@ -61,7 +61,7 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                             <Twitter className="h-6 w-6" />
                         </Link>
                         <Link
-                            href="#"
+                            href="https://www.instagram.com/smp24padang?igsh=MWx5NWM1bXZtd2E1"
                             className="text-primary-foreground/80 transition-colors hover:text-white"
                         >
                             <Instagram className="h-6 w-6" />

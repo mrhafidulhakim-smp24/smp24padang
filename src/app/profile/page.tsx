@@ -24,10 +24,6 @@ export default async function ProfilePage() {
     const profile = await getProfile();
     const pastPrincipals = await getPastPrincipals();
 
-    const welcomeParagraphs = profile?.principalWelcome
-        .split('\n')
-        .filter((p) => p.trim() !== '');
-
     return (
         <div className="container mx-auto px-4 py-12 md:py-24">
             <div className="text-center">
@@ -57,10 +53,8 @@ export default async function ProfilePage() {
                                 className="transition-transform duration-300 hover:scale-105 shadow-md"
                             />
                         </div>
-                        <div className="space-y-4 text-foreground/80 text-justify leading-relaxed">
-                            {welcomeParagraphs?.map((p, i) => (
-                                <p key={i}>{p}</p>
-                            ))}
+                        <div className="space-y-4 text-foreground/80 text-justify leading-relaxed whitespace-pre-wrap">
+                            {profile?.principalWelcome}
                         </div>
                         <p className="mt-6 font-semibold text-primary">
                             {profile?.principalName}
