@@ -54,28 +54,12 @@ export default async function AccreditationPage() {
                                         <CardTitle className="font-headline text-xl text-primary">
                                             {doc.title}
                                         </CardTitle>
-                                        <CardDescription className="mt-1">
-                                            {doc.description}
-                                        </CardDescription>
                                     </div>
                                 </div>
-                                <Button
-                                    asChild
-                                    className="mt-4 bg-accent text-accent-foreground hover:bg-accent/90 md:mt-0"
-                                >
-                                    <Link
-                                        href={doc.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        <Download className="mr-2 h-4 w-4" />
-                                        Unduh Dokumen
-                                    </Link>
-                                </Button>
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="aspect-video w-full rounded-md border bg-muted">
+                            <div className="aspect-video w-full rounded-md border bg-muted mb-4">
                                 <iframe
                                     src={getGoogleDriveEmbedLink(doc.link)}
                                     className="h-full w-full"
@@ -84,6 +68,9 @@ export default async function AccreditationPage() {
                                     title={`Pratinjau ${doc.title}`}
                                 ></iframe>
                             </div>
+                            <p className="text-sm text-muted-foreground mt-2">
+                                {doc.description}
+                            </p>
                         </CardContent>
                     </Card>
                 ))}
