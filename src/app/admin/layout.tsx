@@ -169,14 +169,13 @@ export default function AdminLayout({
                                     Admin
                                 </span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 pr-4">
                                 <Link
                                     href="/admin/profile"
                                     className="group-data-[state=collapsed]:hidden"
                                 >
-                                    <Settings className="h-5 w-5 text-muted-foreground hover:text-primary" />
+                                    <UserCircle className="h-5 w-5 text-muted-foreground hover:text-primary" />
                                 </Link>
-                                <ThemeToggle />
                             </div>
                         </div>
                     </SidebarHeader>
@@ -294,6 +293,9 @@ export default function AdminLayout({
                     </SidebarContent>
                     <SidebarFooter>
                         <div className="flex flex-col gap-2 w-full">
+                            <div className="flex items-center justify-between group-data-[state=collapsed]:justify-center">
+                                <ThemeToggle />
+                            </div>
                             <Button
                                 variant="destructive"
                                 className="w-full justify-start group-data-[state=collapsed]:justify-center"
