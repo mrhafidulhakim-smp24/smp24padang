@@ -64,7 +64,7 @@ async function AboutUs() {
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Visi & Misi
                     </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
                         Fondasi dan komitmen yang menjadi landasan SMPN 24
                         Padang.
                     </p>
@@ -79,7 +79,7 @@ async function AboutUs() {
                                         Visi
                                     </h4>
                                 </div>
-                                <p className="mt-2 text-center text-2xl font-bold text-muted-foreground">
+                                <p className="mt-2 text-center text-2xl font-bold text-foreground">
                                     {about.vision}
                                 </p>
                             </div>
@@ -90,7 +90,7 @@ async function AboutUs() {
                                         Misi
                                     </h4>
                                 </div>
-                                <div className="mt-2 space-y-2 font-bold text-muted-foreground">
+                                <div className="mt-2 space-y-2 font-bold text-foreground">
                                     {about.mission
                                         .slice(0, 10)
                                         .map((item, index) => (
@@ -103,7 +103,7 @@ async function AboutUs() {
                             <Button
                                 asChild
                                 variant="link"
-                                className="p-0 text-green-600 hover:text-green-700"
+                                className="mt-4 p-0 self-start text-primary hover:text-primary/80"
                             >
                                 <Link href="/profile/vision-mission">
                                     Baca Selengkapnya{' '}
@@ -143,7 +143,7 @@ async function Announcements() {
                             {announcements.map((item, index) => (
                                 <React.Fragment key={item.id}>
                                     <div className="flex flex-col gap-1.5">
-                                        <p className="text-sm text-muted-foreground">
+                                        <p className="text-sm text-foreground">
                                             {new Date(
                                                 item.date,
                                             ).toLocaleDateString('id-ID', {
@@ -192,7 +192,7 @@ async function LatestNews() {
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Berita Terbaru
                     </h2>
-                    <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
                         Saat ini belum ada berita terbaru. Silakan periksa
                         kembali nanti.
                     </p>
@@ -256,14 +256,14 @@ async function LatestNews() {
                                             {item.title}
                                         </Link>
                                     </CardTitle>
-                                    <p className="mt-2 text-sm text-foreground/80 dark:text-foreground/70">
+                                    <p className="mt-2 text-sm text-foreground dark:text-foreground">
                                         {item.description.substring(0, 80)}...
                                     </p>
                                 </div>
                                 <Button
                                     variant="link"
                                     asChild
-                                    className="mt-4 p-0 self-start text-green-600 hover:text-green-700"
+                                    className="mt-4 p-0 self-start text-primary hover:text-primary/80"
                                 >
                                     <Link href={`/articles/${item.id}`}>
                                         Baca Lebih Lanjut{' '}
@@ -316,7 +316,7 @@ async function Statistics() {
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Statistik Data Sekolah
                     </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
                         Sekilas data mengenai sumber daya di sekolah kami.
                     </p>
                 </div>
@@ -335,7 +335,7 @@ async function Statistics() {
                                 <p className="text-4xl font-bold text-primary">
                                     {stat.value}
                                 </p>
-                                <p className="mt-2 text-muted-foreground">
+                                <p className="mt-2 text-foreground">
                                     {stat.label}
                                 </p>
                             </CardContent>
@@ -357,7 +357,7 @@ async function Facilities() {
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Fasilitas Sekolah
                     </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
                         Lingkungan belajar yang lengkap dan modern untuk
                         mendukung potensi siswa.
                     </p>
@@ -398,7 +398,7 @@ async function FaqSection() {
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Pertanyaan Umum
                     </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
                         Temukan jawaban atas pertanyaan yang sering diajukan.
                     </p>
                 </div>
@@ -463,13 +463,13 @@ export default async function Home() {
                                 Kependudukan
                             </p>
                         </div>
-                        <p className="mt-4 text-lg text-muted-foreground whitespace-pre-wrap">
+                        <p className="mt-4 text-lg text-foreground whitespace-pre-wrap">
                             {profile?.principalWelcome.substring(0, 400)}...
                         </p>
                         <p className="mt-4 font-semibold text-primary">
                             {profile?.principalName}
                         </p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-foreground">
                             Kepala SMPN 24 Padang
                         </p>
                         <Button
@@ -478,7 +478,7 @@ export default async function Home() {
                             className="mt-4 p-0 text-green-600 hover:text-green-700"
                         >
                             <Link href="/profile">
-                                Baca Lebih Lanjut{' '}
+                                Baca Lebih Lanjut tentang Kepala Sekolah{' '}
                                 <ArrowRight className="ml-1 h-4 w-4" />
                             </Link>
                         </Button>

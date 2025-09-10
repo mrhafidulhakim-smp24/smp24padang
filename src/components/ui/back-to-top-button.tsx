@@ -30,6 +30,7 @@ const BackToTopButton = () => {
 
   return (
     <button
+      aria-label="Kembali ke atas"
       className={`fixed bottom-4 right-4 rounded-full bg-gray-800 p-3 text-white transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
