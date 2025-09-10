@@ -6,6 +6,7 @@ import {
     Facebook,
     Twitter,
     Instagram,
+    Youtube,
     Mail,
     Phone,
     MapPin,
@@ -47,14 +48,6 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                         Membina Pikiran, Membentuk Masa Depan. Jelajahi dunia
                         pembelajaran dan penemuan kami.
                     </p>
-                    <div className="flex space-x-4">
-                        <Link
-                            href="https://www.instagram.com/smp24padang?igsh=MWx5NWM1bXZtd2E1"
-                            className="text-primary-foreground/80 transition-colors hover:text-white"
-                        >
-                            <Instagram className="h-6 w-6" />
-                        </Link>
-                    </div>
                 </div>
 
                 <div className="space-y-4 md:col-span-1">
@@ -77,6 +70,20 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                             <span>{contactInfo?.email}</span>
                         </li>
                     </ul>
+                    <div className="flex space-x-4">
+                        <Link
+                            href="https://www.instagram.com/smp24padang?igsh=MWx5NWM1bXZtd2E1"
+                            className="text-primary-foreground/80 transition-colors hover:text-white"
+                        >
+                            <Instagram className="h-6 w-6" />
+                        </Link>
+                        <Link
+                            href="https://youtube.com/@ssk_spendupat?si=O8iKzbAxsGsuedXm"
+                            className="text-primary-foreground/80 transition-colors hover:text-white"
+                        >
+                            <Youtube className="h-6 w-6" />
+                        </Link>
+                    </div>
                 </div>
 
                 {showMap && contactInfo?.googleMapsUrl && (
