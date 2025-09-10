@@ -42,10 +42,16 @@ export const metadata: Metadata = {
     ],
     authors: [{ name: 'SMPN 24 Padang', url: siteUrl }],
     creator: 'SMPN 24 Padang',
+    icons: {
+        icon: '/favicon.ico',
+        shortcut: '/favicon.ico',
+        apple: '/apple-touch-icon.png',
+    },
     openGraph: {
         type: 'website',
         locale: 'id_ID',
         url: siteUrl,
+        siteName: 'SMP Negeri 24 Padang',
         title: 'SMPN 24 Padang',
         description:
             'Situs resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',

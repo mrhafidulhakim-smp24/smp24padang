@@ -49,18 +49,6 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                     </p>
                     <div className="flex space-x-4">
                         <Link
-                            href="#"
-                            className="text-primary-foreground/80 transition-colors hover:text-white"
-                        >
-                            <Facebook className="h-6 w-6" />
-                        </Link>
-                        <Link
-                            href="#"
-                            className="text-primary-foreground/80 transition-colors hover:text-white"
-                        >
-                            <Twitter className="h-6 w-6" />
-                        </Link>
-                        <Link
                             href="https://www.instagram.com/smp24padang?igsh=MWx5NWM1bXZtd2E1"
                             className="text-primary-foreground/80 transition-colors hover:text-white"
                         >
