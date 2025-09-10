@@ -112,7 +112,7 @@ export async function createPastPrincipal(formData: FormData) {
     try {
         await db.insert(pastPrincipals).values({ name, period, imageUrl });
         revalidatePath('/admin/profile/principal');
-        revalidatePath('past-principals-collection');
+        revalidateTag('past-principals-collection');
         return {
             success: true,
             message: 'Riwayat kepala sekolah ditambahkan.',
@@ -160,7 +160,7 @@ export async function updatePastPrincipal(
             })
             .where(eq(pastPrincipals.id, id));
         revalidatePath('/admin/profile/principal');
-        revalidatePath('past-principals-collection');
+        revalidateTag('past-principals-collection');
         return { success: true, message: 'Riwayat kepala sekolah diperbarui.' };
     } catch (error) {
         return { success: false, message: `Gagal memperbarui data: ${error instanceof Error ? error.message : String(error)}` };
@@ -174,7 +174,7 @@ export async function deletePastPrincipal(id: number, imageUrl: string | null) {
         }
         await db.delete(pastPrincipals).where(eq(pastPrincipals.id, id));
         revalidatePath('/admin/profile/principal');
-        revalidatePath('past-principals-collection');
+        revalidateTag('past-principals-collection');
         return { success: true, message: 'Data berhasil dihapus.' };
     } catch (error) {
         return { success: false, message: `Gagal menghapus data: ${error instanceof Error ? error.message : String(error)}` };

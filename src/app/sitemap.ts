@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
+import { getAllNewsIds } from './actions';
 
 const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || 'https://smpn24padang.sch.id';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // List of static pages
     const staticRoutes = [
         '/',
@@ -35,5 +36,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
                 : 0.8,
     }));
 
-    return [...staticUrls];
+    const newsIds = await getAllNewsIds();
+    const newsUrls = newsIds.map((news) => ({
+        url: `${siteUrl}/articles/${news.id}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+    }));
+
+    return [...staticUrls, ...newsUrls];
 }

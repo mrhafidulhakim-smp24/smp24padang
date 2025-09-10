@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         template: '%s | SMPN 24 Padang',
     },
     description:
-        'Situs resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
+        'Website resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
     keywords: [
         'SMPN 24 Padang',
         'Sekolah Menengah Pertama',
@@ -42,10 +42,16 @@ export const metadata: Metadata = {
     ],
     authors: [{ name: 'SMPN 24 Padang', url: siteUrl }],
     creator: 'SMPN 24 Padang',
+    viewport: 'width=device-width, initial-scale=1',
     icons: {
-        icon: '/favicon.ico',
-        shortcut: '/favicon.ico',
-        apple: '/apple-touch-icon.png',
+        icon: [
+            { url: '/favicon.ico', sizes: 'any', type: 'image/x-icon' },
+            { url: '/logo.png', sizes: '512x512', type: 'image/png' },
+        ],
+        shortcut: ['/favicon.ico'],
+        apple: [
+            { url: '/apple-touch-icon.png', sizes: '180x180' },
+        ],
     },
     openGraph: {
         type: 'website',
@@ -118,7 +124,7 @@ export default async function RootLayout({
     return (
         <html lang="id" className="!scroll-smooth" suppressHydrationWarning>
             <body
-                className={`${roboto.variable} ${montserrat.variable} font-body antialiased`}
+                className={`${roboto.variable} ${montserrat.variable} font-body antialiased overflow-x-hidden`}
             >
                 <script
                     type="application/ld+json"

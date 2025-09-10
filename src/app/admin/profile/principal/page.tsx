@@ -28,8 +28,8 @@ export default async function PrincipalProfilePage() {
             </div>
             <Tabs defaultValue="current" className="w-full">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="current">Profil Saat Ini</TabsTrigger>
-                    <TabsTrigger value="history">
+                    <TabsTrigger value="current" className="font-bold">Profil Saat Ini</TabsTrigger>
+                    <TabsTrigger value="history" className="font-bold">
                         Riwayat Kepala Sekolah
                     </TabsTrigger>
                 </TabsList>

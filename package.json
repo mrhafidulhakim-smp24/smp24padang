@@ -6,7 +6,6 @@
         "dev": "next dev -p 9002",
         "build": "next build",
         "start": "next start",
-        "postinstall": "drizzle-kit migrate",
         "lint": "next lint",
         "typecheck": "tsc --noEmit",
         "drizzle:generate": "drizzle-kit generate",
