@@ -114,7 +114,11 @@ export default function AdminLayout({
             label: 'Galeri',
             icon: GalleryHorizontal,
             subItems: [
-                { href: '/admin/gallery', label: 'Galeri Foto', icon: ImageIcon, },
+                {
+                    href: '/admin/gallery',
+                    label: 'Galeri Foto',
+                    icon: ImageIcon,
+                },
                 { href: '/admin/videos', label: 'Galeri Video', icon: Youtube },
             ],
         },
@@ -158,7 +162,7 @@ export default function AdminLayout({
                 >
                     <SidebarHeader>
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center">
+                            <div className="flex items-center mr-16">
                                 <Image
                                     src="/logo.png"
                                     alt="Logo"
@@ -174,7 +178,7 @@ export default function AdminLayout({
                                     href="/admin/profile"
                                     className="group-data-[state=collapsed]:hidden"
                                 >
-                                    <UserCircle className="h-5 w-5 text-muted-foreground hover:text-primary" />
+                                    <UserCircle className="h-6 w-6 text-muted-foreground hover:text-primary" />
                                 </Link>
                             </div>
                         </div>
