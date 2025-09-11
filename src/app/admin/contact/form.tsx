@@ -34,7 +34,7 @@ export default function ContactForm({ initialData }: ContactFormProps) {
             phone: '',
             email: '',
             googleMapsUrl: null,
-        }
+        },
     );
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
@@ -72,7 +72,7 @@ export default function ContactForm({ initialData }: ContactFormProps) {
                     </CardTitle>
                     <CardDescription className="mt-2 text-lg">
                         Perbarui alamat, telepon, dan email yang ditampilkan di
-                        seluruh situs.
+                        seluruh Website.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
@@ -142,7 +142,9 @@ export default function ContactForm({ initialData }: ContactFormProps) {
                         />
                         {contactInfo.googleMapsUrl && (
                             <div className="mt-4">
-                                <Label className="text-base">Pratinjau Peta</Label>
+                                <Label className="text-base">
+                                    Pratinjau Peta
+                                </Label>
                                 <div className="aspect-video w-full overflow-hidden rounded-lg border mt-2">
                                     <iframe
                                         key={contactInfo.googleMapsUrl}
@@ -156,7 +158,8 @@ export default function ContactForm({ initialData }: ContactFormProps) {
                                     ></iframe>
                                 </div>
                                 <p className="text-sm text-muted-foreground mt-2">
-                                    Pastikan URL yang dimasukkan adalah URL sematan Google Maps.
+                                    Pastikan URL yang dimasukkan adalah URL
+                                    sematan Google Maps.
                                 </p>
                             </div>
                         )}

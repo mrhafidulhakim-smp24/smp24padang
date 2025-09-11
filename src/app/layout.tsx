@@ -49,9 +49,7 @@ export const metadata: Metadata = {
             { url: '/logo.png', sizes: '512x512', type: 'image/png' },
         ],
         shortcut: [`${siteUrl}/favicon.ico`],
-        apple: [
-            { url: '/apple-touch-icon.png', sizes: '180x180' },
-        ],
+        apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
     },
     manifest: `${siteUrl}/site.webmanifest`,
     openGraph: {
@@ -61,7 +59,7 @@ export const metadata: Metadata = {
         siteName: 'SMP Negeri 24 Padang',
         title: 'SMPN 24 Padang',
         description:
-            'Situs resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
+            'Website resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
         images: [
             {
                 url: `${siteUrl}/logo.png`,
@@ -75,7 +73,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'SMPN 24 Padang',
         description:
-            'Situs resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
+            'Website resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
         images: [`${siteUrl}/logo.png`],
         creator: '@smpn24padang', // Ganti dengan handle Twitter jika ada
     },
