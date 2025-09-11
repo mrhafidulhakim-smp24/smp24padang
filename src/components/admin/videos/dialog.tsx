@@ -12,11 +12,11 @@ import { useEffect, useState } from 'react';
 import { getYouTubeVideoId } from '@/components/youtube-embed';
 
 export function VideoDialog({ open, onOpenChange, video }: { open: boolean, onOpenChange: (open: boolean) => void, video: (typeof videos.$inferSelect) | null }) {
-    const [formData, setFormData] = useState({ title: '', description: '', youtubeUrl: '' });
+    const [formData, setFormData] = useState({ title: '', youtubeUrl: '' });
 
     useEffect(() => {
         if (video) {
-            setFormData({ title: video.title, description: video.description || '', youtubeUrl: video.youtubeUrl });
+            setFormData({ title: video.title, youtubeUrl: video.youtubeUrl });
         }
     }, [video]);
 
@@ -51,10 +51,6 @@ export function VideoDialog({ open, onOpenChange, video }: { open: boolean, onOp
                     <div>
                         <Label htmlFor="title">Title</Label>
                         <Input id="title" name="title" value={formData.title} onChange={handleChange} required />
-                    </div>
-                    <div>
-                        <Label htmlFor="description">Description</Label>
-                        <Textarea id="description" name="description" value={formData.description} onChange={handleChange} />
                     </div>
                     <div>
                         <Label htmlFor="youtubeUrl">YouTube URL</Label>

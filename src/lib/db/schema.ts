@@ -157,7 +157,6 @@ export const pastPrincipals = pgTable('past_principals', {
 export const videos = pgTable('videos', {
     id: serial('id').primaryKey(),
     title: text('title').notNull(),
-    description: text('description'),
     youtubeUrl: text('youtubeUrl').notNull(),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
 });

@@ -169,6 +169,13 @@
       "when": 1757442034133,
       "tag": "0023_melodic_firedrake",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1757600670115,
+      "tag": "0024_awesome_anthem",
+      "breakpoints": true
     }
   ]
 }

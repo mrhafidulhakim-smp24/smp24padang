@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Roboto, Montserrat } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 import ConditionalLayout from '@/components/layout/conditional-layout';
@@ -26,6 +26,11 @@ const montserrat = Montserrat({
 const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || 'https://smpn24padang.sch.id';
 
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+};
+
 export const metadata: Metadata = {
     metadataBase: new URL(siteUrl),
     title: {
@@ -42,7 +47,6 @@ export const metadata: Metadata = {
     ],
     authors: [{ name: 'SMPN 24 Padang', url: siteUrl }],
     creator: 'SMPN 24 Padang',
-    viewport: 'width=device-width, initial-scale=1',
     icons: {
         icon: [
             { url: '/favicon.ico', sizes: 'any', type: 'image/x-icon' },
