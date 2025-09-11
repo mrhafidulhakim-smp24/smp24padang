@@ -49,7 +49,7 @@ import FaqAccordion from '@/components/faq/faq-accordion';
 export const metadata: Metadata = {
     title: 'SMPN 24 Padang | Cerdas, Terampil & Bebudidaya Lingkungan',
     description:
-        'Selamat datang di situs resmi SMPN 24 Padang. Jelajahi visi, misi, berita terkini, pengumuman, statistik, dan fasilitas sekolah kami. Wujudkan potensi terbaik bersama kami!',
+        'Selamat datang di website resmi SMPN 24 Padang. Jelajahi visi, misi, berita terkini, pengumuman, statistik, dan fasilitas sekolah kami. Wujudkan potensi terbaik bersama kami!',
 };
 
 export const revalidate = 60; // Revalidate at most every 60 seconds

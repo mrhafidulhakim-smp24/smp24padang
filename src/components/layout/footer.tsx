@@ -70,18 +70,20 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                             <span>{contactInfo?.email}</span>
                         </li>
                     </ul>
-                    <div className="flex space-x-4">
+                    <div className="flex flex-col space-y-2">
                         <Link
                             href="https://www.instagram.com/smp24padang?igsh=MWx5NWM1bXZtd2E1"
-                            className="text-primary-foreground/80 transition-colors hover:text-white"
+                            className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white"
                         >
                             <Instagram className="h-6 w-6" />
+                            <span>Instagram</span>
                         </Link>
                         <Link
                             href="https://youtube.com/@ssk_spendupat?si=O8iKzbAxsGsuedXm"
-                            className="text-primary-foreground/80 transition-colors hover:text-white"
+                            className="flex items-center gap-2 text-primary-foreground/80 transition-colors hover:text-white"
                         >
                             <Youtube className="h-6 w-6" />
+                            <span>YouTube</span>
                         </Link>
                     </div>
                 </div>

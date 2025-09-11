@@ -48,11 +48,12 @@ export const metadata: Metadata = {
             { url: '/favicon.ico', sizes: 'any', type: 'image/x-icon' },
             { url: '/logo.png', sizes: '512x512', type: 'image/png' },
         ],
-        shortcut: ['/favicon.ico'],
+        shortcut: [`${siteUrl}/favicon.ico`],
         apple: [
             { url: '/apple-touch-icon.png', sizes: '180x180' },
         ],
     },
+    manifest: `${siteUrl}/site.webmanifest`,
     openGraph: {
         type: 'website',
         locale: 'id_ID',
