@@ -96,7 +96,7 @@ export default function AchievementList({ achievements }: AchievementListProps) 
                                     <p className="text-lg font-semibold text-accent">
                                         {selectedAchievement.student}
                                     </p>
-                                    <p className="text-muted-foreground">
+                                    <p className="text-muted-foreground whitespace-pre-wrap">
                                         {selectedAchievement.description}
                                     </p>
                                 </div>
