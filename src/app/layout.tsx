@@ -50,10 +50,15 @@ export const metadata: Metadata = {
     icons: {
         icon: [
             { url: '/favicon.ico', sizes: 'any', type: 'image/x-icon' },
-            { url: '/logo.png', sizes: '512x512', type: 'image/png' },
+            { url: '/192.png', sizes: '192x192', type: 'image/png' },
+            { url: '/512.png', sizes: '512x512', type: 'image/png' },
         ],
         shortcut: [`${siteUrl}/favicon.ico`],
-        apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+        apple: [
+            { url: '/apple-touch-icon.png', sizes: '180x180' },
+            { url: '/167.png', sizes: '167x167' },
+            { url: '/152.png', sizes: '152x152' },
+        ],
     },
     manifest: `${siteUrl}/site.webmanifest`,
     openGraph: {
@@ -66,9 +71,9 @@ export const metadata: Metadata = {
             'Website resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
         images: [
             {
-                url: `${siteUrl}/logo.png`,
-                width: 512,
-                height: 512,
+                url: `${siteUrl}/1200.png`,
+                width: 1200,
+                height: 630,
                 alt: 'Logo SMPN 24 Padang',
             },
         ],
@@ -78,7 +83,7 @@ export const metadata: Metadata = {
         title: 'SMPN 24 Padang',
         description:
             'Website resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
-        images: [`${siteUrl}/logo.png`],
+        images: [`${siteUrl}/1200.png`],
         creator: '@smpn24padang', // Ganti dengan handle Twitter jika ada
     },
     verification: {
