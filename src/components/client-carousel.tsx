@@ -10,6 +10,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from '@/components/ui/carousel';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Banner {
     id: string;
@@ -25,10 +26,14 @@ interface ClientCarouselProps {
 }
 
 export function ClientCarousel({ banners }: ClientCarouselProps) {
+    const isMobile = useIsMobile();
+
+    const plugins = !isMobile ? [Autoplay({ delay: 5000 })] : [];
+
     return (
         <Carousel
             opts={{ loop: true }}
-            plugins={[Autoplay({ delay: 2000 })]}
+            plugins={plugins}
             className="w-full"
         >
             <CarouselContent>
@@ -47,6 +52,7 @@ export function ClientCarousel({ banners }: ClientCarouselProps) {
                                 data-ai-hint="school students"
                                 className="z-0"
                                 priority={index === 0}
+                                sizes="100vw"
                             />
                             <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white p-4">
                                 <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
