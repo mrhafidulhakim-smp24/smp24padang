@@ -14,40 +14,100 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Book, Home } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 type Staff = InferSelectModel<typeof StaffSchema>;
 
-// Sub-komponen untuk menampilkan kartu staf, agar tidak ada duplikasi kode
-function StaffCard({ person }: { person: Staff }) {
+// Komponen untuk dialog detail staf
+function StaffDetailDialog({ staff, open, onOpenChange }: { staff: Staff | null; open: boolean; onOpenChange: (open: boolean) => void; }) {
+    if (!staff) return null;
+
     return (
-        <Card key={person.id} className="text-center overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl h-full flex flex-col">
-            <CardContent className="p-6 flex flex-col items-center flex-grow">
-                <div className="w-24 h-24 mb-4 rounded-md shadow-lg flex items-center justify-center bg-muted">
-                    {person.imageUrl ? (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-lg md:max-w-2xl p-0">
+                <div className="grid md:grid-cols-2">
+                    <div className="relative h-64 md:h-96 bg-muted md:rounded-l-lg overflow-hidden">
                         <Image
-                            src={person.imageUrl}
-                            alt={person.name}
-                            width={96}
-                            height={96}
-                            className="rounded-md object-cover h-full w-full"
+                            src={staff.imageUrl || ''}
+                            alt={staff.name}
+                            layout="fill"
+                            className="object-cover object-top"
                         />
-                    ) : (
-                        <span className="text-3xl text-muted-foreground">{person.name.charAt(0)}</span>
-                    )}
+                    </div>
+                    <div className="p-6 flex flex-col">
+                        <DialogHeader className="text-left">
+                            <DialogTitle className="text-3xl font-bold tracking-tight">{staff.name}</DialogTitle>
+                            <DialogDescription className="text-lg text-primary">{staff.position}</DialogDescription>
+                        </DialogHeader>
+                        <Separator className="my-4" />
+                        <div className="space-y-4 flex-grow">
+                            {staff.subject && (
+                                <div className="flex items-start">
+                                    <Book className="h-5 w-5 mr-3 mt-1 flex-shrink-0 text-muted-foreground" />
+                                    <div>
+                                        <p className="text-sm font-medium text-muted-foreground">Mata Pelajaran</p>
+                                        <p className="font-semibold">{staff.subject}</p>
+                                    </div>
+                                </div>
+                            )}
+                            {staff.homeroomOf && (
+                                <div className="flex items-start">
+                                    <Home className="h-5 w-5 mr-3 mt-1 flex-shrink-0 text-muted-foreground" />
+                                    <div>
+                                        <p className="text-sm font-medium text-muted-foreground">Wali Kelas</p>
+                                        <p className="font-semibold">{staff.homeroomOf}</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
-                <h3 className="text-lg font-semibold text-card-foreground">{person.name}</h3>
-                <p className="text-sm text-foreground/80">{person.position}</p>
-                {person.subject && (
-                    <p className="text-sm text-foreground/70 mt-1">{person.subject}</p>
-                )}
-                <div className="flex-grow"></div>
-                {person.homeroomOf && (
-                    <Badge variant="secondary" className="mt-2">Wali Kelas {person.homeroomOf}</Badge>
-                )}
-            </CardContent>
-        </Card>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+
+// Sub-komponen untuk menampilkan kartu staf
+function StaffCard({ person, onClick }: { person: Staff, onClick: () => void }) {
+    return (
+        <div onClick={onClick} className="cursor-pointer group">
+            <Card key={person.id} className="text-center overflow-hidden transform transition-all h-full flex flex-col group-hover:scale-105 group-hover:shadow-xl">
+                <CardContent className="p-6 flex flex-col items-center flex-grow">
+                    <div className="w-24 h-24 mb-4 rounded-md shadow-lg flex items-center justify-center bg-muted overflow-hidden">
+                        {person.imageUrl ? (
+                            <Image
+                                src={person.imageUrl}
+                                alt={person.name}
+                                width={96}
+                                height={96}
+                                className="object-cover object-top h-full w-full"
+                            />
+                        ) : (
+                            <span className="text-3xl text-muted-foreground">{person.name.charAt(0)}</span>
+                        )}
+                    </div>
+                    <h3 className="text-lg font-semibold text-card-foreground">{person.name}</h3>
+                    <p className="text-sm text-foreground/80">{person.position}</p>
+                    {person.subject && (
+                        <p className="text-sm text-foreground/70 mt-1">{person.subject}</p>
+                    )}
+                    <div className="flex-grow"></div>
+                    {person.homeroomOf && (
+                        <Badge variant="secondary" className="mt-2">Wali Kelas {person.homeroomOf}</Badge>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
     );
 }
 
@@ -56,6 +116,7 @@ export default function FacultyPage() {
     const [search, setSearch] = useState('');
     const [positionFilter, setPositionFilter] = useState('all');
     const [loading, setLoading] = useState(true);
+    const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
 
     useEffect(() => {
         async function loadData() {
@@ -67,7 +128,6 @@ export default function FacultyPage() {
         loadData();
     }, []);
 
-    // Logika untuk memisahkan staf berdasarkan jabatan
     const principal = staff.find(s => s.position === 'Kepala Sekolah');
     const leadershipOrder = [
         'Wakil Kurikulum',
@@ -135,46 +195,54 @@ export default function FacultyPage() {
                 <div className="text-center py-16"><p className="text-xl text-muted-foreground">Memuat data...</p></div>
             ) : showHierarchicalView ? (
                 <div className="space-y-12">
-                    {/* Principal Section */}
                     {principal && (
                         <section className="py-12 rounded-lg bg-gradient-to-b from-primary/5 to-background dark:from-slate-800/50">
                             <h2 className="text-3xl font-bold text-center mb-8">Kepala Sekolah</h2>
                             <div className="flex justify-center">
-                                <div className="w-full max-w-xs"><StaffCard person={principal} /></div>
+                                <div className="w-full max-w-xs">
+                                    {principal && <StaffCard person={principal} onClick={() => setSelectedStaff(principal)} />}
+                                </div>
                             </div>
                         </section>
                     )}
 
-                    {/* Leadership Section */}
                     {leadership.length > 0 && (
                         <section className="py-12 rounded-lg bg-gradient-to-b from-primary/5 to-background dark:from-slate-800/50">
                             <h2 className="text-3xl font-bold text-center mb-8">Pimpinan Sekolah</h2>
                             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                                {leadership.map(p => <StaffCard key={p.id} person={p} />)}
+                                {leadership.map(p => <StaffCard key={p.id} person={p} onClick={() => setSelectedStaff(p)} />)}
                             </div>
                         </section>
                     )}
 
-                    {/* Other Staff Section */}
                     {otherStaff.length > 0 && (
                         <section className="py-12 rounded-lg bg-gradient-to-b from-primary/5 to-background dark:from-slate-800/50">
                             <h2 className="text-3xl font-bold text-center mb-8">Guru & Tenaga Pendidik</h2>
                             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                {otherStaff.map(p => <StaffCard key={p.id} person={p} />)}
+                                {otherStaff.map(p => <StaffCard key={p.id} person={p} onClick={() => setSelectedStaff(p)} />)}
                             </div>
                         </section>
                     )}
                 </div>
             ) : filteredStaff.length > 0 ? (
-                // Filtered View
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {filteredStaff.map((person) => <StaffCard key={person.id} person={person} />)}
+                    {filteredStaff.map((person) => <StaffCard key={person.id} person={person} onClick={() => setSelectedStaff(person)} />)}
                 </div>
             ) : (
                 <div className="text-center py-16">
                     <p className="text-xl text-muted-foreground">Tidak ada data staf yang cocok dengan pencarian Anda.</p>
                 </div>
             )}
+
+            <StaffDetailDialog 
+                staff={selectedStaff}
+                open={selectedStaff !== null}
+                onOpenChange={(isOpen) => {
+                    if (!isOpen) {
+                        setSelectedStaff(null);
+                    }
+                }}
+            />
         </div>
     );
 }
