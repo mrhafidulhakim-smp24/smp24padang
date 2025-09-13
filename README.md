@@ -107,7 +107,7 @@ npm run db:migrate
 
 ### 4. Jalankan Server Lokal
 
-Mulai server pengembangan pada `http://localhost:3000`.
+Mulai server pengembangan pada `http://localhost:9002`.
 
 ```bash
 npm run dev

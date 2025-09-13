@@ -338,7 +338,7 @@ export default function AdminLayout({
                             <div className="mb-4 hidden items-center gap-4 md:flex">
                                 {pathname !== '/admin/dashboard' && (
                                     <h1 className="text-2xl font-bold">
-                                        {menuItems
+                                        {/* {menuItems
                                             .flatMap((i) =>
                                                 i.subItems
                                                     ? i.subItems.map((s) => ({
@@ -348,7 +348,7 @@ export default function AdminLayout({
                                                     : i,
                                             )
                                             .find((i) => i.href === pathname)
-                                            ?.label || 'Dashboard'}
+                                            ?.label || 'Dashboard'} */}
                                     </h1>
                                 )}
                             </div>
