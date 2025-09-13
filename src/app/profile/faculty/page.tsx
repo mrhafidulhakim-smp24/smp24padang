@@ -33,9 +33,9 @@ function StaffDetailDialog({ staff, open, onOpenChange }: { staff: Staff | null;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-lg md:max-w-2xl p-0">
-                <div className="grid md:grid-cols-2">
-                    <div className="relative h-64 md:h-96 bg-muted md:rounded-l-lg overflow-hidden">
+            <DialogContent className="max-w-sm sm:max-w-lg md:max-w-2xl p-0">
+                <div className="grid grid-cols-5">
+                    <div className="col-span-2 relative h-64 md:h-96 bg-muted rounded-l-lg overflow-hidden">
                         <Image
                             src={staff.imageUrl || ''}
                             alt={staff.name}
@@ -43,28 +43,28 @@ function StaffDetailDialog({ staff, open, onOpenChange }: { staff: Staff | null;
                             className="object-cover object-top"
                         />
                     </div>
-                    <div className="p-6 flex flex-col">
+                    <div className="col-span-3 p-4 md:p-6 flex flex-col">
                         <DialogHeader className="text-left">
-                            <DialogTitle className="text-3xl font-bold tracking-tight">{staff.name}</DialogTitle>
-                            <DialogDescription className="text-lg text-primary">{staff.position}</DialogDescription>
+                            <DialogTitle className="text-xl md:text-3xl font-bold tracking-tight">{staff.name}</DialogTitle>
+                            <DialogDescription className="text-base md:text-lg text-primary">{staff.position}</DialogDescription>
                         </DialogHeader>
-                        <Separator className="my-4" />
-                        <div className="space-y-4 flex-grow">
+                        <Separator className="my-2 md:my-4" />
+                        <div className="space-y-3 md:space-y-4 flex-grow overflow-y-auto">
                             {staff.subject && (
                                 <div className="flex items-start">
-                                    <Book className="h-5 w-5 mr-3 mt-1 flex-shrink-0 text-muted-foreground" />
+                                    <Book className="h-4 w-4 md:h-5 md:w-5 mr-2 md:mr-3 mt-1 flex-shrink-0 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm font-medium text-muted-foreground">Mata Pelajaran</p>
-                                        <p className="font-semibold">{staff.subject}</p>
+                                        <p className="text-xs md:text-sm font-medium text-muted-foreground">Mata Pelajaran</p>
+                                        <p className="text-sm md:text-base font-semibold">{staff.subject}</p>
                                     </div>
                                 </div>
                             )}
                             {staff.homeroomOf && (
                                 <div className="flex items-start">
-                                    <Home className="h-5 w-5 mr-3 mt-1 flex-shrink-0 text-muted-foreground" />
+                                    <Home className="h-4 w-4 md:h-5 md:w-5 mr-2 md:mr-3 mt-1 flex-shrink-0 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm font-medium text-muted-foreground">Wali Kelas</p>
-                                        <p className="font-semibold">{staff.homeroomOf}</p>
+                                        <p className="text-xs md:text-sm font-medium text-muted-foreground">Wali Kelas</p>
+                                        <p className="text-sm md:text-base font-semibold">{staff.homeroomOf}</p>
                                     </div>
                                 </div>
                             )}
