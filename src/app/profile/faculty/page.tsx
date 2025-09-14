@@ -209,7 +209,7 @@ export default function FacultyPage() {
                     {leadership.length > 0 && (
                         <section className="py-12 rounded-lg bg-gradient-to-b from-primary/5 to-background dark:from-slate-800/50">
                             <h2 className="text-3xl font-bold text-center mb-8">Pimpinan Sekolah</h2>
-                            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                                 {leadership.map(p => <StaffCard key={p.id} person={p} onClick={() => setSelectedStaff(p)} />)}
                             </div>
                         </section>
