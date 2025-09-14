@@ -116,12 +116,18 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
             </div>
             <div className="bg-primary py-4">
                 <div className="container mx-auto flex items-center justify-center px-4 text-center text-sm text-primary-foreground/70">
-                    <Link
-                        href="/login"
-                        className="transition-colors hover:text-white"
-                    >
-                        <p>© {currentYear} SMP Negeri 24 Padang.</p>
-                    </Link>
+                    <p>
+                        Copyright© {currentYear} SMP Negeri 24 Padang. All
+                        Rights Reserved. | Maintenance by{' '}
+                        <a
+                            href="https://github.com/Informatics-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-white"
+                        >
+                            Informatics 2025
+                        </a>
+                    </p>
                 </div>
             </div>
         </footer>
