@@ -12,6 +12,8 @@ export async function getNewsForAdmin() {
     return await db.select().from(news).orderBy(desc(news.date));
 }
 
+
+
 export async function createNewsArticle(prevState: any, formData: FormData) {
     const validatedFields = NewsArticleSchema.safeParse({
         title: formData.get('title'),
