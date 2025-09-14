@@ -111,23 +111,18 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                                 Informatika UPI &quot;YPTK&quot; Padang (2025)
                             </Link>
                         </div>
+                        
                     </div>
                 )}
             </div>
             <div className="bg-primary py-4">
                 <div className="container mx-auto flex items-center justify-center px-4 text-center text-sm text-primary-foreground/70">
-                    <p>
-                        Copyright© {currentYear} SMP Negeri 24 Padang. All
-                        Rights Reserved. | Maintenance by{' '}
-                        <a
-                            href="https://github.com/Informatics-2025"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-white"
-                        >
-                            Informatics 2025
-                        </a>
-                    </p>
+                    <Link href="/login">
+                        <p>
+                            Copyright © {currentYear} SMP Negeri 24 Padang. All
+                            Rights Reserved.
+                        </p>
+                    </Link>
                 </div>
             </div>
         </footer>
