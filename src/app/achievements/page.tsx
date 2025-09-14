@@ -5,7 +5,7 @@ import AchievementList from '@/components/achievements/achievement-list';
 export const metadata: Metadata = {
     title: 'Galeri Prestasi SMPN 24 Padang | Raihan Siswa dan Sekolah Terbaik di Indonesia',
     description:
-        'Lihat berbagai prestasi membanggakan siswa-siswi dan SMPN 24 Padang dalam bidang akademik, non-akademik, dan kejuaraan. Inspirasi dari sekolah berprestasi di Indonesia.',
+        'Galeri prestasi siswa dan sekolah SMPN 24 Padang. Lihat pencapaian membanggakan kami di bidang akademik, non-akademik, dan kejuaraan lainnya.',
 };
 
 export const dynamic = 'force-dynamic';

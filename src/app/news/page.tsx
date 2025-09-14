@@ -4,7 +4,7 @@ import { unstable_cache as cache } from 'next/cache';
 export const metadata: Metadata = {
     title: 'Berita & Pengumuman Terbaru SMPN 24 Padang | Informasi Sekolah Terkini',
     description:
-        'Ikuti perkembangan terkini, berita sekolah, dan pengumuman penting dari SMPN 24 Padang. Dapatkan informasi lengkap seputar kegiatan dan prestasi siswa di sekolah kami.',
+        'Berita dan pengumuman terbaru dari SMPN 24 Padang. Dapatkan informasi terkini seputar kegiatan, prestasi, dan acara sekolah.',
 };
 
 export const dynamic = 'force-dynamic';

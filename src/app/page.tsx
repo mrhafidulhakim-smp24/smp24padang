@@ -49,7 +49,7 @@ import FaqAccordion from '@/components/faq/faq-accordion';
 export const metadata: Metadata = {
     title: 'SMPN 24 Padang | Cerdas, Terampil & Bebudidaya Lingkungan',
     description:
-        'Selamat datang di website resmi SMPN 24 Padang. Jelajahi visi, misi, berita terkini, pengumuman, statistik, dan fasilitas sekolah kami. Wujudkan potensi terbaik bersama kami!',
+        'Website resmi SMPN 24 Padang. Jelajahi profil, berita, prestasi, galeri, dan informasi lengkap seputar sekolah kami.',
 };
 
 export const revalidate = 60; // Revalidate at most every 60 seconds
@@ -422,6 +422,7 @@ export default async function Home() {
 
     return (
         <div className="flex flex-col">
+            <h1 className="sr-only">Selamat Datang di Website Resmi SMPN 24 Padang</h1>
             {/* Hero Section */}
             <section className="relative w-full">
                 <ClientCarousel banners={banners} />

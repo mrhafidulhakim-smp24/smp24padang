@@ -7,7 +7,7 @@ import { getGalleryItems } from './actions';
 export const metadata: Metadata = {
     title: 'Galeri Foto & Video SMPN 24 Padang | Kegiatan dan Momen Sekolah',
     description:
-        'Jelajahi koleksi foto dan video kegiatan belajar mengajar, acara sekolah, dan momen berharga lainnya di SMPN 24 Padang. Saksikan langsung suasana sekolah kami.',
+        'Galeri foto dan video SMPN 24 Padang. Jelajahi momen kegiatan belajar, acara sekolah, dan suasana lingkungan sekolah kami.',
 };
 
 export const dynamic = 'force-dynamic';

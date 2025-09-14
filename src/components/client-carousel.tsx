@@ -55,9 +55,9 @@ export function ClientCarousel({ banners }: ClientCarouselProps) {
                                 sizes="100vw"
                             />
                             <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white p-4">
-                                <h1 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
+                                <h2 className="font-headline text-4xl font-bold drop-shadow-md md:text-6xl">
                                     {banner.title}
-                                </h1>
+                                </h2>
                                 <p className="mt-4 max-w-2xl text-lg text-white/90 drop-shadow-sm">
                                     {banner.description}
                                 </p>

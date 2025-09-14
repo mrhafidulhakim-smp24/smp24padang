@@ -38,7 +38,7 @@ export const metadata: Metadata = {
         template: '%s | SMPN 24 Padang',
     },
     description:
-        'Website resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
+        'Website resmi SMPN 24 Padang. Jelajahi profil, berita, prestasi, galeri, dan informasi lengkap seputar sekolah kami.',
     keywords: [
         'SMPN 24 Padang',
         'Sekolah Menengah Pertama',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
         siteName: 'SMP Negeri 24 Padang',
         title: 'SMPN 24 Padang',
         description:
-            'Website resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
+            'Website resmi SMPN 24 Padang. Jelajahi profil, berita, prestasi, galeri, dan informasi lengkap seputar sekolah kami.',
         images: [
             {
                 url: `${siteUrl}/1200.png`,
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'SMPN 24 Padang',
         description:
-            'Website resmi SMPN 24 Padang. Temukan informasi lengkap tentang profil sekolah, berita terbaru, prestasi, galeri, dan kontak kami.',
+            'Website resmi SMPN 24 Padang. Jelajahi profil, berita, prestasi, galeri, dan informasi lengkap seputar sekolah kami.',
         images: [`${siteUrl}/1200.png`],
         creator: '@smpn24padang', // Ganti dengan handle Twitter jika ada
     },
