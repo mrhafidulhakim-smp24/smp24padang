@@ -37,11 +37,7 @@ export function VideoCard({
             <h3 className="font-semibold text-base mt-2 truncate">
                 {video.title}
             </h3>
-            {video.description && (
-                <p className="text-sm text-muted-foreground mt-1 truncate">
-                    {video.description}
-                </p>
-            )}
+
         </div>
     );
 }

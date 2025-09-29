@@ -108,8 +108,8 @@ function BannersTab({
         e.preventDefault();
         const form = e.currentTarget;
         const formData = new FormData();
-        formData.append('title', form.title.value);
-        formData.append('description', form.description.value);
+        formData.append('title', (form.elements.namedItem('title') as HTMLInputElement).value);
+        formData.append('description', (form.elements.namedItem('description') as HTMLInputElement).value);
 
         if (imageFile) {
             formData.append('image', imageFile);
@@ -516,7 +516,7 @@ function FacilitiesTab({
         e.preventDefault();
         const form = e.currentTarget;
         const formData = new FormData();
-        formData.append('name', form.name.value);
+        formData.append('name', (form.elements.namedItem('name') as HTMLInputElement).value);
 
         if (imageFile) {
             formData.append('image', imageFile);

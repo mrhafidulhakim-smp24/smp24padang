@@ -37,6 +37,7 @@ import {
     ShieldCheck,
     Megaphone,
     Video,
+    RefreshCcw,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
@@ -74,6 +75,11 @@ export default function Header({ contactInfo }: HeaderProps) {
                     icon: Network,
                 },
                 {
+                    href: '/profile/curriculum',
+                    label: 'Kurikulum',
+                    icon: GraduationCap,
+                },
+                {
                     href: '/profile/accreditation',
                     label: 'Sertifikasi & Penghargaan',
                     icon: Award,
@@ -93,6 +99,7 @@ export default function Header({ contactInfo }: HeaderProps) {
             subLinks: [
                 { href: '/news', label: 'Berita', icon: Newspaper },
                 { href: '/pengumuman', label: 'Pengumuman', icon: Megaphone },
+                { href: '/sispendik', label: 'Sispendik', icon: RefreshCcw },
             ],
         },
         { href: '/achievements', label: 'Prestasi', icon: Trophy },

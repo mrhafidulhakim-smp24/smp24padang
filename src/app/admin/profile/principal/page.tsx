@@ -27,9 +27,9 @@ export default async function PrincipalProfilePage() {
                 </p>
             </div>
             <Tabs defaultValue="current" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="current" className="font-bold">Profil Saat Ini</TabsTrigger>
-                    <TabsTrigger value="history" className="font-bold">
+                <TabsList className="grid w-full grid-cols-2 bg-muted p-0 border-b">
+                    <TabsTrigger value="current" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Profil Saat Ini</TabsTrigger>
+                    <TabsTrigger value="history" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">
                         Riwayat Kepala Sekolah
                     </TabsTrigger>
                 </TabsList>

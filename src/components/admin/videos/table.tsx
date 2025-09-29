@@ -22,7 +22,6 @@ export function VideosTable({
                 <TableHeader>
                     <TableRow>
                         <TableHead>Title</TableHead>
-                        <TableHead>Description</TableHead>
                         <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -31,9 +30,6 @@ export function VideosTable({
                         <TableRow key={video.id}>
                             <TableCell className="font-medium text-base">
                                 {video.title}
-                            </TableCell>
-                            <TableCell className="text-base">
-                                {video.description}
                             </TableCell>
                             <TableCell className="text-right">
                                 <DropdownMenu>

@@ -28,7 +28,7 @@ export async function updateUniformPageDescription(description: string) {
 }
 
 export async function updateUniform(formData: FormData) {
-    const id = formData.get('uniformId') as string | number | bigint;
+    const id = Number(formData.get('uniformId'));
     const day = formData.get('uniformDay') as string | null;
     const type = formData.get('uniformType') as 'daily' | 'sport';
     const description = formData.get('description') as string;

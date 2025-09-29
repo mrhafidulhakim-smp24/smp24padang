@@ -50,10 +50,6 @@ export function VideoForm({
                 <Input id="title" name="title" defaultValue={initialData?.title} required />
             </div>
             <div>
-                <Label htmlFor="description">Description</Label>
-                <Textarea id="description" name="description" defaultValue={initialData?.description || ''} />
-            </div>
-            <div>
                 <Label htmlFor="youtubeUrl">YouTube URL</Label>
                 <Input id="youtubeUrl" name="youtubeUrl" defaultValue={initialData?.youtubeUrl} required />
             </div>

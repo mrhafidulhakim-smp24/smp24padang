@@ -78,6 +78,7 @@ export default function AdminLayout({
                     label: 'Profil Sekolah',
                     icon: UserCircle,
                 },
+
                 {
                     href: '/admin/profile/vision-mission',
                     label: 'Visi & Misi',
@@ -87,6 +88,11 @@ export default function AdminLayout({
                     href: '/admin/organization',
                     label: 'Struktur Organisasi',
                     icon: Network,
+                },
+                {
+                    href: '/admin/curriculum',
+                    label: 'Kurikulum',
+                    icon: Target,
                 },
                 {
                     href: '/admin/accreditation',
@@ -107,6 +113,7 @@ export default function AdminLayout({
             subItems: [
                 { href: '/admin/news', label: 'Berita' },
                 { href: '/admin/announcements', label: 'Pengumuman' },
+                { href: '/admin/sispendik', label: 'Sispendik' },
             ],
         },
         { href: '/admin/achievements', label: 'Prestasi', icon: Trophy },
@@ -158,7 +165,7 @@ export default function AdminLayout({
                 <Sidebar
                     className={`h-screen fixed top-0 left-0 w-64 z-50 transition-transform duration-300 ease-in-out ${
                         isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                    } md:translate-x-0`} // Always open on desktop
+                    } md:translate-x-0 print:hidden`} // Always open on desktop
                 >
                     <SidebarHeader>
                         <div className="flex items-center justify-between">
@@ -325,7 +332,7 @@ export default function AdminLayout({
                 <div
                     className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
                         isSidebarOpen ? 'md:ml-64' : 'md:ml-0'
-                    }`}
+                    } print:ml-0`}
                 >
                     <AdminHeader
                         isSidebarOpen={isSidebarOpen}

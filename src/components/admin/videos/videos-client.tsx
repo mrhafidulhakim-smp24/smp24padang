@@ -48,9 +48,9 @@ export default function VideosClient({ initialVideos }: { initialVideos: Video[]
     // Function to refresh data by calling the server action again
     const refreshData = async () => {
         const result = await getVideos();
-        if (result.videos) {
-            setAllVideos(result.videos);
-        } else if (result.error) {
+        if (result.success) {
+            setAllVideos(result.data);
+        } else {
             toast({ title: 'Error', description: 'Failed to refresh videos', variant: 'destructive' });
         }
     };
@@ -69,11 +69,11 @@ export default function VideosClient({ initialVideos }: { initialVideos: Video[]
         if (!selectedVideo) return;
         startTransition(async () => {
             const result = await deleteVideo(selectedVideo.id);
-            if (!result.error) {
+            if (result.success) {
                 toast({ title: 'Success!', description: result.message });
                 handleCloseDialog(true);
             } else {
-                toast({ title: 'Error', description: result.error, variant: 'destructive' });
+                toast({ title: 'Error', description: result.message, variant: 'destructive' });
             }
         });
     };

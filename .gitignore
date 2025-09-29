@@ -14,7 +14,9 @@
 /.idx
 # testing
 /coverage
+.qodo
 
+.backup
 # next.js
 /.next/
 /out/
