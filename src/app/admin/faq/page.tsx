@@ -47,12 +47,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import {
-    createFaq,
-    updateFaq,
-    deleteFaq,
-    getFaqs,
-} from './actions';
+import { createFaq, updateFaq, deleteFaq, getFaqs } from './actions';
 import { type Faq } from './schema';
 
 function SubmitButton() {
@@ -113,9 +108,10 @@ function FaqForm({
                     name="answer"
                     defaultValue={initialData?.answer}
                     required
+                    rows={5}
                 />
             </div>
-            <DialogFooter>
+            <DialogFooter className="flex-row justify-end space-x-2">
                 <Button type="button" variant="outline" onClick={onClose}>
                     Batal
                 </Button>
@@ -134,9 +130,7 @@ export default function FaqAdminPage() {
     const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
-        getFaqs().then((data) =>
-            setFaqs(data as Faq[]),
-        );
+        getFaqs().then((data) => setFaqs(data as Faq[]));
     }, []);
 
     const { toast } = useToast();
@@ -147,9 +141,7 @@ export default function FaqAdminPage() {
             const result = await deleteFaq(selectedFaq.id);
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
-                setFaqs(
-                    faqs.filter((f) => f.id !== selectedFaq.id),
-                );
+                setFaqs(faqs.filter((f) => f.id !== selectedFaq.id));
                 setDeleteOpen(false);
                 setSelectedFaq(null);
             } else {
@@ -162,10 +154,7 @@ export default function FaqAdminPage() {
         });
     };
 
-    const boundUpdateFaq = updateFaq.bind(
-        null,
-        selectedFaq?.id || '',
-    );
+    const boundUpdateFaq = updateFaq.bind(null, selectedFaq?.id || '');
 
     return (
         <Card>
@@ -176,7 +165,8 @@ export default function FaqAdminPage() {
                             Kelola FAQ
                         </CardTitle>
                         <CardDescription className="mt-2 text-lg">
-                            Tambah, edit, atau hapus pertanyaan yang sering diajukan.
+                            Tambah, edit, atau hapus pertanyaan yang sering
+                            diajukan.
                         </CardDescription>
                     </div>
                     <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
@@ -186,7 +176,7 @@ export default function FaqAdminPage() {
                                 Tambah FAQ
                             </Button>
                         </DialogTrigger>
-                        <DialogContent>
+                        <DialogContent className="max-h-[90vh] overflow-y-auto">
                             <DialogHeader>
                                 <DialogTitle>Tambah FAQ Baru</DialogTitle>
                             </DialogHeader>
@@ -265,7 +255,7 @@ export default function FaqAdminPage() {
             </CardContent>
             {/* Edit and Delete Dialogs */}
             <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
-                <DialogContent>
+                <DialogContent className="max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Edit FAQ</DialogTitle>
                     </DialogHeader>
@@ -294,9 +284,7 @@ export default function FaqAdminPage() {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel
-                            onClick={() => setSelectedFaq(null)}
-                        >
+                        <AlertDialogCancel onClick={() => setSelectedFaq(null)}>
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction

@@ -273,6 +273,11 @@ export default function AdminLayout({
                                                                                     pathname ===
                                                                                     subItem.href
                                                                                 }
+                                                                                onClick={() => {
+                                                                                    if (isMobile) {
+                                                                                        setIsSidebarOpen(false);
+                                                                                    }
+                                                                                }}
                                                                             >
                                                                                 {
                                                                                     subItem.label
@@ -294,6 +299,11 @@ export default function AdminLayout({
                                             href={item.href}
                                             icon={item.icon}
                                             isActive={pathname === item.href}
+                                            onClick={() => {
+                                                if (isMobile) {
+                                                    setIsSidebarOpen(false);
+                                                }
+                                            }}
                                         >
                                             {item.label}
                                         </SidebarMenuButton>

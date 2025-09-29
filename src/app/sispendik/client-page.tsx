@@ -25,14 +25,40 @@ import {
     getTotalsSummary,
     getTopWasteTypes,
 } from '@/app/admin/sispendik/actions';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell } from 'recharts';
+import {
+    ResponsiveContainer,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    CartesianGrid,
+    Cell,
+} from 'recharts';
 
 const MONTHS = [
-    'Januari','Februari','Maret','April','Mei','Juni',
-    'Juli','Agustus','September','Oktober','November','Desember'
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
 ];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF1919'];
+const COLORS = [
+    '#0088FE',
+    '#00C49F',
+    '#FFBB28',
+    '#FF8042',
+    '#AF19FF',
+    '#FF1919',
+];
 
 type TopWasteType = {
     wasteType: string;
@@ -52,8 +78,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         return (
             <div className="bg-background border p-2 rounded-md shadow-md">
                 <p className="font-bold">{label}</p>
-                <p className="text-sm">Total Sampah: {Number(payload[0].value).toFixed(2)} kg</p>
-                <p className="text-sm text-muted-foreground">Jenis: {payload[0].payload.jenisList || 'N/A'}</p>
+                <p className="text-sm">
+                    Total Sampah: {Number(payload[0].value).toFixed(2)} kg
+                </p>
+                <p className="text-sm text-muted-foreground">
+                    Jenis: {payload[0].payload.jenisList || 'N/A'}
+                </p>
             </div>
         );
     }
@@ -70,19 +100,23 @@ export default function SispendikClientPage() {
     const [totalIncome, setTotalIncome] = useState(0);
     const [topClasses, setTopClasses] = useState<string[]>([]);
     const [topWasteTypes, setTopWasteTypes] = useState<TopWasteType[]>([]);
-    const [levelFilter, setLevelFilter] = useState<'all' | '7' | '8' | '9'>('all');
+    const [levelFilter, setLevelFilter] = useState<'all' | '7' | '8' | '9'>(
+        'all',
+    );
 
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 11 }, (_, i) => currentYear - 5 + i);
 
     useEffect(() => {
         const fetchData = async () => {
-            const [aggData, rankData, summary, topWasteRes] = await Promise.all([
-                getAggregatedData(month, year),
-                getClassRanking(month, year),
-                getTotalsSummary(month, year),
-                getTopWasteTypes(month, year),
-            ]);
+            const [aggData, rankData, summary, topWasteRes] = await Promise.all(
+                [
+                    getAggregatedData(month, year),
+                    getClassRanking(month, year),
+                    getTotalsSummary(month, year),
+                    getTopWasteTypes(month, year),
+                ],
+            );
 
             if (aggData.data) {
                 setAggregatedData(aggData.data);
@@ -90,9 +124,13 @@ export default function SispendikClientPage() {
 
             if (rankData.data) {
                 const typedData = rankData.data as ClassRanking[];
-                const filteredData = typedData.filter(c => levelFilter === 'all' || c.className.startsWith(levelFilter));
+                const filteredData = typedData.filter(
+                    (c) =>
+                        levelFilter === 'all' ||
+                        c.className.startsWith(levelFilter),
+                );
                 setClassRanking(filteredData);
-                setTopClasses(filteredData.slice(0, 3).map(c => c.className));
+                setTopClasses(filteredData.slice(0, 3).map((c) => c.className));
             } else {
                 setClassRanking([]);
                 setTopClasses([]);
@@ -121,7 +159,7 @@ export default function SispendikClientPage() {
             <div className="space-y-6">
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight">
-                        Bank Sampah Digital
+                        Sispendik Bank Sampah
                     </h2>
                     <p className="text-muted-foreground">
                         Pantau data sampah dan peringkat kelas dalam program
@@ -151,7 +189,11 @@ export default function SispendikClientPage() {
                             <CardTitle>Top 3 Kelas</CardTitle>
                             <div className="text-lg font-bold">
                                 {topClasses.length > 0 ? (
-                                    topClasses.map((c, i) => <div key={i}>{i + 1}. {c}</div>)
+                                    topClasses.map((c, i) => (
+                                        <div key={i}>
+                                            {i + 1}. {c}
+                                        </div>
+                                    ))
                                 ) : (
                                     <p className="text-2xl">-</p>
                                 )}
@@ -164,9 +206,19 @@ export default function SispendikClientPage() {
                             <div className="space-y-2 pt-2">
                                 {topWasteTypes.length > 0 ? (
                                     topWasteTypes.map((w, i) => (
-                                        <div key={i} className="flex justify-between items-baseline">
-                                            <p className="font-bold text-sm">{i + 1}. {w.wasteType}</p>
-                                            <p className="text-sm text-muted-foreground">Rp {Number(w.totalValue || 0).toLocaleString('id-ID')}</p>
+                                        <div
+                                            key={i}
+                                            className="flex justify-between items-baseline"
+                                        >
+                                            <p className="font-bold text-sm">
+                                                {i + 1}. {w.wasteType}
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                Rp{' '}
+                                                {Number(
+                                                    w.totalValue || 0,
+                                                ).toLocaleString('id-ID')}
+                                            </p>
                                         </div>
                                     ))
                                 ) : (
@@ -180,37 +232,68 @@ export default function SispendikClientPage() {
                 <div className="grid gap-4 lg:grid-cols-3">
                     <Card className="lg:col-span-2 lg:self-start">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle>Diagram Batang Peringkat Kelas</CardTitle>
+                            <CardTitle>
+                                Diagram Batang Peringkat Kelas
+                            </CardTitle>
                             <div className="flex items-center space-x-2">
-                                <Select value={String(month)} onValueChange={(v) => setMonth(parseInt(v))}>
+                                <Select
+                                    value={String(month)}
+                                    onValueChange={(v) => setMonth(parseInt(v))}
+                                >
                                     <SelectTrigger className="w-auto">
                                         <SelectValue placeholder="Pilih bulan" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {MONTHS.map((m, idx) => (
-                                            <SelectItem key={m} value={(idx + 1).toString()}>{m}</SelectItem>
+                                            <SelectItem
+                                                key={m}
+                                                value={(idx + 1).toString()}
+                                            >
+                                                {m}
+                                            </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
-                                <Select value={String(year)} onValueChange={(v) => setYear(parseInt(v))}>
+                                <Select
+                                    value={String(year)}
+                                    onValueChange={(v) => setYear(parseInt(v))}
+                                >
                                     <SelectTrigger className="w-auto">
                                         <SelectValue placeholder="Pilih tahun" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {years.map((y) => (
-                                            <SelectItem key={y} value={String(y)}>{y}</SelectItem>
+                                            <SelectItem
+                                                key={y}
+                                                value={String(y)}
+                                            >
+                                                {y}
+                                            </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
-                                <Select value={levelFilter} onValueChange={(v) => setLevelFilter(v as any)}>
+                                <Select
+                                    value={levelFilter}
+                                    onValueChange={(v) =>
+                                        setLevelFilter(v as any)
+                                    }
+                                >
                                     <SelectTrigger className="w-auto">
                                         <SelectValue placeholder="Pilih tingkat" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">Semua Tingkat</SelectItem>
-                                        <SelectItem value="7">Kelas 7</SelectItem>
-                                        <SelectItem value="8">Kelas 8</SelectItem>
-                                        <SelectItem value="9">Kelas 9</SelectItem>
+                                        <SelectItem value="all">
+                                            Semua Tingkat
+                                        </SelectItem>
+                                        <SelectItem value="7">
+                                            Kelas 7
+                                        </SelectItem>
+                                        <SelectItem value="8">
+                                            Kelas 8
+                                        </SelectItem>
+                                        <SelectItem value="9">
+                                            Kelas 9
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -220,13 +303,29 @@ export default function SispendikClientPage() {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={classRanking}>
                                         <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="className" angle={-45} textAnchor="end" interval={0} height={60} />
+                                        <XAxis
+                                            dataKey="className"
+                                            angle={-45}
+                                            textAnchor="end"
+                                            interval={0}
+                                            height={60}
+                                        />
                                         <YAxis />
                                         <Tooltip content={<CustomTooltip />} />
                                         <Bar dataKey="total">
-                                            {classRanking.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
+                                            {classRanking.map(
+                                                (entry, index) => (
+                                                    <Cell
+                                                        key={`cell-${index}`}
+                                                        fill={
+                                                            COLORS[
+                                                                index %
+                                                                    COLORS.length
+                                                            ]
+                                                        }
+                                                    />
+                                                ),
+                                            )}
                                         </Bar>
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -248,21 +347,44 @@ export default function SispendikClientPage() {
                                             </TableHead>
                                             <TableHead>Kelas</TableHead>
                                             <TableHead>Total Sampah</TableHead>
-                                            <TableHead>Total Pendapatan</TableHead>
+                                            <TableHead>
+                                                Total Pendapatan
+                                            </TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {classRanking.length === 0 ? (
                                             <TableRow>
-                                                <TableCell colSpan={4} className="text-center py-6">Belum ada data</TableCell>
+                                                <TableCell
+                                                    colSpan={4}
+                                                    className="text-center py-6"
+                                                >
+                                                    Belum ada data
+                                                </TableCell>
                                             </TableRow>
                                         ) : (
                                             classRanking.map((c, idx) => (
                                                 <TableRow key={c.className}>
-                                                    <TableCell>{idx + 1}</TableCell>
-                                                    <TableCell>{c.className}</TableCell>
-                                                    <TableCell>{Number(c.total || 0).toFixed(2)} kg</TableCell>
-                                                    <TableCell>Rp {Number(c.totalValue || 0).toLocaleString('id-ID')}</TableCell>
+                                                    <TableCell>
+                                                        {idx + 1}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {c.className}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {Number(
+                                                            c.total || 0,
+                                                        ).toFixed(2)}{' '}
+                                                        kg
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        Rp{' '}
+                                                        {Number(
+                                                            c.totalValue || 0,
+                                                        ).toLocaleString(
+                                                            'id-ID',
+                                                        )}
+                                                    </TableCell>
                                                 </TableRow>
                                             ))
                                         )}

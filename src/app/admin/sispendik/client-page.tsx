@@ -217,24 +217,34 @@ export default function SispendikClient({ kelas, jenisSampah }: Props) {
             });
             return;
         }
+
         const res = editingJenis
             ? await updateJenisSampah(editingJenis.id, {
                   namaSampah: name,
                   hargaPerKg: price,
               })
             : await createJenisSampah({ namaSampah: name, hargaPerKg: price });
-        if ((res as any).success) {
+
+        if (res.success && res.data) {
             toast({
                 title: 'Sukses',
                 description: editingJenis
                     ? 'Jenis sampah diperbarui'
                     : 'Jenis sampah ditambahkan',
             });
+
+            if (editingJenis) {
+                setLocalJenis((prev) =>
+                    prev.map((j) => (j.id === editingJenis.id ? res.data : j)),
+                );
+            } else {
+                setLocalJenis((prev) => [...prev, res.data]);
+            }
+
             setJenisModalOpen(false);
             setEditingJenis(null);
             setNewJenisName('');
             setNewJenisPrice('');
-            window.location.reload();
         } else {
             toast({
                 title: 'Error',
@@ -248,7 +258,7 @@ export default function SispendikClient({ kelas, jenisSampah }: Props) {
         const res = await deleteJenisSampah(id);
         if (res.success) {
             toast({ title: 'Sukses', description: 'Jenis sampah dihapus' });
-            window.location.reload();
+            setLocalJenis((prev) => prev.filter((j) => j.id !== id));
         } else {
             toast({
                 title: 'Error',
@@ -406,7 +416,7 @@ export default function SispendikClient({ kelas, jenisSampah }: Props) {
             {/* Heading removed to avoid duplicate titles. Page heading handled by page.tsx */}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <Card className="lg:col-span-2">
+                <Card className="lg:col-span-2 print:break-inside-avoid">
                     <CardHeader className="flex items-center justify-end gap-2 sm:flex-row flex-col">
                         <div className="flex items-center flex-wrap gap-2 w-full sm:w-auto print:hidden">
                             <Select

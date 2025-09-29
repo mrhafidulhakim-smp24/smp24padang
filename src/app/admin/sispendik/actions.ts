@@ -51,12 +51,15 @@ export async function createJenisSampah(data: {
     hargaPerKg: number;
 }) {
     try {
-        await db.insert(jenisSampah).values({
-            namaSampah: data.namaSampah,
-            hargaPerKg: data.hargaPerKg.toFixed(2),
-        });
+        const newJenis = await db
+            .insert(jenisSampah)
+            .values({
+                namaSampah: data.namaSampah,
+                hargaPerKg: data.hargaPerKg.toFixed(2),
+            })
+            .returning();
         revalidatePath('/admin/sispendik');
-        return { success: true };
+        return { success: true, data: newJenis[0] };
     } catch (error) {
         return { error: 'Failed to create jenis sampah' };
     }
@@ -70,16 +73,17 @@ export async function updateJenisSampah(
     },
 ) {
     try {
-        await db
+        const updatedJenis = await db
             .update(jenisSampah)
             .set({
                 namaSampah: data.namaSampah,
                 hargaPerKg: data.hargaPerKg.toFixed(2),
                 updatedAt: new Date(),
             })
-            .where(eq(jenisSampah.id, id));
+            .where(eq(jenisSampah.id, id))
+            .returning();
         revalidatePath('/admin/sispendik');
-        return { success: true };
+        return { success: true, data: updatedJenis[0] };
     } catch (error) {
         return { error: 'Failed to update jenis sampah' };
     }

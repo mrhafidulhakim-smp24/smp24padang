@@ -2,16 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-    Facebook,
-    Twitter,
-    Instagram,
-    Youtube,
-    Mail,
-    Phone,
-    MapPin,
-} from 'lucide-react';
-import { getContactInfo } from '@/lib/data/contact';
+import { Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 
 type ContactInfo = {
     address: string;
@@ -108,10 +99,10 @@ export default function Footer({ showMap = true, contactInfo }: FooterProps) {
                                 className="text-gray-400 hover:text-white text-xs font-light text-left"
                             >
                                 Dikembangkan oleh Mahasiswa Kerja Praktek Teknik
-                                Informatika UPI &quot;YPTK&quot; Padang (2025)
+                                Informatika UPI &quot;YPTK&quot; Padang (Aira,
+                                Aldi, Ikhwan, Habib, Rafi)
                             </Link>
                         </div>
-                        
                     </div>
                 )}
             </div>

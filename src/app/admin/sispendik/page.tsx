@@ -45,10 +45,10 @@ export default async function SispendikAdminPage() {
     }
 
     return (
-        <div className="space-y-6">
-            <div>
+        <div className="space-y-6 print:space-y-0">
+        <div className="print:hidden">
                 <h2 className="text-3xl font-bold tracking-tight">
-                    Bank Sampah Digital
+                    Sispendik Bank Sampah
                 </h2>
                 <p className="text-muted-foreground">
                     Kelola data sampah per kelas dan lihat statistik pengumpulan

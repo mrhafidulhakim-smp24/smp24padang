@@ -16,7 +16,6 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
     DialogFooter,
     DialogClose,
 } from '@/components/ui/dialog';
@@ -34,13 +33,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { PlusCircle, Trash2, Pencil } from 'lucide-react';
 import {
     Card,
@@ -108,8 +100,14 @@ function BannersTab({
         e.preventDefault();
         const form = e.currentTarget;
         const formData = new FormData();
-        formData.append('title', (form.elements.namedItem('title') as HTMLInputElement).value);
-        formData.append('description', (form.elements.namedItem('description') as HTMLInputElement).value);
+        formData.append(
+            'title',
+            (form.elements.namedItem('title') as HTMLInputElement).value,
+        );
+        formData.append(
+            'description',
+            (form.elements.namedItem('description') as HTMLInputElement).value,
+        );
 
         if (imageFile) {
             formData.append('image', imageFile);
@@ -162,7 +160,7 @@ function BannersTab({
 
     return (
         <Card>
-            <CardHeader className="flex-row items-center justify-between">
+            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <CardTitle className="text-2xl font-bold">
                         Kelola Banner
@@ -176,29 +174,24 @@ function BannersTab({
                         setEditingBanner(null);
                         setDialogOpen(true);
                     }}
+                    className="w-full md:w-auto"
                 >
                     <PlusCircle className="mr-2 h-4 w-4" /> Tambah Banner
                 </Button>
             </CardHeader>
-            <CardContent>
-                <Table>
+            <CardContent className="overflow-x-auto">
+                <Table className="min-w-full">
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-                                Gambar
-                            </TableHead>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-                                Judul
-                            </TableHead>
-                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">
-                                Aksi
-                            </TableHead>
+                            <TableHead>Gambar</TableHead>
+                            <TableHead>Judul</TableHead>
+                            <TableHead className="text-right">Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell className="px-6 py-4 whitespace-nowrap">
+                                <TableCell>
                                     <Image
                                         src={item.imageUrl || ''}
                                         alt={item.title}
@@ -207,10 +200,10 @@ function BannersTab({
                                         className="rounded-md bg-muted object-cover"
                                     />
                                 </TableCell>
-                                <TableCell className="px-6 py-4 whitespace-nowrap font-medium text-base">
+                                <TableCell className="font-medium">
                                     {item.title}
                                 </TableCell>
-                                <TableCell className="px-6 py-4 whitespace-nowrap text-right">
+                                <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button
                                             variant="outline"
@@ -516,7 +509,10 @@ function FacilitiesTab({
         e.preventDefault();
         const form = e.currentTarget;
         const formData = new FormData();
-        formData.append('name', (form.elements.namedItem('name') as HTMLInputElement).value);
+        formData.append(
+            'name',
+            (form.elements.namedItem('name') as HTMLInputElement).value,
+        );
 
         if (imageFile) {
             formData.append('image', imageFile);
@@ -554,7 +550,10 @@ function FacilitiesTab({
         startTransition(async () => {
             const result = await deleteFacility(id, imageUrl);
             if (result.success) {
-                toast({ title: 'Fasilitas dihapus!', description: 'Data fasilitas telah dihapus.' });
+                toast({
+                    title: 'Fasilitas dihapus!',
+                    description: 'Data fasilitas telah dihapus.',
+                });
                 refreshData();
             } else {
                 toast({
@@ -568,7 +567,7 @@ function FacilitiesTab({
 
     return (
         <Card>
-            <CardHeader className="flex-row items-center justify-between">
+            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <CardTitle className="text-2xl font-bold">
                         Kelola Fasilitas
@@ -582,29 +581,24 @@ function FacilitiesTab({
                         setEditingFacility(null);
                         setDialogOpen(true);
                     }}
+                    className="w-full md:w-auto"
                 >
                     <PlusCircle className="mr-2 h-4 w-4" /> Tambah Fasilitas
                 </Button>
             </CardHeader>
-            <CardContent>
-                <Table>
+            <CardContent className="overflow-x-auto">
+                <Table className="min-w-full">
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-                                Gambar
-                            </TableHead>
-                            <TableHead className="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-                                Nama Fasilitas
-                            </TableHead>
-                            <TableHead className="px-6 py-3 text-right text-sm font-medium uppercase tracking-wider">
-                                Aksi
-                            </TableHead>
+                            <TableHead>Gambar</TableHead>
+                            <TableHead>Nama Fasilitas</TableHead>
+                            <TableHead className="text-right">Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell className="px-6 py-4 whitespace-nowrap">
+                                <TableCell>
                                     <Image
                                         src={item.imageUrl}
                                         alt={item.name}
@@ -613,10 +607,10 @@ function FacilitiesTab({
                                         className="rounded-md bg-muted object-cover"
                                     />
                                 </TableCell>
-                                <TableCell className="px-6 py-4 whitespace-nowrap font-medium text-base">
+                                <TableCell className="font-medium">
                                     {item.name}
                                 </TableCell>
-                                <TableCell className="px-6 py-4 whitespace-nowrap text-right">
+                                <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
                                         <Button
                                             variant="outline"
@@ -788,11 +782,28 @@ export default function HomepageAdminPage() {
                 </p>
             </div>
             <Tabs defaultValue="banners" className="w-full">
-                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 bg-muted p-0 border-b">
-                    <TabsTrigger value="banners" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Banner</TabsTrigger>
-                    <TabsTrigger value="statistics" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Statistik</TabsTrigger>
-                    <TabsTrigger value="facilities" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Fasilitas</TabsTrigger>
-                </TabsList>
+                <div className="flex justify-center">
+                    <TabsList className="grid w-full max-w-md grid-cols-3 bg-muted p-0">
+                        <TabsTrigger
+                            value="banners"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                        >
+                            Banner
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="statistics"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                        >
+                            Statistik
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="facilities"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                        >
+                            Fasilitas
+                        </TabsTrigger>
+                    </TabsList>
+                </div>
                 <TabsContent value="banners" className="mt-6">
                     <BannersTab
                         data={homepageData.banners}
