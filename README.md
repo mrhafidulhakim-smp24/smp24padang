@@ -17,13 +17,13 @@ Website ini dikembangkan oleh mahasiswa kerja praktik dari **Universitas Putra I
 -   **Ikhwan Ramdhan** - Ketua Tim & Project Manager
     -   _Penanggung jawab utama dari tahap perencanaan hingga produksi. Berperan sebagai penghubung antara tim teknis dan pihak (SMPN 24 Padang), memastikan komunikasi berjalan efektif dan kebutuhan terpenuhi._
 -   **Aldi Syaputra** - Backend Developer
-    -   _Bertanggung jawab pada pengembangan backend dan penyusunan dokumentasi teknis proyek._
+    -   _Bertugas pada aspek keamanan backend, menjaga sistem dari potensi kerentanan dan memastikan stabilitas layanan._
 -   **Aira Afriandi** - Frontend Developer
     -   _Fokus pada pengembangan antarmuka pengguna (frontend), memastikan tampilan website responsif dan ramah pengguna._
 -   **Muhammada Rafi Saputra** - Database Administrator
     -   _Menangani perancangan dan pengelolaan basis data, memastikan integritas dan efisiensi data dalam sistem._
 -   **Muhammad Habib** - Backend Security
-    -   _Bertugas pada aspek keamanan backend, menjaga sistem dari potensi kerentanan dan memastikan stabilitas layanan._
+    -   _Bertanggung jawab pada pengembangan backend dan penyusunan dokumentasi teknis proyek._
 
 ## 🎓 Dukungan Institusional
 

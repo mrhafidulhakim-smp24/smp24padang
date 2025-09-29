@@ -788,10 +788,10 @@ export default function HomepageAdminPage() {
                 </p>
             </div>
             <Tabs defaultValue="banners" className="w-full">
-                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-                    <TabsTrigger value="banners">Banner</TabsTrigger>
-                    <TabsTrigger value="statistics">Statistik</TabsTrigger>
-                    <TabsTrigger value="facilities">Fasilitas</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 bg-muted p-0 border-b">
+                    <TabsTrigger value="banners" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Banner</TabsTrigger>
+                    <TabsTrigger value="statistics" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Statistik</TabsTrigger>
+                    <TabsTrigger value="facilities" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Fasilitas</TabsTrigger>
                 </TabsList>
                 <TabsContent value="banners" className="mt-6">
                     <BannersTab

@@ -20,8 +20,12 @@ export default async function CurriculumPage() {
         );
     }
 
-    const kurikulumDocs = documents.filter((doc) => doc.category === 'kurikulum');
-    const kesiswaanDocs = documents.filter((doc) => doc.category === 'kesiswaan');
+    const kurikulumDocs = documents.filter(
+        (doc) => doc.category === 'kurikulum',
+    );
+    const kesiswaanDocs = documents.filter(
+        (doc) => doc.category === 'kesiswaan',
+    );
     const saranaPrasaranaDocs = documents.filter(
         (doc) => doc.category === 'sarana-prasarana',
     );
@@ -50,14 +54,31 @@ export default async function CurriculumPage() {
 
     return (
         <div className="container mx-auto py-8 px-4">
-            <h1 className="text-3xl font-bold mb-6 text-center">Dokumen Sekolah</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center">
+                Dokumen Sekolah
+            </h1>
 
             <Tabs defaultValue="kurikulum" className="space-y-6">
                 <div className="w-full overflow-x-auto flex justify-center">
-                    <TabsList className="bg-muted p-0 border-b">
-                        <TabsTrigger value="kurikulum" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Kurikulum</TabsTrigger>
-                        <TabsTrigger value="kesiswaan" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Kesiswaan</TabsTrigger>
-                        <TabsTrigger value="sarana-prasarana" className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none">Sarana & Prasarana</TabsTrigger>
+                    <TabsList className="bg-muted p-0 border-b grid w-full grid-cols-3">
+                        <TabsTrigger
+                            value="kurikulum"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                        >
+                            Kurikulum
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="kesiswaan"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                        >
+                            Kesiswaan
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="sarana-prasarana"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                        >
+                            Sarana & Prasarana
+                        </TabsTrigger>
                     </TabsList>
                 </div>
 

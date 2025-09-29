@@ -166,7 +166,7 @@ export default function Header({ contactInfo }: HeaderProps) {
 
                 <div className="flex w-full items-center justify-end">
                     {/* Desktop Navigation */}
-                    <nav className="items-center justify-end gap-6 hidden md:flex">
+                    <nav className="items-center justify-end gap-4 hidden md:flex">
                         {navLinks.map((link) => {
                             const isDropdownActive =
                                 link.subLinks &&
@@ -185,7 +185,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                 <DropdownMenu key={link.href}>
                                     <DropdownMenuTrigger
                                         className={cn(
-                                            'relative flex items-center text-lg font-semibold text-muted-foreground transition-colors hover:text-primary focus:outline-none after:absolute after:bottom-[-4px] after:left-0 after:h-[1px] after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
+                                            'relative flex items-center text-base lg:text-lg font-semibold text-muted-foreground transition-colors hover:text-primary focus:outline-none after:absolute after:bottom-[-4px] after:left-0 after:h-[1px] after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
                                             isDropdownActive
                                                 ? 'text-primary after:scale-x-100'
                                                 : 'after:scale-x-0',
@@ -227,7 +227,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                                     key={link.href}
                                     href={link.href}
                                     className={cn(
-                                        'relative text-lg font-semibold text-muted-foreground transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
+                                        'relative text-base lg:text-lg font-semibold text-muted-foreground transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out whitespace-nowrap',
                                         isLinkActive
                                             ? 'text-primary after:scale-x-100'
                                             : 'after:scale-x-0 hover:after:scale-x-100 hover:text-green-700',

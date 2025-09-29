@@ -6,8 +6,7 @@ async function main() {
             id: true,
             name: true,
             email: true,
-            emailVerified: true,
-            image: true,
+            password: true,
         },
     });
 

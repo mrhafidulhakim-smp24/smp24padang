@@ -5,10 +5,9 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { updatePrincipalProfile } from './actions';
-import { Upload, UserCircle } from 'lucide-react';
+import { UserCircle } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -16,6 +15,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import RichTextEditor from '@/components/admin/rich-text-editor';
 
 type Profile = {
     id: string;
@@ -39,6 +39,10 @@ export default function PrincipalForm({
     const [profileData, setProfileData] = useState<Profile | null>(
         initialProfileData,
     );
+    const [principalWelcome, setPrincipalWelcome] = useState(
+        initialProfileData?.principalWelcome || '',
+    );
+    const [history, setHistory] = useState(initialProfileData?.history || '');
     const [principalImageFile, setPrincipalImageFile] = useState<File | null>(
         null,
     );
@@ -49,6 +53,8 @@ export default function PrincipalForm({
 
     useEffect(() => {
         setProfileData(initialProfileData);
+        setPrincipalWelcome(initialProfileData?.principalWelcome || '');
+        setHistory(initialProfileData?.history || '');
         setPreviewImageUrl(initialProfileData?.principalImageUrl || null);
     }, [initialProfileData]);
 
@@ -56,6 +62,8 @@ export default function PrincipalForm({
         event.preventDefault();
         setErrors({}); // Clear previous errors
         const formData = new FormData(event.currentTarget);
+        formData.append('principalWelcome', principalWelcome);
+        formData.append('history', history);
 
         if (principalImageFile) {
             formData.append('principalImage', principalImageFile);
@@ -84,7 +92,7 @@ export default function PrincipalForm({
                 } else if (result.message) {
                     toast({
                         title: 'Error',
-                        description: result.message,
+                        description: 'Please check the form for errors.',
                         variant: 'destructive',
                     });
                 } else {
@@ -211,15 +219,10 @@ export default function PrincipalForm({
                             >
                                 Kata Sambutan
                             </Label>
-                            <Textarea
-                                id="principalWelcome"
-                                name="principalWelcome"
-                                defaultValue={
-                                    profileData?.principalWelcome || ''
-                                }
-                                rows={15}
-                                required
-                                className="text-base"
+                            <RichTextEditor
+                                value={principalWelcome}
+                                onChange={setPrincipalWelcome}
+                                placeholder="Tulis kata sambutan di sini..."
                             />
                             {errors.principalWelcome && (
                                 <p className="text-red-500 text-sm mt-1">
@@ -234,13 +237,10 @@ export default function PrincipalForm({
                             >
                                 Tentang Sekolah
                             </Label>
-                            <Textarea
-                                id="history"
-                                name="history"
-                                defaultValue={profileData?.history || ''}
-                                rows={8}
-                                required
-                                className="text-base"
+                            <RichTextEditor
+                                value={history}
+                                onChange={setHistory}
+                                placeholder="Tulis tentang sekolah di sini..."
                             />
                             {errors.history && (
                                 <p className="text-red-500 text-sm mt-1">

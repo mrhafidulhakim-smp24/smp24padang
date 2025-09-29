@@ -89,8 +89,17 @@ export default async function ProfilePage() {
                 </div>
                 <div className="mt-12">
                     <Card>
-                        <CardContent className="p-8 text-foreground/80 whitespace-pre-wrap">
-                            {profile?.history}
+                        <CardContent className="p-8 text-foreground/80">
+                            <div
+                                className="space-y-4 text-justify leading-relaxed"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        profile?.history?.replace(
+                                            /\n/g,
+                                            '<br />',
+                                        ) || '',
+                                }}
+                            ></div>
                         </CardContent>
                     </Card>
                 </div>

@@ -14,6 +14,15 @@ async function main() {
       process.exit(1);
     }
 
+    const existingUser = await db.query.users.findFirst({
+      where: (users, { or, eq }) => or(eq(users.email, email), eq(users.name, name)),
+    });
+
+    if (existingUser) {
+      console.error(`Error: User with email "${email}" or username "${name}" already exists.`);
+      process.exit(1);
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const userId = randomUUID();
 
