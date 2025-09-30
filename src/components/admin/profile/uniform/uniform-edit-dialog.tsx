@@ -13,9 +13,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Upload } from 'lucide-react';
 import Image from 'next/image';
-import { updateUniform, createUniform } from '@/app/admin/profile/uniform/actions'; // Adjust import path
+import {
+    updateUniform,
+    createUniform,
+} from '@/app/admin/profile/uniform/actions';
 import { useToast } from '@/hooks/use-toast';
-import { Uniform } from '@/app/admin/profile/uniform/types'; // Adjust import path
+import { Uniform } from '@/app/admin/profile/uniform/types';
 
 type UniformEditDialogProps = {
     isOpen: boolean;
@@ -32,12 +35,14 @@ export default function UniformEditDialog({
 }: UniformEditDialogProps) {
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
-    const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(initialUniform);
+    const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(
+        initialUniform,
+    );
     const [imageFile, setImageFile] = useState<File | null>(null);
 
     useEffect(() => {
         setSelectedUniform(initialUniform);
-        setImageFile(null); // Clear image file when initialUniform changes
+        setImageFile(null);
     }, [initialUniform]);
 
     const handleEditSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -66,10 +71,12 @@ export default function UniformEditDialog({
             if (result.success) {
                 toast({
                     title: 'Sukses!',
-                    description: isCreating ? 'Seragam berhasil ditambahkan.' : 'Seragam berhasil diperbarui.',
+                    description: isCreating
+                        ? 'Seragam berhasil ditambahkan.'
+                        : 'Seragam berhasil diperbarui.',
                 });
-                onSaveSuccess(); // Call callback to re-fetch data in parent
-                onOpenChange(false); // Close dialog
+                onSaveSuccess();
+                onOpenChange(false);
             } else {
                 toast({
                     title: 'Gagal!',
@@ -99,7 +106,12 @@ export default function UniformEditDialog({
                             defaultValue={selectedUniform?.description || ''}
                             onChange={(e) =>
                                 setSelectedUniform((prev) =>
-                                    prev ? { ...prev, description: e.target.value } : null,
+                                    prev
+                                        ? {
+                                              ...prev,
+                                              description: e.target.value,
+                                          }
+                                        : null,
                                 )
                             }
                             required
@@ -125,7 +137,9 @@ export default function UniformEditDialog({
                                     className="object-cover rounded-md"
                                 />
                             ) : (
-                                <p className="text-sm text-muted-foreground">Tidak ada gambar saat ini.</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Tidak ada gambar saat ini.
+                                </p>
                             )}
                         </div>
                         <Label>Ganti Gambar</Label>

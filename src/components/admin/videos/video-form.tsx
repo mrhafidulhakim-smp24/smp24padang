@@ -5,7 +5,6 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { DialogFooter } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import type { videos as VideoSchema } from '@/lib/db/schema';
@@ -27,11 +26,17 @@ export function VideoForm({
     initialData,
     onClose,
 }: {
-    action: (state: any, formData: FormData) => Promise<{ message: string; error?: string; }>;
+    action: (
+        state: any,
+        formData: FormData,
+    ) => Promise<{ message: string; error?: string }>;
     initialData?: Video | null;
     onClose: () => void;
 }) {
-    const [state, formAction] = useFormState(action, { message: '', error: undefined });
+    const [state, formAction] = useFormState(action, {
+        message: '',
+        error: undefined,
+    });
     const { toast } = useToast();
 
     useEffect(() => {
@@ -39,7 +44,11 @@ export function VideoForm({
             toast({ title: 'Success!', description: state.message });
             onClose();
         } else if (state.error) {
-            toast({ title: 'Error', description: state.error, variant: 'destructive' });
+            toast({
+                title: 'Error',
+                description: state.error,
+                variant: 'destructive',
+            });
         }
     }, [state, toast, onClose]);
 
@@ -47,14 +56,26 @@ export function VideoForm({
         <form action={formAction} className="space-y-4">
             <div>
                 <Label htmlFor="title">Title</Label>
-                <Input id="title" name="title" defaultValue={initialData?.title} required />
+                <Input
+                    id="title"
+                    name="title"
+                    defaultValue={initialData?.title}
+                    required
+                />
             </div>
             <div>
                 <Label htmlFor="youtubeUrl">YouTube URL</Label>
-                <Input id="youtubeUrl" name="youtubeUrl" defaultValue={initialData?.youtubeUrl} required />
+                <Input
+                    id="youtubeUrl"
+                    name="youtubeUrl"
+                    defaultValue={initialData?.youtubeUrl}
+                    required
+                />
             </div>
             <DialogFooter>
-                <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
+                <Button type="button" variant="outline" onClick={onClose}>
+                    Cancel
+                </Button>
                 <SubmitButton />
             </DialogFooter>
         </form>

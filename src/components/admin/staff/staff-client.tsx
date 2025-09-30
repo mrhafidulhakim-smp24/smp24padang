@@ -48,19 +48,34 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { createStaff, updateStaff, deleteStaff, getStaff } from '@/app/admin/staff/actions';
+import {
+    createStaff,
+    updateStaff,
+    deleteStaff,
+    getStaff,
+} from '@/app/admin/staff/actions';
 import type { staff as StaffSchema } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';
 import { Badge } from '@/components/ui/badge';
 
 type Staff = InferSelectModel<typeof StaffSchema>;
 
-function SubmitButton({ pendingText = 'Menyimpan...' }: { pendingText?: string }) {
+function SubmitButton({
+    pendingText = 'Menyimpan...',
+}: {
+    pendingText?: string;
+}) {
     const { pending } = useFormStatus();
     return (
         <Button type="submit" disabled={pending}>
@@ -74,11 +89,17 @@ function StaffForm({
     initialData,
     onClose,
 }: {
-    action: (state: any, formData: FormData) => Promise<{ success: boolean; message: string }>;
+    action: (
+        state: any,
+        formData: FormData,
+    ) => Promise<{ success: boolean; message: string }>;
     initialData?: Staff | null;
     onClose: () => void;
 }) {
-    const [state, formAction] = useFormState(action, { success: false, message: '' });
+    const [state, formAction] = useFormState(action, {
+        success: false,
+        message: '',
+    });
     const { toast } = useToast();
     const [preview, setPreview] = useState(initialData?.imageUrl || null);
 
@@ -87,7 +108,11 @@ function StaffForm({
             toast({ title: 'Sukses!', description: state.message });
             onClose();
         } else if (state.message && !state.success) {
-            toast({ title: 'Gagal', description: state.message, variant: 'destructive' });
+            toast({
+                title: 'Gagal',
+                description: state.message,
+                variant: 'destructive',
+            });
         }
     }, [state, toast, onClose]);
 
@@ -107,58 +132,115 @@ function StaffForm({
                 <div className="mt-1 flex items-center gap-4">
                     <div className="w-20 h-20 rounded-md border flex items-center justify-center bg-muted">
                         {preview ? (
-                            <Image src={preview} alt="Preview" width={80} height={80} className="h-full w-full rounded-md object-cover" />
+                            <Image
+                                src={preview}
+                                alt="Preview"
+                                width={80}
+                                height={80}
+                                className="h-full w-full rounded-md object-cover"
+                            />
                         ) : (
                             <Upload className="h-8 w-8 text-muted-foreground" />
                         )}
                     </div>
-                    <Input id="image" name="image" type="file" accept="image/*" onChange={handleImageChange} className="max-w-xs" />
+                    <Input
+                        id="image"
+                        name="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="max-w-xs"
+                    />
                 </div>
             </div>
 
             <div>
                 <Label htmlFor="name">Nama Lengkap</Label>
-                <Input id="name" name="name" defaultValue={initialData?.name} required />
+                <Input
+                    id="name"
+                    name="name"
+                    defaultValue={initialData?.name}
+                    required
+                />
             </div>
             <div>
                 <Label htmlFor="position">Jabatan</Label>
-                <Select name="position" defaultValue={initialData?.position} required>
-                    <SelectTrigger><SelectValue placeholder="Pilih jabatan..." /></SelectTrigger>
+                <Select
+                    name="position"
+                    defaultValue={initialData?.position}
+                    required
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Pilih jabatan..." />
+                    </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="Kepala Sekolah">Kepala Sekolah</SelectItem>
-                        <SelectItem value="Wakil Kurikulum">Wakil Kurikulum</SelectItem>
-                        <SelectItem value="Wakil Kesiswaan">Wakil Kesiswaan</SelectItem>
-                        <SelectItem value="Koordinator Tata Usaha">Koordinator Tata Usaha</SelectItem>
-                        <SelectItem value="Wakil Sarana & Prasarana">Wakil Sarana & Prasarana</SelectItem>
-                        <SelectItem value="Guru Mata Pelajaran">Guru Mata Pelajaran</SelectItem>
-                        <SelectItem value="Guru Bimbingan Konseling">Guru Bimbingan Konseling</SelectItem>
-                        <SelectItem value="Staf Tata Usaha">Staf Tata Usaha</SelectItem>
+                        <SelectItem value="Kepala Sekolah">
+                            Kepala Sekolah
+                        </SelectItem>
+                        <SelectItem value="Wakil Kurikulum">
+                            Wakil Kurikulum
+                        </SelectItem>
+                        <SelectItem value="Wakil Kesiswaan">
+                            Wakil Kesiswaan
+                        </SelectItem>
+                        <SelectItem value="Koordinator Tata Usaha">
+                            Koordinator Tata Usaha
+                        </SelectItem>
+                        <SelectItem value="Wakil Sarana & Prasarana">
+                            Wakil Sarana & Prasarana
+                        </SelectItem>
+                        <SelectItem value="Guru Mata Pelajaran">
+                            Guru Mata Pelajaran
+                        </SelectItem>
+                        <SelectItem value="Guru Bimbingan Konseling">
+                            Guru Bimbingan Konseling
+                        </SelectItem>
+                        <SelectItem value="Staf Tata Usaha">
+                            Staf Tata Usaha
+                        </SelectItem>
                         <SelectItem value="Pustakawan">Pustakawan</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
             <div>
                 <Label htmlFor="subject">Mata Pelajaran / Bidang</Label>
-                <Input id="subject" name="subject" defaultValue={initialData?.subject || ''} />
+                <Input
+                    id="subject"
+                    name="subject"
+                    defaultValue={initialData?.subject || ''}
+                />
             </div>
             <div>
                 <Label htmlFor="homeroomOf">Wali Kelas (Opsional)</Label>
-                <Input id="homeroomOf" name="homeroomOf" placeholder="Contoh: Kelas 9A" defaultValue={initialData?.homeroomOf || ''} />
+                <Input
+                    id="homeroomOf"
+                    name="homeroomOf"
+                    placeholder="Contoh: Kelas 9A"
+                    defaultValue={initialData?.homeroomOf || ''}
+                />
             </div>
 
             <DialogFooter>
-                <Button type="button" variant="outline" onClick={onClose}>Batal</Button>
+                <Button type="button" variant="outline" onClick={onClose}>
+                    Batal
+                </Button>
                 <SubmitButton />
             </DialogFooter>
         </form>
     );
 }
 
-export default function StaffClientPage({ initialStaff }: { initialStaff: Staff[] }) {
+export default function StaffClientPage({
+    initialStaff,
+}: {
+    initialStaff: Staff[];
+}) {
     const [staff, setStaff] = useState<Staff[]>(initialStaff);
     const [search, setSearch] = useState('');
     const [positionFilter, setPositionFilter] = useState('all');
-    const [dialog, setDialog] = useState<'add' | 'edit' | 'delete' | null>(null);
+    const [dialog, setDialog] = useState<'add' | 'edit' | 'delete' | null>(
+        null,
+    );
     const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
@@ -177,23 +259,41 @@ export default function StaffClientPage({ initialStaff }: { initialStaff: Staff[
     const handleDelete = () => {
         if (!selectedStaff) return;
         startTransition(async () => {
-            const result = await deleteStaff(selectedStaff.id, selectedStaff.imageUrl);
+            const result = await deleteStaff(
+                selectedStaff.id,
+                selectedStaff.imageUrl,
+            );
             if (result.success) {
                 toast({ title: 'Sukses!', description: result.message });
                 handleCloseDialog(true);
             } else {
-                toast({ title: 'Gagal', description: result.message, variant: 'destructive' });
+                toast({
+                    title: 'Gagal',
+                    description: result.message,
+                    variant: 'destructive',
+                });
             }
         });
     };
 
-    const boundUpdateStaff = selectedStaff ? updateStaff.bind(null, selectedStaff.id, selectedStaff.imageUrl) : () => Promise.resolve({ success: false, message: 'No staff selected' });
+    const boundUpdateStaff = selectedStaff
+        ? updateStaff.bind(null, selectedStaff.id, selectedStaff.imageUrl)
+        : () =>
+              Promise.resolve({ success: false, message: 'No staff selected' });
 
-    const positions = ['all', ...new Set(staff.map(s => s.position).filter((p): p is string => !!p))];
+    const positions = [
+        'all',
+        ...new Set(
+            staff.map((s) => s.position).filter((p): p is string => !!p),
+        ),
+    ];
 
-    const filteredStaff = staff.filter(s => {
-        const nameMatch = (s.name || '').toLowerCase().includes(search.toLowerCase());
-        const positionMatch = positionFilter === 'all' || s.position === positionFilter;
+    const filteredStaff = staff.filter((s) => {
+        const nameMatch = (s.name || '')
+            .toLowerCase()
+            .includes(search.toLowerCase());
+        const positionMatch =
+            positionFilter === 'all' || s.position === positionFilter;
         return nameMatch && positionMatch;
     });
 
@@ -202,17 +302,39 @@ export default function StaffClientPage({ initialStaff }: { initialStaff: Staff[
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-2xl font-bold">Kelola Guru & Staf</CardTitle>
-                        <CardDescription className="mt-2 text-lg">Tambah, edit, atau hapus data.</CardDescription>
+                        <CardTitle className="text-2xl font-bold">
+                            Kelola Guru & Staf
+                        </CardTitle>
+                        <CardDescription className="mt-2 text-lg">
+                            Tambah, edit, atau hapus data.
+                        </CardDescription>
                     </div>
-                    <Button onClick={() => setDialog('add')}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Staf</Button>
+                    <Button onClick={() => setDialog('add')}>
+                        <PlusCircle className="mr-2 h-4 w-4" /> Tambah Staf
+                    </Button>
                 </div>
                 <div className="mt-4 flex items-center gap-4">
-                    <Input placeholder="Cari nama..." value={search} onChange={(e) => startTransition(() => setSearch(e.target.value))} className="max-w-sm" />
-                    <Select value={positionFilter} onValueChange={setPositionFilter}>
-                        <SelectTrigger className="max-w-sm"><SelectValue placeholder="Filter jabatan" /></SelectTrigger>
+                    <Input
+                        placeholder="Cari nama..."
+                        value={search}
+                        onChange={(e) =>
+                            startTransition(() => setSearch(e.target.value))
+                        }
+                        className="max-w-sm"
+                    />
+                    <Select
+                        value={positionFilter}
+                        onValueChange={setPositionFilter}
+                    >
+                        <SelectTrigger className="max-w-sm">
+                            <SelectValue placeholder="Filter jabatan" />
+                        </SelectTrigger>
                         <SelectContent>
-                            {positions.map(p => <SelectItem key={p} value={p}>{p === 'all' ? 'Semua Jabatan' : p}</SelectItem>)}
+                            {positions.map((p) => (
+                                <SelectItem key={p} value={p}>
+                                    {p === 'all' ? 'Semua Jabatan' : p}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
@@ -235,54 +357,124 @@ export default function StaffClientPage({ initialStaff }: { initialStaff: Staff[
                                     <TableCell>
                                         <div className="w-10 h-10 rounded-md border bg-muted flex items-center justify-center">
                                             {item.imageUrl ? (
-                                                <Image src={item.imageUrl} alt={item.name} width={40} height={40} className="h-full w-full rounded-md object-cover" />
+                                                <Image
+                                                    src={item.imageUrl}
+                                                    alt={item.name}
+                                                    width={40}
+                                                    height={40}
+                                                    className="h-full w-full rounded-md object-cover"
+                                                />
                                             ) : (
-                                                <span className="text-muted-foreground">{item.name.charAt(0)}</span>
+                                                <span className="text-muted-foreground">
+                                                    {item.name.charAt(0)}
+                                                </span>
                                             )}
                                         </div>
                                     </TableCell>
-                                    <TableCell className="font-medium">{item.name}</TableCell>
+                                    <TableCell className="font-medium">
+                                        {item.name}
+                                    </TableCell>
                                     <TableCell>{item.position}</TableCell>
-                                    <TableCell>{item.homeroomOf ? <Badge variant="secondary">{item.homeroomOf}</Badge> : '-'}</TableCell>
+                                    <TableCell>
+                                        {item.homeroomOf ? (
+                                            <Badge variant="secondary">
+                                                {item.homeroomOf}
+                                            </Badge>
+                                        ) : (
+                                            '-'
+                                        )}
+                                    </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    className="h-8 w-8 p-0"
+                                                >
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => { setSelectedStaff(item); setDialog('edit'); }}><Pencil className="mr-2 h-4 w-4" /> Edit</DropdownMenuItem>
-                                                <DropdownMenuItem className="text-red-500" onClick={() => { setSelectedStaff(item); setDialog('delete'); }}><Trash2 className="mr-2 h-4 w-4" /> Hapus</DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setSelectedStaff(item);
+                                                        setDialog('edit');
+                                                    }}
+                                                >
+                                                    <Pencil className="mr-2 h-4 w-4" />{' '}
+                                                    Edit
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    className="text-red-500"
+                                                    onClick={() => {
+                                                        setSelectedStaff(item);
+                                                        setDialog('delete');
+                                                    }}
+                                                >
+                                                    <Trash2 className="mr-2 h-4 w-4" />{' '}
+                                                    Hapus
+                                                </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
                                 </TableRow>
                             ))
                         ) : (
-                            <TableRow><TableCell colSpan={5} className="h-24 text-center">Belum ada data.</TableCell></TableRow>
+                            <TableRow>
+                                <TableCell
+                                    colSpan={5}
+                                    className="h-24 text-center"
+                                >
+                                    Belum ada data.
+                                </TableCell>
+                            </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </CardContent>
 
             {/* Dialogs */}
-            <Dialog open={dialog === 'add' || dialog === 'edit'} onOpenChange={() => handleCloseDialog()}>
+            <Dialog
+                open={dialog === 'add' || dialog === 'edit'}
+                onOpenChange={() => handleCloseDialog()}
+            >
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{dialog === 'add' ? 'Tambah Staf Baru' : 'Edit Data Staf'}</DialogTitle></DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {dialog === 'add'
+                                ? 'Tambah Staf Baru'
+                                : 'Edit Data Staf'}
+                        </DialogTitle>
+                    </DialogHeader>
                     <StaffForm
-                        action={dialog === 'add' ? createStaff : boundUpdateStaff}
+                        action={
+                            dialog === 'add' ? createStaff : boundUpdateStaff
+                        }
                         initialData={dialog === 'edit' ? selectedStaff : null}
                         onClose={() => handleCloseDialog(true)}
                     />
                 </DialogContent>
             </Dialog>
 
-            <AlertDialog open={dialog === 'delete'} onOpenChange={() => handleCloseDialog()}>
+            <AlertDialog
+                open={dialog === 'delete'}
+                onOpenChange={() => handleCloseDialog()}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-                        <AlertDialogDescription>Tindakan ini akan menghapus data secara permanen dan tidak dapat dibatalkan.</AlertDialogDescription>
+                        <AlertDialogDescription>
+                            Tindakan ini akan menghapus data secara permanen dan
+                            tidak dapat dibatalkan.
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Batal</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDelete} disabled={isPending} className="bg-destructive hover:bg-destructive/90">
+                        <AlertDialogAction
+                            onClick={handleDelete}
+                            disabled={isPending}
+                            className="bg-destructive hover:bg-destructive/90"
+                        >
                             {isPending ? 'Menghapus...' : 'Hapus'}
                         </AlertDialogAction>
                     </AlertDialogFooter>

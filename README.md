@@ -2,69 +2,85 @@
 
 > Cerdas, Terampil, dan Berbudaya Lingkungan.
 
-Website ini merupakan representasi digital dari visi dan misi **SMPN 24 Padang** sebagai Sekolah Adiwiyata Mandiri Nasional, Sekolah Ramah Anak, dan Sekolah Siaga Kependudukan.
+Selamat datang di repositori resmi Website SMP Negeri 24 Padang. Proyek ini adalah representasi digital dari visi dan misi **SMPN 24 Padang** sebagai Sekolah Adiwiyata Mandiri Nasional, Sekolah Ramah Anak, dan Sekolah Siaga Kependudukan.
 
 ## 🚀 Tentang Proyek
 
-Website resmi SMP Negeri 24 Padang dikembangkan sebagai media informasi digital yang menyajikan berita, pengumuman, dokumentasi kegiatan, serta layanan akademik bagi siswa, guru, dan masyarakat umum.
+Website ini dikembangkan sebagai media informasi digital yang menyajikan berita, pengumuman, dokumentasi kegiatan, serta layanan akademik bagi siswa, guru, dan masyarakat.
 
-Proyek ini merupakan hasil kerja praktik mahasiswa **Universitas Putra Indonesia "YPTK" Padang**, Program Studi Teknik Informatika, sebagai bentuk kontribusi nyata dalam mendukung digitalisasi pendidikan di lingkungan sekolah.
+Proyek ini merupakan hasil kerja praktik mahasiswa **Universitas Putra Indonesia "YPTK" Padang**, Program Studi Teknik Informatika. Kami mempersembahkannya sebagai kontribusi nyata dalam mendukung digitalisasi pendidikan sekaligus sebagai **kenang-kenangan dan warisan digital** dari kami untuk SMPN 24 Padang.
 
-## 👨‍💻 Tim Pengembang
+## ✨ Visi Proyek
 
-Website ini dikembangkan oleh mahasiswa kerja praktik dari **Universitas Putra Indonesia "YPTK" Padang**, Program Studi Teknik Informatika. Setiap anggota tim memiliki peran spesifik yang berkontribusi pada keberhasilan proyek:
-
--   **Ikhwan Ramdhan** - Ketua Tim & Project Manager
-    -   _Penanggung jawab utama dari tahap perencanaan hingga produksi. Berperan sebagai penghubung antara tim teknis dan pihak (SMPN 24 Padang), memastikan komunikasi berjalan efektif dan kebutuhan terpenuhi._
--   **Aldi Syaputra** - Backend Security
-    -   _Bertugas pada aspek keamanan backend, menjaga sistem dari potensi kerentanan dan memastikan stabilitas layanan._
--   **Aira Afriandi** - Frontend Developer
-    -   _Fokus pada pengembangan antarmuka pengguna (frontend), memastikan tampilan website responsif dan ramah pengguna._
--   **Muhammada Rafi Saputra** - Database Administrator
-    -   _Menangani perancangan dan pengelolaan basis data, memastikan integritas dan efisiensi data dalam sistem._
--   **Muhammad Habib** - Backend Developer
-    -   _Bertanggung jawab pada pengembangan backend dan penyusunan dokumentasi teknis proyek._
-
-## 🎓 Dukungan Institusional
-
-Proyek ini didukung penuh oleh pihak sekolah, dengan arahan dan bimbingan dari:
-
--   **Kepala Sekolah:** Hasyuni Harti, M.Pd
--   **Wakil Kurikulum:** Muhammad Rajab, MA
-
-_Kami mengucapkan terima kasih atas kepercayaan dan kolaborasi yang diberikan oleh SMPN 24 Padang dalam pelaksanaan proyek ini._
+Proyek ini dirancang tidak hanya sebagai sumber informasi, tetapi sebagai sebuah **ekosistem digital** yang menghubungkan seluruh komunitas sekolah siswa, guru, orang tua, dan masyarakat luas. Dibangun dengan presisi arsitektural dan visi jangka panjang, website ini bertujuan untuk menjadi fondasi digital yang adaptif, aman, dan berkelanjutan.
 
 ---
 
-## Visi Proyek
+## 🛠️ Fondasi Teknologi
 
-Proyek ini dirancang tidak hanya sebagai sumber informasi, tetapi sebagai sebuah platform ekosistem digital yang menghubungkan seluruh komunitas sekolah—siswa, guru, orang tua, dan masyarakat luas.
+Kualitas sebuah bangunan digital ditentukan oleh fondasinya. Proyek ini dibangun di atas tumpukan teknologi modern yang dipilih untuk performa, skalabilitas, dan keandalan.
 
-Dibangun dengan presisi arsitektural dan visi jangka panjang, website ini bertujuan untuk menjadi fondasi digital yang adaptif, aman, dan berkelanjutan bagi citra dan kemajuan sekolah di era modern.
+| Kategori           | Teknologi                                                                                        | Deskripsi                                                                                  |
+| :----------------- | :----------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| **Core Framework** | [Next.js 14](https://nextjs.org/)                                                                | Framework React dengan App Router untuk rendering sisi server dan performa optimal.        |
+| **Bahasa**         | [TypeScript](https://www.typescriptlang.org/)                                                    | Menjamin _type safety_ dan skalabilitas kode untuk pengembangan jangka panjang.            |
+| **UI & Styling**   | [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)                    | Desain modern dan konsisten dengan _utility-first CSS_ dan komponen UI yang _reusable_.    |
+| **ORM & Database** | [Drizzle ORM](https://orm.drizzle.team/), [Vercel Postgres](https://vercel.com/storage/postgres) | Interaksi database yang aman dan efisien dengan skema yang terdefinisi secara eksplisit.   |
+| **Otentikasi**     | [Auth.js (NextAuth.js)](https://authjs.dev/)                                                     | Sistem otentikasi yang aman dan fleksibel untuk melindungi rute dan data sensitif.         |
+| **Deployment**     | [Vercel](https://vercel.com/)                                                                    | Platform _serverless_ untuk deployment yang cepat, andal, dan terintegrasi dengan Next.js. |
 
-## Arsitektur & Fitur Unggulan
+---
 
-Setiap fitur dirancang untuk memberikan nilai, fungsionalitas, dan pengalaman pengguna yang superior.
+## 🌟 Tim Pengembang: Talenta di Balik Proyek
 
--   `📰` **Pusat Informasi Dinamis:** Publikasi berita, artikel, dan pengumuman sekolah secara _real-time_ melalui sistem manajemen konten yang intuitif.
+Proyek ini merupakan hasil kolaborasi mahasiswa yang bekerja sama dengan penuh tanggung jawab untuk menghadirkan solusi digital bagi SMP Negeri 24 Padang.  
+Setiap anggota tim memiliki peran dan kontribusi yang saling melengkapi, sehingga proyek ini dapat terselesaikan dengan baik dan menjadi pengalaman berharga bagi semua yang terlibat.
 
--   `🏆` **Etalase Prestasi & Akreditasi:** Sebuah panggung digital untuk menampilkan pencapaian siswa dan guru, serta menegaskan komitmen sekolah terhadap kualitas melalui data akreditasi.
+| Nama                       | Peran                               | Tanggung Jawab                                                                                                                                                                          |
+| :------------------------- | :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Ikhwan Ramdhan**         | **Ketua Tim & Fullstack Developer** | Memimpin jalannya proyek, mengembangkan fitur frontend dan backend, menjembatani komunikasi antara tim dengan pihak sekolah, serta menangani proses deploy agar website siap digunakan. |
+| **Aldi Syaputra**          | **Backend & Keamanan Sistem**       | Mengembangkan logika sisi server dan memastikan keamanan sistem agar layanan tetap stabil dan terlindungi.                                                                              |
+| **Aira Afriandi**          | **Frontend Developer**              | Membangun antarmuka pengguna yang responsif dan mudah digunakan, sekaligus menjaga konsistensi desain.                                                                                  |
+| **Muhammada Rafi Saputra** | **Database Administrator**          | Mendesain dan mengelola basis data agar tetap terstruktur, cepat, dan andal dalam mendukung aplikasi.                                                                                   |
+| **Muhammad Habib**         | **Backend Developer & Tester**      | Mengembangkan fitur sisi server, melakukan pengujian fungsionalitas sistem, serta membantu dokumentasi teknis.                                                                          |
 
--   `🖼️` **Galeri Digital Imersif:** Dokumentasi visual dari setiap kegiatan, acara, dan momen berharga di sekolah, disajikan dalam antarmuka yang modern dan menarik.
+---
 
--   `⚙️` **Panel Administrasi Terintegrasi:** Sebuah _command center_ terpusat bagi administrator untuk mengelola seluruh konten website dengan efisiensi, keamanan, dan kemudahan maksimal.
+## 📂 Struktur & Arsitektur Proyek
 
--   `📱` **Desain Responsif & Aksesibel:** Dirancang dengan pendekatan _mobile-first_, memastikan pengalaman yang konsisten dan optimal di semua perangkat, dari desktop hingga smartphone.
+Arsitektur proyek ini dirancang agar modular, mudah dipahami, dan skalabel untuk pengembangan di masa depan.
 
-## Fondasi Teknologi
+```
+.
+├── drizzle/         # Skema dan migrasi database (Drizzle ORM)
+├── public/          # Aset statis (gambar, ikon, font)
+└── src/
+    ├── app/         # Arsitektur utama Next.js 14 (App Router)
+    │   ├── (pages)/ # Direktori untuk halaman publik (e.g., /berita, /profil)
+    │   │   ├── page.tsx       # Komponen UI utama untuk sebuah rute
+    │   │   └── actions.ts     # Server Actions untuk mutasi data
+    │   ├── admin/   # Grup rute untuk dasbor admin yang dilindungi
+    │   ├── api/     # API Routes untuk endpoint kustom
+    │   ├── layout.tsx         # Layout utama aplikasi
+    │   └── page.tsx           # Halaman utama (homepage)
+    ├── components/  # Komponen React yang dapat digunakan kembali
+    │   ├── ui/      # Komponen UI dasar dari shadcn/ui
+    │   └── ...      # Komponen spesifik fitur
+    ├── lib/         # Logika bisnis, utilitas, dan konfigurasi
+    │   ├── auth.ts  # Konfigurasi Auth.js (NextAuth)
+    │   ├── db/      # Inisialisasi dan koneksi Drizzle ORM
+    │   └── utils.ts # Fungsi helper umum
+    └── types/       # Definisi tipe TypeScript kustom
+```
 
-Kualitas sebuah bangunan digital ditentukan oleh fondasi teknologinya. Proyek ini dibangun di atas tumpukan teknologi modern yang dipilih untuk performa, skalabilitas, dan keandalan.
+---
 
-| Kategori           | Teknologi                                                                                        |
-| ------------------ | ------------------------------------------------------------------------------------------------ |
-| **Core Framework** | [Next.js 14](https://nextjs.org/) (App Router)                                                   |
-| **Bahasa**         | [TypeScript](https://www.typescriptlang.org/)                                                    |
-| **UI & Styling**   | [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)                    |
-| **ORM & Database** | [Drizzle ORM](https://orm.drizzle.team/), [Vercel Postgres](https://vercel.com/storage/postgres) |
-| **Otentikasi**     | [Auth.js (NextAuth.js)](https://authjs.dev/)                                                     |
-| **Deployment**     | [Vercel](https://vercel.com/)                                                                    |
+## 🙏 Ucapan Terima Kasih
+
+Keberhasilan proyek ini tidak lepas dari dukungan, bimbingan, dan kepercayaan yang luar biasa dari berbagai pihak. Dengan tulus, kami mengucapkan terima kasih kepada:
+
+-   **Ibu Hasyuni Harti, M.Pd**, selaku Kepala Sekolah SMPN 24 Padang, atas kesempatan dan kepercayaan yang diberikan kepada kami.
+-   **Bapak Muhammad Rajab, MA**, selaku Wakil Kurikulum, atas arahan dan bimbingan yang sangat berharga selama proses pengembangan.
+-   Seluruh **staf Tata Usaha dan majelis guru** pengalaman yang diberikan selama masa PKL.
+
+Kolaborasi ini adalah pengalaman yang tak ternilai bagi kami. Semoga website ini dapat menjadi jembatan digital yang bermanfaat bagi seluruh warga sekolah.

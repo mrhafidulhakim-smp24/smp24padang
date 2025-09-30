@@ -1,17 +1,28 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { createVideo, updateVideo } from '@/app/admin/videos/actions';
 import type { videos } from '@/lib/db/schema';
 import { useEffect, useState } from 'react';
 import { getYouTubeVideoId } from '@/components/youtube-embed';
 
-export function VideoDialog({ open, onOpenChange, video }: { open: boolean, onOpenChange: (open: boolean) => void, video: (typeof videos.$inferSelect) | null }) {
+export function VideoDialog({
+    open,
+    onOpenChange,
+    video,
+}: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    video: typeof videos.$inferSelect | null;
+}) {
     const [formData, setFormData] = useState({ title: '', youtubeUrl: '' });
 
     useEffect(() => {
@@ -20,7 +31,9 @@ export function VideoDialog({ open, onOpenChange, video }: { open: boolean, onOp
         }
     }, [video]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -29,14 +42,22 @@ export function VideoDialog({ open, onOpenChange, video }: { open: boolean, onOp
 
         const videoId = getYouTubeVideoId(formData.youtubeUrl);
         if (!videoId) {
-            alert('Invalid YouTube URL. Please enter a valid YouTube video URL.');
+            alert(
+                'Invalid YouTube URL. Please enter a valid YouTube video URL.',
+            );
             return;
         }
 
         if (video) {
-            await updateVideo(video.id, { ...formData, youtubeUrl: `https://www.youtube.com/watch?v=${videoId}` });
+            await updateVideo(video.id, {
+                ...formData,
+                youtubeUrl: `https://www.youtube.com/watch?v=${videoId}`,
+            });
         } else {
-            await createVideo({ ...formData, youtubeUrl: `https://www.youtube.com/watch?v=${videoId}` } as any);
+            await createVideo({
+                ...formData,
+                youtubeUrl: `https://www.youtube.com/watch?v=${videoId}`,
+            } as any);
         }
         onOpenChange(false);
     };
@@ -45,18 +66,34 @@ export function VideoDialog({ open, onOpenChange, video }: { open: boolean, onOp
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>{video ? 'Edit Video' : 'Add Video'}</DialogTitle>
+                    <DialogTitle>
+                        {video ? 'Edit Video' : 'Add Video'}
+                    </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <Label htmlFor="title">Title</Label>
-                        <Input id="title" name="title" value={formData.title} onChange={handleChange} required />
+                        <Input
+                            id="title"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
                     <div>
                         <Label htmlFor="youtubeUrl">YouTube URL</Label>
-                        <Input id="youtubeUrl" name="youtubeUrl" value={formData.youtubeUrl} onChange={handleChange} required />
+                        <Input
+                            id="youtubeUrl"
+                            name="youtubeUrl"
+                            value={formData.youtubeUrl}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
-                    <Button type="submit">{video ? 'Save Changes' : 'Create Video'}</Button>
+                    <Button type="submit">
+                        {video ? 'Save Changes' : 'Create Video'}
+                    </Button>
                 </form>
             </DialogContent>
         </Dialog>

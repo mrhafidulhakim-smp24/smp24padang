@@ -26,6 +26,21 @@ const nextConfig = {
       }
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.smpn24padang.sch.id',
+          },
+        ],
+        destination: 'https://smpn24padang.sch.id/:path*',
+        permanent: true,
+      },
+    ]
+  },
 };
  
 // Force rebuild on Vercel

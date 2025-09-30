@@ -10,7 +10,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
