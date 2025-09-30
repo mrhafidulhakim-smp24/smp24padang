@@ -36,13 +36,13 @@ Kualitas sebuah bangunan digital ditentukan oleh fondasinya. Proyek ini dibangun
 Proyek ini merupakan hasil kolaborasi mahasiswa yang bekerja sama dengan penuh tanggung jawab untuk menghadirkan solusi digital bagi SMP Negeri 24 Padang.  
 Setiap anggota tim memiliki peran dan kontribusi yang saling melengkapi, sehingga proyek ini dapat terselesaikan dengan baik dan menjadi pengalaman berharga bagi semua yang terlibat.
 
-| Nama                       | Peran                               | Tanggung Jawab                                                                                                                                                                          |
-| :------------------------- | :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Ikhwan Ramdhan**         | **Ketua Tim & Fullstack Developer** | Memimpin jalannya proyek, mengembangkan fitur frontend dan backend, menjembatani komunikasi antara tim dengan pihak sekolah, serta menangani proses deploy agar website siap digunakan. |
-| **Aldi Syaputra**          | **Backend & Keamanan Sistem**       | Mengembangkan logika sisi server dan memastikan keamanan sistem agar layanan tetap stabil dan terlindungi.                                                                              |
-| **Aira Afriandi**          | **Frontend Developer**              | Membangun antarmuka pengguna yang responsif dan mudah digunakan, sekaligus menjaga konsistensi desain.                                                                                  |
-| **Muhammada Rafi Saputra** | **Database Administrator**          | Mendesain dan mengelola basis data agar tetap terstruktur, cepat, dan andal dalam mendukung aplikasi.                                                                                   |
-| **Muhammad Habib**         | **Backend Developer & Tester**      | Mengembangkan fitur sisi server, melakukan pengujian fungsionalitas sistem, serta membantu dokumentasi teknis.                                                                          |
+| Nama                       | Peran                               | Tanggung Jawab                                                                                                                                                                    |
+| :------------------------- | :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Ikhwan Ramdhan**         | **Ketua Tim & Fullstack Developer** | Memimpin jalannya proyek, mendukung keseluruhan pengembangan, menjembatani komunikasi antara tim dengan pihak sekolah, serta menangani proses deploy agar website siap digunakan. |
+| **Aldi Syaputra**          | **Backend & Keamanan Sistem**       | Mengembangkan logika sisi server dan memastikan keamanan sistem agar layanan tetap stabil dan terlindungi.                                                                        |
+| **Aira Afriandi**          | **Frontend Developer**              | Membangun antarmuka pengguna yang responsif dan mudah digunakan, sekaligus menjaga konsistensi desain.                                                                            |
+| **Muhammada Rafi Saputra** | **Database Administrator**          | Mendesain dan mengelola basis data agar tetap terstruktur, cepat, dan andal dalam mendukung aplikasi.                                                                             |
+| **Muhammad Habib**         | **Backend Developer & Tester**      | Mengembangkan fitur sisi server, melakukan pengujian fungsionalitas sistem, serta membantu dokumentasi teknis.                                                                    |
 
 ---
 
