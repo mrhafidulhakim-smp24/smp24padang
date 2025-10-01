@@ -201,7 +201,7 @@ export default function SispendikClientPage() {
                     </Card>
                     <Card className="bg-green-100 dark:bg-green-900">
                         <CardHeader>
-                            <CardTitle>Top 3 Sampah</CardTitle>
+                            <CardTitle>Jenis Sampah Teratas</CardTitle>
                             <div className="space-y-2 pt-2">
                                 {topWasteTypes.length > 0 ? (
                                     topWasteTypes.map((w, i) => (
@@ -213,10 +213,7 @@ export default function SispendikClientPage() {
                                                 {i + 1}. {w.wasteType}
                                             </p>
                                             <p className="text-sm text-muted-foreground">
-                                                Rp{' '}
-                                                {Number(
-                                                    w.totalValue || 0,
-                                                ).toLocaleString('id-ID')}
+                                                {Number(w.totalKg || 0).toFixed(2)} kg
                                             </p>
                                         </div>
                                     ))

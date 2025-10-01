@@ -466,7 +466,9 @@ export default function SispendikClient({ kelas, jenisSampah }: Props) {
                                     <SelectValue placeholder="Tingkat" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">Semua Kelas</SelectItem>
+                                    <SelectItem value="all">
+                                        Semua Kelas
+                                    </SelectItem>
                                     <SelectItem value="7">Kelas 7</SelectItem>
                                     <SelectItem value="8">Kelas 8</SelectItem>
                                     <SelectItem value="9">Kelas 9</SelectItem>
@@ -486,7 +488,9 @@ export default function SispendikClient({ kelas, jenisSampah }: Props) {
                     <CardContent>
                         <div ref={printRef} className="print:block">
                             <div className="hidden print:block text-center mb-4">
-                                <h1 className="text-xl font-bold">Laporan Bank Sampah</h1>
+                                <h1 className="text-xl font-bold">
+                                    Laporan Bank Sampah
+                                </h1>
                             </div>
                             <div className="overflow-x-auto rounded border print:overflow-visible print:rounded-none print:border-0">
                                 <Table className="min-w-full w-full print:min-w-0">
