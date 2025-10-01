@@ -87,5 +87,5 @@ export async function deleteStaff(id: string, imageUrl: string | null) {
 }
 
 export async function getStaff() {
-    return await db.select().from(staff).orderBy(asc(staff.createdAt));
+    return await db.select().from(staff).orderBy(asc(staff.name));
 }

@@ -54,7 +54,7 @@ function StaffDetailDialog({ staff, open, onOpenChange }: { staff: Staff | null;
                                 <div className="flex items-start">
                                     <Book className="h-4 w-4 md:h-5 md:w-5 mr-2 md:mr-3 mt-1 flex-shrink-0 text-muted-foreground" />
                                     <div>
-                                        <p className="text-xs md:text-sm font-medium text-muted-foreground">Mata Pelajaran</p>
+                                        <p className="text-xs md:text-sm font-medium text-muted-foreground">Mata Pelajaran / Bidang</p>
                                         <p className="text-sm md:text-base font-semibold">{staff.subject}</p>
                                     </div>
                                 </div>

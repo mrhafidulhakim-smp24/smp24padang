@@ -128,5 +128,14 @@ body {
     .print-break-inside-avoid {
       page-break-inside: avoid;
     }
+
+    table, th, td {
+        border: 1px solid black !important;
+        border-collapse: collapse !important;
+    }
+
+    th, td {
+        padding: 4px 8px !important;
+    }
   }
 }

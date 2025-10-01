@@ -485,6 +485,9 @@ export default function SispendikClient({ kelas, jenisSampah }: Props) {
                     </CardHeader>
                     <CardContent>
                         <div ref={printRef} className="print:block">
+                            <div className="hidden print:block text-center mb-4">
+                                <h1 className="text-xl font-bold">Laporan Bank Sampah</h1>
+                            </div>
                             <div className="overflow-x-auto rounded border print:overflow-visible print:rounded-none print:border-0">
                                 <Table className="min-w-full w-full print:min-w-0">
                                     <TableHeader>
