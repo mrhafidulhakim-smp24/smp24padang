@@ -1,8 +1,7 @@
 'use server';
-// @ts-nocheck
 
 import { db } from '@/lib/db';
-import { kelas, jenisSampah, sampahKelas } from '@/lib/db/types';
+import { kelas, jenisSampah, sampahKelas, guruSispendik, setoranGuru } from '@/lib/db/schema';
 import { desc, eq, and, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
@@ -46,6 +45,19 @@ export async function getAllJenisSampah() {
     }
 }
 
+// Guru Actions
+export async function getAllGurus() {
+	try {
+		const data = await db
+			.select()
+			.from(guruSispendik)
+			.orderBy(guruSispendik.namaGuru);
+		return { data };
+	} catch (error) {
+		return { error: 'Failed to fetch guru data' };
+	}
+}
+
 export async function createJenisSampah(data: {
     namaSampah: string;
     hargaPerKg: number;
@@ -55,7 +67,7 @@ export async function createJenisSampah(data: {
             .insert(jenisSampah)
             .values({
                 namaSampah: data.namaSampah,
-                hargaPerKg: data.hargaPerKg.toFixed(2),
+                hargaPerKg: String(data.hargaPerKg),
             })
             .returning();
         revalidatePath('/admin/sispendik');
@@ -77,7 +89,7 @@ export async function updateJenisSampah(
             .update(jenisSampah)
             .set({
                 namaSampah: data.namaSampah,
-                hargaPerKg: data.hargaPerKg.toFixed(2),
+                hargaPerKg: String(data.hargaPerKg),
                 updatedAt: new Date(),
             })
             .where(eq(jenisSampah.id, id))
@@ -154,7 +166,7 @@ export async function createSampahKelas(data: {
         await db.insert(sampahKelas).values({
             kelasId: data.kelasId,
             jenisSampahId: data.jenisSampahId,
-            jumlahKg: data.jumlahKg.toString(),
+            jumlahKg: String(data.jumlahKg),
         });
         revalidatePath('/admin/sispendik');
         revalidatePath('/sispendik');
@@ -173,7 +185,7 @@ export async function updateSampahKelas(
             .update(sampahKelas)
             .set({
                 jenisSampahId: data.jenisSampahId,
-                jumlahKg: data.jumlahKg.toString(),
+                jumlahKg: String(data.jumlahKg),
             })
             .where(eq(sampahKelas.id, id));
         revalidatePath('/admin/sispendik');
@@ -391,6 +403,30 @@ export async function getTopWasteTypes(month: number, year: number) {
         return { data };
     } catch (error) {
         return { error: 'Failed to fetch top waste types' };
+    }
+}
+
+export async function getGuruRanking(month: number, year: number) {
+    try {
+        const data = await db
+            .select({
+                guruName: guruSispendik.namaGuru,
+                totalKg: sql<number>`COALESCE(SUM(${setoranGuru.jumlahKg}), 0)`,
+            })
+            .from(setoranGuru)
+            .innerJoin(guruSispendik, eq(setoranGuru.guruId, guruSispendik.id))
+            .where(
+                and(
+                    sql`EXTRACT(MONTH FROM ${setoranGuru.createdAt}) = ${month}`,
+                    sql`EXTRACT(YEAR FROM ${setoranGuru.createdAt}) = ${year}`,
+                ),
+            )
+            .groupBy(guruSispendik.namaGuru)
+            .orderBy(desc(sql<number>`SUM(${setoranGuru.jumlahKg})`));
+        return { data };
+    } catch (error) {
+        console.error("Error fetching guru ranking:", error);
+        return { error: 'Failed to fetch guru ranking' };
     }
 }
 

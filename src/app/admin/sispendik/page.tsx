@@ -1,17 +1,33 @@
-import { getAllKelas, getAllJenisSampah } from './actions';
+import { getAllKelas, getAllJenisSampah, getAllGurus } from './actions';
+import { getSetoranGuru } from './setoran-guru-actions';
 import SispendikClient from './client-page';
 
 export default async function SispendikAdminPage() {
     // Fetch initial data
-    const [kelasResponse, jenisSampahResponse] = await Promise.all([
+    const [
+        kelasResponse,
+        jenisSampahResponse,
+        gurusResponse,
+        setoranGuruResponse,
+    ] = await Promise.all([
         getAllKelas(),
         getAllJenisSampah(),
+        getAllGurus(), // Hapus duplikasi getGurus()
+        getSetoranGuru(),
     ]);
 
     const kelas = kelasResponse.data || [];
     const jenisSampah = jenisSampahResponse.data || [];
+    const gurusData = gurusResponse.data || [];
+    const setoranGuru = setoranGuruResponse.data || [];
 
-    if (kelasResponse.error || jenisSampahResponse.error) {
+    const error =
+        kelasResponse.error ||
+        jenisSampahResponse.error ||
+        gurusResponse.error ||
+        setoranGuruResponse.error;
+
+    if (error) {
         return (
             <div className="p-4">
                 <div className="rounded-md bg-destructive/15 p-3">
@@ -34,8 +50,7 @@ export default async function SispendikAdminPage() {
                                 Error
                             </h3>
                             <div className="mt-2 text-sm text-destructive">
-                                {kelasResponse.error ||
-                                    jenisSampahResponse.error}
+                                {error}
                             </div>
                         </div>
                     </div>
@@ -46,17 +61,21 @@ export default async function SispendikAdminPage() {
 
     return (
         <div className="space-y-6 print:space-y-0">
-        <div className="print:hidden">
+            <div className="print:hidden">
                 <h2 className="text-3xl font-bold tracking-tight">
                     Sispendik Bank Sampah
                 </h2>
                 <p className="text-muted-foreground">
-                    Kelola data sampah per kelas dan lihat statistik pengumpulan
-                    sampah
+                    Kelola data sampah per kelas dan per guru, serta lihat
+                    statistik pengumpulan sampah.
                 </p>
             </div>
-
-            <SispendikClient kelas={kelas} jenisSampah={jenisSampah} />
+            <SispendikClient
+                kelas={kelas}
+                jenisSampah={jenisSampah}
+                gurus={gurusData}
+                initialSetoranGuru={setoranGuru}
+            />
         </div>
     );
 }

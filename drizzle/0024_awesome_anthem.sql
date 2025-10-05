@@ -1,1 +1,1 @@
-ALTER TABLE "videos" DROP COLUMN "description";
+-- This migration was intentionally left empty to resolve a database state conflict.
