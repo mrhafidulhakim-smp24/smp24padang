@@ -44,32 +44,6 @@ type TopWasteType = { wasteType: string; totalKg: number; totalValue: number };
 type ClassRanking = { className: string; total: number; totalValue: number; jenisList: string | null };
 type GuruRanking = { guruName: string; totalKg: number };
 
-// --- DUMMY DATA ---
-const dummyClassRanking: ClassRanking[] = [
-    { className: 'VII A', total: 15.5, totalValue: 77500, jenisList: 'Plastik, Kertas' },
-    { className: 'VIII B', total: 12.2, totalValue: 61000, jenisList: 'Kertas' },
-    { className: 'IX C', total: 10.8, totalValue: 54000, jenisList: 'Botol' },
-    { className: 'VII B', total: 9.5, totalValue: 47500, jenisList: 'Plastik' },
-    { className: 'VIII A', total: 8.1, totalValue: 40500, jenisList: 'Kardus' },
-    { className: 'IX A', total: 7.9, totalValue: 39500, jenisList: 'Plastik, Kertas' },
-    { className: 'VII C', total: 6.3, totalValue: 31500, jenisList: 'Kertas' },
-    { className: 'VIII C', total: 5.0, totalValue: 25000, jenisList: 'Botol' },
-    { className: 'IX B', total: 4.8, totalValue: 24000, jenisList: 'Plastik' },
-    { className: 'VII D', total: 4.5, totalValue: 22500, jenisList: 'Kertas' },
-    { className: 'VIII D', total: 3.2, totalValue: 16000, jenisList: 'Botol' },
-];
-
-const dummyGuruRanking: GuruRanking[] = [
-    { guruName: 'Budi Santoso', totalKg: 8.5 },
-    { guruName: 'Ani Wijaya', totalKg: 7.2 },
-    { guruName: 'Citra Lestari', totalKg: 6.8 },
-    { guruName: 'Dewi Anggraini', totalKg: 5.4 },
-    { guruName: 'Eko Prasetyo', totalKg: 4.9 },
-    { guruName: 'Fitriani', totalKg: 4.5 },
-    { guruName: 'Gunawan', totalKg: 3.8 },
-    { guruName: 'Hasan', totalKg: 3.1 },
-];
-
 
 // --- CUSTOM TOOLTIPS ---
 const CustomClassTooltip = ({ active, payload, label }: any) => {
@@ -101,8 +75,8 @@ export default function SispendikClientPage() {
     const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [year, setYear] = useState(new Date().getFullYear());
     const [aggregatedData, setAggregatedData] = useState<AggregatedData[]>([]);
-    const [classRanking, setClassRanking] = useState<ClassRanking[]>(dummyClassRanking);
-    const [guruRanking, setGuruRanking] = useState<GuruRanking[]>(dummyGuruRanking);
+    const [classRanking, setClassRanking] = useState<ClassRanking[]>([]);
+    const [guruRanking, setGuruRanking] = useState<GuruRanking[]>([]);
     const [totalWaste, setTotalWaste] = useState(0);
     const [totalIncome, setTotalIncome] = useState(0);
     const [topClasses, setTopClasses] = useState<string[]>([]);
@@ -130,8 +104,8 @@ export default function SispendikClientPage() {
                 setClassRanking(filteredData);
                 setTopClasses(filteredData.slice(0, 3).map((c) => c.className));
             } else {
-                setClassRanking(dummyClassRanking); // Fallback to dummy data
-                setTopClasses(dummyClassRanking.slice(0, 3).map((c) => c.className));
+                setClassRanking([]);
+                setTopClasses([]);
             }
 
             if (summary.data) {
@@ -148,7 +122,7 @@ export default function SispendikClientPage() {
             if (guruRankData.data && Array.isArray(guruRankData.data) && guruRankData.data.length > 0) {
                 setGuruRanking(guruRankData.data as GuruRanking[]);
             } else {
-                setGuruRanking(dummyGuruRanking); // Fallback to dummy data
+                setGuruRanking([]);
             }
         };
 
