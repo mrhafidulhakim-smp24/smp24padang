@@ -14,6 +14,11 @@ Proyek ini merupakan hasil kerja praktik mahasiswa **Universitas Putra Indonesia
 
 Proyek ini dirancang tidak hanya sebagai sumber informasi, tetapi sebagai sebuah **ekosistem digital** yang menghubungkan seluruh komunitas sekolah siswa, guru, orang tua, dan masyarakat luas. Dibangun dengan presisi arsitektural dan visi jangka panjang, website ini bertujuan untuk menjadi fondasi digital yang adaptif, aman, dan berkelanjutan.
 
+## 📜 Lisensi & Arsitektur
+
+-   **Lisensi**: Proyek ini dilisensikan di bawah **[MIT License](LICENSE)**. Anda bebas menggunakan, memodifikasi, dan mendistribusikan kode ini dengan menyertakan pemberitahuan hak cipta asli.
+-   **Arsitektur**: Untuk pemahaman mendalam mengenai struktur teknis, dependensi, dan pola desain yang digunakan, silakan merujuk ke dokumen **[architecture.md](architecture.md)**.
+
 ---
 
 ## 🛠️ Fondasi Teknologi
@@ -81,6 +86,7 @@ Keberhasilan proyek ini tidak lepas dari dukungan, bimbingan, dan kepercayaan ya
 
 -   **Ibu Hasyuni Harti, M.Pd**, selaku Kepala Sekolah SMPN 24 Padang, atas kesempatan dan kepercayaan yang diberikan kepada kami.
 -   **Bapak Muhammad Rajab, MA**, selaku Wakil Kurikulum, atas arahan dan bimbingan yang sangat berharga selama proses pengembangan.
--   Seluruh **staf Tata Usaha dan majelis guru** pengalaman yang diberikan selama masa PKL.
+-   Seluruh **staf Tata Usaha dan majelis guru** atas pengalaman yang diberikan selama masa PKL.
+-   Rekan-rekan **PLK guru muda Universitas Negeri Padang** periode Juli-Desember 2025, atas kolaborasi dan semangat kebersamaannya.
 
 Kolaborasi ini adalah pengalaman yang tak ternilai bagi kami. Semoga website ini dapat menjadi jembatan digital yang bermanfaat bagi seluruh warga sekolah.
