@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function GalleryPage() {
+    console.log('DATABASE_URL:', process.env.DATABASE_URL);
     const galleryItems = await getGalleryItems();
 
     return (
