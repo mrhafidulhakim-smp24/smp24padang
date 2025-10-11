@@ -32,7 +32,7 @@ export default async function GalleryPage() {
                     {galleryItems.map((item, index) => (
                         <div
                             key={index}
-                            className="group relative mb-4 break-inside-avoid"
+                            className="relative mb-4 break-inside-avoid"
                             data-aos="fade-up"
                             data-aos-delay={(index % 4) * 100}
                         >
@@ -43,12 +43,12 @@ export default async function GalleryPage() {
                                     src={item.src}
                                     alt={item.alt}
                                     className={cn(
-                                        "w-full object-cover transform transition-transform duration-300 group-hover:scale-105",
+                                        "w-full object-cover",
                                         item.orientation === 'landscape' ? 'aspect-video' : 'aspect-[3/4]'
                                     )}
                                 />
                             </Card>
-                            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
                                 <p className="text-sm font-bold text-white">
                                     {item.category}
                                 </p>

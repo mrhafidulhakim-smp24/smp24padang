@@ -54,6 +54,8 @@ type HeaderProps = {
 
 export default function Header({ contactInfo }: HeaderProps) {
     const [isSheetOpen, setSheetOpen] = useState(false);
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+    const [pinnedDropdown, setPinnedDropdown] = useState<string | null>(null);
     const pathname = usePathname();
 
     const navLinks = [
@@ -150,7 +152,7 @@ export default function Header({ contactInfo }: HeaderProps) {
             <div className="container mx-auto flex h-16 items-center px-4">
                 <Link
                     href="/"
-                    className="mr-6 flex flex-shrink-0 items-center gap-2"
+                    className="mr-6 flex flex-shrink-0 items-center gap-2 p-2 rounded-md"
                 >
                     <Image
                         src="/logo.png"
@@ -182,8 +184,39 @@ export default function Header({ contactInfo }: HeaderProps) {
                                     pathname.startsWith('/articles'));
 
                             return link.subLinks ? (
-                                <DropdownMenu key={link.href}>
+                                <DropdownMenu
+                                    key={link.href}
+                                    open={
+                                        openDropdown === link.href ||
+                                        pinnedDropdown === link.href
+                                    }
+                                    onOpenChange={(isOpen) => {
+                                        if (!isOpen) {
+                                            if (pinnedDropdown === link.href) {
+                                                setPinnedDropdown(null);
+                                            }
+                                            if (openDropdown === link.href) {
+                                                setOpenDropdown(null);
+                                            }
+                                        }
+                                    }}
+                                >
                                     <DropdownMenuTrigger
+                                        onMouseEnter={() =>
+                                            setOpenDropdown(link.href)
+                                        }
+                                        onMouseLeave={() =>
+                                            setOpenDropdown(null)
+                                        }
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (pinnedDropdown === link.href) {
+                                                setPinnedDropdown(null);
+                                            } else {
+                                                setPinnedDropdown(link.href);
+                                                setOpenDropdown(null);
+                                            }
+                                        }}
                                         className={cn(
                                             'relative flex items-center text-base lg:text-lg font-semibold text-muted-foreground transition-colors hover:text-primary focus:outline-none after:absolute after:bottom-[-4px] after:left-0 after:h-[1px] after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
                                             isDropdownActive
@@ -194,7 +227,15 @@ export default function Header({ contactInfo }: HeaderProps) {
                                         {link.label}{' '}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-[280px] bg-white rounded-xl shadow-lg p-2">
+                                    <DropdownMenuContent
+                                        onMouseEnter={() =>
+                                            setOpenDropdown(link.href)
+                                        }
+                                        onMouseLeave={() =>
+                                            setOpenDropdown(null)
+                                        }
+                                        className="w-[280px] bg-white rounded-xl shadow-lg p-2"
+                                    >
                                         {link.subLinks.map((subLink) => {
                                             const isSubLinkActive =
                                                 pathname === subLink.href;
