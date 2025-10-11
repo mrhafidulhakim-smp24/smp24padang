@@ -8,6 +8,7 @@ import React, {
     ReactNode,
 } from 'react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 type Facility = {
     id: string;
@@ -368,12 +369,9 @@ export default function Facilities({
 
                 {/* View All Button */}
                 <div className="mt-8 text-center">
-                    <Link
-                        href="/gallery"
-                        className="inline-block rounded-md border px-4 py-2 text-sm font-medium bg-white/90 backdrop-blur-sm hover:bg-white transition-colors"
-                    >
-                        Lihat Semua Fasilitas
-                    </Link>
+                    <Button asChild>
+                        <Link href="/gallery">Lihat Semua Fasilitas</Link>
+                    </Button>
                 </div>
             </div>
         </section>

@@ -59,33 +59,33 @@ async function AboutUs() {
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Visi & Misi
                     </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
+                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
                         Fondasi dan komitmen yang menjadi landasan SMPN 24
                         Padang.
                     </p>
                 </div>
                 <div className="mt-12">
-                    <Card className="h-full bg-primary/5">
+                    <Card className="h-full bg-card">
                         <CardContent className="flex flex-col gap-8 p-6 md:p-8">
-                            <div>
-                                <div className="flex items-center justify-center gap-4">
-                                    <Target className="h-8 w-8 text-green-600" />
-                                    <h4 className="font-headline text-3xl font-bold text-primary">
+                            <div className="text-center">
+                                <div className="inline-flex items-center justify-center gap-3">
+                                    <Target className="h-7 w-7 text-primary" />
+                                    <h4 className="font-headline text-2xl font-bold text-primary md:text-3xl">
                                         Visi
                                     </h4>
                                 </div>
-                                <p className="mt-2 text-center text-2xl font-bold text-foreground">
+                                <p className="mt-2 text-center text-lg font-semibold text-foreground md:text-xl">
                                     {about.vision}
                                 </p>
                             </div>
-                            <div>
-                                <div className="flex items-center justify-center gap-4">
-                                    <Book className="h-8 w-8 text-green-600" />
-                                    <h4 className="font-headline text-3xl font-bold text-primary">
+                            <div className="text-center">
+                                <div className="inline-flex items-center justify-center gap-3">
+                                    <Book className="h-7 w-7 text-primary" />
+                                    <h4 className="font-headline text-2xl font-bold text-primary md:text-3xl">
                                         Misi
                                     </h4>
                                 </div>
-                                <div className="mt-2 space-y-2 font-bold text-foreground">
+                                <div className="mt-4 space-y-2 text-center text-base text-foreground">
                                     {about.mission
                                         .slice(0, 10)
                                         .map((item: string, index: number) => (
@@ -98,7 +98,7 @@ async function AboutUs() {
                             <Button
                                 asChild
                                 variant="link"
-                                className="mt-4 p-0 self-start text-primary hover:text-primary/80"
+                                className="mt-2"
                             >
                                 <Link href="/profile/vision-mission">
                                     Baca Selengkapnya{' '}
@@ -122,8 +122,8 @@ async function Announcements() {
             <div className="container mx-auto px-4">
                 <Card className="mx-auto max-w-6xl">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-3 font-headline text-3xl text-primary">
-                            <Megaphone className="h-8 w-8 text-green-600" />
+                        <CardTitle className="flex items-center gap-3 font-headline text-2xl text-primary md:text-3xl">
+                            <Megaphone className="h-8 w-8 text-primary" />
                             Pengumuman Terbaru
                         </CardTitle>
                         <CardDescription>
@@ -135,7 +135,7 @@ async function Announcements() {
                             {announcements.map((item: any, index: number) => (
                                 <React.Fragment key={item.id}>
                                     <div className="flex flex-col gap-1.5">
-                                        <p className="text-sm text-foreground">
+                                        <p className="text-sm text-muted-foreground">
                                             {new Date(
                                                 item.date,
                                             ).toLocaleDateString('id-ID', {
@@ -205,11 +205,11 @@ async function LatestNews() {
                     </p>
                 </div>
 
-                <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8">
+                <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {latestNews.map((item: any) => (
                         <Card
                             key={item.id}
-                            className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
+                            className="flex flex-col overflow-hidden rounded-lg transition-shadow duration-300 hover:shadow-xl"
                         >
                             <div className="relative w-full aspect-video">
                                 <Link
@@ -240,17 +240,16 @@ async function LatestNews() {
                                             },
                                         )}
                                     </p>
-                                    <CardTitle className="font-headline text-lg font-bold text-primary">
+                                    <CardTitle className="font-headline text-lg font-bold">
                                         <Link
                                             href={`/articles/${item.id}`}
-                                            className="hover:underline"
+                                            className="text-foreground hover:text-primary hover:underline"
                                         >
                                             {item.title}
                                         </Link>
                                     </CardTitle>
-                                    <p className="mt-2 text-sm text-foreground dark:text-foreground">
-                                        {item.description?.substring(0, 80)}
-                                        ...
+                                    <p className="mt-2 text-sm text-muted-foreground line-clamp-3">
+                                        {item.description}
                                     </p>
                                 </div>
                                 <Button
@@ -302,16 +301,15 @@ async function Statistics() {
         <section className="bg-primary/5 py-12 md:py-24">
             <div className="container mx-auto px-4">
                 <div className="text-center">
-                    <h2 className="font-headline text-2xl md:text-3xl font-bold text-primary">
-                        Statistik Data Sekolah
+                    <h2 className="font-headline text-2xl font-bold text-primary md:text-3xl">
+                        Statistik Sekolah
                     </h2>
-                    <p className="mx-auto mt-1 max-w-2xl text-foreground text-sm md:text-base">
-                        Sekilas data mengenai sumber daya di sekolah kami.
+                    <p className="mx-auto mt-1 max-w-2xl text-muted-foreground text-sm md:text-base">
+                        Data terpadu mengenai sumber daya utama di SMPN 24 Padang.
                     </p>
                 </div>
 
-                {/* MOBILE: grid 2x2 (grid-cols-2) */}
-                <div className="mt-6 grid grid-cols-2 gap-3 md:hidden">
+                <div className="mt-8 grid grid-cols-2 gap-4 md:hidden">
                     {statistics.map((s) => (
                         <div
                             key={s.id}
@@ -319,11 +317,11 @@ async function Statistics() {
                             role="group"
                             aria-label={`${s.label} - ${s.value}`}
                         >
-                            <div className="rounded-full bg-green-600/10 p-2 flex items-center justify-center">
-                                <s.icon className="h-5 w-5 text-green-600" />
+                            <div className="rounded-full bg-primary/10 p-2 flex items-center justify-center">
+                                <s.icon className="h-5 w-5 text-primary" />
                             </div>
                             <div>
-                                <p className="text-xl font-semibold text-primary leading-tight">
+                                <p className="text-xl font-semibold text-foreground leading-tight">
                                     {s.value}
                                 </p>
                                 <p className="text-xs text-muted-foreground mt-0.5">
@@ -339,18 +337,18 @@ async function Statistics() {
                     {statistics.map((stat) => (
                         <Card
                             key={stat.id}
-                            className="text-center shadow-none hover:shadow-lg transition-shadow duration-300"
+                            className="text-center shadow-none hover:shadow-lg transition-shadow duration-300 bg-card"
                         >
                             <CardHeader className="items-center">
-                                <div className="rounded-full bg-green-600/20 p-4">
-                                    <stat.icon className="h-10 w-10 text-green-600" />
+                                <div className="rounded-full bg-primary/10 p-4">
+                                    <stat.icon className="h-10 w-10 text-primary" />
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-3xl md:text-4xl font-bold text-primary">
+                                <p className="text-3xl md:text-4xl font-bold text-foreground">
                                     {stat.value}
                                 </p>
-                                <p className="mt-2 text-foreground">
+                                <p className="mt-2 text-muted-foreground">
                                     {stat.label}
                                 </p>
                             </CardContent>
@@ -370,7 +368,7 @@ async function FaqSection() {
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Pertanyaan Umum
                     </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
+                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
                         Temukan jawaban atas pertanyaan yang sering diajukan.
                     </p>
                 </div>
@@ -410,56 +408,51 @@ export default async function Home() {
             </section>
 
             {/* Welcome from Principal */}
-            <section className="bg-primary/5 py-16 md:py-24">
-                <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-3 lg:grid-cols-5">
-                    <div className="relative mx-auto h-96 w-80 overflow-hidden rounded-lg shadow-xl md:h-[450px] md:w-full md:col-span-1 lg:col-span-2">
+            <section className="bg-background py-16 md:py-24">
+                <div className="container mx-auto flex flex-col items-center gap-12 px-4 md:flex-row md:gap-16">
+                    <div className="relative w-48 flex-shrink-0 h-64 overflow-hidden rounded-lg shadow-xl md:w-80 md:h-96">
                         <Image
                             src={
                                 profile?.principalImageUrl ??
                                 'https://placehold.co/600x800.png'
                             }
-                            alt="Principal"
+                            alt={profile?.principalName ?? 'Kepala Sekolah'}
                             fill
                             loading="lazy"
-                            style={{
-                                objectFit: 'cover',
-                                objectPosition: 'top',
-                            }}
-                            className="transition-transform duration-500 hover:scale-110"
+                            className="object-cover object-top transition-transform duration-500 hover:scale-110"
                         />
                     </div>
-                    <div className="md:col-span-2 lg:col-span-3">
-                        <h2 className="font-headline text-3xl font-bold text-primary">
-                            Sambutan Kepala Sekolah
+                    <div className="md:text-left">
+                        <p className="font-semibold text-primary">
+                            Sambutan Hangat
+                        </p>
+                        <h2 className="mt-1 font-headline text-2xl font-bold text-foreground md:text-3xl">
+                            Dari Kepala Sekolah SMPN 24 Padang
                         </h2>
-                        <div className="mt-4 flex items-center gap-3 rounded-lg bg-green-100 p-3 dark:bg-green-900/30">
+                        <div className="mt-4 inline-flex items-center gap-3 rounded-lg bg-green-100 p-3 dark:bg-green-900/30">
                             <ShieldCheck className="h-6 w-6 flex-shrink-0 text-green-600 dark:text-green-400" />
-                            <p className="font-semibold text-green-800 dark:text-green-200">
-                                Terakreditasi A - Sekolah Adiwiyata Mandiri
-                                Nasional, Sekolah Ramah Anak & Sekolah Siaga
-                                Kependudukan
+                            <p className="text-sm font-semibold text-green-800 dark:text-green-200">
+                                Terakreditasi A - Adiwiyata Mandiri Nasional
                             </p>
                         </div>
                         <div
-                            className="mt-4 text-lg text-foreground line-clamp-8"
+                            className="prose prose-lg mt-4 max-w-none text-muted-foreground line-clamp-6"
                             dangerouslySetInnerHTML={{
                                 __html: profile?.principalWelcome ?? '',
                             }}
                         />
-                        <p className="mt-4 font-semibold text-primary">
+                        <p className="mt-6 font-bold text-foreground">
                             {profile?.principalName}
                         </p>
-                        <p className="text-sm text-foreground">
+                        <p className="text-sm text-muted-foreground">
                             Kepala SMPN 24 Padang
                         </p>
                         <Button
                             asChild
-                            variant="link"
-                            className="mt-4 p-0 text-green-600 hover:text-green-700"
+                            className="mt-6"
                         >
                             <Link href="/profile">
-                                Baca Lebih Lanjut tentang Kepala Sekolah{' '}
-                                <ArrowRight className="ml-1 h-4 w-4" />
+                                Selengkapnya tentang profil sekolah
                             </Link>
                         </Button>
                     </div>

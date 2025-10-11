@@ -1,6 +1,8 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Calendar, UserCircle } from 'lucide-react';
+import { ArrowLeft, Calendar, UserCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
 import { news } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
@@ -45,6 +47,12 @@ export default async function NewsArticlePage({
     return (
         <div className="bg-background">
             <div className="container mx-auto max-w-4xl px-4 py-12 md:py-24">
+                <Button asChild variant="outline" className="mb-8">
+                    <Link href="/news" className="flex items-center gap-2">
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Kembali ke Berita</span>
+                    </Link>
+                </Button>
                 <article className="prose prose-lg dark:prose-invert mx-auto">
                     <div className="relative mb-8 w-full aspect-video overflow-hidden rounded-lg">
                         <Image

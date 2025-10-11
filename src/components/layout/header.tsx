@@ -184,94 +184,96 @@ export default function Header({ contactInfo }: HeaderProps) {
                                     pathname.startsWith('/articles'));
 
                             return link.subLinks ? (
-                                <DropdownMenu
+                                <div
+                                    className="relative"
                                     key={link.href}
-                                    open={
-                                        openDropdown === link.href ||
-                                        pinnedDropdown === link.href
+                                    onMouseEnter={() =>
+                                        setOpenDropdown(link.href)
                                     }
-                                    onOpenChange={(isOpen) => {
-                                        if (!isOpen) {
-                                            if (pinnedDropdown === link.href) {
-                                                setPinnedDropdown(null);
-                                            }
-                                            if (openDropdown === link.href) {
-                                                setOpenDropdown(null);
-                                            }
-                                        }
-                                    }}
+                                    onMouseLeave={() => setOpenDropdown(null)}
                                 >
-                                    <DropdownMenuTrigger
-                                        onMouseEnter={() =>
-                                            setOpenDropdown(link.href)
+                                    <DropdownMenu
+                                        open={
+                                            openDropdown === link.href ||
+                                            pinnedDropdown === link.href
                                         }
-                                        onMouseLeave={() =>
-                                            setOpenDropdown(null)
-                                        }
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            if (pinnedDropdown === link.href) {
-                                                setPinnedDropdown(null);
-                                            } else {
-                                                setPinnedDropdown(link.href);
-                                                setOpenDropdown(null);
+                                        onOpenChange={(isOpen) => {
+                                            if (!isOpen) {
+                                                if (
+                                                    pinnedDropdown === link.href
+                                                ) {
+                                                    setPinnedDropdown(null);
+                                                }
+                                                if (
+                                                    openDropdown === link.href
+                                                ) {
+                                                    setOpenDropdown(null);
+                                                }
                                             }
                                         }}
-                                        className={cn(
-                                            'relative flex items-center text-base lg:text-lg font-semibold text-muted-foreground transition-colors hover:text-primary focus:outline-none after:absolute after:bottom-[-4px] after:left-0 after:h-[1px] after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
-                                            isDropdownActive
-                                                ? 'text-primary after:scale-x-100'
-                                                : 'after:scale-x-0',
-                                        )}
                                     >
-                                        {link.label}{' '}
-                                        <ChevronDown className="ml-1 h-4 w-4" />
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent
-                                        onMouseEnter={() =>
-                                            setOpenDropdown(link.href)
-                                        }
-                                        onMouseLeave={() =>
-                                            setOpenDropdown(null)
-                                        }
-                                        className="w-[280px] bg-white rounded-xl shadow-lg p-2"
-                                    >
-                                        {link.subLinks.map((subLink) => {
-                                            const isSubLinkActive =
-                                                pathname === subLink.href;
-                                            return (
-                                                <DropdownMenuItem
-                                                    key={subLink.href}
-                                                    asChild
-                                                    className={cn(
-                                                        'py-2 border-b border-gray-200 last:border-b-0',
-                                                    )}
-                                                >
-                                                    <Link
-                                                        href={subLink.href}
+                                        <DropdownMenuTrigger
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                if (
+                                                    pinnedDropdown === link.href
+                                                ) {
+                                                    setPinnedDropdown(null);
+                                                } else {
+                                                    setPinnedDropdown(
+                                                        link.href,
+                                                    );
+                                                    setOpenDropdown(null);
+                                                }
+                                            }}
+                                            className={cn(
+                                                'flex items-center rounded-md px-3 py-2 text-base lg:text-lg font-semibold transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none',
+                                                isDropdownActive
+                                                    ? 'font-bold text-foreground'
+                                                    : 'text-muted-foreground',
+                                            )}
+                                        >
+                                            {link.label}{' '}
+                                            <ChevronDown className="ml-1 h-4 w-4" />
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-[280px] bg-white rounded-xl shadow-lg p-2">
+                                            {link.subLinks.map((subLink) => {
+                                                const isSubLinkActive =
+                                                    pathname === subLink.href;
+                                                return (
+                                                    <DropdownMenuItem
+                                                        key={subLink.href}
+                                                        asChild
                                                         className={cn(
-                                                            'flex items-center gap-3 text-base font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 rounded-md px-3 py-2',
-                                                            isSubLinkActive &&
-                                                                'text-primary',
+                                                            'py-2 border-b border-gray-200 last:border-b-0',
                                                         )}
                                                     >
-                                                        <subLink.icon className="h-5 w-5" />
-                                                        {subLink.label}
-                                                    </Link>
-                                                </DropdownMenuItem>
-                                            );
-                                        })}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                                        <Link
+                                                            href={subLink.href}
+                                                            className={cn(
+                                                                'flex items-center gap-3 text-base font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 rounded-md px-3 py-2',
+                                                                isSubLinkActive &&
+                                                                    'text-primary',
+                                                            )}
+                                                        >
+                                                            <subLink.icon className="h-5 w-5" />
+                                                            {subLink.label}
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                );
+                                            })}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
                             ) : (
                                 <Link
                                     key={link.href}
                                     href={link.href}
                                     className={cn(
-                                        'relative text-base lg:text-lg font-semibold text-muted-foreground transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-bottom-left after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
+                                        'relative text-base lg:text-lg font-semibold transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:origin-center after:bg-primary after:transition-transform after:duration-300 after:ease-in-out',
                                         isLinkActive
-                                            ? 'text-primary after:scale-x-100'
-                                            : 'after:scale-x-0 hover:after:scale-x-100 hover:text-green-700',
+                                            ? 'font-bold text-foreground'
+                                            : 'text-muted-foreground after:scale-x-0 hover:text-primary hover:after:scale-x-100',
                                     )}
                                 >
                                     {link.label}
@@ -288,7 +290,11 @@ export default function Header({ contactInfo }: HeaderProps) {
                     <div className="md:hidden">
                         <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
                             <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon" className="z-50">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="z-50"
+                                >
                                     <Menu className="h-6 w-6" />
                                     <span className="sr-only">
                                         Open navigation menu

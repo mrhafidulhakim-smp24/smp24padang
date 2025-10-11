@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getOrganizationStructures } from './actions';
+import { LazyIframe } from '@/components/lazy-iframe';
 
 export const metadata: Metadata = {
     title: 'Struktur Organisasi SMPN 24 Padang | Bagan Kepengurusan Sekolah',
@@ -66,15 +67,14 @@ export default async function OrganizationStructurePage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="aspect-video w-full max-w-5xl mx-auto rounded-md border bg-muted">
+                                <div className="aspect-video w-full max-w-5xl mx-auto rounded-md border overflow-hidden bg-muted">
                                     {chart.pdfUrl ? (
-                                        <iframe
+                                        <LazyIframe
                                             src={getGoogleDriveEmbedLink(chart.pdfUrl)}
-                                            className="h-full w-full"
                                             style={{ border: 0 }}
                                             allow="fullscreen"
                                             title={`Pratinjau ${chart.title}`}
-                                        ></iframe>
+                                        />
                                     ) : (
                                         <div className="flex items-center justify-center h-full text-muted-foreground">
                                             Bagan organisasi belum diunggah.
