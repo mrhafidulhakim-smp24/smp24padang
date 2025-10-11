@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import React, {
+    useEffect,
+    useRef,
+    useState,
+    useCallback,
+    ReactNode,
+} from 'react';
 import Link from 'next/link';
-import { BlurImage } from '@/components/blur-image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type Facility = {
     id: string;
@@ -23,32 +26,293 @@ type Props = {
     placeholders: Placeholder[];
 };
 
-export default function Facilities({ facilities, placeholders }: Props) {
-    const scrollRef = useRef<HTMLDivElement | null>(null);
-    const [index, setIndex] = useState(0);
+// Skeleton Loading Component
+function SkeletonLoader(): ReactNode {
+    return (
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 animate-pulse" />
+    );
+}
 
-    // batasi 10 item pertama untuk mobile
-    const items = facilities.slice(0, 10);
-    const total = items.length;
+// Image Card Component with Optimized Loading - Mobile
+interface FacilityCardProps {
+    facility: Facility;
+    placeholder?: Placeholder;
+}
 
-    const handlePan = (dir: 'left' | 'right') => {
-        setIndex((prev) =>
-            dir === 'right' ? (prev + 2) % total : (prev - 2 + total) % total,
+function FacilityCard({ facility, placeholder }: FacilityCardProps): ReactNode {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<boolean>(false);
+    const imgRef = useRef<HTMLImageElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const src: string = facility.imageUrl ?? 'https://placehold.co/300x200.png';
+
+    // Use Intersection Observer for lazy loading
+    useEffect((): (() => void) => {
+        if (!containerRef.current) return () => {};
+
+        const observer = new IntersectionObserver(
+            (entries: IntersectionObserverEntry[]): void => {
+                entries.forEach((entry: IntersectionObserverEntry): void => {
+                    if (
+                        entry.isIntersecting &&
+                        imgRef.current &&
+                        !imgRef.current.src
+                    ) {
+                        imgRef.current.src = src;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                rootMargin: '50px',
+                threshold: 0.01,
+            },
         );
-    };
 
-    // auto scroll
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setIndex((prev) => (prev + 2) % total);
-        }, 5000);
-        return () => clearInterval(timer);
-    }, [total]);
+        observer.observe(containerRef.current);
+
+        return (): void => {
+            if (containerRef.current) {
+                observer.unobserve(containerRef.current);
+            }
+        };
+    }, [src]);
+
+    const handleImageLoad = useCallback((): void => {
+        setIsLoading(false);
+        setError(false);
+        if (imgRef.current) {
+            imgRef.current.style.opacity = '1';
+        }
+    }, []);
+
+    const handleImageError = useCallback((): void => {
+        setIsLoading(false);
+        setError(true);
+    }, []);
+
+    return (
+        <div
+            ref={containerRef}
+            className="relative overflow-hidden rounded-lg h-40 bg-slate-100 dark:bg-slate-800"
+        >
+            <Link href="/gallery" className="absolute inset-0 block">
+                {/* Loading Skeleton */}
+                {isLoading && <SkeletonLoader />}
+
+                {/* Blur Placeholder */}
+                {placeholder && isLoading && (
+                    <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{
+                            backgroundImage: `url('${placeholder.base64}')`,
+                            filter: 'blur(10px)',
+                        }}
+                    />
+                )}
+
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                {/* Actual Image - Optimized */}
+                {!error && (
+                    <img
+                        ref={imgRef}
+                        alt={facility.name}
+                        width={300}
+                        height={200}
+                        className="w-full h-full object-cover transition-all duration-300 ease-out opacity-0 active:scale-105"
+                        loading="lazy"
+                        decoding="async"
+                        srcSet={`${src}?w=300 300w, ${src}?w=400 400w`}
+                        sizes="(max-width: 640px) 300px, 400px"
+                        onLoad={handleImageLoad}
+                        onError={handleImageError}
+                    />
+                )}
+
+                {error && (
+                    <div className="w-full h-full flex items-center justify-center bg-slate-300 dark:bg-slate-700">
+                        <span className="text-sm text-slate-600 dark:text-slate-300">
+                            Gagal memuat
+                        </span>
+                    </div>
+                )}
+
+                {/* Text Content */}
+                <div className="absolute inset-0 z-20 flex items-end p-2 pointer-events-none">
+                    <h3 className="font-headline text-sm font-bold text-white drop-shadow-lg line-clamp-2">
+                        {facility.name}
+                    </h3>
+                </div>
+            </Link>
+        </div>
+    );
+}
+
+// Desktop Card Component
+function FacilityCardDesktop({
+    facility,
+    placeholder,
+}: FacilityCardProps): ReactNode {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<boolean>(false);
+    const imgRef = useRef<HTMLImageElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const src: string = facility.imageUrl ?? 'https://placehold.co/600x400.png';
+
+    useEffect((): (() => void) => {
+        if (!containerRef.current) return () => {};
+
+        const observer = new IntersectionObserver(
+            (entries: IntersectionObserverEntry[]): void => {
+                entries.forEach((entry: IntersectionObserverEntry): void => {
+                    if (
+                        entry.isIntersecting &&
+                        imgRef.current &&
+                        !imgRef.current.src
+                    ) {
+                        imgRef.current.src = src;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                rootMargin: '100px',
+                threshold: 0.01,
+            },
+        );
+
+        observer.observe(containerRef.current);
+
+        return (): void => {
+            if (containerRef.current) {
+                observer.unobserve(containerRef.current);
+            }
+        };
+    }, [src]);
+
+    const handleImageLoad = useCallback((): void => {
+        setIsLoading(false);
+        setError(false);
+        if (imgRef.current) {
+            imgRef.current.style.opacity = '1';
+        }
+    }, []);
+
+    const handleImageError = useCallback((): void => {
+        setIsLoading(false);
+        setError(true);
+    }, []);
+
+    return (
+        <div
+            ref={containerRef}
+            className="relative overflow-hidden rounded-lg shadow-sm bg-slate-100 dark:bg-slate-800"
+        >
+            <Link
+                href="/gallery"
+                className="group relative overflow-hidden rounded-lg block"
+            >
+                {/* Loading Skeleton */}
+                {isLoading && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 animate-pulse z-0" />
+                )}
+
+                {/* Blur Placeholder */}
+                {placeholder && isLoading && (
+                    <div
+                        className="absolute inset-0 bg-cover bg-center z-0"
+                        style={{
+                            backgroundImage: `url('${placeholder.base64}')`,
+                            filter: 'blur(20px)',
+                        }}
+                    />
+                )}
+
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent" />
+
+                {/* Actual Image */}
+                {!error && (
+                    <img
+                        ref={imgRef}
+                        alt={facility.name}
+                        width={600}
+                        height={400}
+                        className="h-48 sm:h-56 md:h-40 lg:h-48 w-full object-cover transition-all duration-300 ease-out opacity-0 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
+                        srcSet={`${src}?w=600 600w, ${src}?w=800 800w, ${src}?w=1000 1000w`}
+                        sizes="(max-width: 768px) 600px, (max-width: 1024px) 800px, 1000px"
+                        onLoad={handleImageLoad}
+                        onError={handleImageError}
+                    />
+                )}
+
+                {error && (
+                    <div className="h-48 sm:h-56 md:h-40 lg:h-48 w-full flex items-center justify-center bg-slate-300 dark:bg-slate-700">
+                        <span className="text-sm text-slate-600 dark:text-slate-300">
+                            Gagal memuat
+                        </span>
+                    </div>
+                )}
+
+                {/* Text Content */}
+                <div className="absolute inset-0 z-20 flex items-end p-4 pointer-events-none">
+                    <h3 className="font-headline text-sm sm:text-base md:text-sm lg:text-base font-bold text-white drop-shadow-lg">
+                        {facility.name}
+                    </h3>
+                </div>
+            </Link>
+        </div>
+    );
+}
+
+export default function Facilities({
+    facilities,
+    placeholders,
+}: Props): ReactNode {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    // Reduce layout thrashing with requestAnimationFrame
+    useEffect((): (() => void) => {
+        const container = containerRef.current;
+        if (!container) return () => {};
+
+        let isScrolling: boolean = false;
+        let scrollTimeout: ReturnType<typeof setTimeout>;
+
+        const handleScroll = (): void => {
+            if (!isScrolling) {
+                isScrolling = true;
+                container.style.willChange = 'scroll-position';
+            }
+
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout((): void => {
+                isScrolling = false;
+                container.style.willChange = 'auto';
+            }, 150);
+        };
+
+        container.addEventListener('scroll', handleScroll, { passive: true });
+
+        return (): void => {
+            container.removeEventListener('scroll', handleScroll);
+            clearTimeout(scrollTimeout);
+        };
+    }, []);
+
+    // Limit items for mobile
+    const items: Facility[] = facilities.slice(0, 10);
 
     return (
         <section className="py-16 md:py-24 overflow-hidden">
             <div className="container mx-auto px-4">
-                <div className="text-center">
+                <div className="text-center mb-8">
                     <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
                         Fasilitas Sekolah
                     </h2>
@@ -59,149 +323,54 @@ export default function Facilities({ facilities, placeholders }: Props) {
                 </div>
 
                 {/* DESKTOP grid */}
-                <div className="mt-8 hidden md:grid md:grid-cols-4 sm:grid-cols-2 gap-4">
-                    {facilities.map((facility) => {
-                        const placeholder = placeholders.find(
-                            (p) => p.src === facility.imageUrl,
-                        );
-                        const src =
-                            facility.imageUrl ??
-                            'https://placehold.co/600x400.png';
+                <div className="hidden md:grid md:grid-cols-4 sm:grid-cols-2 gap-4 mt-8">
+                    {facilities.map((facility: Facility): ReactNode => {
+                        const placeholder: Placeholder | undefined =
+                            placeholders.find(
+                                (p: Placeholder): boolean =>
+                                    p.src === facility.imageUrl,
+                            );
                         return (
-                            <Link
+                            <FacilityCardDesktop
                                 key={facility.id}
-                                href="/gallery"
-                                className="group relative overflow-hidden rounded-lg shadow-sm"
-                            >
-                                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent" />
-                                {placeholder ? (
-                                    <BlurImage
-                                        src={src}
-                                        alt={facility.name}
-                                        width={600}
-                                        height={400}
-                                        placeholder={placeholder.base64}
-                                        className="h-48 sm:h-56 md:h-40 lg:h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                ) : (
-                                    <Image
-                                        src={src}
-                                        alt={facility.name}
-                                        width={600}
-                                        height={400}
-                                        loading="lazy"
-                                        className="h-48 sm:h-56 md:h-40 lg:h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                )}
-                                <div className="absolute inset-0 z-20 flex items-end p-4">
-                                    <h3 className="font-headline text-sm sm:text-base md:text-sm lg:text-base font-bold text-white drop-shadow-lg">
-                                        {facility.name}
-                                    </h3>
-                                </div>
-                            </Link>
+                                facility={facility}
+                                placeholder={placeholder}
+                            />
                         );
                     })}
                 </div>
 
-                {/* MOBILE carousel 2 kolom */}
-                <div className="mt-6 md:hidden relative overflow-hidden">
+                {/* MOBILE grid 2 kolom */}
+                <div className="md:hidden mt-6">
                     <div
-                        ref={scrollRef}
-                        className="flex transition-transform duration-500 ease-in-out"
+                        ref={containerRef}
+                        className="grid grid-cols-2 gap-3"
                         style={{
-                            transform: `translateX(-${(index / 2) * 100}%)`,
-                            width: `${Math.ceil(total / 2) * 100}%`,
+                            contain: 'layout style paint',
                         }}
                     >
-                        {Array.from({ length: Math.ceil(total / 2) }).map(
-                            (_, i) => {
-                                const first = items[i * 2];
-                                const second = items[i * 2 + 1];
-                                return (
-                                    <div
-                                        key={i}
-                                        className="flex w-full flex-shrink-0 gap-3 px-1"
-                                    >
-                                        {[first, second].map(
-                                            (facility) =>
-                                                facility && (
-                                                    <div
-                                                        key={facility.id}
-                                                        className="flex-1 relative rounded-xl overflow-hidden"
-                                                    >
-                                                        {placeholders.find(
-                                                            (p) =>
-                                                                p.src ===
-                                                                facility.imageUrl,
-                                                        ) ? (
-                                                            <BlurImage
-                                                                src={
-                                                                    facility.imageUrl ??
-                                                                    'https://placehold.co/300x200.png'
-                                                                }
-                                                                alt={
-                                                                    facility.name
-                                                                }
-                                                                width={400}
-                                                                height={300}
-                                                                placeholder={
-                                                                    placeholders.find(
-                                                                        (p) =>
-                                                                            p.src ===
-                                                                            facility.imageUrl,
-                                                                    )?.base64 ||
-                                                                    ''
-                                                                }
-                                                                className="h-48 w-full object-cover"
-                                                            />
-                                                        ) : (
-                                                            <Image
-                                                                src={
-                                                                    facility.imageUrl ??
-                                                                    'https://placehold.co/300x200.png'
-                                                                }
-                                                                alt={
-                                                                    facility.name
-                                                                }
-                                                                width={400}
-                                                                height={300}
-                                                                className="h-48 w-full object-cover"
-                                                            />
-                                                        )}
-                                                        <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-2">
-                                                            <h3 className="text-white font-semibold text-sm">
-                                                                {facility.name}
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                ),
-                                        )}
-                                    </div>
+                        {items.map((facility: Facility): ReactNode => {
+                            const placeholder: Placeholder | undefined =
+                                placeholders.find(
+                                    (p: Placeholder): boolean =>
+                                        p.src === facility.imageUrl,
                                 );
-                            },
-                        )}
+                            return (
+                                <FacilityCard
+                                    key={facility.id}
+                                    facility={facility}
+                                    placeholder={placeholder}
+                                />
+                            );
+                        })}
                     </div>
-
-                    {/* tombol panah */}
-                    <button
-                        onClick={() => handlePan('left')}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-30 rounded-full bg-gray-200/90 p-2 shadow hover:bg-gray-300 transition"
-                    >
-                        <ChevronLeft className="h-5 w-5 text-gray-700" />
-                    </button>
-                    <button
-                        onClick={() => handlePan('right')}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-30 rounded-full bg-gray-200/90 p-2 shadow hover:bg-gray-300 transition"
-                    >
-                        <ChevronRight className="h-5 w-5 text-gray-700" />
-                    </button>
                 </div>
 
-                {/* tombol lihat semua */}
-                <div className="mt-6 text-center">
+                {/* View All Button */}
+                <div className="mt-8 text-center">
                     <Link
                         href="/gallery"
-                        className="inline-block rounded-md border px-4 py-2 text-sm font-medium bg-white/90 backdrop-blur-sm hover:bg-white"
+                        className="inline-block rounded-md border px-4 py-2 text-sm font-medium bg-white/90 backdrop-blur-sm hover:bg-white transition-colors"
                     >
                         Lihat Semua Fasilitas
                     </Link>
