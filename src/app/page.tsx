@@ -67,25 +67,29 @@ async function AboutUs() {
                 <div className="mt-12">
                     <Card className="h-full bg-card">
                         <CardContent className="flex flex-col gap-8 p-6 md:p-8">
-                            <div className="text-center">
-                                <div className="inline-flex items-center justify-center gap-3">
-                                    <Target className="h-7 w-7 text-primary" />
-                                    <h4 className="font-headline text-2xl font-bold text-primary md:text-3xl">
-                                        Visi
-                                    </h4>
+                            <div>
+                                <div className="text-center">
+                                    <div className="inline-flex items-center justify-center gap-3">
+                                        <Target className="h-7 w-7 text-primary" />
+                                        <h4 className="font-headline text-2xl font-bold text-primary md:text-3xl">
+                                            Visi
+                                        </h4>
+                                    </div>
                                 </div>
-                                <p className="mt-2 text-center text-lg font-semibold text-foreground md:text-xl">
+                                <p className="mt-2 text-center text-base font-semibold text-foreground md:text-xl">
                                     {about.vision}
                                 </p>
                             </div>
-                            <div className="text-center">
-                                <div className="inline-flex items-center justify-center gap-3">
-                                    <Book className="h-7 w-7 text-primary" />
-                                    <h4 className="font-headline text-2xl font-bold text-primary md:text-3xl">
-                                        Misi
-                                    </h4>
+                            <div>
+                                <div className="text-center">
+                                    <div className="inline-flex items-center justify-center gap-3">
+                                        <Book className="h-7 w-7 text-primary" />
+                                        <h4 className="font-headline text-2xl font-bold text-primary md:text-3xl">
+                                            Misi
+                                        </h4>
+                                    </div>
                                 </div>
-                                <div className="mt-4 space-y-2 text-center text-base text-foreground">
+                                <div className="mt-4 space-y-2 text-left text-base text-foreground">
                                     {about.mission
                                         .slice(0, 10)
                                         .map((item: string, index: number) => (
@@ -410,7 +414,7 @@ export default async function Home() {
             {/* Welcome from Principal */}
             <section className="bg-background py-16 md:py-24">
                 <div className="container mx-auto flex flex-col items-center gap-12 px-4 md:flex-row md:gap-16">
-                    <div className="relative w-48 flex-shrink-0 h-64 overflow-hidden rounded-lg shadow-xl md:w-80 md:h-96">
+                    <div className="relative w-56 flex-shrink-0 h-72 overflow-hidden rounded-lg shadow-xl md:w-80 md:h-96">
                         <Image
                             src={
                                 profile?.principalImageUrl ??
@@ -447,14 +451,15 @@ export default async function Home() {
                         <p className="text-sm text-muted-foreground">
                             Kepala SMPN 24 Padang
                         </p>
-                        <Button
-                            asChild
-                            className="mt-6"
-                        >
-                            <Link href="/profile">
-                                Selengkapnya tentang profil sekolah
-                            </Link>
-                        </Button>
+                        <div className="mt-6 text-center md:text-left">
+                            <Button
+                                asChild
+                            >
+                                <Link href="/profile">
+                                    Selengkapnya tentang profil sekolah
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </section>
