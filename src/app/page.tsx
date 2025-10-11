@@ -1,3 +1,4 @@
+// src/app/page.tsx
 import React from 'react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
@@ -13,7 +14,6 @@ import {
 import { Button } from '@/components/ui/button';
 import {
     ArrowRight,
-    BookOpen,
     ShieldCheck,
     School,
     Users,
@@ -21,18 +21,10 @@ import {
     BookCopy,
     Target,
     Book,
-    Newspaper,
     Megaphone,
 } from 'lucide-react';
-import { Marquee, MarqueeItem } from '@/components/ui/marquee';
+import { Marquee } from '@/components/ui/marquee';
 import { ClientCarousel } from '@/components/client-carousel';
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from '@/components/ui/carousel';
 import {
     getBanners,
     getLatestNews,
@@ -48,6 +40,7 @@ import FaqAccordion from '@/components/faq/faq-accordion';
 import { AnimatedSection } from '@/components/animated-section';
 import { BlurImage } from '@/components/blur-image';
 import placeholders from '@/lib/placeholders.json';
+import Facilities from '@/components/Facilities';
 
 export const metadata: Metadata = {
     title: 'SMPN 24 Padang | Cerdas, Terampil & Bebudidaya Lingkungan',
@@ -55,7 +48,7 @@ export const metadata: Metadata = {
         'Website resmi SMPN 24 Padang. Jelajahi profil, berita, prestasi, galeri, dan informasi lengkap seputar sekolah kami.',
 };
 
-export const revalidate = 60; // Revalidate at most every 60 seconds
+export const revalidate = 60;
 
 async function AboutUs() {
     const about = await getAbout();
@@ -97,9 +90,14 @@ async function AboutUs() {
                                     <div className="mt-2 space-y-2 font-bold text-foreground">
                                         {about.mission
                                             .slice(0, 10)
-                                            .map((item, index) => (
-                                                <p key={index}>{item}</p>
-                                            ))}
+                                            .map(
+                                                (
+                                                    item: string,
+                                                    index: number,
+                                                ) => (
+                                                    <p key={index}>{item}</p>
+                                                ),
+                                            )}
                                     </div>
                                 </div>
                             </CardContent>
@@ -125,10 +123,7 @@ async function AboutUs() {
 
 async function Announcements() {
     const announcements = await getAnnouncements();
-
-    if (!announcements || announcements.length === 0) {
-        return null; // Don't render the section if there are no announcements
-    }
+    if (!announcements || announcements.length === 0) return null;
 
     return (
         <AnimatedSection animation="slide-in-left">
@@ -146,33 +141,39 @@ async function Announcements() {
                         </CardHeader>
                         <CardContent>
                             <div className="flex flex-col gap-4">
-                                {announcements.map((item, index) => (
-                                    <React.Fragment key={item.id}>
-                                        <div className="flex flex-col gap-1.5">
-                                            <p className="text-sm text-foreground">
-                                                {new Date(
-                                                    item.date,
-                                                ).toLocaleDateString('id-ID', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
-                                            </p>
-                                            <Link
-                                                href="/pengumuman"
-                                                className="font-semibold text-foreground hover:text-primary hover:underline"
-                                            >
-                                                {item.title}
-                                            </Link>
-                                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                                                {item.description}
-                                            </p>
-                                        </div>
-                                        {index < announcements.length - 1 && (
-                                            <Separator />
-                                        )}
-                                    </React.Fragment>
-                                ))}
+                                {announcements.map(
+                                    (item: any, index: number) => (
+                                        <React.Fragment key={item.id}>
+                                            <div className="flex flex-col gap-1.5">
+                                                <p className="text-sm text-foreground">
+                                                    {new Date(
+                                                        item.date,
+                                                    ).toLocaleDateString(
+                                                        'id-ID',
+                                                        {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                        },
+                                                    )}
+                                                </p>
+                                                <Link
+                                                    href="/pengumuman"
+                                                    className="font-semibold text-foreground hover:text-primary hover:underline"
+                                                >
+                                                    {item.title}
+                                                </Link>
+                                                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                            {index <
+                                                announcements.length - 1 && (
+                                                <Separator />
+                                            )}
+                                        </React.Fragment>
+                                    ),
+                                )}
                             </div>
                             <div className="mt-8 text-center">
                                 <Button asChild>
@@ -191,7 +192,6 @@ async function Announcements() {
 
 async function LatestNews() {
     const latestNews = await getLatestNews();
-
     if (!latestNews || latestNews.length === 0) {
         return (
             <section className="bg-primary/5 py-16 md:py-24">
@@ -221,8 +221,9 @@ async function LatestNews() {
                             sekolah kami.
                         </p>
                     </div>
+
                     <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8">
-                        {latestNews.map((item) => (
+                        {latestNews.map((item: any) => (
                             <Card
                                 key={item.id}
                                 className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
@@ -234,12 +235,12 @@ async function LatestNews() {
                                     >
                                         <Image
                                             src={
-                                                item.imageUrl ||
+                                                item.imageUrl ??
                                                 'https://placehold.co/400x400.png'
                                             }
                                             alt={item.title}
                                             fill
-                                            data-ai-hint="news event"
+                                            loading="lazy"
                                             className="object-cover"
                                         />
                                     </Link>
@@ -247,14 +248,13 @@ async function LatestNews() {
                                 <div className="flex flex-1 flex-col justify-between p-4">
                                     <div>
                                         <p className="mb-2 text-sm text-muted-foreground">
-                                            {new Date(item.date).toLocaleDateString(
-                                                'id-ID',
-                                                {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                },
-                                            )}
+                                            {new Date(
+                                                item.date,
+                                            ).toLocaleDateString('id-ID', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                            })}
                                         </p>
                                         <CardTitle className="font-headline text-lg font-bold text-primary">
                                             <Link
@@ -265,7 +265,8 @@ async function LatestNews() {
                                             </Link>
                                         </CardTitle>
                                         <p className="mt-2 text-sm text-foreground dark:text-foreground">
-                                            {item.description.substring(0, 80)}...
+                                            {item.description?.substring(0, 80)}
+                                            ...
                                         </p>
                                     </div>
                                     <Button
@@ -291,6 +292,7 @@ async function LatestNews() {
 async function Statistics() {
     const stats = await getStatistics();
     if (!stats) return null;
+
     const statistics = [
         {
             id: 'classrooms',
@@ -310,31 +312,52 @@ async function Statistics() {
             label: 'Guru',
             icon: UserCheck,
         },
-        {
-            id: 'staff',
-            value: stats.staff,
-            label: 'Staf',
-            icon: BookCopy,
-        },
+        { id: 'staff', value: stats.staff, label: 'Staf', icon: BookCopy },
     ];
 
     return (
         <AnimatedSection animation="scale-up">
-            <section className="bg-primary/5 py-16 md:py-24">
+            <section className="bg-primary/5 py-12 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="text-center">
-                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                        <h2 className="font-headline text-2xl md:text-3xl font-bold text-primary">
                             Statistik Data Sekolah
                         </h2>
-                        <p className="mx-auto mt-2 max-w-2xl text-foreground">
+                        <p className="mx-auto mt-1 max-w-2xl text-foreground text-sm md:text-base">
                             Sekilas data mengenai sumber daya di sekolah kami.
                         </p>
                     </div>
-                    <div className="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4">
+
+                    {/* MOBILE: grid 2x2 (grid-cols-2) - ringan tanpa shadow berat */}
+                    <div className="mt-6 grid grid-cols-2 gap-3 md:hidden">
+                        {statistics.map((s) => (
+                            <div
+                                key={s.id}
+                                className="rounded-lg bg-card p-3 flex items-center gap-3"
+                                role="group"
+                                aria-label={`${s.label} - ${s.value}`}
+                            >
+                                <div className="rounded-full bg-green-600/10 p-2 flex items-center justify-center">
+                                    <s.icon className="h-5 w-5 text-green-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xl font-semibold text-primary leading-tight">
+                                        {s.value}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground mt-0.5">
+                                        {s.label}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* DESKTOP: grid 4 kolom (seperti semula) dengan animasi hanya di md: ke atas */}
+                    <div className="hidden md:grid mt-8 grid-cols-2 md:grid-cols-4 gap-6">
                         {statistics.map((stat) => (
                             <Card
                                 key={stat.id}
-                                className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                                className="transform text-center md:transition-all md:duration-300 md:hover:-translate-y-2 md:hover:shadow-2xl shadow-none"
                             >
                                 <CardHeader className="items-center">
                                     <div className="rounded-full bg-green-600/20 p-4">
@@ -342,7 +365,7 @@ async function Statistics() {
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-4xl font-bold text-primary">
+                                    <p className="text-3xl md:text-4xl font-bold text-primary">
                                         {stat.value}
                                     </p>
                                     <p className="mt-2 text-foreground">
@@ -351,112 +374,6 @@ async function Statistics() {
                                 </CardContent>
                             </Card>
                         ))}
-                    </div>
-                </div>
-            </section>
-        </AnimatedSection>
-    );
-}
-
-async function Facilities() {
-    const facilities = await getFacilities();
-    const typedPlaceholders = placeholders as Array<{ src: string; base64: string }>;
-
-    return (
-        <AnimatedSection animation="fade-in">
-            <section className="py-16 md:py-24">
-                <div className="container mx-auto px-4">
-                    <div className="text-center">
-                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                            Fasilitas Sekolah
-                        </h2>
-                        <p className="mx-auto mt-2 max-w-2xl text-foreground">
-                            Lingkungan belajar yang lengkap dan modern untuk
-                            mendukung potensi siswa.
-                        </p>
-                    </div>
-                    <div className="mt-12 md:hidden">
-                        <Carousel opts={{ loop: true }}>
-                            <CarouselContent>
-                                {facilities.map((facility) => {
-                                    const placeholder = typedPlaceholders.find(
-                                        (p) => p.src === facility.imageUrl
-                                    );
-                                    return (
-                                        <CarouselItem key={facility.id}>
-                                            <div className="group relative overflow-hidden rounded-lg shadow-lg">
-                                                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                                {placeholder ? (
-                                                    <BlurImage
-                                                        src={facility.imageUrl}
-                                                        alt={facility.name}
-                                                        width={600}
-                                                        height={400}
-                                                        placeholder={placeholder.base64}
-                                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                    />
-                                                ) : (
-                                                    <Image
-                                                        src={facility.imageUrl}
-                                                        alt={facility.name}
-                                                        width={600}
-                                                        height={400}
-                                                        data-ai-hint="school facility"
-                                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                    />
-                                                )}
-                                                <div className="absolute inset-0 z-20 flex items-end p-6">
-                                                    <h3 className="font-headline text-xl font-bold text-white shadow-black drop-shadow-lg">
-                                                        {facility.name}
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                        </CarouselItem>
-                                    );
-                                })}
-                            </CarouselContent>
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </Carousel>
-                    </div>
-                    <div className="mt-12 hidden md:grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
-                        {facilities.map((facility) => {
-                            const placeholder = typedPlaceholders.find(
-                                (p) => p.src === facility.imageUrl
-                            );
-                            return (
-                                <div
-                                    key={facility.id}
-                                    className="group relative overflow-hidden rounded-lg shadow-lg"
-                                >
-                                    <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                    {placeholder ? (
-                                        <BlurImage
-                                            src={facility.imageUrl}
-                                            alt={facility.name}
-                                            width={600}
-                                            height={400}
-                                            placeholder={placeholder.base64}
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-                                    ) : (
-                                        <Image
-                                            src={facility.imageUrl}
-                                            alt={facility.name}
-                                            width={600}
-                                            height={400}
-                                            data-ai-hint="school facility"
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-                                    )}
-                                    <div className="absolute inset-0 z-20 flex items-end p-6">
-                                        <h3 className="font-headline text-xl font-bold text-white shadow-black drop-shadow-lg">
-                                            {facility.name}
-                                        </h3>
-                                    </div>
-                                </div>
-                            );
-                        })}
                     </div>
                 </div>
             </section>
@@ -474,7 +391,8 @@ async function FaqSection() {
                             Pertanyaan Umum
                         </h2>
                         <p className="mx-auto mt-2 max-w-2xl text-foreground">
-                            Temukan jawaban atas pertanyaan yang sering diajukan.
+                            Temukan jawaban atas pertanyaan yang sering
+                            diajukan.
                         </p>
                     </div>
                     <div className="mt-12 max-w-3xl mx-auto">
@@ -495,41 +413,45 @@ export default async function Home() {
     const banners = await getBanners();
     const profile = await getProfile();
     const marqueeItems = await getMarqueeItems();
+    const facilities = await getFacilities();
 
     return (
         <div className="flex flex-col">
-            <h1 className="sr-only">Selamat Datang di Website Resmi SMPN 24 Padang</h1>
-            {/* Hero Section */}
+            <h1 className="sr-only">
+                Selamat Datang di Website Resmi SMPN 24 Padang
+            </h1>
+
+            {/* Hero */}
             <AnimatedSection animation="fade-in">
                 <section className="relative w-full">
                     <ClientCarousel banners={banners} />
                 </section>
             </AnimatedSection>
 
-            {/* Marquee Section */}
+            {/* Marquee */}
             <AnimatedSection animation="fade-in">
                 <section>
                     <Marquee items={marqueeItems} />
                 </section>
             </AnimatedSection>
 
-            {/* Welcome from Principal Section */}
+            {/* Welcome from Principal */}
             <AnimatedSection animation="slide-in-left">
                 <section className="bg-primary/5 py-16 md:py-24">
                     <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-3 lg:grid-cols-5">
                         <div className="relative mx-auto h-96 w-80 overflow-hidden rounded-lg shadow-xl md:h-[450px] md:w-full md:col-span-1 lg:col-span-2">
                             <Image
                                 src={
-                                    profile?.principalImageUrl ||
+                                    profile?.principalImageUrl ??
                                     'https://placehold.co/600x800.png'
                                 }
                                 alt="Principal"
                                 fill
+                                loading="lazy"
                                 style={{
                                     objectFit: 'cover',
                                     objectPosition: 'top',
                                 }}
-                                data-ai-hint="school principal"
                                 className="transition-transform duration-500 hover:scale-110"
                             />
                         </div>
@@ -548,7 +470,7 @@ export default async function Home() {
                             <div
                                 className="mt-4 text-lg text-foreground line-clamp-8"
                                 dangerouslySetInnerHTML={{
-                                    __html: profile?.principalWelcome || '',
+                                    __html: profile?.principalWelcome ?? '',
                                 }}
                             />
                             <p className="mt-4 font-semibold text-primary">
@@ -572,22 +494,19 @@ export default async function Home() {
                 </section>
             </AnimatedSection>
 
-            {/* About Us Section */}
             <AboutUs />
-
-            {/* Announcements Section */}
             <Announcements />
-
-            {/* Latest News Section */}
             <LatestNews />
-
-            {/* Statistics Section */}
             <Statistics />
 
-            {/* Facilities Section */}
-            <Facilities />
+            {/* use client-side Facilities component */}
+            <Facilities
+                facilities={facilities}
+                placeholders={
+                    placeholders as Array<{ src: string; base64: string }>
+                }
+            />
 
-            {/* FAQ Section */}
             <FaqSection />
         </div>
     );

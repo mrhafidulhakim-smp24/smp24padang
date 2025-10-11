@@ -67,75 +67,113 @@ body {
 }
 
 @layer utilities {
-  .line-clamp-2 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-  .line-clamp-3 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-  }
-  .line-clamp-4 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-  }
-  .line-clamp-5 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
-  }
-  .line-clamp-6 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 6;
-  }
-  .line-clamp-7 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 7;
-  }
-  .line-clamp-8 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 8;
-  }
-  
-  @media print {
-    thead {
-      display: table-header-group;
+    .line-clamp-2 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+    .line-clamp-3 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+    .line-clamp-4 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+    }
+    .line-clamp-5 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+    }
+    .line-clamp-6 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 6;
+    }
+    .line-clamp-7 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 7;
+    }
+    .line-clamp-8 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 8;
     }
 
-    tr {
-      page-break-inside: avoid;
+    @media print {
+        thead {
+            display: table-header-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        .print-no-space > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0 !important;
+            margin-top: calc(
+                0rem * calc(1 - var(--tw-space-y-reverse))
+            ) !important;
+            margin-bottom: calc(0rem * var(--tw-space-y-reverse)) !important;
+        }
+
+        .print-break-inside-avoid {
+            page-break-inside: avoid;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black !important;
+            border-collapse: collapse !important;
+        }
+
+        th,
+        td {
+            padding: 4px 8px !important;
+        }
+    }
+}
+
+@layer components {
+    /* tombol pan (mobile) */
+    .pan-btn {
+        @apply w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform;
+        background-color: rgb(var(--primary) / 1); /* gunakan var --primary */
+        color: rgb(var(--primary-foreground) / 1); /* warna teks sesuai tema */
     }
 
-    .print-no-space > :not([hidden]) ~ :not([hidden]) {
-      --tw-space-y-reverse: 0 !important;
-      margin-top: calc(0rem * calc(1 - var(--tw-space-y-reverse))) !important;
-      margin-bottom: calc(0rem * var(--tw-space-y-reverse)) !important;
+    .pan-btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
     }
 
-    .print-break-inside-avoid {
-      page-break-inside: avoid;
+    .pan-btn:active {
+        transform: translateY(0);
+        filter: brightness(0.95);
     }
 
-    table, th, td {
-        border: 1px solid black !important;
-        border-collapse: collapse !important;
+    /* styling untuk ikon panah list di desktop (lebih kontras) */
+    .list-arrow {
+        @apply text-lg font-semibold text-primary;
     }
 
-    th, td {
-        padding: 4px 8px !important;
+    /* utility hide scrollbar (sudah ada) */
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
     }
-  }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }
