@@ -20,7 +20,7 @@ export default async function FaqAccordion() {
                     <AccordionTrigger className="text-left text-lg font-semibold">
                         {`${index + 1}. ${faq.question}`}
                     </AccordionTrigger>
-                    <AccordionContent className="text-base text-muted-foreground whitespace-pre-wrap">
+                    <AccordionContent className="text-base text-muted-foreground">
                         {faq.answer}
                     </AccordionContent>
                 </AccordionItem>

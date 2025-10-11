@@ -33,9 +33,7 @@ export const getYouTubeVideoId = (url: string): string | null => {
 export const getYouTubeThumbnailUrl = (url: string) => {
   const videoId = getYouTubeVideoId(url);
   if (videoId) {
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-    console.log('Generated Thumbnail URL:', thumbnailUrl);
-    return thumbnailUrl;
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   }
   return null;
 };
