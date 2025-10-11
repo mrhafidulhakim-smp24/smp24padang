@@ -61,7 +61,14 @@ export default async function GalleryPage() {
                 </div>
             ) : (
                 <div className="mt-16 text-center text-muted-foreground">
-                    <p>
+                    <Image
+                        width={800}
+                        height={600}
+                        src="https://via.placeholder.com/800x600.png/000000/FFFFFF?text=Image+Not+Found"
+                        alt="Placeholder"
+                        className="mx-auto w-full max-w-lg rounded-lg"
+                    />
+                    <p className="mt-4">
                         Belum ada gambar di galeri. Silakan periksa kembali
                         nanti.
                     </p>

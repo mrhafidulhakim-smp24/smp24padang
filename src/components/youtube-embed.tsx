@@ -9,19 +9,25 @@ export const getYouTubeVideoId = (url: string): string | null => {
   if (!url) return null;
   try {
     const urlObj = new URL(url);
-    let videoId = urlObj.searchParams.get('v');
-    if (videoId) {
-      return videoId;
+    let videoId: string | null = null;
+
+    if (urlObj.hostname.includes('youtube.com')) {
+      if (urlObj.pathname.includes('/watch')) {
+        videoId = urlObj.searchParams.get('v');
+      } else if (urlObj.pathname.includes('/embed/')) {
+        videoId = urlObj.pathname.split('/embed/')[1].split('/')[0];
+      } else if (urlObj.pathname.includes('/live/')) {
+        videoId = urlObj.pathname.split('/live/')[1].split('/')[0];
+      }
+    } else if (urlObj.hostname === 'youtu.be') {
+      videoId = urlObj.pathname.slice(1).split('/')[0];
     }
-    if (urlObj.hostname === 'youtu.be') {
-      videoId = urlObj.pathname.slice(1);
-      return videoId;
-    }
+
+    return videoId;
   } catch (error) {
     console.error('Invalid YouTube URL', error);
     return null;
   }
-  return null;
 };
 
 export const getYouTubeThumbnailUrl = (url: string) => {

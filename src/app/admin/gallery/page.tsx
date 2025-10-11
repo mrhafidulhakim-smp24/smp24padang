@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlusCircle, Trash2, Upload } from 'lucide-react';
+import { PlusCircle, Trash2, Upload, Pencil } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -45,6 +45,7 @@ import {
     createGalleryItem,
     deleteGalleryItem,
     getGalleryItems,
+    updateGalleryItem,
 } from './actions';
 import type { galleryItems as GalleryItemSchema } from '@/lib/db/schema';
 import { type InferSelectModel } from 'drizzle-orm';
@@ -155,10 +156,91 @@ function GalleryForm({
     );
 }
 
+function GalleryEditForm({
+    item,
+    onClose,
+}: {
+    item: GalleryItem;
+    onClose: () => void;
+}) {
+    const [state, formAction] = useFormState(updateGalleryItem, {
+        success: false,
+        message: '',
+    });
+    const { toast } = useToast();
+
+    useEffect(() => {
+        if (state.success) {
+            toast({ title: 'Sukses!', description: state.message });
+            onClose();
+        } else if (state.message) {
+            toast({
+                title: 'Gagal',
+                description: state.message,
+                variant: 'destructive',
+            });
+        }
+    }, [state, toast, onClose]);
+
+    return (
+        <form action={formAction} className="space-y-4">
+            <Input type="hidden" name="id" value={item.id} />
+            <div className="flex items-center gap-4">
+                <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={120}
+                    height={80}
+                    className="rounded-md object-cover"
+                />
+                <div>
+                    <p className="text-sm font-medium">Gambar saat ini</p>
+                    <p className="text-xs text-muted-foreground">
+                        Mengubah gambar tidak didukung saat ini.
+                    </p>
+                </div>
+            </div>
+            <div>
+                <Label htmlFor="alt">Judul/Deskripsi Gambar</Label>
+                <Input id="alt" name="alt" defaultValue={item.alt} required />
+            </div>
+            <div>
+                <Label htmlFor="category">Kategori</Label>
+                <Input
+                    id="category"
+                    name="category"
+                    defaultValue={item.category}
+                    required
+                />
+            </div>
+            <div>
+                <Label htmlFor="orientation">Orientasi Gambar</Label>
+                <Select
+                    name="orientation"
+                    defaultValue={item.orientation}
+                    required
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Pilih orientasi..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="landscape">Landscape</SelectItem>
+                        <SelectItem value="portrait">Portrait</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <DialogFooter>
+                <SubmitButton />
+            </DialogFooter>
+        </form>
+    );
+}
+
 export default function GalleryAdminPage() {
     const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddOpen, setAddOpen] = useState(false);
+    const [isEditOpen, setEditOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
     const { toast } = useToast();
@@ -208,7 +290,7 @@ export default function GalleryAdminPage() {
                             Kelola Galeri
                         </CardTitle>
                         <CardDescription className="mt-2 text-lg">
-                            Tambah atau hapus gambar dari galeri sekolah.
+                            Tambah, edit, atau hapus gambar dari galeri sekolah.
                         </CardDescription>
                     </div>
                     <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
@@ -258,7 +340,18 @@ export default function GalleryAdminPage() {
                                     height={400}
                                     className="aspect-square w-full rounded-lg object-cover"
                                 />
-                                <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+                                <div className="absolute inset-0 flex items-center justify-center gap-2 rounded-lg bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        onClick={() => {
+                                            setSelectedItem(item);
+                                            setEditOpen(true);
+                                        }}
+                                    >
+                                        <Pencil className="h-5 w-5" />
+                                        <span className="sr-only">Edit</span>
+                                    </Button>
                                     <Button
                                         variant="destructive"
                                         size="icon"
@@ -278,6 +371,26 @@ export default function GalleryAdminPage() {
                     </div>
                 )}
             </CardContent>
+
+            {/* Edit Dialog */}
+            {selectedItem && (
+                <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Edit Detail Gambar</DialogTitle>
+                        </DialogHeader>
+                        <GalleryEditForm
+                            item={selectedItem}
+                            onClose={() => {
+                                setEditOpen(false);
+                                setSelectedItem(null);
+                                fetchItems();
+                            }}
+                        />
+                    </DialogContent>
+                </Dialog>
+            )}
+
             {/* Delete AlertDialog */}
             <AlertDialog open={isDeleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>

@@ -44,6 +44,31 @@ export async function createGalleryItem(prevState: any, formData: FormData) {
     }
 }
 
+export async function updateGalleryItem(prevState: any, formData: FormData) {
+    const id = formData.get('id') as string;
+    const alt = formData.get('alt') as string;
+    const category = formData.get('category') as string;
+    const orientation = formData.get('orientation') as 'landscape' | 'portrait';
+
+    if (!id || !alt || !category || !orientation) {
+        return { success: false, message: 'Data tidak lengkap.' };
+    }
+
+    try {
+        await db
+            .update(galleryItems)
+            .set({ alt, category, orientation })
+            .where(eq(galleryItems.id, id));
+
+        revalidatePath('/gallery');
+        revalidatePath('/admin/gallery');
+        return { success: true, message: 'Gambar berhasil diperbarui.' };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Gagal memperbarui gambar.' };
+    }
+}
+
 export async function deleteGalleryItem(id: string, src: string) {
     try {
         if (src && !src.includes('placehold.co')) {
