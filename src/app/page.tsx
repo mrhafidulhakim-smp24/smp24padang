@@ -45,6 +45,9 @@ import {
 } from './actions';
 import { Separator } from '@/components/ui/separator';
 import FaqAccordion from '@/components/faq/faq-accordion';
+import { AnimatedSection } from '@/components/animated-section';
+import { BlurImage } from '@/components/blur-image';
+import placeholders from '@/lib/placeholders.json';
 
 export const metadata: Metadata = {
     title: 'SMPN 24 Padang | Cerdas, Terampil & Bebudidaya Lingkungan',
@@ -58,63 +61,65 @@ async function AboutUs() {
     const about = await getAbout();
 
     return (
-        <section className="bg-background py-16 md:py-24" data-aos="fade-up">
-            <div className="container mx-auto px-4">
-                <div className="text-center">
-                    <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Visi & Misi
-                    </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
-                        Fondasi dan komitmen yang menjadi landasan SMPN 24
-                        Padang.
-                    </p>
+        <AnimatedSection animation="slide-in-up">
+            <section className="bg-background py-16 md:py-24">
+                <div className="container mx-auto px-4">
+                    <div className="text-center">
+                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                            Visi & Misi
+                        </h2>
+                        <p className="mx-auto mt-2 max-w-2xl text-foreground">
+                            Fondasi dan komitmen yang menjadi landasan SMPN 24
+                            Padang.
+                        </p>
+                    </div>
+                    <div className="mt-12">
+                        <Card className="h-full bg-primary/5">
+                            <CardContent className="flex flex-col gap-8 p-6 md:p-8">
+                                <div>
+                                    <div className="flex items-center justify-center gap-4">
+                                        <Target className="h-8 w-8 text-green-600" />
+                                        <h4 className="font-headline text-3xl font-bold text-primary">
+                                            Visi
+                                        </h4>
+                                    </div>
+                                    <p className="mt-2 text-center text-2xl font-bold text-foreground">
+                                        {about.vision}
+                                    </p>
+                                </div>
+                                <div>
+                                    <div className="flex items-center justify-center gap-4">
+                                        <Book className="h-8 w-8 text-green-600" />
+                                        <h4 className="font-headline text-3xl font-bold text-primary">
+                                            Misi
+                                        </h4>
+                                    </div>
+                                    <div className="mt-2 space-y-2 font-bold text-foreground">
+                                        {about.mission
+                                            .slice(0, 10)
+                                            .map((item, index) => (
+                                                <p key={index}>{item}</p>
+                                            ))}
+                                    </div>
+                                </div>
+                            </CardContent>
+                            <CardFooter className="justify-center">
+                                <Button
+                                    asChild
+                                    variant="link"
+                                    className="mt-4 p-0 self-start text-primary hover:text-primary/80"
+                                >
+                                    <Link href="/profile/vision-mission">
+                                        Baca Selengkapnya{' '}
+                                        <ArrowRight className="ml-1 h-4 w-4" />
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </div>
                 </div>
-                <div className="mt-12">
-                    <Card className="h-full bg-primary/5">
-                        <CardContent className="flex flex-col gap-8 p-6 md:p-8">
-                            <div>
-                                <div className="flex items-center justify-center gap-4">
-                                    <Target className="h-8 w-8 text-green-600" />
-                                    <h4 className="font-headline text-3xl font-bold text-primary">
-                                        Visi
-                                    </h4>
-                                </div>
-                                <p className="mt-2 text-center text-2xl font-bold text-foreground">
-                                    {about.vision}
-                                </p>
-                            </div>
-                            <div>
-                                <div className="flex items-center justify-center gap-4">
-                                    <Book className="h-8 w-8 text-green-600" />
-                                    <h4 className="font-headline text-3xl font-bold text-primary">
-                                        Misi
-                                    </h4>
-                                </div>
-                                <div className="mt-2 space-y-2 font-bold text-foreground">
-                                    {about.mission
-                                        .slice(0, 10)
-                                        .map((item, index) => (
-                                            <p key={index}>{item}</p>
-                                        ))}
-                                </div>
-                            </div>
-                        </CardContent>
-                        <CardFooter className="justify-center">
-                            <Button
-                                asChild
-                                variant="link"
-                                className="mt-4 p-0 self-start text-primary hover:text-primary/80"
-                            >
-                                <Link href="/profile/vision-mission">
-                                    Baca Selengkapnya{' '}
-                                    <ArrowRight className="ml-1 h-4 w-4" />
-                                </Link>
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                </div>
-            </div>
-        </section>
+            </section>
+        </AnimatedSection>
     );
 }
 
@@ -126,59 +131,61 @@ async function Announcements() {
     }
 
     return (
-        <section className="bg-primary/5 py-16 md:py-24" data-aos="fade-up">
-            <div className="container mx-auto px-4">
-                <Card className="mx-auto max-w-6xl">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3 font-headline text-3xl text-primary">
-                            <Megaphone className="h-8 w-8 text-green-600" />
-                            Pengumuman Terbaru
-                        </CardTitle>
-                        <CardDescription>
-                            Informasi penting dan terkini dari sekolah.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-col gap-4">
-                            {announcements.map((item, index) => (
-                                <React.Fragment key={item.id}>
-                                    <div className="flex flex-col gap-1.5">
-                                        <p className="text-sm text-foreground">
-                                            {new Date(
-                                                item.date,
-                                            ).toLocaleDateString('id-ID', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                            })}
-                                        </p>
-                                        <Link
-                                            href="/pengumuman"
-                                            className="font-semibold text-foreground hover:text-primary hover:underline"
-                                        >
-                                            {item.title}
-                                        </Link>
-                                        <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                                            {item.description}
-                                        </p>
-                                    </div>
-                                    {index < announcements.length - 1 && (
-                                        <Separator />
-                                    )}
-                                </React.Fragment>
-                            ))}
-                        </div>
-                        <div className="mt-8 text-center">
-                            <Button asChild>
-                                <Link href="/pengumuman">
-                                    Lihat Semua Pengumuman
-                                </Link>
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </section>
+        <AnimatedSection animation="slide-in-left">
+            <section className="bg-primary/5 py-16 md:py-24">
+                <div className="container mx-auto px-4">
+                    <Card className="mx-auto max-w-6xl">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-3 font-headline text-3xl text-primary">
+                                <Megaphone className="h-8 w-8 text-green-600" />
+                                Pengumuman Terbaru
+                            </CardTitle>
+                            <CardDescription>
+                                Informasi penting dan terkini dari sekolah.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex flex-col gap-4">
+                                {announcements.map((item, index) => (
+                                    <React.Fragment key={item.id}>
+                                        <div className="flex flex-col gap-1.5">
+                                            <p className="text-sm text-foreground">
+                                                {new Date(
+                                                    item.date,
+                                                ).toLocaleDateString('id-ID', {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                })}
+                                            </p>
+                                            <Link
+                                                href="/pengumuman"
+                                                className="font-semibold text-foreground hover:text-primary hover:underline"
+                                            >
+                                                {item.title}
+                                            </Link>
+                                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                                                {item.description}
+                                            </p>
+                                        </div>
+                                        {index < announcements.length - 1 && (
+                                            <Separator />
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                            <div className="mt-8 text-center">
+                                <Button asChild>
+                                    <Link href="/pengumuman">
+                                        Lihat Semua Pengumuman
+                                    </Link>
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </section>
+        </AnimatedSection>
     );
 }
 
@@ -202,80 +209,82 @@ async function LatestNews() {
     }
 
     return (
-        <section className="bg-primary/5 py-16 md:py-24" data-aos="fade-up">
-            <div className="container mx-auto px-4">
-                <div className="text-center">
-                    <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Berita Terkini
-                    </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-                        Ikuti kegiatan dan prestasi terbaru dari lingkungan
-                        sekolah kami.
-                    </p>
-                </div>
-                <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8">
-                    {latestNews.map((item) => (
-                        <Card
-                            key={item.id}
-                            className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
-                        >
-                            <div className="relative w-full aspect-video">
-                                <Link
-                                    href={`/articles/${item.id}`}
-                                    className="absolute inset-0"
-                                >
-                                    <Image
-                                        src={
-                                            item.imageUrl ||
-                                            'https://placehold.co/400x400.png'
-                                        }
-                                        alt={item.title}
-                                        fill
-                                        data-ai-hint="news event"
-                                        className="object-cover"
-                                    />
-                                </Link>
-                            </div>
-                            <div className="flex flex-1 flex-col justify-between p-4">
-                                <div>
-                                    <p className="mb-2 text-sm text-muted-foreground">
-                                        {new Date(item.date).toLocaleDateString(
-                                            'id-ID',
-                                            {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                            },
-                                        )}
-                                    </p>
-                                    <CardTitle className="font-headline text-lg font-bold text-primary">
-                                        <Link
-                                            href={`/articles/${item.id}`}
-                                            className="hover:underline"
-                                        >
-                                            {item.title}
-                                        </Link>
-                                    </CardTitle>
-                                    <p className="mt-2 text-sm text-foreground dark:text-foreground">
-                                        {item.description.substring(0, 80)}...
-                                    </p>
-                                </div>
-                                <Button
-                                    variant="link"
-                                    asChild
-                                    className="mt-4 p-0 self-start text-primary hover:text-primary/80"
-                                >
-                                    <Link href={`/articles/${item.id}`}>
-                                        Baca Lebih Lanjut{' '}
-                                        <ArrowRight className="ml-1 h-4 w-4" />
+        <AnimatedSection animation="slide-in-right">
+            <section className="bg-primary/5 py-16 md:py-24">
+                <div className="container mx-auto px-4">
+                    <div className="text-center">
+                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                            Berita Terkini
+                        </h2>
+                        <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+                            Ikuti kegiatan dan prestasi terbaru dari lingkungan
+                            sekolah kami.
+                        </p>
+                    </div>
+                    <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8">
+                        {latestNews.map((item) => (
+                            <Card
+                                key={item.id}
+                                className="flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl"
+                            >
+                                <div className="relative w-full aspect-video">
+                                    <Link
+                                        href={`/articles/${item.id}`}
+                                        className="absolute inset-0"
+                                    >
+                                        <Image
+                                            src={
+                                                item.imageUrl ||
+                                                'https://placehold.co/400x400.png'
+                                            }
+                                            alt={item.title}
+                                            fill
+                                            data-ai-hint="news event"
+                                            className="object-cover"
+                                        />
                                     </Link>
-                                </Button>
-                            </div>
-                        </Card>
-                    ))}
+                                </div>
+                                <div className="flex flex-1 flex-col justify-between p-4">
+                                    <div>
+                                        <p className="mb-2 text-sm text-muted-foreground">
+                                            {new Date(item.date).toLocaleDateString(
+                                                'id-ID',
+                                                {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                },
+                                            )}
+                                        </p>
+                                        <CardTitle className="font-headline text-lg font-bold text-primary">
+                                            <Link
+                                                href={`/articles/${item.id}`}
+                                                className="hover:underline"
+                                            >
+                                                {item.title}
+                                            </Link>
+                                        </CardTitle>
+                                        <p className="mt-2 text-sm text-foreground dark:text-foreground">
+                                            {item.description.substring(0, 80)}...
+                                        </p>
+                                    </div>
+                                    <Button
+                                        variant="link"
+                                        asChild
+                                        className="mt-4 p-0 self-start text-primary hover:text-primary/80"
+                                    >
+                                        <Link href={`/articles/${item.id}`}>
+                                            Baca Lebih Lanjut{' '}
+                                            <ArrowRight className="ml-1 h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </AnimatedSection>
     );
 }
 
@@ -310,108 +319,175 @@ async function Statistics() {
     ];
 
     return (
-        <section className="bg-primary/5 py-16 md:py-24" data-aos="fade-up">
-            <div className="container mx-auto px-4">
-                <div className="text-center">
-                    <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Statistik Data Sekolah
-                    </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
-                        Sekilas data mengenai sumber daya di sekolah kami.
-                    </p>
+        <AnimatedSection animation="scale-up">
+            <section className="bg-primary/5 py-16 md:py-24">
+                <div className="container mx-auto px-4">
+                    <div className="text-center">
+                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                            Statistik Data Sekolah
+                        </h2>
+                        <p className="mx-auto mt-2 max-w-2xl text-foreground">
+                            Sekilas data mengenai sumber daya di sekolah kami.
+                        </p>
+                    </div>
+                    <div className="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4">
+                        {statistics.map((stat) => (
+                            <Card
+                                key={stat.id}
+                                className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                            >
+                                <CardHeader className="items-center">
+                                    <div className="rounded-full bg-green-600/20 p-4">
+                                        <stat.icon className="h-10 w-10 text-green-600" />
+                                    </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-4xl font-bold text-primary">
+                                        {stat.value}
+                                    </p>
+                                    <p className="mt-2 text-foreground">
+                                        {stat.label}
+                                    </p>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
                 </div>
-                <div className="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4">
-                    {statistics.map((stat) => (
-                        <Card
-                            key={stat.id}
-                            className="transform text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-                        >
-                            <CardHeader className="items-center">
-                                <div className="rounded-full bg-green-600/20 p-4">
-                                    <stat.icon className="h-10 w-10 text-green-600" />
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-4xl font-bold text-primary">
-                                    {stat.value}
-                                </p>
-                                <p className="mt-2 text-foreground">
-                                    {stat.label}
-                                </p>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-            </div>
-        </section>
+            </section>
+        </AnimatedSection>
     );
 }
 
 async function Facilities() {
     const facilities = await getFacilities();
+    const typedPlaceholders = placeholders as Array<{ src: string; base64: string }>;
 
     return (
-        <section className="py-16 md:py-24" data-aos="fade-up">
-            <div className="container mx-auto px-4">
-                <div className="text-center">
-                    <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Fasilitas Sekolah
-                    </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
-                        Lingkungan belajar yang lengkap dan modern untuk
-                        mendukung potensi siswa.
-                    </p>
+        <AnimatedSection animation="fade-in">
+            <section className="py-16 md:py-24">
+                <div className="container mx-auto px-4">
+                    <div className="text-center">
+                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                            Fasilitas Sekolah
+                        </h2>
+                        <p className="mx-auto mt-2 max-w-2xl text-foreground">
+                            Lingkungan belajar yang lengkap dan modern untuk
+                            mendukung potensi siswa.
+                        </p>
+                    </div>
+                    <div className="mt-12 md:hidden">
+                        <Carousel opts={{ loop: true }}>
+                            <CarouselContent>
+                                {facilities.map((facility) => {
+                                    const placeholder = typedPlaceholders.find(
+                                        (p) => p.src === facility.imageUrl
+                                    );
+                                    return (
+                                        <CarouselItem key={facility.id}>
+                                            <div className="group relative overflow-hidden rounded-lg shadow-lg">
+                                                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                                {placeholder ? (
+                                                    <BlurImage
+                                                        src={facility.imageUrl}
+                                                        alt={facility.name}
+                                                        width={600}
+                                                        height={400}
+                                                        placeholder={placeholder.base64}
+                                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                                    />
+                                                ) : (
+                                                    <Image
+                                                        src={facility.imageUrl}
+                                                        alt={facility.name}
+                                                        width={600}
+                                                        height={400}
+                                                        data-ai-hint="school facility"
+                                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                                    />
+                                                )}
+                                                <div className="absolute inset-0 z-20 flex items-end p-6">
+                                                    <h3 className="font-headline text-xl font-bold text-white shadow-black drop-shadow-lg">
+                                                        {facility.name}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </CarouselItem>
+                                    );
+                                })}
+                            </CarouselContent>
+                            <CarouselPrevious />
+                            <CarouselNext />
+                        </Carousel>
+                    </div>
+                    <div className="mt-12 hidden md:grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
+                        {facilities.map((facility) => {
+                            const placeholder = typedPlaceholders.find(
+                                (p) => p.src === facility.imageUrl
+                            );
+                            return (
+                                <div
+                                    key={facility.id}
+                                    className="group relative overflow-hidden rounded-lg shadow-lg"
+                                >
+                                    <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                    {placeholder ? (
+                                        <BlurImage
+                                            src={facility.imageUrl}
+                                            alt={facility.name}
+                                            width={600}
+                                            height={400}
+                                            placeholder={placeholder.base64}
+                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                    ) : (
+                                        <Image
+                                            src={facility.imageUrl}
+                                            alt={facility.name}
+                                            width={600}
+                                            height={400}
+                                            data-ai-hint="school facility"
+                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                    )}
+                                    <div className="absolute inset-0 z-20 flex items-end p-6">
+                                        <h3 className="font-headline text-xl font-bold text-white shadow-black drop-shadow-lg">
+                                            {facility.name}
+                                        </h3>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-                <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
-                    {facilities.map((facility) => (
-                        <div
-                            key={facility.id}
-                            className="group relative overflow-hidden rounded-lg shadow-lg"
-                        >
-                            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <Image
-                                src={facility.imageUrl}
-                                alt={facility.name}
-                                width={600}
-                                height={400}
-                                data-ai-hint="school facility"
-                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 z-20 flex items-end p-6">
-                                <h3 className="font-headline text-xl font-bold text-white shadow-black drop-shadow-lg">
-                                    {facility.name}
-                                </h3>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
+            </section>
+        </AnimatedSection>
     );
 }
 
 async function FaqSection() {
     return (
-        <section className="bg-primary/5 py-16 md:py-24" data-aos="fade-up">
-            <div className="container mx-auto px-4">
-                <div className="text-center">
-                    <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
-                        Pertanyaan Umum
-                    </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-foreground">
-                        Temukan jawaban atas pertanyaan yang sering diajukan.
-                    </p>
+        <AnimatedSection animation="slide-in-up">
+            <section className="bg-primary/5 py-16 md:py-24">
+                <div className="container mx-auto px-4">
+                    <div className="text-center">
+                        <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl">
+                            Pertanyaan Umum
+                        </h2>
+                        <p className="mx-auto mt-2 max-w-2xl text-foreground">
+                            Temukan jawaban atas pertanyaan yang sering diajukan.
+                        </p>
+                    </div>
+                    <div className="mt-12 max-w-3xl mx-auto">
+                        <FaqAccordion />
+                    </div>
+                    <div className="mt-8 text-center">
+                        <Button asChild>
+                            <Link href="/contact">Selengkapnya</Link>
+                        </Button>
+                    </div>
                 </div>
-                <div className="mt-12 max-w-3xl mx-auto">
-                    <FaqAccordion />
-                </div>
-                <div className="mt-8 text-center">
-                    <Button asChild>
-                        <Link href="/contact">Selengkapnya</Link>
-                    </Button>
-                </div>
-            </div>
-        </section>
+            </section>
+        </AnimatedSection>
     );
 }
 
@@ -424,71 +500,77 @@ export default async function Home() {
         <div className="flex flex-col">
             <h1 className="sr-only">Selamat Datang di Website Resmi SMPN 24 Padang</h1>
             {/* Hero Section */}
-            <section className="relative w-full">
-                <ClientCarousel banners={banners} />
-            </section>
+            <AnimatedSection animation="fade-in">
+                <section className="relative w-full">
+                    <ClientCarousel banners={banners} />
+                </section>
+            </AnimatedSection>
 
             {/* Marquee Section */}
-            <section>
-                <Marquee items={marqueeItems} />
-            </section>
+            <AnimatedSection animation="fade-in">
+                <section>
+                    <Marquee items={marqueeItems} />
+                </section>
+            </AnimatedSection>
 
             {/* Welcome from Principal Section */}
-            <section className="bg-primary/5 py-16 md:py-24">
-                <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-3 lg:grid-cols-5">
-                    <div className="relative mx-auto h-96 w-80 overflow-hidden rounded-lg shadow-xl md:h-[450px] md:w-full md:col-span-1 lg:col-span-2">
-                        <Image
-                            src={
-                                profile?.principalImageUrl ||
-                                'https://placehold.co/600x800.png'
-                            }
-                            alt="Principal"
-                            fill
-                            style={{
-                                objectFit: 'cover',
-                                objectPosition: 'top',
-                            }}
-                            data-ai-hint="school principal"
-                            className="transition-transform duration-500 hover:scale-110"
-                        />
-                    </div>
-                    <div className="md:col-span-2 lg:col-span-3">
-                        <h2 className="font-headline text-3xl font-bold text-primary">
-                            Sambutan Kepala Sekolah
-                        </h2>
-                        <div className="mt-4 flex items-center gap-3 rounded-lg bg-green-100 p-3 dark:bg-green-900/30">
-                            <ShieldCheck className="h-6 w-6 flex-shrink-0 text-green-600 dark:text-green-400" />
-                            <p className="font-semibold text-green-800 dark:text-green-200">
-                                Terakreditasi A - Sekolah Adiwiyata Mandiri
-                                Nasional, Sekolah Ramah Anak & Sekolah Siaga
-                                Kependudukan
-                            </p>
+            <AnimatedSection animation="slide-in-left">
+                <section className="bg-primary/5 py-16 md:py-24">
+                    <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-3 lg:grid-cols-5">
+                        <div className="relative mx-auto h-96 w-80 overflow-hidden rounded-lg shadow-xl md:h-[450px] md:w-full md:col-span-1 lg:col-span-2">
+                            <Image
+                                src={
+                                    profile?.principalImageUrl ||
+                                    'https://placehold.co/600x800.png'
+                                }
+                                alt="Principal"
+                                fill
+                                style={{
+                                    objectFit: 'cover',
+                                    objectPosition: 'top',
+                                }}
+                                data-ai-hint="school principal"
+                                className="transition-transform duration-500 hover:scale-110"
+                            />
                         </div>
-                        <div
-                            className="mt-4 text-lg text-foreground line-clamp-8"
-                            dangerouslySetInnerHTML={{
-                                __html: profile?.principalWelcome || '',
-                            }}
-                        />
-                        <p className="mt-4 font-semibold text-primary">
-                            {profile?.principalName}
-                        </p>
-                        <p className="text-sm text-foreground">
-                            Kepala SMPN 24 Padang
-                        </p>
-                        <Button
-                            asChild
-                            variant="link"
-                            className="mt-4 p-0 text-green-600 hover:text-green-700"
-                        >
-                            <Link href="/profile">
-                                Baca Lebih Lanjut tentang Kepala Sekolah{' '}
-                                <ArrowRight className="ml-1 h-4 w-4" />
-                            </Link>
-                        </Button>
+                        <div className="md:col-span-2 lg:col-span-3">
+                            <h2 className="font-headline text-3xl font-bold text-primary">
+                                Sambutan Kepala Sekolah
+                            </h2>
+                            <div className="mt-4 flex items-center gap-3 rounded-lg bg-green-100 p-3 dark:bg-green-900/30">
+                                <ShieldCheck className="h-6 w-6 flex-shrink-0 text-green-600 dark:text-green-400" />
+                                <p className="font-semibold text-green-800 dark:text-green-200">
+                                    Terakreditasi A - Sekolah Adiwiyata Mandiri
+                                    Nasional, Sekolah Ramah Anak & Sekolah Siaga
+                                    Kependudukan
+                                </p>
+                            </div>
+                            <div
+                                className="mt-4 text-lg text-foreground line-clamp-8"
+                                dangerouslySetInnerHTML={{
+                                    __html: profile?.principalWelcome || '',
+                                }}
+                            />
+                            <p className="mt-4 font-semibold text-primary">
+                                {profile?.principalName}
+                            </p>
+                            <p className="text-sm text-foreground">
+                                Kepala SMPN 24 Padang
+                            </p>
+                            <Button
+                                asChild
+                                variant="link"
+                                className="mt-4 p-0 text-green-600 hover:text-green-700"
+                            >
+                                <Link href="/profile">
+                                    Baca Lebih Lanjut tentang Kepala Sekolah{' '}
+                                    <ArrowRight className="ml-1 h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </AnimatedSection>
 
             {/* About Us Section */}
             <AboutUs />
