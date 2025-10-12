@@ -38,20 +38,24 @@ export function GuruDialog({
         errors: {},
         success: false,
     });
+    const processedStateRef = useRef<typeof state | null>(null);
 
     useEffect(() => {
-        if (state.message) {
-            if (state.success) {
-                toast({ title: 'Sukses', description: state.message });
-                onSuccess();
-                onClose();
-            } else {
-                toast({
-                    title: 'Gagal',
-                    description: state.message,
-                    variant: 'destructive',
-                });
+        if (state !== processedStateRef.current) {
+            if (state.message) {
+                if (state.success) {
+                    toast({ title: 'Sukses', description: state.message });
+                    onSuccess();
+                    onClose();
+                } else {
+                    toast({
+                        title: 'Gagal',
+                        description: state.message,
+                        variant: 'destructive',
+                    });
+                }
             }
+            processedStateRef.current = state;
         }
     }, [state, toast, onSuccess, onClose]);
 
