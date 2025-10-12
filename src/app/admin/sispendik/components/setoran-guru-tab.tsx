@@ -92,6 +92,7 @@ export function TabSetoranGuru({
         success: false,
     });
     const addFormRef = useRef<HTMLFormElement>(null);
+    const processedAddStateRef = useRef<typeof addState | null>(null);
 
     const refetchGurus = async () => {
         const res = await getAllGurus();
@@ -132,21 +133,24 @@ export function TabSetoranGuru({
     };
 
     useEffect(() => {
-        if (addState.message) {
-            if (addState.success) {
-                toast({ title: 'Sukses', description: addState.message });
-                addFormRef.current?.reset();
-                refetchAllSetoran();
-                if (manageGuru) {
-                    fetchGuruEntries(manageGuru.id);
+        if (addState !== processedAddStateRef.current) {
+            if (addState.message) {
+                if (addState.success) {
+                    toast({ title: 'Sukses', description: addState.message });
+                    addFormRef.current?.reset();
+                    refetchAllSetoran();
+                    if (manageGuru) {
+                        fetchGuruEntries(manageGuru.id);
+                    }
+                } else {
+                    toast({
+                        title: 'Gagal',
+                        description: addState.message,
+                        variant: 'destructive',
+                    });
                 }
-            } else {
-                toast({
-                    title: 'Gagal',
-                    description: addState.message,
-                    variant: 'destructive',
-                });
             }
+            processedAddStateRef.current = addState;
         }
     }, [addState, toast, manageGuru]);
 
