@@ -76,7 +76,9 @@ export function TabSetoranGuru({
     const [entries, setEntries] = useState<SetoranGuruEntry[]>([]);
     const [loadingEntries, setLoadingEntries] = useState(false); // Loading state for dialog
     const [editingEntryId, setEditingEntryId] = useState<number | null>(null);
-    const [editedEntry, setEditedEntry] = useState<Partial<SetoranGuruEntry>>({});
+    const [editedEntry, setEditedEntry] = useState<Partial<SetoranGuruEntry>>(
+        {},
+    );
     const [isSaving, setIsSaving] = useState(false);
     const [deleteEntryDialog, setDeleteEntryDialog] =
         useState<SetoranGuruEntry | null>(null);
@@ -171,11 +173,16 @@ export function TabSetoranGuru({
                     acc + Number(s.jumlahKg) * Number(s.hargaPerKg || 0),
                 0,
             );
+            const wasteTypes = [
+                ...new Set(guruSetoran.map((s) => s.jenisSampah)),
+            ].join(', ');
+
             return {
                 ...guru,
                 totalKg,
                 totalValue,
                 setoranCount: guruSetoran.length,
+                wasteTypes,
             };
         });
         return summary;
@@ -211,13 +218,10 @@ export function TabSetoranGuru({
             return;
         }
 
-        const result = await updateSetoranGuru(
-            entryId,
-            {
-                jenisSampahId: jenisId,
-                jumlahKg: jumlah
-            }
-        );
+        const result = await updateSetoranGuru(entryId, {
+            jenisSampahId: jenisId,
+            jumlahKg: jumlah,
+        });
         if (result.success) {
             toast({ title: 'Sukses', description: result.message });
             cancelEditEntry();
@@ -308,6 +312,7 @@ export function TabSetoranGuru({
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Nama Guru</TableHead>
+                                    <TableHead>Jenis Sampah</TableHead>
                                     <TableHead>Jumlah Setoran</TableHead>
                                     <TableHead>Total (Kg)</TableHead>
                                     <TableHead>Total (Rp)</TableHead>
@@ -322,6 +327,9 @@ export function TabSetoranGuru({
                                         <TableRow key={guru.id}>
                                             <TableCell className="font-medium">
                                                 {guru.namaGuru}
+                                            </TableCell>
+                                            <TableCell>
+                                                {guru.wasteTypes}
                                             </TableCell>
                                             <TableCell>
                                                 {guru.setoranCount}
@@ -357,7 +365,9 @@ export function TabSetoranGuru({
                                                         size="icon"
                                                         title="Hapus Guru"
                                                         onClick={() =>
-                                                            setDeletingGuru(guru)
+                                                            setDeletingGuru(
+                                                                guru,
+                                                            )
                                                         }
                                                     >
                                                         <Trash2 className="h-4 w-4" />
@@ -369,7 +379,7 @@ export function TabSetoranGuru({
                                 ) : (
                                     <TableRow>
                                         <TableCell
-                                            colSpan={5}
+                                            colSpan={6}
                                             className="h-24 text-center"
                                         >
                                             Belum ada data guru.
@@ -491,8 +501,20 @@ export function TabSetoranGuru({
                                                                 <Select
                                                                     name="jenisSampahId"
                                                                     value={editedEntry.jenisSampahId?.toString()}
-                                                                    onValueChange={(value) => {
-                                                                        setEditedEntry(prev => ({ ...prev, jenisSampahId: parseInt(value) }));
+                                                                    onValueChange={(
+                                                                        value,
+                                                                    ) => {
+                                                                        setEditedEntry(
+                                                                            (
+                                                                                prev,
+                                                                            ) => ({
+                                                                                ...prev,
+                                                                                jenisSampahId:
+                                                                                    parseInt(
+                                                                                        value,
+                                                                                    ),
+                                                                            }),
+                                                                        );
                                                                     }}
                                                                     required
                                                                 >
@@ -526,9 +548,23 @@ export function TabSetoranGuru({
                                                                     name="jumlahKg"
                                                                     type="number"
                                                                     step="0.01"
-                                                                    value={editedEntry.jumlahKg}
-                                                                    onChange={(ev) => {
-                                                                        setEditedEntry(prev => ({ ...prev, jumlahKg: ev.target.value }));
+                                                                    value={
+                                                                        editedEntry.jumlahKg
+                                                                    }
+                                                                    onChange={(
+                                                                        ev,
+                                                                    ) => {
+                                                                        setEditedEntry(
+                                                                            (
+                                                                                prev,
+                                                                            ) => ({
+                                                                                ...prev,
+                                                                                jumlahKg:
+                                                                                    ev
+                                                                                        .target
+                                                                                        .value,
+                                                                            }),
+                                                                        );
                                                                     }}
                                                                     required
                                                                 />
@@ -573,10 +609,20 @@ export function TabSetoranGuru({
                                                                 <>
                                                                     <Button
                                                                         size="icon"
-                                                                        disabled={isSaving}
-                                                                        onClick={() => handleSaveEntry(e.id)}
+                                                                        disabled={
+                                                                            isSaving
+                                                                        }
+                                                                        onClick={() =>
+                                                                            handleSaveEntry(
+                                                                                e.id,
+                                                                            )
+                                                                        }
                                                                     >
-                                                                        {isSaving ? "..." : <Save className="h-4 w-4" />}
+                                                                        {isSaving ? (
+                                                                            '...'
+                                                                        ) : (
+                                                                            <Save className="h-4 w-4" />
+                                                                        )}
                                                                     </Button>
                                                                     <Button
                                                                         size="icon"
@@ -596,7 +642,9 @@ export function TabSetoranGuru({
                                                                         variant="outline"
                                                                         type="button"
                                                                         onClick={() =>
-                                                                            startEditEntry(e)
+                                                                            startEditEntry(
+                                                                                e,
+                                                                            )
                                                                         }
                                                                     >
                                                                         <Pencil className="h-4 w-4" />
@@ -639,13 +687,16 @@ export function TabSetoranGuru({
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini akan menghapus data setoran ini secara permanen.
+                            Tindakan ini akan menghapus data setoran ini secara
+                            permanen.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Batal</AlertDialogCancel>
                         <AlertDialogAction
-                            onClick={() => handleDeleteEntry(deleteEntryDialog!.id)}
+                            onClick={() =>
+                                handleDeleteEntry(deleteEntryDialog!.id)
+                            }
                             className="bg-destructive hover:bg-destructive/90"
                         >
                             Hapus
@@ -665,11 +716,9 @@ export function TabSetoranGuru({
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini akan menghapus guru '{
-                                deletingGuru?.namaGuru
-                            }'
-                            secara permanen. Semua data setoran terkait juga
-                            akan terhapus.
+                            Tindakan ini akan menghapus guru '
+                            {deletingGuru?.namaGuru}' secara permanen. Semua
+                            data setoran terkait juga akan terhapus.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
