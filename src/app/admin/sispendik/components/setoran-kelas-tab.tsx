@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -61,10 +61,7 @@ interface TabSetoranKelasProps {
     jenisSampah: JenisSampah[];
 }
 
-export function TabSetoranKelas({
-    kelas,
-    jenisSampah,
-}: TabSetoranKelasProps) {
+export function TabSetoranKelas({ kelas, jenisSampah }: TabSetoranKelasProps) {
     const { toast } = useToast();
 
     const [localJenis, setLocalJenis] = useState<JenisSampah[]>(jenisSampah);
@@ -233,7 +230,7 @@ export function TabSetoranKelas({
         }
     };
 
-    const fetchRecap = async () => {
+    const fetchRecap = useCallback(async () => {
         const [totals, summary] = await Promise.all([
             getClassTotals(selectedMonth, selectedYear),
             getTotalsSummary(selectedMonth, selectedYear),
@@ -251,16 +248,16 @@ export function TabSetoranKelas({
             setSumKg(Number((summary.data as any).totalKg || 0));
             setSumValue(Number((summary.data as any).totalValue || 0));
         }
-    };
+    }, [selectedMonth, selectedYear, buildEmptyRows]);
 
     useEffect(() => {
         setTableData(buildEmptyRows());
         fetchRecap();
-    }, []);
+    }, [buildEmptyRows, fetchRecap]);
 
     useEffect(() => {
         fetchRecap();
-    }, [selectedMonth, selectedYear]);
+    }, [fetchRecap]);
 
     const openManage = async (k: Kelas) => {
         setManageClass(k);
@@ -748,7 +745,8 @@ export function TabSetoranKelas({
                             — {MONTHS[selectedMonth - 1]} {selectedYear}
                         </DialogTitle>
                         <DialogDescription>
-                            Tambah atau edit setoran untuk kelas ini pada bulan yang dipilih.
+                            Tambah atau edit setoran untuk kelas ini pada bulan
+                            yang dipilih.
                         </DialogDescription>
                     </DialogHeader>
 

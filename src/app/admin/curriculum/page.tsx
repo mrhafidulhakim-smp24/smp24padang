@@ -1,7 +1,7 @@
 'use client';
 
 import { useToast } from '@/hooks/use-toast';
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect, useTransition, useCallback } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
     AlertDialog,
@@ -50,24 +50,7 @@ export default function CurriculumPage() {
         category: 'kurikulum',
     });
 
-    useEffect(() => {
-        loadDocuments();
-    }, []);
-
-    useEffect(() => {
-        // Reset form when category changes, unless we are editing
-        if (!editingDoc) {
-            setFormData((prev) => ({
-                ...prev,
-                title: '',
-                description: '',
-                pdfUrl: '',
-                category: selectedCategory,
-            }));
-        }
-    }, [selectedCategory, editingDoc]);
-
-    async function loadDocuments() {
+    const loadDocuments = useCallback(async () => {
         setIsLoading(true);
         setError(null);
         try {
@@ -90,7 +73,24 @@ export default function CurriculumPage() {
         } finally {
             setIsLoading(false);
         }
-    }
+    }, [toast]);
+
+    useEffect(() => {
+        loadDocuments();
+    }, [loadDocuments]);
+
+    useEffect(() => {
+        // Reset form when category changes, unless we are editing
+        if (!editingDoc) {
+            setFormData((prev) => ({
+                ...prev,
+                title: '',
+                description: '',
+                pdfUrl: '',
+                category: selectedCategory,
+            }));
+        }
+    }, [selectedCategory, editingDoc]);
 
     const handleEdit = (doc: Curriculum) => {
         setEditingDoc(doc);

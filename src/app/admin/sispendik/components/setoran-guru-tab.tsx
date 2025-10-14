@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -104,30 +104,33 @@ export function TabSetoranGuru({
     };
 
     // Revamped function to fetch entries for the dialog
-    const fetchGuruEntries = async (guruId: number) => {
-        setLoadingEntries(true);
-        setEntries([]); // Clear previous entries
-        try {
-            const res = await getSetoranGuruByGuru(guruId);
-            if (res.data) {
-                setEntries(res.data);
-            } else if (res.error) {
+    const fetchGuruEntries = useCallback(
+        async (guruId: number) => {
+            setLoadingEntries(true);
+            setEntries([]); // Clear previous entries
+            try {
+                const res = await getSetoranGuruByGuru(guruId);
+                if (res.data) {
+                    setEntries(res.data);
+                } else if (res.error) {
+                    toast({
+                        title: 'Gagal Memuat Setoran',
+                        description: res.error,
+                        variant: 'destructive',
+                    });
+                }
+            } catch (error) {
                 toast({
-                    title: 'Gagal Memuat Setoran',
-                    description: res.error,
+                    title: 'Error',
+                    description: 'Terjadi kesalahan saat mengambil data.',
                     variant: 'destructive',
                 });
+            } finally {
+                setLoadingEntries(false);
             }
-        } catch (error) {
-            toast({
-                title: 'Error',
-                description: 'Terjadi kesalahan saat mengambil data.',
-                variant: 'destructive',
-            });
-        } finally {
-            setLoadingEntries(false);
-        }
-    };
+        },
+        [toast],
+    );
 
     const openManageGuru = (guru: Guru) => {
         setManageGuru(guru);
@@ -154,7 +157,7 @@ export function TabSetoranGuru({
             }
             processedAddStateRef.current = addState;
         }
-    }, [addState, toast, manageGuru]);
+    }, [addState, toast, manageGuru, fetchGuruEntries]);
 
     const refetchAllSetoran = async () => {
         const updatedSetoran = await getSetoranGuru();
@@ -716,8 +719,8 @@ export function TabSetoranGuru({
                     <AlertDialogHeader>
                         <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Tindakan ini akan menghapus guru '
-                            {deletingGuru?.namaGuru}' secara permanen. Semua
+                            Tindakan ini akan menghapus guru &apos;
+                            {deletingGuru?.namaGuru}&apos; secara permanen. Semua
                             data setoran terkait juga akan terhapus.
                         </AlertDialogDescription>
                     </AlertDialogHeader>

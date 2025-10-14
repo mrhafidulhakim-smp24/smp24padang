@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, Variants } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 
@@ -31,7 +31,7 @@ export function AnimatedSection({
     }
   }, [controls, inView]);
 
-  const variants = {
+  const variants: Variants = {
     hidden: {
       opacity: 0,
       x: animation === 'slide-in-left' ? -100 : animation === 'slide-in-right' ? 100 : 0,
