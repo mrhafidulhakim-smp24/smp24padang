@@ -99,11 +99,7 @@ async function AboutUs() {
                             </div>
                         </CardContent>
                         <CardFooter className="justify-center">
-                            <Button
-                                asChild
-                                variant="link"
-                                className="mt-2"
-                            >
+                            <Button asChild variant="link" className="mt-2">
                                 <Link href="/profile/vision-mission">
                                     Baca Selengkapnya{' '}
                                     <ArrowRight className="ml-1 h-4 w-4" />
@@ -309,7 +305,8 @@ async function Statistics() {
                         Statistik Sekolah
                     </h2>
                     <p className="mx-auto mt-1 max-w-2xl text-muted-foreground text-sm md:text-base">
-                        Data terpadu mengenai sumber daya utama di SMPN 24 Padang.
+                        Data terpadu mengenai sumber daya utama di SMPN 24
+                        Padang.
                     </p>
                 </div>
 
@@ -449,12 +446,10 @@ export default async function Home() {
                             {profile?.principalName}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                            Kepala SMPN 24 Padang
+                            Kepala Sekolah SMPN 24 Padang
                         </p>
                         <div className="mt-6 text-center md:text-left">
-                            <Button
-                                asChild
-                            >
+                            <Button asChild>
                                 <Link href="/profile">
                                     Selengkapnya tentang profil sekolah
                                 </Link>

@@ -356,10 +356,11 @@ export async function getClassTotals(month: number, year: number) {
 
 export async function getTotalsSummary(month: number, year: number) {
     try {
-        const data = await db
+        // Get student deposits
+        const studentDeposits = await db
             .select({
-                totalKg: sql<number>`COALESCE(SUM(${sampahKelas.jumlahKg}), 0)`,
-                totalValue: sql<number>`COALESCE(SUM(CAST(${sampahKelas.jumlahKg} AS numeric) * CAST(${jenisSampah.hargaPerKg} AS numeric)), 0)`,
+                jumlahKg: sampahKelas.jumlahKg,
+                hargaPerKg: jenisSampah.hargaPerKg,
             })
             .from(sampahKelas)
             .innerJoin(jenisSampah, eq(sampahKelas.jenisSampahId, jenisSampah.id))
@@ -369,39 +370,86 @@ export async function getTotalsSummary(month: number, year: number) {
                     sql`EXTRACT(YEAR FROM ${sampahKelas.createdAt}) = ${year}`,
                 ),
             );
-        // returns array with single row
-        const row = (data as any[])[0] || { totalKg: 0, totalValue: 0 };
-        return { data: row };
+
+        // Get teacher deposits
+        const teacherDeposits = await db
+            .select({
+                jumlahKg: setoranGuru.jumlahKg,
+                hargaPerKg: jenisSampah.hargaPerKg,
+            })
+            .from(setoranGuru)
+            .innerJoin(jenisSampah, eq(setoranGuru.jenisSampahId, jenisSampah.id))
+            .where(
+                and(
+                    sql`EXTRACT(MONTH FROM ${setoranGuru.createdAt}) = ${month}`,
+                    sql`EXTRACT(YEAR FROM ${setoranGuru.createdAt}) = ${year}`,
+                ),
+            );
+
+        const allDeposits = [...studentDeposits, ...teacherDeposits];
+
+        const totalKg = allDeposits.reduce((acc, row) => acc + Number(row.jumlahKg), 0);
+        const totalValue = allDeposits.reduce((acc, row) => acc + (Number(row.jumlahKg) * Number(row.hargaPerKg)), 0);
+
+        return { data: { totalKg, totalValue } };
+
     } catch (error) {
+        console.error("Error in getTotalsSummary:", error);
         return { error: 'Failed to fetch totals summary' };
     }
 }
 
 export async function getTopWasteTypes(month: number, year: number) {
     try {
-        const data = await db
+        // Get student waste
+        const studentWaste = await db
             .select({
                 wasteType: jenisSampah.namaSampah,
-                totalKg: sql<number>`SUM(${sampahKelas.jumlahKg})`,
-                totalValue: sql<number>`COALESCE(SUM(CAST(${sampahKelas.jumlahKg} AS numeric) * CAST(${jenisSampah.hargaPerKg} AS numeric)), 0)`,
+                jumlahKg: sampahKelas.jumlahKg,
             })
             .from(sampahKelas)
-            .innerJoin(
-                jenisSampah,
-                eq(sampahKelas.jenisSampahId, jenisSampah.id),
-            )
-            .where(
-                and(
-                    sql`EXTRACT(MONTH FROM ${sampahKelas.createdAt}) = ${month}`,
-                    sql`EXTRACT(YEAR FROM ${sampahKelas.createdAt}) = ${year}`,
-                ),
-            )
-            .groupBy(jenisSampah.namaSampah)
-            .orderBy(desc(sql<number>`SUM(${sampahKelas.jumlahKg})`))
-            .limit(3);
-        
-        return { data };
+            .innerJoin(jenisSampah, eq(sampahKelas.jenisSampahId, jenisSampah.id))
+            .where(and(
+                sql`EXTRACT(MONTH FROM ${sampahKelas.createdAt}) = ${month}`,
+                sql`EXTRACT(YEAR FROM ${sampahKelas.createdAt}) = ${year}`
+            ));
+
+        // Get teacher waste
+        const teacherWaste = await db
+            .select({
+                wasteType: jenisSampah.namaSampah,
+                jumlahKg: setoranGuru.jumlahKg,
+            })
+            .from(setoranGuru)
+            .innerJoin(jenisSampah, eq(setoranGuru.jenisSampahId, jenisSampah.id))
+            .where(and(
+                sql`EXTRACT(MONTH FROM ${setoranGuru.createdAt}) = ${month}`,
+                sql`EXTRACT(YEAR FROM ${setoranGuru.createdAt}) = ${year}`
+            ));
+
+        const allWaste = [...studentWaste, ...teacherWaste];
+
+        const aggregated = allWaste.reduce((acc, row) => {
+            const existing = acc.get(row.wasteType);
+            const amount = Number(row.jumlahKg);
+            if (existing) {
+                existing.totalKg += amount;
+            } else {
+                acc.set(row.wasteType, { wasteType: row.wasteType, totalKg: amount });
+            }
+            return acc;
+        }, new Map<string, { wasteType: string, totalKg: number }>());
+
+        const sorted = Array.from(aggregated.values())
+            .sort((a, b) => b.totalKg - a.totalKg)
+            .slice(0, 3);
+
+        const finalData = sorted.map(s => ({ ...s, totalValue: 0 }));
+
+        return { data: finalData };
+
     } catch (error) {
+        console.error("Error in getTopWasteTypes:", error);
         return { error: 'Failed to fetch top waste types' };
     }
 }
@@ -412,9 +460,11 @@ export async function getGuruRanking(month: number, year: number) {
             .select({
                 guruName: guruSispendik.namaGuru,
                 totalKg: sql<number>`COALESCE(SUM(${setoranGuru.jumlahKg}), 0)`,
+                wasteTypes: sql<string>`STRING_AGG(DISTINCT ${jenisSampah.namaSampah}, ', ')`
             })
             .from(setoranGuru)
             .innerJoin(guruSispendik, eq(setoranGuru.guruId, guruSispendik.id))
+            .innerJoin(jenisSampah, eq(setoranGuru.jenisSampahId, jenisSampah.id))
             .where(
                 and(
                     sql`EXTRACT(MONTH FROM ${setoranGuru.createdAt}) = ${month}`,

@@ -69,7 +69,7 @@ export default async function ProfilePage() {
                                     {profile?.principalName}
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    Kepala SMPN 24 Padang
+                                    Kepala Sekolah SMPN 24 Padang
                                 </p>
                             </div>
                         </div>
@@ -129,28 +129,30 @@ export default async function ProfilePage() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {pastPrincipals.map((principal) => (
-                                        <TableRow key={principal.id}>
-                                            <TableCell>
-                                                <Image
-                                                    src={
-                                                        principal.imageUrl ||
-                                                        'https://placehold.co/120x120.png'
-                                                    }
-                                                    alt={principal.name}
-                                                    width={120}
-                                                    height={120}
-                                                    className="rounded-md object-cover bg-muted"
-                                                />
-                                            </TableCell>
-                                            <TableCell className="font-medium">
-                                                {principal.name}
-                                            </TableCell>
-                                            <TableCell>
-                                                {principal.period}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                                    {[...pastPrincipals]
+                                        .reverse()
+                                        .map((principal) => (
+                                            <TableRow key={principal.id}>
+                                                <TableCell>
+                                                    <Image
+                                                        src={
+                                                            principal.imageUrl ||
+                                                            'https://placehold.co/120x120.png'
+                                                        }
+                                                        alt={principal.name}
+                                                        width={120}
+                                                        height={120}
+                                                        className="rounded-md object-cover bg-muted"
+                                                    />
+                                                </TableCell>
+                                                <TableCell className="font-medium">
+                                                    {principal.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {principal.period}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
                                 </TableBody>
                             </Table>
                         </Card>

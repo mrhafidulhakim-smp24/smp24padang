@@ -19,6 +19,8 @@ import {
     UserCheck,
     UserCog,
     Video,
+    MessageCircleQuestion,
+    LayoutDashboard,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -46,6 +48,12 @@ const menuItems = [
         label: 'Struktur Organisasi',
         icon: Network,
         description: 'Kelola bagan dan daftar struktur organisasi sekolah.',
+    },
+    {
+        href: '/admin/curriculum',
+        label: 'Kurikulum',
+        icon: Target,
+        description: 'Kelola informasi dan struktur kurikulum sekolah.',
     },
     {
         href: '/admin/accreditation',
@@ -78,6 +86,12 @@ const menuItems = [
         description: 'Buat pengumuman penting untuk seluruh warga sekolah.',
     },
     {
+        href: '/admin/sispendik',
+        label: 'Sispendik',
+        icon: LayoutDashboard,
+        description: 'Kelola data dan laporan dari sistem bank sampah Sispendik.',
+    },
+    {
         href: '/admin/achievements',
         label: 'Prestasi',
         icon: Trophy,
@@ -101,24 +115,21 @@ const menuItems = [
         icon: Phone,
         description: 'Perbarui alamat, email, dan nomor telepon sekolah.',
     },
+    {
+        href: '/admin/faq',
+        label: 'FAQ',
+        icon: MessageCircleQuestion,
+        description: 'Tambah dan kelola pertanyaan yang sering diajukan.',
+    },
 ];
 
 async function getDashboardStats() {
-  const [
-    statsData,
-    newsCount,
-    announcementsCount,
-    galleryCount,
-    achievementsCount,
-    videosCount,
-  ] = await Promise.all([
-    db.select().from(statistics).limit(1),
-    db.select({ value: count() }).from(news),
-    db.select({ value: count() }).from(announcements),
-    db.select({ value: count() }).from(galleryItems),
-    db.select({ value: count() }).from(achievements),
-    db.select({ value: count() }).from(videos),
-  ]);
+  const statsData = await db.select().from(statistics).limit(1);
+  const newsCount = await db.select({ value: count() }).from(news);
+  const announcementsCount = await db.select({ value: count() }).from(announcements);
+  const galleryCount = await db.select({ value: count() }).from(galleryItems);
+  const achievementsCount = await db.select({ value: count() }).from(achievements);
+  const videosCount = await db.select({ value: count() }).from(videos);
 
   const stats = statsData[0];
 
@@ -173,7 +184,7 @@ export default async function AdminDashboardPage() {
                 </p>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 {statItems.map(item => (
                     <StatCard key={item.title} {...item} />
                 ))}
