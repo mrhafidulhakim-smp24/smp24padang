@@ -1,13 +1,8 @@
 'use client';
 
-import React, {
-    useEffect,
-    useRef,
-    useState,
-    useCallback,
-    ReactNode,
-} from 'react';
+import React, { useEffect, useRef, useState, ReactNode } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
 type Facility = {
@@ -43,93 +38,37 @@ interface FacilityCardProps {
 function FacilityCard({ facility, placeholder }: FacilityCardProps): ReactNode {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false);
-    const imgRef = useRef<HTMLImageElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
 
     const src: string = facility.imageUrl ?? 'https://placehold.co/300x200.png';
 
-    // Use Intersection Observer for lazy loading
-    useEffect((): (() => void) => {
-        if (!containerRef.current) return () => {};
-
-        const observer = new IntersectionObserver(
-            (entries: IntersectionObserverEntry[]): void => {
-                entries.forEach((entry: IntersectionObserverEntry): void => {
-                    if (
-                        entry.isIntersecting &&
-                        imgRef.current &&
-                        !imgRef.current.src
-                    ) {
-                        imgRef.current.src = src;
-                        observer.unobserve(entry.target);
-                    }
-                });
-            },
-            {
-                rootMargin: '50px',
-                threshold: 0.01,
-            },
-        );
-
-        observer.observe(containerRef.current);
-
-        return (): void => {
-            if (containerRef.current) {
-                observer.unobserve(containerRef.current);
-            }
-        };
-    }, [src]);
-
-    const handleImageLoad = useCallback((): void => {
-        setIsLoading(false);
-        setError(false);
-        if (imgRef.current) {
-            imgRef.current.style.opacity = '1';
-        }
-    }, []);
-
-    const handleImageError = useCallback((): void => {
-        setIsLoading(false);
-        setError(true);
-    }, []);
-
     return (
-        <div
-            ref={containerRef}
-            className="relative overflow-hidden rounded-lg h-40 bg-slate-100 dark:bg-slate-800"
-        >
+        <div className="relative overflow-hidden rounded-lg h-40 bg-slate-100 dark:bg-slate-800">
             <Link href="/gallery" className="absolute inset-0 block">
                 {/* Loading Skeleton */}
                 {isLoading && <SkeletonLoader />}
 
-                {/* Blur Placeholder */}
-                {placeholder && isLoading && (
-                    <div
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{
-                            backgroundImage: `url('${placeholder.base64}')`,
-                            filter: 'blur(10px)',
-                        }}
-                    />
-                )}
-
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                {/* Actual Image - Optimized */}
+                {/* Actual Image - Next.js optimized */}
                 {!error && (
-                    <img
-                        ref={imgRef}
+                    <Image
                         alt={facility.name}
-                        width={300}
-                        height={200}
-                        className="w-full h-full object-cover transition-all duration-300 ease-out opacity-0 active:scale-105"
+                        src={src}
+                        fill
+                        className={`object-cover transition-all duration-300 ease-out ${
+                            isLoading ? 'opacity-0' : 'opacity-100'
+                        } active:scale-105`}
+                        sizes="(max-width: 640px) 50vw, 400px"
+                        placeholder={placeholder ? 'blur' : 'empty'}
+                        blurDataURL={placeholder?.base64}
                         loading="lazy"
-                        decoding="async"
-                        srcSet={`${src}?w=300 300w, ${src}?w=400 400w`}
-                        sizes="(max-width: 640px) 300px, 400px"
-                        onLoad={handleImageLoad}
-                        onError={handleImageError}
+                        onLoad={() => setIsLoading(false)}
+                        onError={() => {
+                            setIsLoading(false);
+                            setError(true);
+                        }}
+                        priority={false}
                     />
                 )}
 
@@ -159,60 +98,11 @@ function FacilityCardDesktop({
 }: FacilityCardProps): ReactNode {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false);
-    const imgRef = useRef<HTMLImageElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
 
     const src: string = facility.imageUrl ?? 'https://placehold.co/600x400.png';
 
-    useEffect((): (() => void) => {
-        if (!containerRef.current) return () => {};
-
-        const observer = new IntersectionObserver(
-            (entries: IntersectionObserverEntry[]): void => {
-                entries.forEach((entry: IntersectionObserverEntry): void => {
-                    if (
-                        entry.isIntersecting &&
-                        imgRef.current &&
-                        !imgRef.current.src
-                    ) {
-                        imgRef.current.src = src;
-                        observer.unobserve(entry.target);
-                    }
-                });
-            },
-            {
-                rootMargin: '100px',
-                threshold: 0.01,
-            },
-        );
-
-        observer.observe(containerRef.current);
-
-        return (): void => {
-            if (containerRef.current) {
-                observer.unobserve(containerRef.current);
-            }
-        };
-    }, [src]);
-
-    const handleImageLoad = useCallback((): void => {
-        setIsLoading(false);
-        setError(false);
-        if (imgRef.current) {
-            imgRef.current.style.opacity = '1';
-        }
-    }, []);
-
-    const handleImageError = useCallback((): void => {
-        setIsLoading(false);
-        setError(true);
-    }, []);
-
     return (
-        <div
-            ref={containerRef}
-            className="relative overflow-hidden rounded-lg shadow-sm bg-slate-100 dark:bg-slate-800"
-        >
+        <div className="relative overflow-hidden rounded-lg shadow-sm bg-slate-100 dark:bg-slate-800">
             <Link
                 href="/gallery"
                 className="group relative overflow-hidden rounded-lg block"
@@ -222,35 +112,31 @@ function FacilityCardDesktop({
                     <div className="absolute inset-0 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 animate-pulse z-0" />
                 )}
 
-                {/* Blur Placeholder */}
-                {placeholder && isLoading && (
-                    <div
-                        className="absolute inset-0 bg-cover bg-center z-0"
-                        style={{
-                            backgroundImage: `url('${placeholder.base64}')`,
-                            filter: 'blur(20px)',
-                        }}
-                    />
-                )}
-
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent" />
 
-                {/* Actual Image */}
+                {/* Actual Image - Next.js optimized */}
                 {!error && (
-                    <img
-                        ref={imgRef}
-                        alt={facility.name}
-                        width={600}
-                        height={400}
-                        className="h-48 sm:h-56 md:h-40 lg:h-48 w-full object-cover transition-all duration-300 ease-out opacity-0 group-hover:scale-105"
-                        loading="lazy"
-                        decoding="async"
-                        srcSet={`${src}?w=600 600w, ${src}?w=800 800w, ${src}?w=1000 1000w`}
-                        sizes="(max-width: 768px) 600px, (max-width: 1024px) 800px, 1000px"
-                        onLoad={handleImageLoad}
-                        onError={handleImageError}
-                    />
+                    <div className="h-48 sm:h-56 md:h-40 lg:h-48 w-full relative">
+                        <Image
+                            alt={facility.name}
+                            src={src}
+                            fill
+                            className={`object-cover transition-all duration-300 ease-out ${
+                                isLoading ? 'opacity-0' : 'opacity-100'
+                            } group-hover:scale-105`}
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                            placeholder={placeholder ? 'blur' : 'empty'}
+                            blurDataURL={placeholder?.base64}
+                            loading="lazy"
+                            onLoad={() => setIsLoading(false)}
+                            onError={() => {
+                                setIsLoading(false);
+                                setError(true);
+                            }}
+                            priority={false}
+                        />
+                    </div>
                 )}
 
                 {error && (
@@ -283,7 +169,7 @@ export default function Facilities({
         const container = containerRef.current;
         if (!container) return () => {};
 
-        let isScrolling: boolean = false;
+        let isScrolling = false;
         let scrollTimeout: ReturnType<typeof setTimeout>;
 
         const handleScroll = (): void => {

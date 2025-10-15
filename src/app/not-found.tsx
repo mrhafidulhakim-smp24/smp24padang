@@ -3,162 +3,69 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Home, AlertTriangle } from 'lucide-react';
-
-// Komponen untuk animasi daun SVG
-const Leaf = ({
-    className,
-    ...props
-}: React.ComponentProps<typeof motion.svg>) => (
-    <motion.svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={className}
-        {...props}
-    >
-        <path d="M11 20A7 7 0 0 1 4 13H2a9 9 0 0 0 18 0h-2a7 7 0 0 1-7 7zM12 4c-5.523 0-10 4.477-10 10h2c0-4.418 3.582-8 8-8s8 3.582 8 8h2c0-5.523-4.477-10-10-10z" />
-        <path d="M12 4a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
-    </motion.svg>
-);
+import { Home } from 'lucide-react';
+import MonsterBackground from '@/components/MonsterBackground';
 
 export default function NotFound() {
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-green-50 dark:bg-gray-900 p-4 text-center">
-            {/* Kontainer utama dengan animasi stagger */}
-            <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={{
-                    hidden: { opacity: 0 },
-                    visible: {
-                        opacity: 1,
-                        transition: {
-                            staggerChildren: 0.2,
-                        },
-                    },
-                }}
-                className="relative w-full max-w-lg"
-            >
-                {/* Ilustrasi Daun Beranimasi */}
-                <motion.div
-                    className="absolute -top-20 -left-10 text-green-300 dark:text-green-700"
-                    animate={{ rotate: [0, 5, 0], y: [0, -10, 0] }}
-                    transition={{
-                        duration: 5,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                    }}
-                >
-                    <Leaf style={{ width: 80, height: 80 }} />
-                </motion.div>
-                <motion.div
-                    className="absolute -bottom-20 -right-10 text-green-300 dark:text-green-700"
-                    animate={{ rotate: [0, -5, 0], y: [0, 10, 0] }}
-                    transition={{
-                        duration: 6,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                        delay: 0.5,
-                    }}
-                >
-                    <Leaf style={{ width: 100, height: 100 }} />
-                </motion.div>
+        <div className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-green-50 to-emerald-100 dark:from-neutral-950 dark:to-neutral-900">
+            {/* Monster animasi di belakang konten */}
+            <MonsterBackground
+            className="select-none scale-[1.2] -translate-y-[28%]"
+            animationUrl="https://assets9.lottiefiles.com/packages/lf20_e3zt5qof.json"
+            />
 
-                {/* Konten Teks */}
-                <motion.div
-                    variants={{
-                        hidden: { opacity: 0, y: 20 },
-                        visible: { opacity: 1, y: 0 },
-                    }}
-                    className="relative rounded-lg bg-white/50 dark:bg-gray-800/50 p-8 shadow-xl backdrop-blur-sm"
-                >
+            {/* Konten utama */}
+            <motion.section
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="relative z-10 mx-auto w-full max-w-2xl px-6 py-16"
+            >
+                <div className="rounded-2xl bg-white/60 dark:bg-neutral-800/60 backdrop-blur-md shadow-xl ring-1 ring-black/5 dark:ring-white/5 p-8 md:p-12">
                     <motion.h1
-                        className="text-6xl md:text-8xl font-bold text-green-600 dark:text-green-400"
-                        variants={{
-                            hidden: { opacity: 0, y: -30 },
-                            visible: {
-                                opacity: 1,
-                                y: 0,
-                                transition: { duration: 0.5 },
-                            },
-                        }}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.05 }}
+                        className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-emerald-700 dark:text-emerald-400"
                     >
-                        404
+                        404 — Halaman Tidak Ditemukan
                     </motion.h1>
 
-                    <motion.h2
-                        className="mt-4 text-2xl md:text-3xl font-semibold text-gray-800 dark:text-gray-100"
-                        variants={{
-                            hidden: { opacity: 0, y: 20 },
-                            visible: {
-                                opacity: 1,
-                                y: 0,
-                                transition: { duration: 0.5, delay: 0.2 },
-                            },
-                        }}
-                    >
-                        Halaman Tidak Ditemukan
-                    </motion.h2>
-
                     <motion.p
-                        className="mt-4 text-base text-gray-600 dark:text-gray-300"
-                        variants={{
-                            hidden: { opacity: 0 },
-                            visible: {
-                                opacity: 1,
-                                transition: { duration: 0.5, delay: 0.4 },
-                            },
-                        }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.15 }}
+                        className="mt-4 text-base sm:text-lg text-neutral-700 dark:text-neutral-200"
                     >
                         Ups! Sepertinya Anda tersesat. Mari kita kembali ke
                         jalan yang benar dan terus merawat lingkungan kita.
                     </motion.p>
 
-                    {/* Tombol Aksi */}
                     <motion.div
-                        className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4"
-                        variants={{
-                            hidden: { opacity: 0, y: 20 },
-                            visible: {
-                                opacity: 1,
-                                y: 0,
-                                transition: { duration: 0.5, delay: 0.6 },
-                            },
-                        }}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.25 }}
+                        className="mt-8 flex items-center justify-center"
                     >
                         <Button
                             asChild
-                            className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white dark:bg-green-500 dark:hover:bg-green-600 transition-transform transform hover:scale-105 hover:shadow-lg"
+                            className="group bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-5 text-base sm:text-lg h-auto rounded-xl shadow-emerald-600/30 hover:shadow-emerald-600/50 shadow-lg transition-all"
                             aria-label="Kembali ke Beranda"
                         >
                             <Link href="/">
-                                <Home className="mr-2 h-4 w-4" />
-                                Kembali ke Beranda
+                                <span className="inline-flex items-center gap-2">
+                                    <Home className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" />
+                                    Kembali ke Beranda
+                                </span>
                             </Link>
                         </Button>
-                        <Button
-                            variant="outline"
-                            className="w-full sm:w-auto transition-transform transform hover:scale-105"
-                            aria-label="Laporkan Masalah"
-                            onClick={() =>
-                                alert(
-                                    'Fitur pelaporan masalah sedang dalam pengembangan.',
-                                )
-                            }
-                        >
-                            <AlertTriangle className="mr-2 h-4 w-4" />
-                            Laporkan Masalah
-                        </Button>
                     </motion.div>
-                </motion.div>
-            </motion.div>
+                </div>
+            </motion.section>
+
+            {/* Lapisan halus untuk depth tambahan di tepi layar */}
+            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(60%_40%_at_50%_30%,rgba(16,185,129,0.08),transparent_70%)] dark:bg-[radial-gradient(60%_40%_at_50%_30%,rgba(16,185,129,0.12),transparent_70%)]" />
         </div>
     );
 }
