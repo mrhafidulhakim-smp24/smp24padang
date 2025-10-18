@@ -114,6 +114,7 @@ export default function AdminLayout({
                 { href: '/admin/news', label: 'Berita' },
                 { href: '/admin/announcements', label: 'Pengumuman' },
                 { href: '/admin/sispendik', label: 'Sispendik' },
+                { href: '/admin/banksampah', label: 'Bank Sampah' },
             ],
         },
         { href: '/admin/achievements', label: 'Prestasi', icon: Trophy },
@@ -274,8 +275,12 @@ export default function AdminLayout({
                                                                                     subItem.href
                                                                                 }
                                                                                 onClick={() => {
-                                                                                    if (isMobile) {
-                                                                                        setIsSidebarOpen(false);
+                                                                                    if (
+                                                                                        isMobile
+                                                                                    ) {
+                                                                                        setIsSidebarOpen(
+                                                                                            false,
+                                                                                        );
                                                                                     }
                                                                                 }}
                                                                             >

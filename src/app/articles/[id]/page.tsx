@@ -1,102 +1,54 @@
-import Image from 'next/image';
-import Link from 'next/link';
+
+import { getWasteNewsById } from '@/app/admin/banksampah/actions';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Calendar, UserCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { db } from '@/lib/db';
-import { news } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-import { getAllNewsIds } from '../../actions';
+import Image from 'next/image';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, ExternalLink } from 'lucide-react';
 
-export const revalidate = 3600; // Revalidate at most every hour
-
-export async function generateStaticParams() {
-    const newsIds = await getAllNewsIds();
-    return newsIds;
-}
-
-async function getNewsArticle(id: string) {
-    try {
-        const article = await db
-            .select()
-            .from(news)
-            .where(eq(news.id, id))
-            .limit(1);
-        return article[0] || null;
-    } catch (error) {
-        console.error('Error fetching news article:', error);
-        return null;
+export default async function ArticlePage({ params }: { params: { id: string } }) {
+    const articleId = parseInt(params.id, 10);
+    if (isNaN(articleId)) {
+        notFound();
     }
-}
 
-export default async function NewsArticlePage({
-    params,
-}: {
-    params: { id: string };
-}) {
-    const article = await getNewsArticle(params.id);
+    const article = await getWasteNewsById(articleId);
 
     if (!article) {
         notFound();
     }
 
-    const paragraphs = article.description
-        .split('\n')
-        .filter((p) => p.trim() !== '');
-
     return (
-        <div className="bg-background">
-            <div className="container mx-auto max-w-4xl px-4 py-12 md:py-24">
-                <Button asChild variant="outline" className="mb-8">
-                    <Link href="/news" className="flex items-center gap-2">
-                        <ArrowLeft className="h-4 w-4" />
-                        <span>Kembali ke Berita</span>
-                    </Link>
-                </Button>
-                <article className="prose prose-lg dark:prose-invert mx-auto">
-                    <div className="relative mb-8 w-full aspect-video overflow-hidden rounded-lg">
+        <div className="container mx-auto py-10">
+            <Card className="max-w-4xl mx-auto">
+                <CardHeader>
+                    <div className="relative w-full h-96 mb-6">
                         <Image
-                            src={
-                                article.imageUrl ||
-                                'https://placehold.co/1200x675.png'
-                            }
+                            src={article.previewUrl || 'https://placehold.co/1200x800.png'}
                             alt={article.title}
                             fill
-                            className="object-cover"
+                            className="object-cover rounded-t-lg"
                         />
                     </div>
-
-                    <h1 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-4">
-                        {article.title}
-                    </h1>
-
-                    <div className="flex items-center gap-6 text-muted-foreground text-sm mb-8">
-                        <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
-                            <span>
-                                {new Date(article.date).toLocaleDateString(
-                                    'id-ID',
-                                    {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                    },
-                                )}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <UserCircle className="h-4 w-4" />
-                            <span>Oleh: Admin Sekolah</span>
-                        </div>
+                    <CardTitle className="text-4xl font-bold leading-tight">{article.title}</CardTitle>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
+                        {article.createdAt && (
+                            <div className="flex items-center gap-1.5">
+                                <Calendar className="h-4 w-4" />
+                                <span>{new Date(article.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                            </div>
+                        )}
+                        {article.googleDriveUrl && (
+                             <a href={article.googleDriveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors">
+                                <ExternalLink className="h-4 w-4" />
+                                <span>Lihat di Google Drive</span>
+                            </a>
+                        )}
                     </div>
-
-                    <div className="space-y-6 text-foreground/90 dark:text-foreground/80 md:text-xl">
-                        {paragraphs.map((p, index) => (
-                            <p key={index}>{p}</p>
-                        ))}
-                    </div>
-                </article>
-            </div>
+                </CardHeader>
+                <CardContent className="prose prose-lg max-w-none">
+                    <p>{article.description}</p>
+                </CardContent>
+            </Card>
         </div>
     );
 }
