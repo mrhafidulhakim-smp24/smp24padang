@@ -94,7 +94,7 @@ export default function Tab3_Documentation() {
 
             {/* Video Player Dialog */}
             <Dialog open={!!selectedVideoUrl} onOpenChange={(isOpen) => !isOpen && closeVideo()}>
-                <DialogContent className="max-w-3xl p-0">
+                <DialogContent className="max-w-5xl p-0">
                     {selectedVideoUrl && (
                         <YouTubeEmbed url={selectedVideoUrl} title="Dokumentasi Bank Sampah" />
                     )}
