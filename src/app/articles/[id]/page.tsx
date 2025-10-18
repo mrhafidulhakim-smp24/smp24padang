@@ -1,12 +1,9 @@
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { getWasteNewsById } from '@/app/admin/banksampah/actions';
-import { PDFViewer } from '@/components/pdf-viewer';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const revalidate = 3600; // Revalidate at most every hour
+import { getWasteNewsById } from '@/app/admin/banksampah/actions';
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, ExternalLink } from 'lucide-react';
 
 export default async function ArticlePage({ params }: { params: { id: string } }) {
     const articleId = parseInt(params.id, 10);
@@ -21,37 +18,37 @@ export default async function ArticlePage({ params }: { params: { id: string } }
     }
 
     return (
-        <div className="bg-background">
-            <div className="container mx-auto max-w-4xl px-4 py-12 md:py-24">
-                <Button asChild variant="outline" className="mb-8">
-                    <Link href="/sispendik" className="flex items-center gap-2">
-                        <ArrowLeft className="h-4 w-4" />
-                        <span>Kembali ke Sispendik</span>
-                    </Link>
-                </Button>
-
-                {article.googleDriveUrl ? (
-                    <PDFViewer
-                        url={article.googleDriveUrl}
-                        title={article.title}
-                        description={article.description}
-                    />
-                ) : (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>{article.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground mb-4">
-                                Pratinjau PDF tidak tersedia untuk artikel ini.
-                            </p>
-                            <div className="prose dark:prose-invert">
-                                <p>{article.description}</p>
+        <div className="container mx-auto py-10">
+            <Card className="max-w-4xl mx-auto">
+                <CardHeader>
+                    <div className="relative w-full h-96 mb-6">
+                        <Image
+                            src={article.previewUrl || 'https://placehold.co/1200x800.png'}
+                            alt={article.title}
+                            fill
+                            className="object-cover rounded-t-lg"
+                        />
+                    </div>
+                    <CardTitle className="text-4xl font-bold leading-tight">{article.title}</CardTitle>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
+                        {article.createdAt && (
+                            <div className="flex items-center gap-1.5">
+                                <Calendar className="h-4 w-4" />
+                                <span>{new Date(article.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                             </div>
-                        </CardContent>
-                    </Card>
-                )}
-            </div>
+                        )}
+                        {article.googleDriveUrl && (
+                             <a href={article.googleDriveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors">
+                                <ExternalLink className="h-4 w-4" />
+                                <span>Lihat di Google Drive</span>
+                            </a>
+                        )}
+                    </div>
+                </CardHeader>
+                <CardContent className="prose prose-lg max-w-none">
+                    <p>{article.description}</p>
+                </CardContent>
+            </Card>
         </div>
     );
 }

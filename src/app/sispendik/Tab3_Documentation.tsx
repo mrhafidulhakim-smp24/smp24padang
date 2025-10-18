@@ -6,17 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { getPublicWasteDocumentation } from '@/app/admin/banksampah/actions';
 import { WasteDocumentationItem } from '@/app/admin/banksampah/page'; // Re-using type
-import { YouTubeEmbed } from '@/components/youtube-embed'; // Corrected import casing
+import { YouTubeEmbed, getYouTubeVideoId } from '@/components/youtube-embed'; // Corrected import casing
 import SispendikSkeleton from './sispendik-skeleton';
 import { PlayCircle } from 'lucide-react';
 
-// Helper to extract YouTube Video ID from various URL formats
-function getYouTubeId(url: string): string | null {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-}
+
 
 export default function Tab3_Documentation() {
     const [docs, setDocs] = useState<WasteDocumentationItem[]>([]);
