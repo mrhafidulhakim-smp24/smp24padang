@@ -64,6 +64,7 @@ export const guruSispendik = pgTable('guru_sispendik', {
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+
 export const setoranGuru = pgTable('setoran_guru', {
     id: serial('id').primaryKey(),
     guruId: integer('guru_id')
@@ -75,3 +76,24 @@ export const setoranGuru = pgTable('setoran_guru', {
     jumlahKg: decimal('jumlah_kg', { precision: 10, scale: 2 }).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const wasteNews = pgTable('waste_news', {
+    id: serial('id').primaryKey(),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    previewUrl: text('preview_url').notNull(),
+    googleDriveUrl: text('google_drive_url'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+});
+
+export const wasteDocumentation = pgTable('waste_documentation', {
+    id: serial('id').primaryKey(),
+    title: text('title').notNull(),
+    imageUrl: text('image_url'),
+    youtubeUrl: text('youtube_url'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+});
+
+
