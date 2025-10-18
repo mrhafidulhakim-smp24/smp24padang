@@ -37,7 +37,7 @@ import {
     ShieldCheck,
     Megaphone,
     Video,
-    RefreshCcw,
+    Recycle,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
@@ -101,7 +101,7 @@ export default function Header({ contactInfo }: HeaderProps) {
             subLinks: [
                 { href: '/news', label: 'Berita', icon: Newspaper },
                 { href: '/pengumuman', label: 'Pengumuman', icon: Megaphone },
-                { href: '/sispendik', label: 'Sispendik', icon: RefreshCcw },
+                { href: '/sispendik', label: 'Sispendik', icon: Recycle },
             ],
         },
         { href: '/achievements', label: 'Prestasi', icon: Trophy },
