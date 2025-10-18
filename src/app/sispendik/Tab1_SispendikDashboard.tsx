@@ -36,6 +36,7 @@ import {
     CartesianGrid,
     Cell,
 } from 'recharts';
+import SispendikSkeleton from './sispendik-skeleton';
 
 const MONTHS = [
     'Januari',
@@ -196,11 +197,7 @@ export default function SispendikDashboard() {
     }, [month, year, levelFilter]);
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-[60vh]">
-                <p className="text-lg text-muted-foreground">Memuat data...</p>
-            </div>
-        );
+        return <SispendikSkeleton />;
     }
 
     return (
@@ -610,4 +607,3 @@ export default function SispendikDashboard() {
         </div>
     );
 }
-
