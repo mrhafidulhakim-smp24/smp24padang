@@ -7,7 +7,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { getPublicWasteDocumentation } from '@/app/admin/banksampah/actions';
 import { WasteDocumentationItem } from '@/app/admin/banksampah/page'; // Re-using type
 import { YouTubeEmbed, getYouTubeVideoId } from '@/components/youtube-embed'; // Corrected import casing
-import SispendikSkeleton from './sispendik-skeleton';
+import SkeletonLoader from '@/components/skeleton-loader';
 import { PlayCircle } from 'lucide-react';
 
 
@@ -41,7 +41,7 @@ export default function Tab3_Documentation() {
     };
 
     if (loading) {
-        return <SispendikSkeleton />;
+        return <SkeletonLoader />;
     }
 
     return (
@@ -94,7 +94,7 @@ export default function Tab3_Documentation() {
 
             {/* Video Player Dialog */}
             <Dialog open={!!selectedVideoUrl} onOpenChange={(isOpen) => !isOpen && closeVideo()}>
-                <DialogContent className="max-w-3xl p-0">
+                <DialogContent className="max-w-7xl p-0">
                     {selectedVideoUrl && (
                         <YouTubeEmbed url={selectedVideoUrl} title="Dokumentasi Bank Sampah" />
                     )}
