@@ -52,7 +52,8 @@ export async function createWasteNews(prevState: any, formData: FormData) {
     let imageUrl: string = '';
 
     try {
-        const blob = await put(imageFile.name, imageFile, { access: 'public' });
+        const filename = `${Date.now()}-${imageFile.name}`
+        const blob = await put(filename, imageFile, { access: 'public' });
         imageUrl = blob.url;
 
         await db.insert(wasteNews).values({
@@ -101,7 +102,8 @@ export async function updateWasteNews(id: number, prevState: any, formData: Form
         let imageUrl = existing?.previewUrl || '';
 
         if (imageFile && imageFile.size > 0) {
-            const blob = await put(imageFile.name, imageFile, { access: 'public' });
+            const filename = `${Date.now()}-${imageFile.name}`
+            const blob = await put(filename, imageFile, { access: 'public' });
             newUrl = blob.url;
 
             // Delete old image if it exists and is not a placeholder
@@ -172,7 +174,8 @@ export async function createWasteDocumentation(prevState: any, formData: FormDat
 
     try {
         if (imageFile && imageFile.size > 0) {
-            const blob = await put(imageFile.name, imageFile, { access: 'public' });
+            const filename = `${Date.now()}-${imageFile.name}`
+            const blob = await put(filename, imageFile, { access: 'public' });
             imageUrl = blob.url;
         }
 
@@ -209,7 +212,8 @@ export async function updateWasteDocumentation(id: number, prevState: any, formD
         let imageUrl = existing?.imageUrl || null;
 
         if (imageFile && imageFile.size > 0) {
-            const blob = await put(imageFile.name, imageFile, { access: 'public' });
+            const filename = `${Date.now()}-${imageFile.name}`
+            const blob = await put(filename, imageFile, { access: 'public' });
             const newUrl = blob.url;
 
             if (imageUrl) {
