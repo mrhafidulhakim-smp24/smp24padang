@@ -53,7 +53,7 @@ export default function Tab3_Documentation() {
             ) : (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {docs.map((item) => {
-                        const videoId = item.youtubeUrl ? getYouTubeId(item.youtubeUrl) : null;
+                        const videoId = item.youtubeUrl ? getYouTubeVideoId(item.youtubeUrl) : null;
 
                         return (
                             <Card key={item.id} className="overflow-hidden">
