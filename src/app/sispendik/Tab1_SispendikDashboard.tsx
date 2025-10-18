@@ -36,7 +36,7 @@ import {
     CartesianGrid,
     Cell,
 } from 'recharts';
-import SispendikSkeleton from './sispendik-skeleton';
+import { Spinner } from '@/components/ui/spinner';
 
 const MONTHS = [
     'Januari',
@@ -196,12 +196,13 @@ export default function SispendikDashboard() {
         fetchData();
     }, [month, year, levelFilter]);
 
-    if (loading) {
-        return <SispendikSkeleton />;
-    }
-
     return (
-        <div className="space-y-8 pt-6">
+        <div className="space-y-8 pt-6 relative">
+            {loading && (
+                <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-20">
+                    <Spinner className="w-10 h-10" />
+                </div>
+            )}
             {/* Top Cards */}
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <Card className="bg-green-100 dark:bg-green-900">
