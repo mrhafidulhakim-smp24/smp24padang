@@ -101,7 +101,7 @@ export default function Header({ contactInfo }: HeaderProps) {
             subLinks: [
                 { href: '/news', label: 'Berita', icon: Newspaper },
                 { href: '/pengumuman', label: 'Pengumuman', icon: Megaphone },
-                { href: '/sispendik', label: 'Sispendik', icon: Recycle },
+                { href: '/sispendik', label: 'Sispendig', icon: Recycle },
             ],
         },
         { href: '/achievements', label: 'Prestasi', icon: Trophy },
