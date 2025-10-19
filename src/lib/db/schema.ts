@@ -1,3 +1,4 @@
+import { users } from './schema/index';
 export * from './schema/index';
 import {
     pgTable,
@@ -9,8 +10,8 @@ import {
     uniqueIndex,
     decimal,
     index,
-    unique,
 } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 export const news = pgTable('news', {
     id: varchar('id').primaryKey(),
@@ -25,9 +26,10 @@ export const news = pgTable('news', {
 export const comments = pgTable('comments', {
     id: serial('id').primaryKey(),
     content: text('content').notNull(),
-    userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
-    contentType: text('content_type').notNull(), // e.g., 'news' or 'waste_news'
-    contentId: text('content_id').notNull(), // ID of the news or waste_news article
+    userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }), // Nullable for anonymous
+    authorName: text('author_name'), // Required if userId is null
+    contentType: text('content_type').notNull(),
+    contentId: text('content_id').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
 }, (table) => ({
     contentIndex: index('content_idx').on(table.contentType, table.contentId),
@@ -35,13 +37,34 @@ export const comments = pgTable('comments', {
 
 export const likes = pgTable('likes', {
     id: serial('id').primaryKey(),
-    userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+    userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }), // Nullable for anonymous
+    anonymousId: text('anonymous_id'), // For tracking anonymous users
     contentType: text('content_type').notNull(),
     contentId: text('content_id').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
 }, (table) => ({
     contentIndex: index('like_content_idx').on(table.contentType, table.contentId),
-    uniqueLike: unique('unique_like').on(table.userId, table.contentType, table.contentId),
+}));
+
+// RELATIONS
+
+export const usersRelations = relations(users, ({ many }) => ({
+	comments: many(comments),
+    likes: many(likes),
+}));
+
+export const commentsRelations = relations(comments, ({ one }) => ({
+	user: one(users, {
+		fields: [comments.userId],
+		references: [users.id],
+	}),
+}));
+
+export const likesRelations = relations(likes, ({ one }) => ({
+	user: one(users, {
+		fields: [likes.userId],
+		references: [users.id],
+	}),
 }));
 
 
@@ -129,19 +152,4 @@ export const wasteDocumentation = pgTable('waste_documentation', {
     youtubeUrl: text('youtube_url'),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
-});
-
-// I need to find where the user table is defined to add the reference.
-// Looking at the migration file, it seems there is a user table.
-// I will assume it is defined in another file and the reference will work.
-// If not, I will have to define it here.
-// From the migration file: CREATE TABLE "user" ("id" text PRIMARY KEY NOT NULL, "name" text, "email" text NOT NULL, "emailVerified" timestamp, "image" text, "password" text NOT NULL);
-
-export const user = pgTable('user', {
-	id: text('id').primaryKey(),
-	name: text('name'),
-	email: text('email').notNull(),
-	emailVerified: timestamp('emailVerified'),
-	image: text('image'),
-	password: text('password').notNull(),
 });
