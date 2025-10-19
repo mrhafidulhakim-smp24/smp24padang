@@ -8,7 +8,42 @@ import {
     serial,
     uniqueIndex,
     decimal,
+    index,
+    unique,
 } from 'drizzle-orm/pg-core';
+
+export const news = pgTable('news', {
+    id: varchar('id').primaryKey(),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    date: text('date').notNull(),
+    imageUrl: text('imageUrl'),
+    createdAt: timestamp('createdAt').defaultNow().notNull(),
+    updatedAt: timestamp('updatedAt').defaultNow().notNull(),
+});
+
+export const comments = pgTable('comments', {
+    id: serial('id').primaryKey(),
+    content: text('content').notNull(),
+    userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+    contentType: text('content_type').notNull(), // e.g., 'news' or 'waste_news'
+    contentId: text('content_id').notNull(), // ID of the news or waste_news article
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+    contentIndex: index('content_idx').on(table.contentType, table.contentId),
+}));
+
+export const likes = pgTable('likes', {
+    id: serial('id').primaryKey(),
+    userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+    contentType: text('content_type').notNull(),
+    contentId: text('content_id').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+    contentIndex: index('like_content_idx').on(table.contentType, table.contentId),
+    uniqueLike: unique('unique_like').on(table.userId, table.contentType, table.contentId),
+}));
+
 
 // `curriculums` should map to the SQL table named `curriculums`.
 export const curriculums = pgTable('curriculums', {
@@ -96,4 +131,17 @@ export const wasteDocumentation = pgTable('waste_documentation', {
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 });
 
+// I need to find where the user table is defined to add the reference.
+// Looking at the migration file, it seems there is a user table.
+// I will assume it is defined in another file and the reference will work.
+// If not, I will have to define it here.
+// From the migration file: CREATE TABLE "user" ("id" text PRIMARY KEY NOT NULL, "name" text, "email" text NOT NULL, "emailVerified" timestamp, "image" text, "password" text NOT NULL);
 
+export const user = pgTable('user', {
+	id: text('id').primaryKey(),
+	name: text('name'),
+	email: text('email').notNull(),
+	emailVerified: timestamp('emailVerified'),
+	image: text('image'),
+	password: text('password').notNull(),
+});
