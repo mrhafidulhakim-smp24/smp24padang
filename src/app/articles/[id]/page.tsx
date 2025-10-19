@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { PDFViewer } from '@/components/pdf-viewer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { InteractionSection } from '@/components/interactions/InteractionSection';
 
 export default async function ArticlePage({ params }: { params: { id: string } }) {
     const articleId = parseInt(params.id, 10);
@@ -27,7 +28,6 @@ export default async function ArticlePage({ params }: { params: { id: string } }
         </Link>
     );
 
-    // If there is a googleDriveUrl, show the PDF viewer as requested.
     if (article.googleDriveUrl) {
         return (
             <div className="container mx-auto py-6">
@@ -36,6 +36,11 @@ export default async function ArticlePage({ params }: { params: { id: string } }
                     title={article.title}
                     description={article.description}
                     url={article.googleDriveUrl}
+                />
+                <InteractionSection 
+                    contentType="waste_news" 
+                    contentId={article.id.toString()} 
+                    pathname={`/articles/${article.id}`} 
                 />
             </div>
         );
@@ -53,6 +58,11 @@ export default async function ArticlePage({ params }: { params: { id: string } }
                     <p>{article.description}</p>
                 </CardContent>
             </Card>
+            <InteractionSection 
+                contentType="waste_news" 
+                contentId={article.id.toString()} 
+                pathname={`/articles/${article.id}`} 
+            />
         </div>
     );
 }
