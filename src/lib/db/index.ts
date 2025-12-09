@@ -1,5 +1,6 @@
+import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { neon, neonConfig } from '@neondatabase/serverless';
+import 'server-only';
 import * as schema from './schema';
 
 if (!process.env.DATABASE_URL) {

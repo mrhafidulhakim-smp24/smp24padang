@@ -1,9 +1,10 @@
 'use server';
+import 'server-only';
 
 import { eq } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
 import { db } from '..';
 import { curriculums } from '../schema';
-import { revalidatePath } from 'next/cache';
 
 interface CurriculumInput {
     title: string;
