@@ -53,7 +53,7 @@ import {
   updateSampahKelas,
 } from "../actions";
 
-import { MONTHS } from "./constants";
+import { MONTHS } from "./types";
 import type { JenisSampah, Kelas, SetoranEntry } from "./types";
 
 interface TabSetoranKelasProps {
@@ -397,15 +397,15 @@ export function TabSetoranKelas({ kelas, jenisSampah }: TabSetoranKelasProps) {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="lg:col-span-2 print:break-inside-avoid print:border-0 print:shadow-none print:p-0">
-          <CardHeader className="flex items-center justify-end gap-2 sm:flex-row flex-col print:hidden">
-            <div className="flex items-center flex-wrap gap-2 w-full sm:w-auto print:hidden">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <Card className="xl:col-span-2 print:break-inside-avoid print:border-0 print:shadow-none print:p-0">
+          <CardHeader className="p-4 sm:p-6 border-b border-border/60 print:hidden">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 w-full items-center print:hidden">
               <Select
                 value={selectedMonth.toString()}
                 onValueChange={(v) => setSelectedMonth(parseInt(v))}
               >
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Pilih bulan" />
                 </SelectTrigger>
                 <SelectContent>
@@ -420,7 +420,7 @@ export function TabSetoranKelas({ kelas, jenisSampah }: TabSetoranKelasProps) {
                 value={String(selectedYear)}
                 onValueChange={(v) => setSelectedYear(parseInt(v))}
               >
-                <SelectTrigger className="w-28">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Pilih tahun" />
                 </SelectTrigger>
                 <SelectContent>
@@ -437,7 +437,7 @@ export function TabSetoranKelas({ kelas, jenisSampah }: TabSetoranKelasProps) {
                   if (isLevelFilter(v)) setTingkatFilter(v);
                 }}
               >
-                <SelectTrigger className="w-32">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Tingkat" />
                 </SelectTrigger>
                 <SelectContent>
@@ -451,9 +451,9 @@ export function TabSetoranKelas({ kelas, jenisSampah }: TabSetoranKelasProps) {
                 placeholder="Cari kelas/jenis..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-44"
+                className="w-full"
               />
-              <Button onClick={handlePrintRecap}>
+              <Button onClick={handlePrintRecap} className="w-full col-span-2 sm:col-span-1 btn-3d">
                 <Printer className="h-4 w-4 mr-2" /> Cetak
               </Button>
             </div>
@@ -659,7 +659,7 @@ export function TabSetoranKelas({ kelas, jenisSampah }: TabSetoranKelasProps) {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-1 print:hidden">
+        <Card className="xl:col-span-1 print:hidden">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>Manajemen Jenis Sampah</CardTitle>
             <div>

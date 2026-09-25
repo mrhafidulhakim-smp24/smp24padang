@@ -237,31 +237,37 @@ export default function MasterDataClient({
                     <CardTitle>Daftar Jenis Sampah</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="rounded-md border">
-                        <Table>
+                    <div className="hidden md:block w-full table-container-3d">
+                        <Table className="min-w-[650px] w-full">
                             <TableHeader>
-                                <TableRow>
-                                    <TableHead>Nama Sampah</TableHead>
-                                    <TableHead>Harga per Kg</TableHead>
-                                    <TableHead>Kategori</TableHead>
-                                    <TableHead>Terakhir Diperbarui</TableHead>
-                                    <TableHead className="w-[100px]">
+                                <TableRow className="bg-muted/50 border-b">
+                                    <TableHead className="font-semibold text-foreground py-3.5 px-4">Nama Sampah</TableHead>
+                                    <TableHead className="font-semibold text-foreground py-3.5 px-4">Harga per Kg</TableHead>
+                                    <TableHead className="font-semibold text-foreground py-3.5 px-4">Kategori</TableHead>
+                                    <TableHead className="font-semibold text-foreground py-3.5 px-4">Terakhir Diperbarui</TableHead>
+                                    <TableHead className="w-[100px] text-right font-semibold text-foreground py-3.5 px-4">
                                         Aksi
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {jenisSampahList.map((item) => (
-                                    <TableRow key={item.id}>
-                                        <TableCell>{item.namaSampah}</TableCell>
-                                        <TableCell>
+                                    <TableRow key={item.id} className="hover:bg-muted/40 transition-colors">
+                                        <TableCell className="font-semibold text-foreground px-4 py-3">{item.namaSampah}</TableCell>
+                                        <TableCell className="font-medium text-primary px-4 py-3">
                                             Rp{' '}
                                             {item.hargaPerKg.toLocaleString(
                                                 'id-ID',
                                             )}
                                         </TableCell>
-                                        <TableCell className="capitalize">{item.kategori}</TableCell>
-                                        <TableCell>
+                                        <TableCell className="capitalize px-4 py-3">
+                                            <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                                                item.kategori === 'organik' ? 'bg-green-500/10 text-green-700 dark:text-green-400' : 'bg-blue-500/10 text-blue-700 dark:text-blue-400'
+                                            }`}>
+                                                {item.kategori}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-4 py-3">
                                             {new Date(
                                                 item.updatedAt,
                                             ).toLocaleDateString('id-ID', {
@@ -270,11 +276,13 @@ export default function MasterDataClient({
                                                 day: 'numeric',
                                             })}
                                         </TableCell>
-                                        <TableCell>
-                                            <div className="flex gap-2">
+                                        <TableCell className="text-right px-4 py-3">
+                                            <div className="flex gap-2 justify-end">
                                                 <Button
                                                     size="sm"
                                                     variant="outline"
+                                                    className="h-8 w-8 p-0 btn-3d"
+                                                    title="Edit"
                                                     onClick={() =>
                                                         handleEdit(item)
                                                     }
@@ -286,6 +294,8 @@ export default function MasterDataClient({
                                                         <Button
                                                             size="sm"
                                                             variant="destructive"
+                                                            className="h-8 w-8 p-0 btn-3d"
+                                                            title="Hapus"
                                                         >
                                                             <Trash2 className="h-4 w-4" />
                                                         </Button>
@@ -315,6 +325,7 @@ export default function MasterDataClient({
                                                                         item.id,
                                                                     )
                                                                 }
+                                                                className="bg-destructive hover:bg-destructive/90"
                                                             >
                                                                 Hapus
                                                             </AlertDialogAction>
@@ -327,6 +338,67 @@ export default function MasterDataClient({
                                 ))}
                             </TableBody>
                         </Table>
+                    </div>
+
+                    {/* Mobile Card Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+                        {jenisSampahList.map((item) => (
+                            <Card key={item.id} className="card-3d card-3d-hover">
+                                <CardContent className="p-4 space-y-3">
+                                    <div className="flex justify-between items-start gap-2 border-b border-border/60 pb-2.5">
+                                        <div>
+                                            <p className="font-bold text-base text-foreground">{item.namaSampah}</p>
+                                            <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold mt-1 ${
+                                                item.kategori === 'organik' ? 'bg-green-500/10 text-green-700 dark:text-green-400' : 'bg-blue-500/10 text-blue-700 dark:text-blue-400'
+                                            }`}>
+                                                {item.kategori}
+                                            </span>
+                                        </div>
+                                        <span className="font-bold text-primary text-base">
+                                            Rp {item.hargaPerKg.toLocaleString('id-ID')}/kg
+                                        </span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 pt-1">
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            className="w-full btn-3d"
+                                            onClick={() => handleEdit(item)}
+                                        >
+                                            <Pencil className="h-3.5 w-3.5 mr-1.5" /> Edit
+                                        </Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button
+                                                    size="sm"
+                                                    variant="destructive"
+                                                    className="w-full btn-3d"
+                                                >
+                                                    <Trash2 className="h-3.5 w-3.5 mr-1.5" /> Hapus
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>Hapus Jenis Sampah?</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        Tindakan ini tidak dapat dibatalkan.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        onClick={() => handleDelete(item.id)}
+                                                        className="bg-destructive hover:bg-destructive/90"
+                                                    >
+                                                        Hapus
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
                     </div>
                 </CardContent>
             </Card>

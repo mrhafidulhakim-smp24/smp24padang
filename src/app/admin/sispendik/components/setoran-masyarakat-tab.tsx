@@ -11,7 +11,7 @@ import {
   getSetoranMasyarakatByNama,
   updateSetoranMasyarakat,
 } from "../setoran-masyarakat-actions";
-import { MONTHS } from "./constants";
+import { MONTHS } from "./types";
 import { SetoranHeader } from "./setoran-header";
 import {
   SetoranSummaryTable,

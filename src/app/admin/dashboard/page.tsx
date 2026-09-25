@@ -168,7 +168,7 @@ function StatCard({
     icon: LucideIcon;
 }) {
     return (
-        <Card>
+        <Card className="card-3d-hover">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">{title}</CardTitle>
                 <Icon className="h-4 w-4 text-muted-foreground" />
@@ -226,7 +226,7 @@ export default async function AdminDashboardPage() {
                     const Icon = item.icon;
                     return (
                         <Link href={item.href} key={item.href}>
-                            <Card className="flex h-full transform flex-col transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
+                            <Card className="flex h-full card-3d-hover flex-col">
                                 <CardHeader className="flex flex-row items-center gap-4">
                                     <div className="rounded-lg bg-primary/10 p-3">
                                         <Icon className="h-6 w-6 text-primary" />

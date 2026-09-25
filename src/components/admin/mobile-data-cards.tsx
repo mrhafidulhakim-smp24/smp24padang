@@ -13,7 +13,7 @@ export function TableDesktopOnly({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("hidden md:block", className)} {...props} />;
+  return <div className={cn("hidden md:block table-container-3d", className)} {...props} />;
 }
 
 export function CardMobileOnly({
@@ -31,7 +31,7 @@ export function MobileDataCard({
   return (
     <div
       className={cn(
-        "w-full rounded-xl border border-border/80 bg-card text-card-foreground shadow-sm transition-all hover:border-border overflow-hidden",
+        "w-full rounded-xl border border-b-[3.5px] border-border bg-card text-card-foreground shadow-[0_2px_4px_-1px_rgba(0,0,0,0.04),0_6px_16px_-2px_rgba(0,0,0,0.06)] transition-all hover:border-border overflow-hidden",
         className
       )}
       {...props}

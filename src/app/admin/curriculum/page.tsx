@@ -180,17 +180,19 @@ export default function CurriculumPage() {
                 onValueChange={setSelectedCategory}
                 className="w-full"
             >
-                <TabsList className="grid w-full grid-cols-3 bg-muted p-0 border-b">
-                    {categories.map((category) => (
-                        <TabsTrigger 
-                            key={category.value} 
-                            value={category.value}
-                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
-                        >
-                            {category.label}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
+                <div className="flex justify-start">
+                    <TabsList className="grid w-full max-w-xl grid-cols-3 card-3d p-1.5 rounded-xl bg-muted/60">
+                        {categories.map((category) => (
+                            <TabsTrigger 
+                                key={category.value} 
+                                value={category.value}
+                                className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg transition-all text-xs sm:text-sm"
+                            >
+                                {category.label}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+                </div>
 
                 <Card className="p-6 my-6">
                     <h2 className="text-2xl font-bold mb-4">
@@ -274,7 +276,7 @@ export default function CurriculumPage() {
                         ) : filteredDocuments.length === 0 ? (
                             <p>Tidak ada dokumen untuk kategori ini.</p>
                         ) : (
-                            <div className="grid gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {filteredDocuments.map((doc) => (
                                     <Card
                                         key={doc.id}

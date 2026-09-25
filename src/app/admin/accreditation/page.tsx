@@ -167,7 +167,7 @@ export default function AccreditationAdminPage() {
     return (
         <Card>
             <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <CardTitle className="text-2xl font-bold">
                             Kelola Sertifikasi Akreditasi
@@ -179,7 +179,7 @@ export default function AccreditationAdminPage() {
                     </div>
                     <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
                         <DialogTrigger asChild>
-                            <Button>
+                            <Button className="w-full sm:w-auto shrink-0">
                                 <PlusCircle className="mr-2 h-4 w-4" />
                                 Tambah Dokumen
                             </Button>
@@ -232,8 +232,8 @@ export default function AccreditationAdminPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <div className="border rounded-lg overflow-hidden">
-                    <Table>
+                <div className="table-container-3d">
+                    <Table className="min-w-[600px]">
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-2/5">Judul</TableHead>

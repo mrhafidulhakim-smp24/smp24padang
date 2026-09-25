@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, Plus, Printer } from "lucide-react";
-import { MONTHS } from "./constants";
+import { MONTHS } from "./types";
 
 interface SetoranHeaderProps {
   title: string;
@@ -46,22 +46,25 @@ export function SetoranHeader({
   return (
     <>
       {loading && (
-        <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10 rounded-md print:hidden">
-          <Loader2 className="h-10 w-10 animate-spin" />
+        <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10 rounded-xl print:hidden">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
         </div>
       )}
-      <CardHeader className="print:hidden">
-        <div className="flex items-center justify-between print:hidden">
-          <div>
-            <CardTitle className="text-xl font-bold">{title}</CardTitle>
-            <p className="text-muted-foreground">{subtitle}</p>
+      <CardHeader className="print:hidden p-4 sm:p-6 border-b border-border/60">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
+          <div className="xl:col-span-5 space-y-1">
+            <CardTitle className="text-xl sm:text-2xl font-bold tracking-tight">
+              {title}
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">{subtitle}</p>
           </div>
-          <div className="flex items-center flex-wrap gap-2">
+
+          <div className="xl:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5 items-center w-full">
             <Select
               value={selectedMonth.toString()}
               onValueChange={(v) => onMonthChange(parseInt(v))}
             >
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-full h-10 border-b-2 border-b-border font-medium">
                 <SelectValue placeholder="Pilih bulan" />
               </SelectTrigger>
               <SelectContent>
@@ -77,7 +80,7 @@ export function SetoranHeader({
               value={String(selectedYear)}
               onValueChange={(v) => onYearChange(parseInt(v))}
             >
-              <SelectTrigger className="w-28">
+              <SelectTrigger className="w-full h-10 border-b-2 border-b-border font-medium">
                 <SelectValue placeholder="Pilih tahun" />
               </SelectTrigger>
               <SelectContent>
@@ -89,12 +92,19 @@ export function SetoranHeader({
               </SelectContent>
             </Select>
 
-            <Button onClick={onAddNew}>
-              <Plus className="mr-2 h-4 w-4" /> {addNewLabel}
+            <Button
+              onClick={onAddNew}
+              className="w-full h-10 btn-3d font-medium"
+            >
+              <Plus className="mr-1.5 h-4 w-4" /> {addNewLabel}
             </Button>
 
-            <Button onClick={onPrint}>
-              <Printer className="mr-2 h-4 w-4" /> Cetak
+            <Button
+              onClick={onPrint}
+              variant="outline"
+              className="w-full h-10 btn-3d font-medium border-b-2 border-b-border"
+            >
+              <Printer className="mr-1.5 h-4 w-4" /> Cetak
             </Button>
           </div>
         </div>

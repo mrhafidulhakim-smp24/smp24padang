@@ -34,7 +34,7 @@ import {
   getPerkembanganSampahKelas,
   type LaporanBulanan,
 } from "../actions";
-import { MONTHS } from "./constants";
+import { MONTHS } from "./types";
 
 type KelasProgress = { kelas: string; months: number[] };
 
@@ -113,16 +113,16 @@ export function TabLaporanSispendik() {
         <p className="text-sm text-muted-foreground">Tahun {year}</p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <p className="text-sm text-muted-foreground">
-          Cetak laporan lengkap beserta tabel rekap dan perkembangan kelas.
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center print:hidden">
+        <p className="md:col-span-8 text-sm text-muted-foreground">
+          Cetak laporan lengkap beserta tabel rekap dan grafik perkembangan kelas.
         </p>
-        <div className="flex items-center gap-2">
+        <div className="md:col-span-4 grid grid-cols-2 gap-2.5">
           <Select
             value={String(year)}
             onValueChange={(value) => setYear(Number(value))}
           >
-            <SelectTrigger className="w-28">
+            <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -133,33 +133,35 @@ export function TabLaporanSispendik() {
               ))}
             </SelectContent>
           </Select>
-          <Button type="button" variant="outline" onClick={handlePrint}>
+          <Button type="button" variant="outline" onClick={handlePrint} className="w-full btn-3d">
             <Printer className="mr-2 h-4 w-4" />
             Cetak
           </Button>
         </div>
       </div>
 
-      <Card className="print:hidden print-break-inside-avoid print:shadow-none print:border-0 print:p-0">
-        <CardContent className="p-4 print:p-0 grid grid-cols-2 gap-4 divide-x divide-border print:divide-black/20">
-          <div className="space-y-1">
-            <p className="text-sm font-medium text-muted-foreground print:text-xs print:font-semibold">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 print:hidden">
+        <Card className="card-3d">
+          <CardContent className="p-5 space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">
               Total Perolehan {year}
             </p>
-            <p className="text-2xl font-bold tracking-tight text-green-700 print:text-lg print:text-black">
+            <p className="text-3xl font-extrabold tracking-tight text-primary">
               {totalKg.toLocaleString("id-ID")} kg
             </p>
-          </div>
-          <div className="space-y-1 pl-4">
-            <p className="text-sm font-medium text-muted-foreground print:text-xs print:font-semibold">
+          </CardContent>
+        </Card>
+        <Card className="card-3d">
+          <CardContent className="p-5 space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">
               Nilai Perolehan {year}
             </p>
-            <p className="text-2xl font-bold tracking-tight text-green-700 print:text-lg print:text-black">
+            <p className="text-3xl font-extrabold tracking-tight text-primary">
               Rp {totalValue.toLocaleString("id-ID")}
             </p>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
 
       <Card className="print:hidden print-break-inside-avoid">
         <CardHeader>
@@ -241,8 +243,8 @@ export function TabLaporanSispendik() {
           </p>
         </CardHeader>
         <CardContent className="print:p-0">
-          <div className="hidden md:block print:block overflow-x-auto rounded border print:overflow-visible print:rounded-none print:border-0">
-            <Table className="min-w-full print:min-w-full print:text-[10px]">
+          <div className="hidden md:block print:block overflow-x-auto rounded border print:overflow-visible print:rounded-none print:border-0 table-container-3d">
+            <Table className="min-w-[850px] w-full print:min-w-full print:text-[10px]">
               <TableHeader>
                 <TableRow>
                   <TableHead className="print:px-1">Kelas</TableHead>

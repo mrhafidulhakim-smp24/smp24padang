@@ -14,7 +14,6 @@ function isSispendikTab(value: string): value is SispendikTab {
   return ["kelas", "guru", "masyarakat", "laporan"].includes(value);
 }
 
-// --- MAIN WRAPPER COMPONENT ---
 export default function SispendikClient(props: SispendikClientProps) {
   const [tabValue, setTabValue] = useState<SispendikTab>("kelas");
   const handleTabChange = (value: string) => {
@@ -22,69 +21,50 @@ export default function SispendikClient(props: SispendikClientProps) {
   };
 
   return (
-    <Tabs value={tabValue} onValueChange={handleTabChange} className="w-full">
-      <div className="mb-4 block sm:hidden print:hidden">
-        <label htmlFor="sispendik-tab-select" className="sr-only">
-          Pilih tab
-        </label>
-        <select
-          id="sispendik-tab-select"
-          className="w-full rounded-md border border-muted bg-background px-3 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-          value={tabValue}
-          onChange={(event) => {
-            if (isSispendikTab(event.target.value)) {
-              setTabValue(event.target.value);
-            }
-          }}
-        >
-          <option value="kelas">Setoran per Kelas</option>
-          <option value="guru">Setoran Guru</option>
-          <option value="masyarakat">Setoran Masyarakat</option>
-          <option value="laporan">Laporan</option>
-        </select>
-      </div>
-      <div className="hidden sm:block overflow-x-auto print:hidden">
-        <TabsList className="grid w-full grid-cols-4 gap-2">
+    <Tabs value={tabValue} onValueChange={handleTabChange} className="w-full space-y-6">
+      <div className="w-full print:hidden">
+        <TabsList className="grid grid-cols-2 lg:grid-cols-4 gap-2 w-full h-auto p-1.5 bg-muted/60 rounded-xl border border-border/80 border-b-[3px] border-b-border shadow-sm">
           <TabsTrigger
             value="kelas"
-            className="min-w-[140px] truncate data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            className="w-full py-2.5 px-3 text-sm font-semibold rounded-lg transition-all text-center whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-primary/80"
           >
             Setoran per Kelas
           </TabsTrigger>
           <TabsTrigger
             value="guru"
-            className="min-w-[140px] truncate data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            className="w-full py-2.5 px-3 text-sm font-semibold rounded-lg transition-all text-center whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-primary/80"
           >
             Setoran Guru
           </TabsTrigger>
           <TabsTrigger
             value="masyarakat"
-            className="min-w-[140px] truncate data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            className="w-full py-2.5 px-3 text-sm font-semibold rounded-lg transition-all text-center whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-primary/80"
           >
             Setoran Masyarakat
           </TabsTrigger>
           <TabsTrigger
             value="laporan"
-            className="min-w-[140px] truncate data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            className="w-full py-2.5 px-3 text-sm font-semibold rounded-lg transition-all text-center whitespace-normal data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-primary/80"
           >
             Laporan
           </TabsTrigger>
         </TabsList>
       </div>
-      <TabsContent value="kelas">
+
+      <TabsContent value="kelas" className="outline-none focus:outline-none">
         <TabSetoranKelas kelas={props.kelas} jenisSampah={props.jenisSampah} />
       </TabsContent>
-      <TabsContent value="guru">
+      <TabsContent value="guru" className="outline-none focus:outline-none">
         <TabSetoranGuru
           jenisSampah={props.jenisSampah}
           gurus={props.gurus}
           initialSetoranGuru={props.initialSetoranGuru}
         />
       </TabsContent>
-      <TabsContent value="masyarakat">
+      <TabsContent value="masyarakat" className="outline-none focus:outline-none">
         <TabSetoranMasyarakat jenisSampah={props.jenisSampah} />
       </TabsContent>
-      <TabsContent value="laporan">
+      <TabsContent value="laporan" className="outline-none focus:outline-none">
         <TabLaporanSispendik />
       </TabsContent>
     </Tabs>

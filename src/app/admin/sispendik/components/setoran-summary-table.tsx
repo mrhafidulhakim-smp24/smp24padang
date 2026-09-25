@@ -39,56 +39,88 @@ export function SetoranSummaryTable({
   onDelete,
 }: SetoranSummaryTableProps) {
   return (
-    <>
-      <div className="hidden print:block text-center mb-4">
-        <h1 className="text-xl font-bold">{printTitle}</h1>
+    <div className="w-full min-w-0 space-y-4">
+      {/* Judul khusus Cetak / Print */}
+      <div className="hidden print:block text-center mb-6">
+        <h1 className="text-2xl font-bold">{printTitle}</h1>
       </div>
 
-      {/* Desktop Table */}
-      <div className="hidden md:block overflow-x-auto rounded border print:block print:overflow-visible print:rounded-none print:border-0">
-        <Table className="min-w-full print:min-w-0">
+      {/* Desktop Table dengan Container 3D adaptif */}
+      <div className="hidden lg:block w-full min-w-0 table-container-3d print:block print:overflow-visible print:border-0 print:shadow-none">
+        <Table className="w-full min-w-[700px] text-sm print:min-w-0">
           <TableHeader>
-            <TableRow>
-              <TableHead>{nameHeader}</TableHead>
-              <TableHead>Jenis Sampah</TableHead>
-              <TableHead>Jumlah Setoran</TableHead>
-              <TableHead>Total (Kg)</TableHead>
-              <TableHead>Total (Rp)</TableHead>
-              <TableHead className="text-right print:hidden">Aksi</TableHead>
-            </TableRow>
+            <tr className="border-b bg-muted/60">
+              <TableHead className="font-semibold text-foreground py-3.5 px-4 w-[25%]">
+                {nameHeader}
+              </TableHead>
+              <TableHead className="font-semibold text-foreground py-3.5 px-4 w-[25%]">
+                Jenis Sampah
+              </TableHead>
+              <TableHead className="font-semibold text-foreground py-3.5 px-4 text-center w-[12%]">
+                Jumlah Setoran
+              </TableHead>
+              <TableHead className="font-semibold text-foreground py-3.5 px-4 text-right w-[13%]">
+                Total (Kg)
+              </TableHead>
+              <TableHead className="font-semibold text-foreground py-3.5 px-4 text-right w-[15%]">
+                Total (Rp)
+              </TableHead>
+              <TableHead className="font-semibold text-foreground py-3.5 px-4 text-right w-[10%] print:hidden">
+                Aksi
+              </TableHead>
+            </tr>
           </TableHeader>
           <TableBody>
             {items.length > 0 ? (
               items.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell className="font-medium">{row.name}</TableCell>
-                  <TableCell>{row.wasteTypes || "-"}</TableCell>
-                  <TableCell>{row.setoranCount}</TableCell>
-                  <TableCell>
+                <TableRow
+                  key={row.id}
+                  className="hover:bg-muted/40 transition-colors"
+                >
+                  <TableCell className="font-semibold text-foreground px-4 py-3">
+                    {row.name}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground px-4 py-3">
+                    <span
+                      className="inline-block max-w-[240px] truncate"
+                      title={row.wasteTypes || "-"}
+                    >
+                      {row.wasteTypes || "-"}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-center font-medium px-4 py-3">
+                    <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary">
+                      {row.setoranCount} setoran
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right font-medium px-4 py-3">
                     {row.totalKg.toLocaleString("id-ID", {
                       maximumFractionDigits: 2,
-                    })}
+                    })}{" "}
+                    kg
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-right font-semibold text-primary px-4 py-3">
                     Rp {row.totalValue.toLocaleString("id-ID")}
                   </TableCell>
-                  <TableCell className="text-right print:hidden">
+                  <TableCell className="text-right px-4 py-3 print:hidden">
                     <div className="flex gap-2 justify-end">
                       <Button
                         variant="outline"
                         size="icon"
+                        className="h-8 w-8 btn-3d"
                         title="Kelola Setoran"
                         onClick={() => onManage(row)}
                       >
-                        <Pencil className="h-4 w-4" />
+                        <Pencil className="h-3.5 w-3.5" />
                       </Button>
                       <Button
                         variant="destructive"
                         size="icon"
+                        className="h-8 w-8 btn-3d"
                         title="Hapus"
                         onClick={() => onDelete(row)}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   </TableCell>
@@ -96,7 +128,10 @@ export function SetoranSummaryTable({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell
+                  colSpan={6}
+                  className="h-32 text-center text-muted-foreground"
+                >
                   {emptyMessage}
                 </TableCell>
               </TableRow>
@@ -105,58 +140,71 @@ export function SetoranSummaryTable({
         </Table>
       </div>
 
-      {/* Mobile Cards View */}
-      <div className="space-y-4 md:hidden print:hidden">
+      {/* Mobile/Tablet Card Grid View (3D Tactile Cards) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:hidden print:hidden w-full">
         {items.length === 0 ? (
-          <div className="rounded-lg border p-4 text-center">{emptyMessage}</div>
+          <div className="col-span-full rounded-xl border border-dashed p-8 text-center text-muted-foreground bg-muted/20">
+            {emptyMessage}
+          </div>
         ) : (
           items.map((row) => (
-            <Card key={row.id} className="border">
-              <CardContent className="space-y-3 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold">{row.name}</p>
+            <Card key={row.id} className="card-3d card-3d-hover">
+              <CardContent className="space-y-3.5 p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-3 border-b border-border/60 pb-3">
+                  <div className="min-w-0">
+                    <p className="font-bold text-base text-foreground truncate">
+                      {row.name}
+                    </p>
                     <p
-                      className="text-xs text-muted-foreground truncate max-w-[200px]"
+                      className="text-xs text-muted-foreground truncate mt-0.5"
                       title={row.wasteTypes || "-"}
                     >
                       {row.wasteTypes || "-"}
                     </p>
                   </div>
-                  <p className="text-sm font-semibold">
+                  <span className="shrink-0 text-sm font-bold text-primary px-2.5 py-1 rounded-md bg-primary/10">
                     Rp {row.totalValue.toLocaleString("id-ID")}
-                  </p>
+                  </span>
                 </div>
-                <div className="grid gap-2 text-sm">
-                  <div className="flex justify-between gap-2">
-                    <span className="text-muted-foreground">Setoran</span>
-                    <span>{row.setoranCount}</span>
+
+                <div className="grid grid-cols-2 gap-2 text-sm bg-muted/40 p-2.5 rounded-lg border border-border/50">
+                  <div>
+                    <span className="text-xs text-muted-foreground block">
+                      Jumlah Setoran
+                    </span>
+                    <span className="font-semibold text-foreground">
+                      {row.setoranCount} kali
+                    </span>
                   </div>
-                  <div className="flex justify-between gap-2">
-                    <span className="text-muted-foreground">Total Kg</span>
-                    <span>
+                  <div>
+                    <span className="text-xs text-muted-foreground block">
+                      Total Berat
+                    </span>
+                    <span className="font-semibold text-foreground">
                       {row.totalKg.toLocaleString("id-ID", {
                         maximumFractionDigits: 2,
-                      })}
+                      })}{" "}
+                      kg
                     </span>
                   </div>
                 </div>
-                <div className="flex gap-2">
+
+                <div className="grid grid-cols-2 gap-2 pt-1">
                   <Button
-                    className="flex-1"
                     size="sm"
                     variant="outline"
+                    className="w-full btn-3d font-medium border-b-2"
                     onClick={() => onManage(row)}
                   >
-                    Kelola
+                    <Pencil className="h-3.5 w-3.5 mr-1.5" /> Kelola
                   </Button>
                   <Button
-                    className="flex-1"
                     size="sm"
                     variant="destructive"
+                    className="w-full btn-3d font-medium"
                     onClick={() => onDelete(row)}
                   >
-                    Hapus
+                    <Trash2 className="h-3.5 w-3.5 mr-1.5" /> Hapus
                   </Button>
                 </div>
               </CardContent>
@@ -164,6 +212,6 @@ export function SetoranSummaryTable({
           ))
         )}
       </div>
-    </>
+    </div>
   );
 }

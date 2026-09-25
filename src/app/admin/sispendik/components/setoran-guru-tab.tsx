@@ -12,7 +12,7 @@ import {
   getSetoranGuruByGuru,
   updateSetoranGuru,
 } from "../setoran-guru-actions";
-import { MONTHS } from "./constants";
+import { MONTHS } from "./types";
 import { GuruDialog } from "./guru-dialog";
 import { SetoranHeader } from "./setoran-header";
 import {

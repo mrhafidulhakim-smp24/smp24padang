@@ -179,8 +179,9 @@ function BannersTab({
                     <PlusCircle className="mr-2 h-4 w-4" /> Tambah Banner
                 </Button>
             </CardHeader>
-            <CardContent className="overflow-x-auto">
-                <Table className="min-w-full">
+            <CardContent>
+                <div className="table-container-3d">
+                    <Table className="min-w-[600px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Gambar</TableHead>
@@ -262,6 +263,7 @@ function BannersTab({
                         ))}
                     </TableBody>
                 </Table>
+                </div>
             </CardContent>
             <Dialog
                 open={isDialogOpen}
@@ -586,8 +588,9 @@ function FacilitiesTab({
                     <PlusCircle className="mr-2 h-4 w-4" /> Tambah Fasilitas
                 </Button>
             </CardHeader>
-            <CardContent className="overflow-x-auto">
-                <Table className="min-w-full">
+            <CardContent>
+                <div className="table-container-3d">
+                    <Table className="min-w-[600px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Gambar</TableHead>
@@ -668,6 +671,7 @@ function FacilitiesTab({
                         ))}
                     </TableBody>
                 </Table>
+                </div>
             </CardContent>
             <Dialog
                 open={isDialogOpen}
@@ -782,23 +786,23 @@ export default function HomepageAdminPage() {
                 </p>
             </div>
             <Tabs defaultValue="banners" className="w-full">
-                <div className="flex justify-center">
-                    <TabsList className="grid w-full max-w-md grid-cols-3 bg-muted p-0">
+                <div className="flex justify-start sm:justify-center">
+                    <TabsList className="grid w-full max-w-md grid-cols-3 card-3d p-1.5 rounded-xl bg-muted/60">
                         <TabsTrigger
                             value="banners"
-                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg transition-all"
                         >
                             Banner
                         </TabsTrigger>
                         <TabsTrigger
                             value="statistics"
-                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg transition-all"
                         >
                             Statistik
                         </TabsTrigger>
                         <TabsTrigger
                             value="facilities"
-                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-none"
+                            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg transition-all"
                         >
                             Fasilitas
                         </TabsTrigger>
