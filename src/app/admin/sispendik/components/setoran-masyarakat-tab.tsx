@@ -42,6 +42,19 @@ type SetoranMasyarakat = {
   tanggalSetoran: Date | string;
 };
 
+type ItemForm = {
+  key: number;
+  jenisSampahId: string;
+  jumlahKg: string;
+};
+
+let itemKey = 0;
+const newItem = (): ItemForm => ({
+  key: ++itemKey,
+  jenisSampahId: "",
+  jumlahKg: "",
+});
+
 const toDateInput = (value: Date | string) => {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
@@ -58,13 +71,11 @@ export function TabSetoranMasyarakat({
   const [year, setYear] = useState(today.getFullYear());
   const [rows, setRows] = useState<SetoranMasyarakat[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [form, setForm] = useState({
-    namaPenyetor: "",
-    jenisSampahId: "",
-    jumlahKg: "",
-    tanggalSetoran: toDateInput(today),
-  });
+  const [namaPenyetor, setNamaPenyetor] = useState("");
+  const [tanggalSetoran, setTanggalSetoran] = useState(toDateInput(today));
+  const [items, setItems] = useState<ItemForm[]>([newItem()]);
 
   const years = useMemo(
     () =>
@@ -95,27 +106,84 @@ export function TabSetoranMasyarakat({
     fetchRows();
   }, [fetchRows]);
 
+  // Form kosong: mulai penyetor baru. Nama & tanggal terakhir dipertahankan
+  // agar penyetor berikutnya tinggal menambah item (alur input beruntun).
   const resetForm = () => {
     setEditingId(null);
-    setForm({
-      namaPenyetor: "",
-      jenisSampahId: "",
-      jumlahKg: "",
-      tanggalSetoran: `${year}-${String(month).padStart(2, "0")}-15`,
-    });
+    setNamaPenyetor("");
+    setTanggalSetoran(toDateInput(today));
+    setItems([newItem()]);
+  };
+
+  const setItem = (key: number, patch: Partial<ItemForm>) => {
+    setItems((prev) =>
+      prev.map((item) => (item.key === key ? { ...item, ...patch } : item)),
+    );
+  };
+
+  const removeItem = (key: number) => {
+    setItems((prev) =>
+      prev.length > 1 ? prev.filter((item) => item.key !== key) : [newItem()],
+    );
   };
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const payload = {
-      namaPenyetor: form.namaPenyetor,
-      jenisSampahId: Number(form.jenisSampahId),
-      jumlahKg: Number(form.jumlahKg),
-      tanggalSetoran: new Date(`${form.tanggalSetoran}T12:00:00`),
-    };
-    const result = editingId
-      ? await updateSetoranMasyarakat(editingId, payload)
-      : await createSetoranMasyarakat(payload);
+
+    if (editingId) {
+      // Edit satu baris daftar = satu jenis sampah.
+      const first = items[0];
+      if (!first.jenisSampahId || !Number(first.jumlahKg)) {
+        toast({
+          title: "Lengkapi isian",
+          description: "Pilih jenis sampah dan isi jumlah (kg).",
+          variant: "destructive",
+        });
+        return;
+      }
+      setSaving(true);
+      const result = await updateSetoranMasyarakat(editingId, {
+        jenisSampahId: Number(first.jenisSampahId),
+        jumlahKg: Number(first.jumlahKg),
+      });
+      setSaving(false);
+      if (!result.success) {
+        toast({
+          title: "Gagal menyimpan",
+          description: result.error || "Periksa kembali isian.",
+          variant: "destructive",
+        });
+        return;
+      }
+      toast({ title: "Berhasil", description: "Setoran diperbarui." });
+      resetForm();
+      await fetchRows();
+      return;
+    }
+
+    const validItems = items
+      .filter((item) => item.jenisSampahId && Number(item.jumlahKg) > 0)
+      .map((item) => ({
+        jenisSampahId: Number(item.jenisSampahId),
+        jumlahKg: Number(item.jumlahKg),
+      }));
+    if (!namaPenyetor.trim() || validItems.length === 0) {
+      toast({
+        title: "Lengkapi isian",
+        description:
+          "Isi nama penyetor dan minimal satu jenis sampah dengan jumlah > 0.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSaving(true);
+    const result = await createSetoranMasyarakat({
+      namaPenyetor: namaPenyetor.trim(),
+      tanggalSetoran: new Date(`${tanggalSetoran}T12:00:00`),
+      items: validItems,
+    });
+    setSaving(false);
     if (!result.success) {
       toast({
         title: "Gagal menyimpan",
@@ -126,22 +194,29 @@ export function TabSetoranMasyarakat({
     }
     toast({
       title: "Berhasil",
-      description: editingId
-        ? "Setoran diperbarui."
-        : "Setoran masyarakat ditambahkan.",
+      description:
+        validItems.length > 1
+          ? `${validItems.length} jenis sampah untuk ${namaPenyetor.trim()} ditambahkan.`
+          : "Setoran masyarakat ditambahkan.",
     });
-    resetForm();
+    // Nama & tanggal dipertahankan agar bisa langsung input jenis lain
+    // untuk penyetor yang sama; item dikosongkan untuk penyetor baru.
+    setNamaPenyetor("");
+    setItems([newItem()]);
     await fetchRows();
   };
 
   const startEdit = (row: SetoranMasyarakat) => {
     setEditingId(row.id);
-    setForm({
-      namaPenyetor: row.namaPenyetor,
-      jenisSampahId: String(row.jenisSampahId),
-      jumlahKg: String(row.jumlahKg),
-      tanggalSetoran: toDateInput(row.tanggalSetoran),
-    });
+    setNamaPenyetor(row.namaPenyetor);
+    setTanggalSetoran(toDateInput(row.tanggalSetoran));
+    setItems([
+      {
+        key: ++itemKey,
+        jenisSampahId: String(row.jenisSampahId),
+        jumlahKg: String(row.jumlahKg),
+      },
+    ]);
   };
 
   const remove = async (id: number) => {
@@ -172,66 +247,108 @@ export function TabSetoranMasyarakat({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form
-            onSubmit={submit}
-            className="grid grid-cols-1 gap-4 md:grid-cols-5"
-          >
-            <div>
-              <Label>Nama penyetor</Label>
-              <Input
-                value={form.namaPenyetor}
-                onChange={(e) =>
-                  setForm({ ...form, namaPenyetor: e.target.value })
-                }
-                required
-              />
+          <form onSubmit={submit} className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <Label>Nama penyetor</Label>
+                <Input
+                  value={namaPenyetor}
+                  onChange={(e) => setNamaPenyetor(e.target.value)}
+                  placeholder="Nama penyetor"
+                  required
+                />
+              </div>
+              <div>
+                <Label>Tanggal setoran</Label>
+                <Input
+                  type="date"
+                  value={tanggalSetoran}
+                  onChange={(e) => setTanggalSetoran(e.target.value)}
+                  required
+                />
+              </div>
             </div>
-            <div>
-              <Label>Jenis sampah</Label>
-              <Select
-                value={form.jenisSampahId}
-                onValueChange={(jenisSampahId) =>
-                  setForm({ ...form, jenisSampahId })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih jenis" />
-                </SelectTrigger>
-                <SelectContent>
-                  {jenisSampah.map((jenis) => (
-                    <SelectItem key={jenis.id} value={String(jenis.id)}>
-                      {jenis.namaSampah} ({jenis.kategori})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+
+            <div className="space-y-3">
+              <Label>
+                Jenis sampah{" "}
+                <span className="text-muted-foreground">
+                  (satu penyetor bisa membawa beberapa jenis)
+                </span>
+              </Label>
+              {items.map((item, index) => (
+                <div key={item.key} className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <Select
+                      value={item.jenisSampahId}
+                      onValueChange={(value) =>
+                        setItem(item.key, { jenisSampahId: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={`Jenis sampah ${index + 1}`}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {jenisSampah.map((jenis) => (
+                          <SelectItem key={jenis.id} value={String(jenis.id)}>
+                            {jenis.namaSampah} ({jenis.kategori})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-32">
+                    <Input
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      placeholder="Kg"
+                      value={item.jumlahKg}
+                      onChange={(e) =>
+                        setItem(item.key, { jumlahKg: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="outline"
+                    title="Hapus baris"
+                    onClick={() => removeItem(item.key)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              {!editingId && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setItems((prev) => [...prev, newItem()])}
+                >
+                  <Plus className="mr-1 h-4 w-4" />
+                  Tambah jenis sampah
+                </Button>
+              )}
             </div>
-            <div>
-              <Label>Jumlah (kg)</Label>
-              <Input
-                type="number"
-                min="0.01"
-                step="0.01"
-                value={form.jumlahKg}
-                onChange={(e) => setForm({ ...form, jumlahKg: e.target.value })}
-                required
-              />
-            </div>
-            <div>
-              <Label>Tanggal setoran</Label>
-              <Input
-                type="date"
-                value={form.tanggalSetoran}
-                onChange={(e) =>
-                  setForm({ ...form, tanggalSetoran: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div className="flex items-end gap-2">
-              <Button type="submit">
+
+            <div className="flex gap-2">
+              <Button type="submit" disabled={saving}>
                 <Plus className="mr-1 h-4 w-4" />
-                {editingId ? "Simpan" : "Tambah"}
+                {saving
+                  ? "Menyimpan…"
+                  : editingId
+                    ? "Simpan"
+                    : items.filter(
+                          (item) =>
+                            item.jenisSampahId && Number(item.jumlahKg) > 0,
+                        ).length > 1
+                      ? "Simpan Semua"
+                      : "Tambah"}
               </Button>
               {editingId && (
                 <Button type="button" variant="outline" onClick={resetForm}>
