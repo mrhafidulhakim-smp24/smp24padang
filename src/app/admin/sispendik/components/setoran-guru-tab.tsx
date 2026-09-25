@@ -1,59 +1,29 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { useToast } from "@/hooks/use-toast";
-import { Loader2, Pencil, Plus, Printer, Save, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useFormState } from "react-dom";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { getAllGurus } from "../actions";
-import { deleteGuru } from "../guru-actions";
 import {
   createSetoranGuru,
+  deleteGuru,
   deleteSetoranGuru,
   getSetoranGuru,
   getSetoranGuruByGuru,
   updateSetoranGuru,
 } from "../setoran-guru-actions";
-
 import { MONTHS } from "./constants";
 import { GuruDialog } from "./guru-dialog";
-import { SubmitButton } from "./submit-button";
+import { SetoranHeader } from "./setoran-header";
+import {
+  SetoranSummaryTable,
+  type SetoranSummaryRow,
+} from "./setoran-summary-table";
+import {
+  KelolaSetoranDialog,
+  type SetoranDetailItem,
+} from "./kelola-setoran-dialog";
+import { ConfirmDeleteDialog } from "./confirm-delete-dialog";
 import type { Guru, JenisSampah, SetoranGuruEntry } from "./types";
 
 interface TabSetoranGuruProps {
@@ -68,128 +38,78 @@ export function TabSetoranGuru({
   initialSetoranGuru,
 }: TabSetoranGuruProps) {
   const { toast } = useToast();
-  const [gurus, setGurus] = useState(initialGurus);
-  const [setoranList, setSetoranList] = useState(initialSetoranGuru);
-  const printRef = useRef<HTMLDivElement>(null);
-
+  const [gurus, setGurus] = useState<Guru[]>(initialGurus);
+  const [setoranList, setSetoranList] =
+    useState<SetoranGuruEntry[]>(initialSetoranGuru);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [loading, setLoading] = useState(false);
 
-  const currentYear = new Date().getFullYear();
-  const years = Array.from(
-    { length: currentYear - 2020 + 6 },
-    (_, i) => 2020 + i,
-  );
-
-  // State for managing teacher deposits modal
+  // Modal kelola setoran guru
   const [manageGuru, setManageGuru] = useState<Guru | null>(null);
   const [entries, setEntries] = useState<SetoranGuruEntry[]>([]);
-  const [loadingEntries, setLoadingEntries] = useState(false); // Loading state for dialog
-  const [editingEntryId, setEditingEntryId] = useState<number | null>(null);
-  const [editedEntry, setEditedEntry] = useState<Partial<SetoranGuruEntry>>({});
-  const [isSaving, setIsSaving] = useState(false);
-  const [deleteEntryDialog, setDeleteEntryDialog] =
-    useState<SetoranGuruEntry | null>(null);
+  const [loadingEntries, setLoadingEntries] = useState(false);
 
-  // State for managing teachers
+  // Modal tambah/edit guru
   const [guruModalOpen, setGuruModalOpen] = useState(false);
   const [editingGuru, setEditingGuru] = useState<Guru | null>(null);
-  const [deletingGuru, setDeletingGuru] = useState<Guru | null>(null);
 
-  const [addState, addAction] = useFormState(createSetoranGuru, {
-    message: null,
-    errors: {},
-    success: false,
-  });
-  const addFormRef = useRef<HTMLFormElement>(null);
-  const processedAddStateRef = useRef<typeof addState | null>(null);
+  // Modal hapus guru
+  const [deletingGuru, setDeletingGuru] = useState<Guru | null>(null);
 
   const refetchGurus = async () => {
     const res = await getAllGurus();
-    if (res.data) {
-      setGurus(res.data);
-    }
+    if (res.data) setGurus(res.data);
   };
 
   const refetchAllSetoran = useCallback(async () => {
     setLoading(true);
-    const updatedSetoran = await getSetoranGuru(selectedMonth, selectedYear);
-    if (updatedSetoran.data) setSetoranList(updatedSetoran.data);
+    const res = await getSetoranGuru(selectedMonth, selectedYear);
+    if (res.data) setSetoranList(res.data);
     setLoading(false);
   }, [selectedMonth, selectedYear]);
 
-  // Data bulan berjalan sudah dikirim oleh halaman server.
-  // Fetch berikutnya hanya diperlukan saat filter bulan/tahun berubah.
   const hasUsedInitialData = useRef(false);
   useEffect(() => {
     if (!hasUsedInitialData.current) {
       hasUsedInitialData.current = true;
       return;
     }
-    refetchAllSetoran();
+    void refetchAllSetoran();
   }, [refetchAllSetoran]);
 
   const fetchGuruEntries = useCallback(
     async (guruId: number) => {
       setLoadingEntries(true);
-      setEntries([]); // Clear previous entries
-      try {
-        const res = await getSetoranGuruByGuru(
-          guruId,
-          selectedMonth,
-          selectedYear,
-        );
-        if (res.data) {
-          setEntries(res.data);
-        } else if (res.error) {
-          toast({
-            title: "Gagal Memuat Setoran",
-            description: res.error,
-            variant: "destructive",
-          });
-        }
-      } catch (error) {
+      setEntries([]);
+      const res = await getSetoranGuruByGuru(
+        guruId,
+        selectedMonth,
+        selectedYear,
+      );
+      if (res.data) {
+        setEntries(res.data);
+      } else if (res.error) {
         toast({
-          title: "Error",
-          description: "Terjadi kesalahan saat mengambil data.",
+          title: "Gagal Memuat Setoran",
+          description: res.error,
           variant: "destructive",
         });
-      } finally {
-        setLoadingEntries(false);
       }
+      setLoadingEntries(false);
     },
     [toast, selectedMonth, selectedYear],
   );
 
-  const openManageGuru = (guru: Guru) => {
+  const openManageGuru = (row: SetoranSummaryRow) => {
+    const guru = gurus.find((g) => g.id === Number(row.id));
+    if (!guru) return;
     setManageGuru(guru);
-    fetchGuruEntries(guru.id);
+    void fetchGuruEntries(guru.id);
   };
 
-  useEffect(() => {
-    if (addState !== processedAddStateRef.current) {
-      if (addState.message) {
-        if (addState.success) {
-          toast({ title: "Sukses", description: addState.message });
-          addFormRef.current?.reset();
-          refetchAllSetoran();
-          if (manageGuru) {
-            fetchGuruEntries(manageGuru.id);
-          }
-        } else {
-          toast({
-            title: "Gagal",
-            description: addState.message,
-            variant: "destructive",
-          });
-        }
-      }
-      processedAddStateRef.current = addState;
-    }
-  }, [addState, toast, manageGuru, fetchGuruEntries, refetchAllSetoran]);
-
-  const guruSummary = useMemo(() => {
+  // Ringkasan data per guru (1-pass loop bersih dan reaktif)
+  const summaryRows = useMemo<SetoranSummaryRow[]>(() => {
     const summaryMap = new Map<
       number,
       {
@@ -197,600 +117,191 @@ export function TabSetoranGuru({
         totalKg: number;
         totalValue: number;
         setoranCount: number;
-        wasteTypes: string;
+        types: Set<string>;
       }
     >();
 
-    initialGurus.forEach((guru) => {
+    gurus.forEach((guru) => {
       summaryMap.set(guru.id, {
         guru,
         totalKg: 0,
         totalValue: 0,
         setoranCount: 0,
-        wasteTypes: "-",
+        types: new Set(),
       });
     });
 
     setoranList.forEach((s) => {
       if (s.guruId && summaryMap.has(s.guruId)) {
-        const summary = summaryMap.get(s.guruId)!;
-        summary.totalKg += Number(s.jumlahKg);
-        summary.totalValue += Number(s.jumlahKg) * Number(s.hargaPerKg || 0);
-        summary.setoranCount += 1;
+        const item = summaryMap.get(s.guruId)!;
+        const kg = Number(s.jumlahKg) || 0;
+        const val = kg * Number(s.hargaPerKg || 0);
+        item.totalKg += kg;
+        item.totalValue += val;
+        item.setoranCount += 1;
+        if (s.jenisSampah) item.types.add(s.jenisSampah);
       }
     });
 
-    setoranList
-      .reduce((acc, s) => {
-        if (s.guruId && s.jenisSampah) {
-          const currentTypes = acc.get(s.guruId) || new Set<string>();
-          currentTypes.add(s.jenisSampah);
-          acc.set(s.guruId, currentTypes);
-        }
-        return acc;
-      }, new Map<number, Set<string>>())
-      .forEach((types, guruId) => {
-        if (summaryMap.has(guruId)) {
-          summaryMap.get(guruId)!.wasteTypes = Array.from(types).join(", ");
-        }
-      });
+    return Array.from(summaryMap.values()).map(
+      ({ guru, totalKg, totalValue, setoranCount, types }) => ({
+        id: guru.id,
+        name: guru.namaGuru,
+        wasteTypes: Array.from(types).join(", ") || "-",
+        setoranCount,
+        totalKg,
+        totalValue,
+      }),
+    );
+  }, [gurus, setoranList]);
 
-    return Array.from(summaryMap.values()).map(({ guru, ...stats }) => ({
-      ...guru,
-      ...stats,
-    }));
-  }, [initialGurus, setoranList]);
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const startEditEntry = (entry: SetoranGuruEntry) => {
-    setEditingEntryId(entry.id);
-    setEditedEntry(entry);
-  };
-
-  const cancelEditEntry = () => {
-    setEditingEntryId(null);
-    setEditedEntry({});
-  };
-
-  const handleSaveEntry = async (entryId: number) => {
-    setIsSaving(true);
-
-    const jenisId = editedEntry.jenisSampahId;
-    const jumlah = parseFloat(String(editedEntry.jumlahKg) || "0");
-
-    if (!jenisId || !jumlah) {
-      toast({
-        title: "Gagal",
-        description: "Jenis sampah dan jumlah harus diisi dan valid.",
-        variant: "destructive",
-      });
-      setIsSaving(false);
-      return;
-    }
-
-    const result = await updateSetoranGuru(entryId, {
-      jenisSampahId: jenisId,
-      jumlahKg: jumlah,
+  // Handler CRUD entri setoran
+  const handleAddEntry = async (
+    jenisSampahId: number,
+    jumlahKg: number,
+  ): Promise<boolean> => {
+    if (!manageGuru) return false;
+    const res = await createSetoranGuru({
+      guruId: manageGuru.id,
+      jenisSampahId,
+      jumlahKg,
+      createdAt: new Date(selectedYear, selectedMonth - 1, 15),
     });
-    if (result.success) {
-      toast({ title: "Sukses", description: result.message });
-      cancelEditEntry();
-      refetchAllSetoran();
-      if (manageGuru) {
-        fetchGuruEntries(manageGuru.id);
-      }
-    } else {
-      toast({
-        title: "Gagal",
-        description: result.message,
-        variant: "destructive",
-      });
+
+    if (res.success) {
+      toast({ title: "Sukses", description: res.message });
+      void fetchGuruEntries(manageGuru.id);
+      void refetchAllSetoran();
+      return true;
     }
-    setIsSaving(false);
+
+    toast({
+      title: "Gagal",
+      description: res.message || "Gagal menambah setoran.",
+      variant: "destructive",
+    });
+    return false;
   };
 
-  const handleDeleteEntry = async (entryId: number) => {
-    const result = await deleteSetoranGuru(entryId);
-    if (result.success) {
-      toast({ title: "Sukses", description: result.message });
-      refetchAllSetoran();
-      if (manageGuru) {
-        fetchGuruEntries(manageGuru.id);
-      }
-    } else {
-      toast({
-        title: "Gagal",
-        description: result.message,
-        variant: "destructive",
-      });
+  const handleUpdateEntry = async (
+    id: number,
+    jenisSampahId: number,
+    jumlahKg: number,
+  ): Promise<boolean> => {
+    const res = await updateSetoranGuru(id, { jenisSampahId, jumlahKg });
+    if (res.success) {
+      toast({ title: "Sukses", description: res.message });
+      void refetchAllSetoran();
+      if (manageGuru) void fetchGuruEntries(manageGuru.id);
+      return true;
     }
-    setDeleteEntryDialog(null);
+
+    toast({
+      title: "Gagal",
+      description: res.message,
+      variant: "destructive",
+    });
+    return false;
   };
 
-  const handleDeleteGuru = async (id: number) => {
-    const result = await deleteGuru(id);
-    if (result.success) {
-      toast({ title: "Sukses", description: result.message });
-      refetchGurus();
-      refetchAllSetoran();
+  const handleDeleteEntry = async (id: number): Promise<boolean> => {
+    const res = await deleteSetoranGuru(id);
+    if (res.success) {
+      toast({ title: "Sukses", description: res.message });
+      void refetchAllSetoran();
+      if (manageGuru) void fetchGuruEntries(manageGuru.id);
+      return true;
+    }
+
+    toast({
+      title: "Gagal",
+      description: res.message,
+      variant: "destructive",
+    });
+    return false;
+  };
+
+  const handleDeleteGuru = async () => {
+    if (!deletingGuru) return;
+    const res = await deleteGuru(deletingGuru.id);
+    if (res.success) {
+      toast({ title: "Sukses", description: res.message });
+      void refetchGurus();
+      void refetchAllSetoran();
+      if (manageGuru?.id === deletingGuru.id) setManageGuru(null);
     } else {
       toast({
         title: "Gagal",
-        description: result.message,
+        description: res.message,
         variant: "destructive",
       });
     }
     setDeletingGuru(null);
   };
 
+  // Format entries untuk dialog
+  const detailItems: SetoranDetailItem[] = useMemo(
+    () =>
+      entries.map((e) => ({
+        id: e.id,
+        jenisSampahId: e.jenisSampahId ?? 0,
+        jenisSampah: e.jenisSampah || "-",
+        jumlahKg: e.jumlahKg,
+        hargaPerKg: e.hargaPerKg,
+        tanggal: e.createdAt,
+      })),
+    [entries],
+  );
+
   return (
     <div>
       <Card className="relative print:border-0 print:shadow-none print:p-0">
-        {loading && (
-          <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10 rounded-md print:hidden">
-            <Loader2 className="h-10 w-10 animate-spin" />
-          </div>
-        )}
-        <CardHeader className="print:hidden">
-          <div className="flex items-center justify-between print:hidden">
-            <div>
-              <CardTitle className="text-xl font-bold">
-                Riwayat Setoran Guru
-              </CardTitle>
-              <p className="text-muted-foreground">
-                Kelola data setoran dari setiap guru.
-              </p>
-            </div>
-            <div className="flex items-center flex-wrap gap-2">
-              <Select
-                value={selectedMonth.toString()}
-                onValueChange={(v) => setSelectedMonth(parseInt(v))}
-              >
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Pilih bulan" />
-                </SelectTrigger>
-                <SelectContent>
-                  {MONTHS.map((m, idx) => (
-                    <SelectItem key={m} value={(idx + 1).toString()}>
-                      {m}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select
-                value={String(selectedYear)}
-                onValueChange={(v) => setSelectedYear(parseInt(v))}
-              >
-                <SelectTrigger className="w-28">
-                  <SelectValue placeholder="Pilih tahun" />
-                </SelectTrigger>
-                <SelectContent>
-                  {years.map((y) => (
-                    <SelectItem key={y} value={String(y)}>
-                      {y}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                onClick={() => {
-                  setEditingGuru(null);
-                  setGuruModalOpen(true);
-                }}
-              >
-                <Plus className="mr-2 h-4 w-4" /> Tambah Guru
-              </Button>
-              <Button onClick={handlePrint}>
-                <Printer className="mr-2 h-4 w-4" /> Cetak
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
+        <SetoranHeader
+          title="Riwayat Setoran Guru"
+          subtitle="Kelola data setoran dari setiap guru."
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+          onMonthChange={setSelectedMonth}
+          onYearChange={setSelectedYear}
+          addNewLabel="Tambah Guru"
+          onAddNew={() => {
+            setEditingGuru(null);
+            setGuruModalOpen(true);
+          }}
+          onPrint={() => window.print()}
+          loading={loading}
+        />
+
         <CardContent>
-          <div ref={printRef}>
-            <div className="hidden print:block text-center mb-4">
-              <h1 className="text-xl font-bold">
-                Laporan Setoran Guru - {MONTHS[selectedMonth - 1]}{" "}
-                {selectedYear}
-              </h1>
-            </div>
-            <div className="hidden md:block overflow-x-auto rounded border print:block print:overflow-visible print:rounded-none print:border-0">
-              <Table className="min-w-full print:min-w-0">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nama Guru</TableHead>
-                    <TableHead>Jenis Sampah</TableHead>
-                    <TableHead>Jumlah Setoran</TableHead>
-                    <TableHead>Total (Kg)</TableHead>
-                    <TableHead>Total (Rp)</TableHead>
-                    <TableHead className="text-right print:hidden">
-                      Aksi
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {guruSummary.length > 0 ? (
-                    guruSummary.map((guru) => (
-                      <TableRow key={guru.id}>
-                        <TableCell className="font-medium">
-                          {guru.namaGuru}
-                        </TableCell>
-                        <TableCell>{guru.wasteTypes || "-"}</TableCell>
-                        <TableCell>{guru.setoranCount}</TableCell>
-                        <TableCell>
-                          {guru.totalKg.toLocaleString("id-ID", {
-                            maximumFractionDigits: 2,
-                          })}
-                        </TableCell>
-                        <TableCell>
-                          Rp {guru.totalValue.toLocaleString("id-ID")}
-                        </TableCell>
-                        <TableCell className="text-right print:hidden">
-                          <div className="flex gap-2 justify-end">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              title="Kelola Setoran"
-                              onClick={() => openManageGuru(guru)}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="icon"
-                              title="Hapus Guru"
-                              onClick={() => setDeletingGuru(guru)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={6} className="h-24 text-center">
-                        Belum ada data guru.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-            <div className="space-y-4 md:hidden print:hidden">
-              {guruSummary.length === 0 ? (
-                <div className="rounded-lg border p-4 text-center">
-                  Belum ada data guru.
-                </div>
-              ) : (
-                guruSummary.map((guru) => (
-                  <Card key={guru.id} className="border">
-                    <CardContent className="space-y-3 p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-semibold">
-                            {guru.namaGuru}
-                          </p>
-                          <p
-                            className="text-xs text-muted-foreground truncate max-w-[200px]"
-                            title={guru.wasteTypes || "-"}
-                          >
-                            {guru.wasteTypes || "-"}
-                          </p>
-                        </div>
-                        <p className="text-sm font-semibold">
-                          Rp {guru.totalValue.toLocaleString("id-ID")}
-                        </p>
-                      </div>
-                      <div className="grid gap-2 text-sm">
-                        <div className="flex justify-between gap-2">
-                          <span className="text-muted-foreground">Setoran</span>
-                          <span>{guru.setoranCount}</span>
-                        </div>
-                        <div className="flex justify-between gap-2">
-                          <span className="text-muted-foreground">
-                            Total Kg
-                          </span>
-                          <span>
-                            {guru.totalKg.toLocaleString("id-ID", {
-                              maximumFractionDigits: 2,
-                            })}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          className="flex-1"
-                          size="sm"
-                          variant="outline"
-                          onClick={() => openManageGuru(guru)}
-                        >
-                          Kelola
-                        </Button>
-                        <Button
-                          className="flex-1"
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => setDeletingGuru(guru)}
-                        >
-                          Hapus
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))
-              )}
-            </div>
-          </div>
+          <SetoranSummaryTable
+            printTitle={`Laporan Setoran Guru - ${MONTHS[selectedMonth - 1]} ${selectedYear}`}
+            nameHeader="Nama Guru"
+            emptyMessage="Belum ada data guru."
+            items={summaryRows}
+            onManage={openManageGuru}
+            onDelete={(row) => {
+              const guru = gurus.find((g) => g.id === Number(row.id));
+              if (guru) setDeletingGuru(guru);
+            }}
+          />
         </CardContent>
       </Card>
 
-      {/* Manage Teacher Deposits Dialog */}
-      <Dialog
-        open={!!manageGuru}
-        onOpenChange={(open) => {
-          if (!open) {
-            setManageGuru(null);
-            setEntries([]); // Clear entries on close
-          }
-        }}
-      >
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>Kelola Setoran: {manageGuru?.namaGuru}</DialogTitle>
-            <DialogDescription>
-              Tambah atau edit setoran untuk guru ini di bulan{" "}
-              {MONTHS[selectedMonth - 1]} {selectedYear}.
-            </DialogDescription>
-          </DialogHeader>
+      {/* Modal Kelola Setoran Guru */}
+      <KelolaSetoranDialog
+        isOpen={!!manageGuru}
+        onClose={() => setManageGuru(null)}
+        title={`Kelola Setoran: ${manageGuru?.namaGuru}`}
+        subtitle={`Tambah atau edit setoran untuk guru ini di bulan ${MONTHS[selectedMonth - 1]} ${selectedYear}.`}
+        jenisSampah={jenisSampah}
+        entries={detailItems}
+        loadingEntries={loadingEntries}
+        onAddEntry={handleAddEntry}
+        onUpdateEntry={handleUpdateEntry}
+        onDeleteEntry={handleDeleteEntry}
+      />
 
-          <form
-            action={addAction}
-            ref={addFormRef}
-            className="grid grid-cols-1 sm:grid-cols-5 gap-2 border-b pb-4"
-          >
-            <input type="hidden" name="guruId" value={manageGuru?.id} />
-            <input
-              type="hidden"
-              name="createdAt"
-              value={new Date(
-                selectedYear,
-                selectedMonth - 1,
-                15,
-              ).toISOString()}
-            />
-            <div className="sm:col-span-2">
-              <Label>Jenis Sampah</Label>
-              <Select name="jenisSampahId" required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih jenis" />
-                </SelectTrigger>
-                <SelectContent>
-                  {jenisSampah.map((j) => (
-                    <SelectItem key={j.id} value={String(j.id)}>
-                      {j.namaSampah}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="sm:col-span-2">
-              <Label>Jumlah (Kg)</Label>
-              <Input name="jumlahKg" type="number" step="0.01" required />
-            </div>
-            <div className="sm:col-span-1 flex items-end">
-              <SubmitButton pendingText="Menambah...">
-                <Plus className="h-4 w-4 mr-1" /> Tambah
-              </SubmitButton>
-            </div>
-          </form>
-
-          <div className="overflow-x-auto rounded border mt-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Jenis</TableHead>
-                  <TableHead>Jumlah (Kg)</TableHead>
-                  <TableHead>Total (Rp)</TableHead>
-                  <TableHead>Tanggal</TableHead>
-                  <TableHead className="w-[120px]">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loadingEntries ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-6">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : entries.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-6">
-                      Belum ada setoran
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  entries.map((e) => {
-                    const isEditing = editingEntryId === e.id;
-                    return (
-                      <TableRow key={e.id}>
-                        <div className="contents">
-                          {isEditing ? (
-                            <>
-                              <TableCell>
-                                <Select
-                                  name="jenisSampahId"
-                                  value={editedEntry.jenisSampahId?.toString()}
-                                  onValueChange={(value) => {
-                                    setEditedEntry((prev) => ({
-                                      ...prev,
-                                      jenisSampahId: parseInt(value),
-                                    }));
-                                  }}
-                                  required
-                                >
-                                  <SelectTrigger>
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {jenisSampah.map((j) => (
-                                      <SelectItem
-                                        key={j.id}
-                                        value={String(j.id)}
-                                      >
-                                        {j.namaSampah}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </TableCell>
-                              <TableCell>
-                                <Input
-                                  name="jumlahKg"
-                                  type="number"
-                                  step="0.01"
-                                  value={editedEntry.jumlahKg}
-                                  onChange={(ev) => {
-                                    setEditedEntry((prev) => ({
-                                      ...prev,
-                                      jumlahKg: ev.target.value,
-                                    }));
-                                  }}
-                                  required
-                                />
-                              </TableCell>
-                            </>
-                          ) : (
-                            <>
-                              <TableCell>{e.jenisSampah}</TableCell>
-                              <TableCell>
-                                {Number(e.jumlahKg).toLocaleString("id-ID")}
-                              </TableCell>
-                            </>
-                          )}
-                          <TableCell>
-                            Rp{" "}
-                            {Number(
-                              Number(e.jumlahKg) * Number(e.hargaPerKg || 0),
-                            ).toLocaleString("id-ID")}
-                          </TableCell>
-                          <TableCell>
-                            {new Date(e.createdAt).toLocaleDateString("id-ID")}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              {isEditing ? (
-                                <>
-                                  <Button
-                                    size="icon"
-                                    disabled={isSaving}
-                                    onClick={() => handleSaveEntry(e.id)}
-                                  >
-                                    {isSaving ? (
-                                      <Loader2 className="h-4 w-4 animate-spin" />
-                                    ) : (
-                                      <Save className="h-4 w-4" />
-                                    )}
-                                  </Button>
-                                  <Button
-                                    size="icon"
-                                    variant="outline"
-                                    type="button"
-                                    onClick={cancelEditEntry}
-                                  >
-                                    Batal
-                                  </Button>
-                                </>
-                              ) : (
-                                <>
-                                  <Button
-                                    size="icon"
-                                    variant="outline"
-                                    type="button"
-                                    onClick={() => startEditEntry(e)}
-                                  >
-                                    <Pencil className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    size="icon"
-                                    variant="destructive"
-                                    type="button"
-                                    onClick={() => setDeleteEntryDialog(e)}
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </>
-                              )}
-                            </div>
-                          </TableCell>
-                        </div>
-                      </TableRow>
-                    );
-                  })
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Setoran Entry Dialog */}
-      <AlertDialog
-        open={!!deleteEntryDialog}
-        onOpenChange={(open) => {
-          if (!open) setDeleteEntryDialog(null);
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tindakan ini akan menghapus data setoran ini secara permanen.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => handleDeleteEntry(deleteEntryDialog!.id)}
-              className="bg-destructive hover:bg-destructive/90"
-            >
-              Hapus
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {/* Delete Guru Dialog */}
-      <AlertDialog
-        open={!!deletingGuru}
-        onOpenChange={(open) => {
-          if (!open) setDeletingGuru(null);
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tindakan ini akan menghapus guru &apos;
-              {deletingGuru?.namaGuru}&apos; secara permanen. Semua data setoran
-              terkait juga akan terhapus.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => handleDeleteGuru(deletingGuru!.id)}
-              className="bg-destructive hover:bg-destructive/90"
-            >
-              Hapus
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
+      {/* Modal Tambah/Edit Guru */}
       <GuruDialog
         isOpen={guruModalOpen}
         onClose={() => {
@@ -799,9 +310,17 @@ export function TabSetoranGuru({
         }}
         guru={editingGuru}
         onSuccess={() => {
-          refetchGurus();
-          refetchAllSetoran();
+          void refetchGurus();
+          void refetchAllSetoran();
         }}
+      />
+
+      {/* Konfirmasi Hapus Guru */}
+      <ConfirmDeleteDialog
+        isOpen={!!deletingGuru}
+        onClose={() => setDeletingGuru(null)}
+        onConfirm={handleDeleteGuru}
+        description={`Tindakan ini akan menghapus guru '${deletingGuru?.namaGuru}' secara permanen. Semua data setoran terkait juga akan terhapus.`}
       />
     </div>
   );

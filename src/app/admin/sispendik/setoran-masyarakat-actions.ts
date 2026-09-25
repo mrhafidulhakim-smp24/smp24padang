@@ -65,6 +65,44 @@ export async function getSetoranMasyarakat(month: number, year: number) {
   }
 }
 
+// Daftar setoran satu penyetor dalam bulan tertentu (untuk dialog kelola).
+export async function getSetoranMasyarakatByNama(
+  namaPenyetor: string,
+  month: number,
+  year: number,
+) {
+  try {
+    const { start, end } = monthRange(year, month);
+    const data = await db
+      .select({
+        id: setoranMasyarakat.id,
+        namaPenyetor: setoranMasyarakat.namaPenyetor,
+        jenisSampahId: setoranMasyarakat.jenisSampahId,
+        jenisSampah: jenisSampah.namaSampah,
+        kategori: jenisSampah.kategori,
+        jumlahKg: setoranMasyarakat.jumlahKg,
+        hargaPerKg: setoranMasyarakat.hargaPerKgSnapshot,
+        tanggalSetoran: setoranMasyarakat.tanggalSetoran,
+      })
+      .from(setoranMasyarakat)
+      .innerJoin(
+        jenisSampah,
+        eq(setoranMasyarakat.jenisSampahId, jenisSampah.id),
+      )
+      .where(
+        and(
+          eq(setoranMasyarakat.namaPenyetor, namaPenyetor),
+          gte(setoranMasyarakat.tanggalSetoran, start),
+          lt(setoranMasyarakat.tanggalSetoran, end),
+        ),
+      )
+      .orderBy(desc(setoranMasyarakat.tanggalSetoran));
+    return { data };
+  } catch {
+    return { error: "Gagal mengambil data setoran penyetor." };
+  }
+}
+
 export async function createSetoranMasyarakat(input: unknown) {
   const parsed = setoranMasyarakatSchema.safeParse(input);
   if (!parsed.success) {
@@ -151,7 +189,7 @@ export async function updateSetoranMasyarakat(id: number, input: unknown) {
       .set(updateData)
       .where(eq(setoranMasyarakat.id, id));
     revalidateSispendik();
-    return { success: true };
+    return { success: true, message: "Berhasil memperbarui setoran." };
   } catch {
     return { error: "Gagal memperbarui setoran masyarakat." };
   }
@@ -163,8 +201,35 @@ export async function deleteSetoranMasyarakat(id: number) {
   try {
     await db.delete(setoranMasyarakat).where(eq(setoranMasyarakat.id, id));
     revalidateSispendik();
-    return { success: true };
+    return { success: true, message: "Berhasil menghapus data setoran." };
   } catch {
     return { error: "Gagal menghapus setoran masyarakat." };
   }
 }
+
+export async function deleteSetoranMasyarakatByNama(
+  namaPenyetor: string,
+  month: number,
+  year: number,
+) {
+  try {
+    const { start, end } = monthRange(year, month);
+    await db
+      .delete(setoranMasyarakat)
+      .where(
+        and(
+          eq(setoranMasyarakat.namaPenyetor, namaPenyetor),
+          gte(setoranMasyarakat.tanggalSetoran, start),
+          lt(setoranMasyarakat.tanggalSetoran, end),
+        ),
+      );
+    revalidateSispendik();
+    return {
+      success: true,
+      message: `Berhasil menghapus setoran ${namaPenyetor}.`,
+    };
+  } catch {
+    return { error: "Gagal menghapus data setoran penyetor." };
+  }
+}
+
