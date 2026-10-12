@@ -8,8 +8,13 @@ async function run() {
     try {
         await client.connect();
         console.log('Connected.');
-        const sql = fs.readFileSync('drizzle/manual/0031_sispendik_safe_enhancements.sql', 'utf-8');
-        await client.query(sql);
+        const migrations = [
+            'drizzle/manual/0031_sispendig_safe_enhancements.sql',
+            'drizzle/manual/0033_rename_legacy_guru_table.sql',
+        ];
+        for (const migration of migrations) {
+            await client.query(fs.readFileSync(migration, 'utf-8'));
+        }
         console.log('Success.');
     } catch (e) { console.error(e); } finally { await client.end(); }
 }
