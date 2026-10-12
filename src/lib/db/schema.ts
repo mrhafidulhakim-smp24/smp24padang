@@ -143,7 +143,7 @@ export const sampahKelas = pgTable(
   }),
 );
 
-export const guruSispendik = pgTable("guru_sispendik", {
+export const guruSispendig = pgTable("guru_sispendig", {
   id: serial("id").primaryKey(),
   namaGuru: varchar("nama_guru", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -156,7 +156,7 @@ export const setoranGuru = pgTable(
     id: serial("id").primaryKey(),
     guruId: integer("guru_id")
       .notNull()
-      .references(() => guruSispendik.id, { onDelete: "cascade" }),
+      .references(() => guruSispendig.id, { onDelete: "cascade" }),
     jenisSampahId: integer("jenis_sampah_id")
       .notNull()
       .references(() => jenisSampah.id, { onDelete: "cascade" }),
