@@ -38,7 +38,7 @@ import { MONTHS } from "./types";
 
 type KelasProgress = { kelas: string; months: number[] };
 
-export function TabLaporanSispendik() {
+export function TabLaporanSispendig() {
   const { toast } = useToast();
   const [year, setYear] = useState(new Date().getFullYear());
   const [months, setMonths] = useState<LaporanBulanan[]>([]);
@@ -109,7 +109,7 @@ export function TabLaporanSispendik() {
   return (
     <div className="space-y-6">
       <div className="hidden print:block">
-        <h2 className="text-xl font-bold">Laporan Sispendik SMPN 24 Padang</h2>
+        <h2 className="text-xl font-bold">Laporan Sispendig SMPN 24 Padang</h2>
         <p className="text-sm text-muted-foreground">Tahun {year}</p>
       </div>
 

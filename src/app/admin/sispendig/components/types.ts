@@ -12,13 +12,13 @@ export const MONTHS = [
 import { createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import {
-    guruSispendik,
+    guruSispendig,
     jenisSampah as jenisSampahTable,
 } from '@/lib/db/schema';
 
 // Create Zod schemas from Drizzle tables
 export const JenisSampahSchema = createSelectSchema(jenisSampahTable);
-export const GuruSchema = createSelectSchema(guruSispendik);
+export const GuruSchema = createSelectSchema(guruSispendig);
 
 // --- TYPE DEFINITIONS ---
 export type JenisSampah = z.infer<typeof JenisSampahSchema>;
@@ -50,7 +50,7 @@ export interface SetoranGuruEntry {
     hargaPerKg: string | null;
 }
 
-export interface SispendikClientProps {
+export interface SispendigClientProps {
     kelas: Kelas[];
     jenisSampah: JenisSampah[];
     gurus: Guru[];

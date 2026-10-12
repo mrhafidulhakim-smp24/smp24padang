@@ -2,13 +2,13 @@
 
 import { z } from 'zod';
 import { db } from '@/lib/db';
-import { setoranGuru, guruSispendik, jenisSampah } from '@/lib/db/schema';
+import { setoranGuru, guruSispendig, jenisSampah } from '@/lib/db/schema';
 import { eq, desc, and, gte, lt } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
-function revalidateSispendik() {
-  revalidatePath('/admin/sispendik');
-  revalidatePath('/sispendik');
+function revalidateSispendig() {
+  revalidatePath('/admin/sispendig');
+  revalidatePath('/sispendig');
 }
 
 function monthRange(year: number, month: number) {
@@ -37,8 +37,8 @@ export async function createGuru(input: { namaGuru: string } | FormData | unknow
   }
 
   try {
-    await db.insert(guruSispendik).values({ namaGuru: parsed.data.namaGuru });
-    revalidateSispendik();
+    await db.insert(guruSispendig).values({ namaGuru: parsed.data.namaGuru });
+    revalidateSispendig();
     return { success: true, message: 'Guru berhasil ditambahkan.' };
   } catch {
     return { success: false, message: 'Gagal menambahkan guru.' };
@@ -66,13 +66,13 @@ export async function updateGuru(
 
   try {
     await db
-      .update(guruSispendik)
+      .update(guruSispendig)
       .set({
         namaGuru: parsed.data.namaGuru,
         updatedAt: new Date(),
       })
-      .where(eq(guruSispendik.id, id));
-    revalidateSispendik();
+      .where(eq(guruSispendig.id, id));
+    revalidateSispendig();
     return { success: true, message: 'Guru berhasil diperbarui.' };
   } catch {
     return { success: false, message: 'Gagal memperbarui guru.' };
@@ -81,8 +81,8 @@ export async function updateGuru(
 
 export async function deleteGuru(id: number) {
   try {
-    await db.delete(guruSispendik).where(eq(guruSispendik.id, id));
-    revalidateSispendik();
+    await db.delete(guruSispendig).where(eq(guruSispendig.id, id));
+    revalidateSispendig();
     return { success: true, message: 'Guru berhasil dihapus.' };
   } catch {
     return { success: false, message: 'Gagal menghapus guru.' };
@@ -155,7 +155,7 @@ export async function createSetoranGuru(
       tanggalSetoran: parsed.data.createdAt,
     });
 
-    revalidateSispendik();
+    revalidateSispendig();
     return { success: true, message: 'Berhasil membuat setoran baru.' };
   } catch {
     return { success: false, message: 'Gagal menyimpan ke database.' };
@@ -213,7 +213,7 @@ export async function updateSetoranGuru(
     }
 
     await db.update(setoranGuru).set(updateData).where(eq(setoranGuru.id, id));
-    revalidateSispendik();
+    revalidateSispendig();
     return { success: true, message: 'Berhasil memperbarui setoran.' };
   } catch {
     return { success: false, message: 'Gagal memperbarui di database.' };
@@ -223,7 +223,7 @@ export async function updateSetoranGuru(
 export async function deleteSetoranGuru(id: number) {
   try {
     await db.delete(setoranGuru).where(eq(setoranGuru.id, id));
-    revalidateSispendik();
+    revalidateSispendig();
     return { success: true, message: 'Berhasil menghapus data setoran.' };
   } catch {
     return { success: false, message: 'Gagal menghapus data dari database.' };
@@ -239,13 +239,13 @@ export async function getSetoranGuru(month: number, year: number) {
         guruId: setoranGuru.guruId,
         jumlahKg: setoranGuru.jumlahKg,
         createdAt: setoranGuru.tanggalSetoran,
-        guru: guruSispendik.namaGuru,
+        guru: guruSispendig.namaGuru,
         jenisSampahId: jenisSampah.id,
         jenisSampah: jenisSampah.namaSampah,
         hargaPerKg: setoranGuru.hargaPerKgSnapshot,
       })
       .from(setoranGuru)
-      .leftJoin(guruSispendik, eq(setoranGuru.guruId, guruSispendik.id))
+      .leftJoin(guruSispendig, eq(setoranGuru.guruId, guruSispendig.id))
       .leftJoin(jenisSampah, eq(setoranGuru.jenisSampahId, jenisSampah.id))
       .where(
         and(
@@ -275,13 +275,13 @@ export async function getSetoranGuruByGuru(
         guruId: setoranGuru.guruId,
         jumlahKg: setoranGuru.jumlahKg,
         createdAt: setoranGuru.tanggalSetoran,
-        guru: guruSispendik.namaGuru,
+        guru: guruSispendig.namaGuru,
         jenisSampahId: setoranGuru.jenisSampahId,
         jenisSampah: jenisSampah.namaSampah,
         hargaPerKg: jenisSampah.hargaPerKg,
       })
       .from(setoranGuru)
-      .leftJoin(guruSispendik, eq(setoranGuru.guruId, guruSispendik.id))
+      .leftJoin(guruSispendig, eq(setoranGuru.guruId, guruSispendig.id))
       .leftJoin(jenisSampah, eq(setoranGuru.jenisSampahId, jenisSampah.id))
       .where(
         and(

@@ -21,9 +21,9 @@ const setoranMasyarakatSchema = z.object({
 // Edit: satu baris daftar = satu jenis sampah.
 const setoranItemUpdateSchema = itemSchema;
 
-function revalidateSispendik() {
-  revalidatePath("/admin/sispendik");
-  revalidatePath("/sispendik");
+function revalidateSispendig() {
+  revalidatePath("/admin/sispendig");
+  revalidatePath("/sispendig");
 }
 
 function monthRange(year: number, month: number) {
@@ -60,7 +60,7 @@ export async function getSetoranMasyarakat(month: number, year: number) {
   } catch {
     return {
       error:
-        "Gagal mengambil setoran masyarakat. Pastikan migrasi SISPENDIK sudah dijalankan.",
+        "Gagal mengambil setoran masyarakat. Pastikan migrasi SISPENDIG sudah dijalankan.",
     };
   }
 }
@@ -142,7 +142,7 @@ export async function createSetoranMasyarakat(input: unknown) {
     await db
       .insert(setoranMasyarakat)
       .values(rows as NonNullable<(typeof rows)[number]>[]);
-    revalidateSispendik();
+    revalidateSispendig();
     return { success: true, count: rows.length };
   } catch {
     return { error: "Gagal menyimpan setoran masyarakat." };
@@ -188,7 +188,7 @@ export async function updateSetoranMasyarakat(id: number, input: unknown) {
       .update(setoranMasyarakat)
       .set(updateData)
       .where(eq(setoranMasyarakat.id, id));
-    revalidateSispendik();
+    revalidateSispendig();
     return { success: true, message: "Berhasil memperbarui setoran." };
   } catch {
     return { error: "Gagal memperbarui setoran masyarakat." };
@@ -200,7 +200,7 @@ export async function deleteSetoranMasyarakat(id: number) {
     return { error: "ID setoran tidak valid." };
   try {
     await db.delete(setoranMasyarakat).where(eq(setoranMasyarakat.id, id));
-    revalidateSispendik();
+    revalidateSispendig();
     return { success: true, message: "Berhasil menghapus data setoran." };
   } catch {
     return { error: "Gagal menghapus setoran masyarakat." };
@@ -223,7 +223,7 @@ export async function deleteSetoranMasyarakatByNama(
           lt(setoranMasyarakat.tanggalSetoran, end),
         ),
       );
-    revalidateSispendik();
+    revalidateSispendig();
     return {
       success: true,
       message: `Berhasil menghapus setoran ${namaPenyetor}.`,

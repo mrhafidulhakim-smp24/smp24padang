@@ -1,8 +1,8 @@
 import { getAllKelas, getAllJenisSampah, getAllGurus } from './actions';
 import { getSetoranGuru } from './setoran-guru-actions';
-import SispendikClient from './client-page';
+import SispendigClient from './client-page';
 
-export default async function SispendikAdminPage() {
+export default async function SispendigAdminPage() {
     // Fetch initial data
     const initialMonth = new Date().getMonth() + 1;
     const initialYear = new Date().getFullYear();
@@ -72,7 +72,7 @@ export default async function SispendikAdminPage() {
                     statistik pengumpulan sampah.
                 </p>
             </div>
-            <SispendikClient
+            <SispendigClient
                 kelas={kelas}
                 jenisSampah={jenisSampah}
                 gurus={gurusData}

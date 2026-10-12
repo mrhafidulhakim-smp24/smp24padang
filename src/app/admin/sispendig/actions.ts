@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import {
-  guruSispendik,
+  guruSispendig,
   jenisSampah,
   kelas,
   sampahKelas,
@@ -65,8 +65,8 @@ export async function getAllGurus() {
   try {
     const data = await db
       .select()
-      .from(guruSispendik)
-      .orderBy(guruSispendik.namaGuru);
+      .from(guruSispendig)
+      .orderBy(guruSispendig.namaGuru);
     return { data };
   } catch (error) {
     return { error: "Failed to fetch guru data" };
@@ -94,7 +94,7 @@ export async function createJenisSampah(data: {
         hargaPerKg: String(data.hargaPerKg),
       })
       .returning();
-    revalidatePath("/admin/sispendik");
+    revalidatePath("/admin/sispendig");
     return { success: true, data: newJenis[0] };
   } catch (error) {
     return { error: "Failed to create jenis sampah" };
@@ -127,7 +127,7 @@ export async function updateJenisSampah(
       })
       .where(eq(jenisSampah.id, id))
       .returning();
-    revalidatePath("/admin/sispendik");
+    revalidatePath("/admin/sispendig");
     return { success: true, data: updatedJenis[0] };
   } catch (error) {
     return { error: "Failed to update jenis sampah" };
@@ -165,7 +165,7 @@ export async function deleteJenisSampah(id: number) {
       };
     }
     await db.delete(jenisSampah).where(eq(jenisSampah.id, id));
-    revalidatePath("/admin/sispendik");
+    revalidatePath("/admin/sispendig");
     return { success: true };
   } catch (error) {
     return { error: "Failed to delete jenis sampah" };
@@ -175,8 +175,8 @@ export async function deleteJenisSampah(id: number) {
 export async function resetClassDeposits(kelasId: number) {
   try {
     await db.delete(sampahKelas).where(eq(sampahKelas.kelasId, kelasId));
-    revalidatePath("/admin/sispendik");
-    revalidatePath("/sispendik");
+    revalidatePath("/admin/sispendig");
+    revalidatePath("/sispendig");
     return { success: true };
   } catch (error) {
     return { error: "Failed to reset class deposits" };
@@ -199,8 +199,8 @@ export async function resetClassDepositsByMonth(
           lt(sampahKelas.tanggalSetoran, end),
         ),
       );
-    revalidatePath("/admin/sispendik");
-    revalidatePath("/sispendik");
+    revalidatePath("/admin/sispendig");
+    revalidatePath("/sispendig");
     return { success: true };
   } catch (error) {
     return { error: "Failed to reset class deposits for month" };
@@ -210,8 +210,8 @@ export async function resetClassDepositsByMonth(
 export async function deleteSampahKelasRecord(id: number) {
   try {
     await db.delete(sampahKelas).where(eq(sampahKelas.id, id));
-    revalidatePath("/admin/sispendik");
-    revalidatePath("/sispendik");
+    revalidatePath("/admin/sispendig");
+    revalidatePath("/sispendig");
     return { success: true };
   } catch (error) {
     return { error: "Failed to delete sampah kelas record" };
@@ -246,8 +246,8 @@ export async function createSampahKelas(data: {
       hargaPerKgSnapshot: jenis.hargaPerKg,
       tanggalSetoran: data.createdAt,
     });
-    revalidatePath("/admin/sispendik");
-    revalidatePath("/sispendik");
+    revalidatePath("/admin/sispendig");
+    revalidatePath("/sispendig");
     return { success: true };
   } catch (error) {
     return { error: "Failed to create sampah kelas record" };
@@ -286,8 +286,8 @@ export async function updateSampahKelas(
       updateData.hargaPerKgSnapshot = jenis.hargaPerKg;
     }
     await db.update(sampahKelas).set(updateData).where(eq(sampahKelas.id, id));
-    revalidatePath("/admin/sispendik");
-    revalidatePath("/sispendik");
+    revalidatePath("/admin/sispendig");
+    revalidatePath("/sispendig");
     return { success: true };
   } catch (error) {
     return { error: "Failed to update sampah kelas record" };
@@ -618,13 +618,13 @@ export async function getGuruRanking(month: number, year: number) {
   try {
     const data = await db
       .select({
-        guruName: guruSispendik.namaGuru,
+        guruName: guruSispendig.namaGuru,
         totalKg: sql<number>`COALESCE(SUM(${setoranGuru.jumlahKg}), 0)`,
         wasteTypes: sql<string>`STRING_AGG(DISTINCT ${jenisSampah.namaSampah}, ', ')`,
         categories: sql<string>`STRING_AGG(DISTINCT ${jenisSampah.kategori}, ', ')`,
       })
       .from(setoranGuru)
-      .innerJoin(guruSispendik, eq(setoranGuru.guruId, guruSispendik.id))
+      .innerJoin(guruSispendig, eq(setoranGuru.guruId, guruSispendig.id))
       .innerJoin(jenisSampah, eq(setoranGuru.jenisSampahId, jenisSampah.id))
       .where(
         and(
@@ -632,7 +632,7 @@ export async function getGuruRanking(month: number, year: number) {
           sql`EXTRACT(YEAR FROM ${setoranGuru.tanggalSetoran}) = ${year}`,
         ),
       )
-      .groupBy(guruSispendik.namaGuru)
+      .groupBy(guruSispendig.namaGuru)
       .orderBy(desc(sql<number>`SUM(${setoranGuru.jumlahKg})`));
     return { data };
   } catch (error) {
