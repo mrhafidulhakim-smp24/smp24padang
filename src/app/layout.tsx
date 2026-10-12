@@ -43,7 +43,7 @@ export const metadata: Metadata = {
         template: '%s | SMP Negeri 24 Padang',
     },
     description:
-        'Website resmi SMP Negeri 24 Padang (Spendupat), Kota Padang, Sumatera Barat. Informasi lengkap profil sekolah, PPDB, prestasi siswa, berita terkini, program kurikulum, bank sampah sekolah (Sispendik), dan kegiatan kesiswaan.',
+        'Website resmi SMP Negeri 24 Padang (Spendupat), Kota Padang, Sumatera Barat. Informasi lengkap profil sekolah, PPDB, prestasi siswa, berita terkini, program kurikulum, bank sampah sekolah (Sispendig), dan kegiatan kesiswaan.',
     keywords: [
         // Nama Sekolah & Brand
         'SMP Negeri 24 Padang',

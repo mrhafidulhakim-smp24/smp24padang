@@ -26,7 +26,7 @@ const BREADCRUMB_LABELS: Record<string, string> = {
     announcements: 'Pengumuman',
     articles: 'Artikel',
     gallery: 'Galeri',
-    sispendik: 'Sispendik',
+    sispendig: 'Sispendig',
     'master-data': 'Master Data',
     faq: 'FAQ',
     contact: 'Pesan & Kontak',

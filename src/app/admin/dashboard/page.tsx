@@ -94,11 +94,11 @@ const menuItems = [
         description: 'Buat pengumuman penting untuk seluruh warga sekolah.',
     },
     {
-        href: '/admin/sispendik',
+        href: '/admin/sispendig',
         label: 'Sispendig',
         icon: LayoutDashboard,
         description:
-            'Kelola data dan laporan dari sistem bank sampah Sispendik.',
+            'Kelola data dan laporan dari sistem bank sampah Sispendig.',
     },
     {
         href: '/admin/achievements',

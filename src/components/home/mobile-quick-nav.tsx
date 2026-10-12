@@ -23,7 +23,7 @@ const mobileQuickLinks = [
     icon: Megaphone,
   },
   {
-    href: "/sispendik",
+    href: "/sispendig",
     label: "Sispendig",
     icon: Recycle,
   },

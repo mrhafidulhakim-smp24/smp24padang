@@ -173,7 +173,7 @@ export default function Header({ contactInfo }: HeaderProps) {
                     icon: Megaphone,
                 },
                 {
-                    href: '/sispendik',
+                    href: '/sispendig',
                     label: 'Sispendig',
                     description: 'Bank Sampah & Pengelolaan Digital',
                     icon: Recycle,

@@ -28,7 +28,7 @@ const PUBLIC_BREADCRUMB_LABELS: Record<string, string> = {
     gallery: 'Galeri',
     articles: 'Artikel',
     pengumuman: 'Pengumuman',
-    sispendik: 'Sispendik',
+    sispendig: 'Sispendig',
     contact: 'Hubungi Kami',
     videos: 'Video',
 };

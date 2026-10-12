@@ -24,7 +24,7 @@ export default async function ArticlePage({
   }
 
   const backButton = (
-    <Link href="/sispendik" className="mb-6 inline-block">
+    <Link href="/sispendig" className="mb-6 inline-block">
       <Button variant="outline">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Kembali ke Sispendig

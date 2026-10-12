@@ -20,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/profile/past-principals',
         '/profile/uniform',
         '/profile/vision-mission',
-        '/sispendik',
+        '/sispendig',
         '/videos',
     ];
 

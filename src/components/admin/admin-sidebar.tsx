@@ -71,7 +71,7 @@ export const ADMIN_MENU_ITEMS: SidebarMenuItem[] = [
         subItems: [
             { href: '/admin/news',          label: 'Berita',      icon: Newspaper },
             { href: '/admin/announcements', label: 'Pengumuman',  icon: Megaphone },
-            { href: '/admin/sispendik',     label: 'Sispendik',   icon: Recycle },
+            { href: '/admin/sispendig',     label: 'Sispendig',   icon: Recycle },
             { href: '/admin/banksampah',    label: 'Bank Sampah', icon: Archive },
         ],
     },
