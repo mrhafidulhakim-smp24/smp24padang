@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  getPublicWasteNews,
-  getPublicWasteVideos,
-} from "@/app/admin/banksampah/actions";
 import SkeletonLoader from "@/components/skeleton-loader";
 import {
   Card,
@@ -14,32 +10,22 @@ import {
 } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { YouTubeEmbed, getYouTubeVideoId } from "@/components/youtube-embed";
-import { WasteNewsItem, WasteVideoItem } from "@/types/banksampah";
 import { PlayCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useSispendigPublicStore } from "./store";
 
 function ArticlesSection() {
-  const [news, setNews] = useState<WasteNewsItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const news = useSispendigPublicStore((state) => state.news);
+  const loadingNews = useSispendigPublicStore((state) => state.loadingNews);
+  const loadNews = useSispendigPublicStore((state) => state.loadNews);
 
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const newsData = await getPublicWasteNews();
-        setNews(newsData as WasteNewsItem[]);
-      } catch (error) {
-        console.error("Failed to fetch waste news:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    void loadNews();
+  }, [loadNews]);
 
-    fetchNews();
-  }, []);
-
-  if (loading) {
+  if (loadingNews || news === null) {
     return <SkeletonLoader />;
   }
 
@@ -87,34 +73,16 @@ function ArticlesSection() {
 }
 
 function VideosSection() {
-  const [videos, setVideos] = useState<WasteVideoItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string | null>(null);
+  const videos = useSispendigPublicStore((state) => state.videos);
+  const loadingVideos = useSispendigPublicStore((state) => state.loadingVideos);
+  const loadVideos = useSispendigPublicStore((state) => state.loadVideos);
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const videoData = await getPublicWasteVideos();
-        setVideos(videoData as WasteVideoItem[]);
-      } catch (error) {
-        console.error("Failed to fetch waste videos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    void loadVideos();
+  }, [loadVideos]);
 
-    fetchVideos();
-  }, []);
-
-  const openVideo = (youtubeUrl: string) => {
-    setSelectedVideoUrl(youtubeUrl);
-  };
-
-  const closeVideo = () => {
-    setSelectedVideoUrl(null);
-  };
-
-  if (loading) {
+  if (loadingVideos || videos === null) {
     return <SkeletonLoader />;
   }
 
@@ -136,7 +104,7 @@ function VideosSection() {
                   <div className="relative w-full aspect-video group">
                     {videoId && (
                       <button
-                        onClick={() => openVideo(item.youtubeUrl)}
+                        onClick={() => setSelectedVideoUrl(item.youtubeUrl)}
                         className="w-full h-full"
                         aria-label={`Putar video ${item.title}`}
                       >
@@ -167,7 +135,7 @@ function VideosSection() {
 
       <Dialog
         open={!!selectedVideoUrl}
-        onOpenChange={(isOpen) => !isOpen && closeVideo()}
+        onOpenChange={(isOpen) => !isOpen && setSelectedVideoUrl(null)}
       >
         <DialogContent className="max-w-4xl p-0">
           {selectedVideoUrl && (
@@ -182,7 +150,7 @@ function VideosSection() {
   );
 }
 
-export default function Tab2_Articles() {
+export default function ArticlesTab() {
   return (
     <div>
       <ArticlesSection />

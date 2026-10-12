@@ -1,54 +1,29 @@
 "use client";
 
-import { getPublicWasteDocumentation } from "@/app/admin/banksampah/actions";
 import SkeletonLoader from "@/components/skeleton-loader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { YouTubeEmbed, getYouTubeVideoId } from "@/components/youtube-embed"; // Corrected import casing
-import { WasteDocumentationItem } from "@/types/banksampah";
+import { YouTubeEmbed, getYouTubeVideoId } from "@/components/youtube-embed";
 import { PlayCircle, ZoomIn } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSispendigPublicStore } from "./store";
 
-export default function Tab3_Documentation() {
-  const [docs, setDocs] = useState<WasteDocumentationItem[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function DocumentationTab() {
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string | null>(null);
-  const [selectedItem, setSelectedItem] =
-    useState<WasteDocumentationItem | null>(null); // State for image popup
+  const [selectedItem, setSelectedItem] = useState<{
+    title: string;
+    imageUrl: string | null;
+  } | null>(null);
+  const docs = useSispendigPublicStore((state) => state.documentation);
+  const loadingDocumentation = useSispendigPublicStore((state) => state.loadingDocumentation);
+  const loadDocumentation = useSispendigPublicStore((state) => state.loadDocumentation);
 
   useEffect(() => {
-    const fetchDocs = async () => {
-      try {
-        const docData = await getPublicWasteDocumentation();
-        setDocs(docData as WasteDocumentationItem[]);
-      } catch (error) {
-        console.error("Failed to fetch waste documentation:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    void loadDocumentation();
+  }, [loadDocumentation]);
 
-    fetchDocs();
-  }, []);
-
-  const openVideo = (youtubeUrl: string) => {
-    setSelectedVideoUrl(youtubeUrl);
-  };
-
-  const closeVideo = () => {
-    setSelectedVideoUrl(null);
-  };
-
-  const openImage = (item: WasteDocumentationItem) => {
-    setSelectedItem(item);
-  };
-
-  const closeImage = () => {
-    setSelectedItem(null);
-  };
-
-  if (loading) {
+  if (loadingDocumentation || docs === null) {
     return <SkeletonLoader />;
   }
 
@@ -72,8 +47,9 @@ export default function Tab3_Documentation() {
                     {videoId && item.youtubeUrl ? (
                       // YouTube Thumbnail
                       <button
-                        onClick={() => openVideo(item.youtubeUrl!)}
+                        onClick={() => setSelectedVideoUrl(item.youtubeUrl!)}
                         className="w-full h-full"
+                        aria-label={`Putar video ${item.title}`}
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
@@ -88,8 +64,9 @@ export default function Tab3_Documentation() {
                     ) : (
                       // Regular Image with Popup
                       <button
-                        onClick={() => item.imageUrl && openImage(item)}
+                        onClick={() => item.imageUrl && setSelectedItem(item)}
                         className="w-full h-full text-left"
+                        aria-label={`Lihat dokumentasi ${item.title}`}
                       >
                         <Image
                           src={
@@ -118,7 +95,7 @@ export default function Tab3_Documentation() {
       {/* Video Player Dialog */}
       <Dialog
         open={!!selectedVideoUrl}
-        onOpenChange={(isOpen) => !isOpen && closeVideo()}
+        onOpenChange={(isOpen) => !isOpen && setSelectedVideoUrl(null)}
       >
         <DialogContent className="max-w-7xl p-0">
           {selectedVideoUrl && (
@@ -133,7 +110,7 @@ export default function Tab3_Documentation() {
       {/* Image Viewer Dialog */}
       <Dialog
         open={!!selectedItem}
-        onOpenChange={(isOpen) => !isOpen && closeImage()}
+        onOpenChange={(isOpen) => !isOpen && setSelectedItem(null)}
       >
         <DialogContent className="max-w-5xl p-4">
           {selectedItem && (
@@ -141,7 +118,7 @@ export default function Tab3_Documentation() {
               <h3 className="text-lg font-semibold">{selectedItem.title}</h3>
               <div className="relative w-full h-auto">
                 <Image
-                  src={selectedItem.imageUrl!}
+                  src={selectedItem.imageUrl || "https://placehold.co/1920x1080.png"}
                   alt={selectedItem.title}
                   width={1920}
                   height={1080}

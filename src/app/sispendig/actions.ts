@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import {
-  guruSispendik,
+  guruSispendig,
   jenisSampah,
   kelas,
   sampahKelas,
@@ -254,13 +254,13 @@ export async function getPublicDashboardData(month: number, year: number) {
       // 7. Guru ranking
       db
         .select({
-          guruName: guruSispendik.namaGuru,
+          guruName: guruSispendig.namaGuru,
           totalKg: sql<number>`COALESCE(SUM(CAST(${setoranGuru.jumlahKg} AS numeric)), 0)::float`,
           wasteTypes: sql<string>`STRING_AGG(DISTINCT ${jenisSampah.namaSampah}, ', ')`,
           categories: sql<string>`STRING_AGG(DISTINCT ${jenisSampah.kategori}, ', ')`,
         })
         .from(setoranGuru)
-        .innerJoin(guruSispendik, eq(setoranGuru.guruId, guruSispendik.id))
+        .innerJoin(guruSispendig, eq(setoranGuru.guruId, guruSispendig.id))
         .innerJoin(jenisSampah, eq(setoranGuru.jenisSampahId, jenisSampah.id))
         .where(
           and(
@@ -268,7 +268,7 @@ export async function getPublicDashboardData(month: number, year: number) {
             lt(setoranGuru.tanggalSetoran, endDate),
           ),
         )
-        .groupBy(guruSispendik.id, guruSispendik.namaGuru)
+        .groupBy(guruSispendig.id, guruSispendig.namaGuru)
         .orderBy(desc(sql`SUM(CAST(${setoranGuru.jumlahKg} AS numeric))`)),
 
       // 8. Masyarakat totals
@@ -358,7 +358,7 @@ export async function getPublicDashboardData(month: number, year: number) {
       },
     };
   } catch (error) {
-    console.error("Failed to load public sispendik dashboard data:", error);
+    console.error("Failed to load public Sispendig dashboard data:", error);
     return { error: "Gagal memuat data setoran sampah." };
   }
 }

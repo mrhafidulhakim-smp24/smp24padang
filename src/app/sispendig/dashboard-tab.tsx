@@ -30,7 +30,7 @@ import {
   Trophy,
   Users,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import {
   Bar,
   BarChart,
@@ -41,7 +41,15 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { getPublicDashboardData } from "./actions";
+import {
+  dashboardKey,
+  EMPTY_DASHBOARD,
+  useSispendigPublicStore,
+  type ClassRanking,
+  type GuruRanking,
+  type LevelFilter,
+  type MasyarakatTotal,
+} from "./store";
 
 const MONTHS = [
   "Januari",
@@ -94,35 +102,6 @@ const MASYARAKAT_COLORS = [
   "#BE123C",
 ];
 
-// --- TYPE DEFINITIONS ---
-type TopWasteType = {
-  wasteType: string;
-  totalKg: number;
-  totalValue: number;
-  category?: string;
-};
-
-type ClassRanking = {
-  className: string;
-  total: number;
-  totalValue: number;
-  jenisList: string | null;
-  categories: string | null;
-};
-
-type GuruRanking = {
-  guruName: string;
-  totalKg: number;
-  wasteTypes: string | null;
-  categories: string | null;
-};
-
-type MasyarakatTotal = {
-  wasteType: string;
-  category: string | null;
-  totalKg: number;
-};
-
 type TooltipPayload<T> = {
   value?: string | number;
   payload: T;
@@ -133,8 +112,6 @@ type TooltipProps<T> = {
   payload?: TooltipPayload<T>[];
   label?: string | number;
 };
-
-type LevelFilter = "all" | "7" | "8" | "9";
 
 function isLevelFilter(value: string): value is LevelFilter {
   return ["all", "7", "8", "9"].includes(value);
@@ -224,65 +201,40 @@ const CustomMasyarakatTooltip = ({
   return null;
 };
 
-export default function SispendikDashboard() {
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [levelFilter, setLevelFilter] = useState<LevelFilter>("all");
-  const [progressLevelFilter, setProgressLevelFilter] = useState<LevelFilter>("all");
-  const [topRankerType, setTopRankerType] = useState<"kelas" | "guru">("kelas");
-
-  const [rawClassTotals, setRawClassTotals] = useState<ClassRanking[]>([]);
-  const [classProgress, setClassProgress] = useState<
-    { kelas: string; months: number[] }[]
-  >([]);
-  const [guruRanking, setGuruRanking] = useState<GuruRanking[]>([]);
-  const [masyarakatTotals, setMasyarakatTotals] = useState<MasyarakatTotal[]>([]);
-  const [totalWaste, setTotalWaste] = useState(0);
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [topWasteTypes, setTopWasteTypes] = useState<TopWasteType[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function SispendigDashboard() {
+  const month = useSispendigPublicStore((state) => state.month);
+  const year = useSispendigPublicStore((state) => state.year);
+  const levelFilter = useSispendigPublicStore((state) => state.levelFilter);
+  const progressLevelFilter = useSispendigPublicStore((state) => state.progressLevelFilter);
+  const topRankerType = useSispendigPublicStore((state) => state.topRankerType);
+  const setMonth = useSispendigPublicStore((state) => state.setMonth);
+  const setYear = useSispendigPublicStore((state) => state.setYear);
+  const setLevelFilter = useSispendigPublicStore((state) => state.setLevelFilter);
+  const setProgressLevelFilter = useSispendigPublicStore((state) => state.setProgressLevelFilter);
+  const toggleTopRankerType = useSispendigPublicStore((state) => state.toggleTopRankerType);
+  const loadDashboard = useSispendigPublicStore((state) => state.loadDashboard);
+  const loadingDashboardKey = useSispendigPublicStore((state) => state.loadingDashboardKey);
+  const dashboardError = useSispendigPublicStore((state) => state.dashboardError);
+  const currentDashboardKey = dashboardKey(month, year);
+  const dashboard = useSispendigPublicStore(
+    (state) => state.dashboards[currentDashboardKey],
+  ) ?? EMPTY_DASHBOARD;
+  const loading = loadingDashboardKey === currentDashboardKey;
+  const {
+    classTotals: rawClassTotals,
+    progress: classProgress,
+    guruRanking,
+    masyarakatTotals,
+    summary: { totalKg: totalWaste, totalValue: totalIncome },
+    topWasteTypes,
+  } = dashboard;
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 11 }, (_, i) => currentYear - 5 + i);
 
   useEffect(() => {
-    let isMounted = true;
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const res = await getPublicDashboardData(month, year);
-        if (!isMounted) return;
-
-        if (res.data) {
-          setClassProgress(res.data.progress);
-          setRawClassTotals(res.data.classTotals as ClassRanking[]);
-          setTotalIncome(Number(res.data.summary.totalValue) || 0);
-          setTotalWaste(Number(res.data.summary.totalKg) || 0);
-          setTopWasteTypes(res.data.topWasteTypes as TopWasteType[]);
-          setGuruRanking(res.data.guruRanking as GuruRanking[]);
-          setMasyarakatTotals(res.data.masyarakatTotals as MasyarakatTotal[]);
-        } else {
-          setClassProgress([]);
-          setRawClassTotals([]);
-          setTotalIncome(0);
-          setTotalWaste(0);
-          setTopWasteTypes([]);
-          setGuruRanking([]);
-          setMasyarakatTotals([]);
-        }
-      } catch (err) {
-        console.error("Failed to load sispendik dashboard data:", err);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [month, year]);
+    void loadDashboard(month, year);
+  }, [loadDashboard, month, year]);
 
   const classTotals = useMemo(() => {
     return rawClassTotals.filter(
@@ -320,7 +272,7 @@ export default function SispendikDashboard() {
   return (
     <div className="relative flex flex-col gap-3.5 py-1.5 sm:gap-5 sm:py-3">
       {loading && (
-        <div className="fixed inset-0 bg-background/40 backdrop-blur-[1px] flex items-center justify-center z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/40 backdrop-blur-[1px]" role="status" aria-live="polite">
           <div className="bg-card border shadow-lg rounded-xl px-5 py-3 flex items-center gap-3">
             <Loader2 className="w-5 h-5 animate-spin text-primary" />
             <span className="text-sm font-medium">Memuat data rekapitulasi...</span>
@@ -333,7 +285,7 @@ export default function SispendikDashboard() {
         <div>
           <h2 className="text-lg font-bold tracking-tight sm:text-2xl flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            Dashboard Rekapitulasi Sispendik
+            Dashboard Rekapitulasi Sispendig
           </h2>
           <p className="text-xs text-muted-foreground sm:text-sm">
             Periode: {MONTHS[month - 1]} {year}
@@ -343,7 +295,7 @@ export default function SispendikDashboard() {
         <div className="flex flex-wrap items-center gap-2">
           <Select
             value={String(month)}
-            onValueChange={(v) => setMonth(parseInt(v))}
+            onValueChange={(value) => setMonth(Number(value))}
           >
             <SelectTrigger className="w-[120px] sm:w-[125px] h-8 text-xs sm:h-9 sm:text-sm">
               <Calendar className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
@@ -360,7 +312,7 @@ export default function SispendikDashboard() {
 
           <Select
             value={String(year)}
-            onValueChange={(v) => setYear(parseInt(v))}
+            onValueChange={(value) => setYear(Number(value))}
           >
             <SelectTrigger className="w-[90px] sm:w-[95px] h-8 text-xs sm:h-9 sm:text-sm">
               <SelectValue placeholder="Tahun" />
@@ -444,9 +396,7 @@ export default function SispendikDashboard() {
                 variant="ghost"
                 size="sm"
                 className="h-6 px-1.5 text-[11px] text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50"
-                onClick={() =>
-                  setTopRankerType(topRankerType === "kelas" ? "guru" : "kelas")
-                }
+                onClick={toggleTopRankerType}
               >
                 Ganti ke {topRankerType === "kelas" ? "Guru" : "Kelas"}
               </Button>
@@ -513,6 +463,12 @@ export default function SispendikDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {dashboardError && (
+        <p className="text-sm text-destructive" role="alert">
+          {dashboardError}
+        </p>
+      )}
 
       {/* ========================================================= */}
       {/* 1. MATRIKS PERKEMBANGAN SAMPAH PER KELAS (TAHUNAN)        */}
